@@ -5,12 +5,12 @@
 import mopac_step
 
 
-class MOPACStep(object):
+class OptimizationStep(object):
     my_description = {
         'description':
-        'Setup and run MOPAC',
-        'group': 'Simulations',
-        'name': 'MolSSI MOPAC'
+        'Optimization of the structure',
+        'group': 'Calculations',
+        'name': 'Optimization'
     }
 
     def __init__(self, workflow=None, gui=None):
@@ -23,11 +23,11 @@ class MOPACStep(object):
     def description(self):
         """Return a description of what this extension does
         """
-        return MOPACStep.my_description
+        return OptimizationStep.my_description
 
     def factory(self, graphical=False, workflow=None, canvas=None, **kwargs):
         """Return the node object or graphical node object"""
         if graphical:
-            return mopac_step.TkMOPAC(canvas=canvas, **kwargs)
+            return mopac_step.TkOptimization(canvas=canvas, **kwargs)
         else:
-            return mopac_step.MOPAC(workflow=workflow, **kwargs)
+            return mopac_step.Optimization(workflow=workflow, **kwargs)

@@ -55,4 +55,15 @@ setup(
     test_suite='tests',
     tests_require=test_requirements,
     setup_requires=setup_requirements,
+    entry_points={
+        'molssi.workflow.tk': [
+            'MOPAC = mopac_step:MOPACStep',
+        ],
+        'molssi.workflow.mopac.tk': [
+            'Energy = mopac_step:MOPACEnergy',
+            'Optimization = mopac_step:MOPACOptimization',
+            'IR Spectrum = mopac_step:MOPACIR',
+            'Thermodynamics = mopac_step:MOPACThermodynamics',
+        ],
+    },
 )
