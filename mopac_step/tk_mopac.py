@@ -31,7 +31,7 @@ class TkMOPAC(molssi_workflow.TkNode):
         frame = ttk.Frame(self.dialog)
         frame.pack(side='top', fill=tk.BOTH, expand=1)
 
-        self.flowchart = molssi_workflow.Workflow(
+        self.flowchart = molssi_workflow.Flowchart(
             master=frame,
             extension_namespace='molssi.workflow.mopac.tk',
             main=False,

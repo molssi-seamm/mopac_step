@@ -60,10 +60,10 @@ setup(
             'MOPAC = mopac_step:MOPACStep',
         ],
         'molssi.workflow.mopac.tk': [
-            'Energy = mopac_step:MOPACEnergy',
-            'Optimization = mopac_step:MOPACOptimization',
-            'IR Spectrum = mopac_step:MOPACIR',
-            'Thermodynamics = mopac_step:MOPACThermodynamics',
+            'Energy = mopac_step:EnergyStep',
+            'Optimization = mopac_step:OptimizationStep',
+            'IR Spectrum = mopac_step:IRStep',
+            'Thermodynamics = mopac_step:ThermodynamicsStep',
         ],
     },
 )

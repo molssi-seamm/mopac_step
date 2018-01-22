@@ -7,7 +7,7 @@ __email__ = 'psaxe@molssi.org'
 __version__ = '0.1.0'
 
 # Bring up the classes so that they appear to be directly in
-# the chemflowchart package.
+# the package.
 
 from mopac_step.mopac_step import MOPACStep  # nopep8
 from mopac_step.mopac import MOPAC  # nopep8
