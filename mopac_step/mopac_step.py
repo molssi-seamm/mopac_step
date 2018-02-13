@@ -25,9 +25,10 @@ class MOPACStep(object):
         """
         return MOPACStep.my_description
 
-    def factory(self, graphical=False, workflow=None, canvas=None, **kwargs):
-        """Return the node object or graphical node object"""
-        if graphical:
-            return mopac_step.TkMOPAC(canvas=canvas, **kwargs)
-        else:
-            return mopac_step.MOPAC(workflow=workflow, **kwargs)
+    def create_node(self, workflow=None, **kwargs):
+        """Return the new node object"""
+        return mopac_step.MOPAC(workflow=workflow, **kwargs)
+
+    def create_tk_node(self, canvas=None, **kwargs):
+        """Return the graphical Tk node object"""
+        return mopac_step.TkMOPAC(canvas=canvas, **kwargs)

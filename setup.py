@@ -56,10 +56,19 @@ setup(
     tests_require=test_requirements,
     setup_requires=setup_requirements,
     entry_points={
-        'molssi.workflow.tk': [
+        'org.molssi.workflow': [
             'MOPAC = mopac_step:MOPACStep',
         ],
-        'molssi.workflow.mopac.tk': [
+        'org.molssi.workflow.tk': [
+            'MOPAC = mopac_step:MOPACStep',
+        ],
+        'org.molssi.workflow.mopac': [
+            'Energy = mopac_step:EnergyStep',
+            'Optimization = mopac_step:OptimizationStep',
+            'IR Spectrum = mopac_step:IRStep',
+            'Thermodynamics = mopac_step:ThermodynamicsStep',
+        ],
+        'org.molssi.workflow.mopac.tk': [
             'Energy = mopac_step:EnergyStep',
             'Optimization = mopac_step:OptimizationStep',
             'IR Spectrum = mopac_step:IRStep',

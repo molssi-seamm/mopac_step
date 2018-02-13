@@ -8,14 +8,12 @@ logger = logging.getLogger(__name__)
 
 
 class Thermodynamics(mopac_step.Energy):
-    def __init__(self, workflow=None, gui_object=None, title='Thermodynamics',
-                 extension=None):
+    def __init__(self, workflow=None, title='Thermodynamics', extension=None):
         """Initialize the node"""
 
         logger.debug('Creating Thermodynamics {}'.format(self))
 
-        super().__init__(workflow=workflow, title=title, gui_object=gui_object,
-                         extension=extension)
+        super().__init__(workflow=workflow, title=title, extension=extension)
 
         self.description = 'Harmonic approximation to thermodynamics functions'
 

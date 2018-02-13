@@ -2,6 +2,7 @@
 """The graphical part of a MolSII MOPAC node"""
 
 import molssi_workflow
+import Pmw
 import tkinter as tk
 import tkinter.ttk as ttk
 
@@ -11,47 +12,64 @@ class TkMOPAC(molssi_workflow.TkNode):
     class is the Tk graphics partner for
     """
 
-    def __init__(self, node=None, canvas=None, x=None, y=None, w=None, h=None):
+    def __init__(self, tk_workflow=None, node=None, canvas=None,
+                 namespace='org.molssi.workflow.mopac.tk',
+                 x=None, y=None, w=None, h=None):
         '''Initialize a node
 
         Keyword arguments:
         '''
-        super().__init__(node=node, canvas=canvas, x=x, y=y, w=w, h=h)
+        self.namespace = namespace
 
-        self.dialog = None
+        super().__init__(tk_workflow=tk_workflow, node=node,
+                         canvas=canvas, x=x, y=y, w=w, h=h)
+
+        self.create_dialog()
 
     def create_dialog(self):
         """Create the dialog!"""
-
-        self.dialog = tk.Toplevel(master=self.toplevel)
-        self.dialog.transient(self.toplevel)
+        self.dialog = Pmw.Dialog(
+            self.toplevel,
+            buttons=('OK', 'Help', 'Cancel'),
+            defaultbutton='OK',
+            master=self.toplevel,
+            title='Edit LAMMPS step',
+            command=self.handle_dialog)
         self.dialog.withdraw()
-        self.dialog.title('MolSSI MOPAC...')
 
-        frame = ttk.Frame(self.dialog)
-        frame.pack(side='top', fill=tk.BOTH, expand=1)
+        # make it large!
+        sw = self.dialog.winfo_screenwidth()
+        sh = self.dialog.winfo_screenheight()
+        w = int(0.9 * sw)
+        h = int(0.8 * sh)
+        x = int(0.05 * sw / 2)
+        y = int(0.1 * sh / 2)
 
-        self.flowchart = molssi_workflow.Flowchart(
+        self.dialog.geometry('{}x{}+{}+{}'.format(w, h, x, y))
+
+        frame = ttk.Frame(self.dialog.interior())
+        frame.pack(expand=tk.YES, fill=tk.BOTH)
+        self.mopac_tk_workflow = molssi_workflow.TkWorkflow(
             master=frame,
-            extension_namespace='molssi.workflow.mopac.tk',
-            main=False,
+            namespace=self.namespace,
             workflow=self.node.mopac_workflow)
-        self.node.mopac_workflow.gui_object = self.flowchart
-        self.flowchart.draw()
+        self.mopac_tk_workflow.draw()
 
-        button_box = ttk.Frame(self.dialog)
-        button_box.pack(side='bottom', expand=1, fill=tk.X)
-        ok_button = ttk.Button(button_box, text="OK", command=self.handle_ok)
-        ok_button.grid(row=0, column=0, sticky=tk.W)
-        help_button = ttk.Button(
-            button_box, text="Help", command=self.handle_help)
-        help_button.grid(row=0, column=1)
-        cancel_button = ttk.Button(
-            button_box, text="Cancel", command=self.handle_cancel)
-        cancel_button.grid(row=0, column=2, sticky=tk.E)
-        button_box.grid_columnconfigure(0, weight=1)
-        button_box.grid_columnconfigure(1, weight=1)
-        button_box.grid_columnconfigure(2, weight=1)
+    def handle_dialog(self, result):
+        if result is None or result == 'Cancel':
+            self.dialog.deactivate(result)
+            return
+
+        if result == 'Help':
+            # display help!!!
+            return
+
+        if result != "OK":
+            self.dialog.deactivate(result)
+            raise RuntimeError(
+                "Don't recognize dialog result '{}'".format(result))
+
+        self.dialog.deactivate(result)
 
     def right_click(self, event):
         """Probably need to add our dialog...
@@ -66,39 +84,25 @@ class TkMOPAC(molssi_workflow.TkNode):
         """Present a dialog for editing the SMILES string
         """
 
-        if not self.dialog:
+        if self.dialog is None:
             self.create_dialog()
 
-        self._tmp = {'dialog': self.dialog}
-        self.previous_grab = self.dialog.grab_current()
-        self.dialog.grab_set()
-        self.dialog.deiconify()
-        self.dialog.attributes('-topmost', True)
+        self.dialog.activate(geometry='centerscreenfirst')
 
-    def handle_ok(self):
-        self.dialog.grab_release()
-        self.dialog.attributes('-topmost', False)
-        self.dialog.withdraw()
-        if self.previous_grab is not None:
-            self.previous_grab().grab_set()
-            self.previous_grab = None
-        self._tmp = None
+    def update_workflow(self, tk_workflow=None, workflow=None):
+        """Update the nongraphical workflow. Only used in nodes that contain
+        workflows"""
 
-    def handle_help(self):
-        print('Help')
-        self.dialog.grab_release()
-        self.dialog.attributes('-topmost', False)
-        self.dialog.withdraw()
-        if self.previous_grab is not None:
-            self.previous_grab().grab_set()
-            self.previous_grab = None
-        self._tmp = None
+        super().update_workflow(
+            workflow=self.node.mopac_workflow,
+            tk_workflow=self.mopac_tk_workflow
+        )
 
-    def handle_cancel(self):
-        self.dialog.grab_release()
-        self.dialog.attributes('-topmost', False)
-        self.dialog.withdraw()
-        if self.previous_grab is not None:
-            self.previous_grab().grab_set()
-            self.previous_grab = None
-        self._tmp = None
+    def from_workflow(self, tk_workflow=None, workflow=None):
+        """Recreate the graphics from the non-graphical workflow.
+        Only used in nodes that contain workflow"""
+
+        super().from_workflow(
+            workflow=self.node.mopac_workflow,
+            tk_workflow=self.mopac_tk_workflow
+        )

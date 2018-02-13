@@ -12,8 +12,7 @@ logger = logging.getLogger(__name__)
 class MOPAC(molssi_workflow.Node):
     def __init__(self,
                  workflow=None,
-                 extension_namespace='molssi.workflow.mopac.tk',
-                 gui_object=None,
+                 namespace='org.molssi.workflow.mopac',
                  extension=None):
         """Initialize the node"""
 
@@ -21,12 +20,11 @@ class MOPAC(molssi_workflow.Node):
 
         self.mopac_workflow = molssi_workflow.Workflow(
             name='MOPAC',
-            extension_namespace=extension_namespace,
+            namespace=namespace,
         )
         self._data = {}
 
-        super().__init__(workflow=workflow, title='MOPAC',
-                         gui_object=gui_object, extension=extension)
+        super().__init__(workflow=workflow, title='MOPAC', extension=extension)
 
     def run(self):
         """Run MOPAC"""

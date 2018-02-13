@@ -38,14 +38,12 @@ class Energy(molssi_workflow.Node):
         'absolute': '',
     }
 
-    def __init__(self, workflow=None, gui_object=None, title='Energy',
-                 extension=None):
+    def __init__(self, workflow=None, title='Energy', extension=None):
         """Initialize the node"""
 
         logger.debug('Creating Energy {}'.format(self))
 
-        super().__init__(workflow=workflow, title=title, gui_object=gui_object,
-                         extension=extension)
+        super().__init__(workflow=workflow, title=title, extension=extension)
 
         self.description = 'A single point energy calculation'
 
