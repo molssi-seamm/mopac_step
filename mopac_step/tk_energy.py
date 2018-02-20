@@ -3,6 +3,7 @@
 
 import molssi_workflow
 import mopac_step
+import Pmw
 import tkinter as tk
 import tkinter.ttk as ttk
 
@@ -31,15 +32,24 @@ class TkEnergy(molssi_workflow.TkNode):
         calculation"""
 
         # Create the dialog for editing this node
-        self.dialog = tk.Toplevel(master=self.toplevel)
-        self._tmp = {'dialog': self.dialog}
-        self.dialog.transient(self.toplevel)
-        self.dialog.title('MOPAC Energy')
+        self.dialog = Pmw.Dialog(
+            self.toplevel,
+            buttons=('OK', 'Help', 'Cancel'),
+            defaultbutton='OK',
+            master=self.toplevel,
+            title='Edit Energy step',
+            command=self.handle_dialog)
+        self.dialog.withdraw()
+
+        # The tabbed notebook
+        notebook = ttk.Notebook(self.dialog.interior())
+        notebook.pack(side='top', fill=tk.BOTH, expand=1)
+        self._tmp['notebook'] = notebook
 
         # Main frame holding the widgets
         frame = ttk.Frame(self.dialog)
-        frame.pack(side='top', fill=tk.BOTH, expand=1)
         self._tmp['frame'] = frame
+        notebook.add(frame, text='Parameters', sticky=tk.NW)
 
         # which structure? may need to set default first...
         if not self.node.structure:
@@ -88,20 +98,13 @@ class TkEnergy(molssi_workflow.TkNode):
 
         frame.grid_columnconfigure(0, minsize=30)
 
+        # Second tab for adding keywords
+        add_to_input = ttk.Frame(self.dialog)
+        self._tmp['add_to_input'] = add_to_input
+        notebook.add(add_to_input, text='Add to input', sticky=tk.NW)
+
+        # And finally, lay the wodgets out
         self.reset_dialog()
-
-        # Button box with the OK, Help and Cancel buttons...
-        button_box = ttk.Frame(self.dialog)
-        button_box.pack(side='bottom', fill=tk.BOTH)
-
-        ok_button = ttk.Button(button_box, text="OK", command=self.handle_ok)
-        ok_button.pack(side='left')
-        help_button = ttk.Button(
-            button_box, text="Help", command=self.handle_help)
-        help_button.pack(side='left')
-        cancel_button = ttk.Button(
-            button_box, text="Cancel", command=self.handle_cancel)
-        cancel_button.pack(side='left')
 
     def reset_dialog(self, widget=None):
         current = self._tmp['convergence'].get()
@@ -126,8 +129,21 @@ class TkEnergy(molssi_workflow.TkNode):
             scfcrt.grid(row=2, column=2, sticky=tk.W)
             scfcrt_units.grid(row=2, column=3, sticky=tk.W)
 
-    def handle_ok(self):
-        """Collect the changes from the dialog"""
+    def handle_dialog(self, result):
+        if result is None or result == 'Cancel':
+            self.dialog.deactivate(result)
+            return
+
+        if result == 'Help':
+            # display help!!!
+            return
+
+        if result != "OK":
+            self.dialog.deactivate(result)
+            raise RuntimeError(
+                "Don't recognize dialog result '{}'".format(result))
+
+        self.dialog.deactivate(result)
 
         self.node.structure = self._tmp['structure'].get()
         self.node.hamiltonian = self._tmp['hamiltonian'].get()
@@ -136,18 +152,3 @@ class TkEnergy(molssi_workflow.TkNode):
             self.node.relscf = self._tmp['relscf'].get()
         elif self.node.convergence == 'absolute':
             self.node.scfcrt = self._tmp['scfcrt'].get()
-
-        self.dialog.destroy()
-        self.dialog = None
-        self._tmp = None
-
-    def handle_help(self):
-        print('Help')
-        self.dialog.destroy()
-        self.dialog = None
-        self._tmp = None
-
-    def handle_cancel(self):
-        self.dialog.destroy()
-        self.dialog = None
-        self._tmp = None

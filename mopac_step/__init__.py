@@ -304,7 +304,7 @@ keywords = {
     'GNORM=n.nn': {
         'description': 'Exit when gradient norm drops below n .n kcal/mol/Angstrom',  # nopep8
         'value optional': False,
-        'value', 'float',
+        'value': 'float',
     },
     'GRADIENTS': {
         'description': 'Print all gradients',
@@ -330,7 +330,7 @@ keywords = {
     'H-PRIORITY=n.nn': {
         'description': 'Heat of formation takes priority in DRC',
         'value optional': True,
-        'value' 'float',
+        'value': 'float',
     },
     'HTML': {
         'description': 'Write a web-page for displaying and editing a protein',
