@@ -148,6 +148,8 @@ keywords = {
     },
     'CYCLES=n': {
         'description': 'Do a maximum of n steps',
+        'value optional': False,
+        'value': 'integer',
     },
     'CVB': {
         'description': 'In MOZYME. add and remove specific bonds to allow a Lewis or PDB structure.',  # nopep8
@@ -359,6 +361,8 @@ keywords = {
         'description': 'Set limit of number of SCF iterations to n',
         'value optional': False,
         'value': 'integer',
+        'default': 2000,
+        'minimum': 0,
     },
     'IUPD=n': {
         'description': 'Mode of Hessian update in eigenvector following',

@@ -52,6 +52,7 @@ class Energy(molssi_workflow.Node):
         self.convergence = 'default'  # 'precise', 'relative' or 'absolute'
         self.relscf = 1.0  # SCF relative convergence, > 1 is less accurate
         self.scfcrt = 0.0001  # kcal/mol, SCF convergence
+        self.keywords = []  # additional keywords to addo
 
     def get_input(self):
         """Get the input for an energy calculation for MOPAC"""
