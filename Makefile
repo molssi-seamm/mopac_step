@@ -86,4 +86,4 @@ install: clean ## install the package to the active Python's site-packages
 	python setup.py install
 
 uninstall: clean ## uninstall the package
-	pip uninstall mopac_step
+	pip uninstall --yes mopac_step
