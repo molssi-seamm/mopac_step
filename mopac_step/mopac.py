@@ -4,6 +4,8 @@
 import molssi_workflow
 import molssi_workflow.data as data
 import logging
+import os
+import os.path
 import pprint
 
 logger = logging.getLogger(__name__)
@@ -25,6 +27,15 @@ class MOPAC(molssi_workflow.Node):
         self._data = {}
 
         super().__init__(workflow=workflow, title='MOPAC', extension=extension)
+
+    def set_id(self, node_id):
+        """Set the id for node to a given tuple"""
+        self._id = node_id
+
+        # and set our subnodes
+        self.mopac_workflow.set_ids(self._id)
+
+        return self.next()
 
     def run(self):
         """Run MOPAC"""
@@ -72,11 +83,18 @@ class MOPAC(molssi_workflow.Node):
         files = {'molssi.dat': '\n\n'.join(input_data)}
         logger.debug('molssi.dat:\n' + files['molssi.dat'])
 
+        os.makedirs(self.directory, exist_ok=True)
+        for filename in files:
+            with open(os.path.join(self.directory, filename),
+                      mode='w') as fd:
+                fd.write(files[filename])
+
         local = molssi_workflow.ExecLocal()
+        return_files = ['molssi.arc', 'molssi.out']
         result = local.run(
             cmd=['mopac', 'molssi.dat'],
             files=files,
-            return_files=['molssi.arc', 'molssi.out']
+            return_files=return_files
         )
 
         if not result:
@@ -85,7 +103,14 @@ class MOPAC(molssi_workflow.Node):
 
         logger.debug('\n' + pprint.pformat(result))
 
-        logger.info('\n\nOutput from MOPAC\n\n' +
-                    result['molssi.out']['data'] + '\n\n')
+        logger.debug('\n\nOutput from MOPAC\n\n' +
+                     result['molssi.out']['data'] + '\n\n')
+
+        for filename in result['files']:
+            with open(os.path.join(self.directory, filename), mode='w') as fd:
+                if result[filename]['data'] is not None:
+                    fd.write(result[filename]['data'])
+                else:
+                    fd.write(result[filename]['exception'])
 
         return super().run()
