@@ -84,3 +84,9 @@ class Energy(molssi_workflow.Node):
                 self.convergence))
 
         return keywords
+
+    def analyze(self, lines=[]):
+        """Parse the output and generating the text output and store the
+        data in variables for other stages to access
+        """
+        pass

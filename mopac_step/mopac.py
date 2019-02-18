@@ -51,7 +51,7 @@ class MOPAC(molssi_workflow.Node):
         while node:
             keywords = node.get_input()
             lines = []
-            lines.append(' '.join(keywords))
+            lines.append(' '.join(keywords) + ' AUX')
             lines.append('Run from MolSSI workflow')
             lines.append('{} using {} hamiltonian'.format(
                 node.description, node.hamiltonian))
@@ -90,7 +90,7 @@ class MOPAC(molssi_workflow.Node):
                 fd.write(files[filename])
 
         local = molssi_workflow.ExecLocal()
-        return_files = ['molssi.arc', 'molssi.out']
+        return_files = ['molssi.arc', 'molssi.out', 'molssi.aux']
         result = local.run(
             cmd=['mopac', 'molssi.dat'],
             files=files,
@@ -113,4 +113,33 @@ class MOPAC(molssi_workflow.Node):
                 else:
                     fd.write(result[filename]['exception'])
 
+        # Analyze the results
+        self.analyze()
+
         return super().run()
+
+    def analyze(self, lines=[]):
+        """Read the results from MOPAC calculations and analyze them,
+        putting key results into variables for subsequent use by
+        other stages
+        """
+
+        filename = 'molssi.aux'
+        with open(os.path.join(self.directory, filename), mode='w') as fd:
+            lines = fd.read().splitlines
+
+        # Find the sections in the file corresponding to sub-tasks
+        sections = []
+        lineno = 0
+        for line in lines:
+            if 'END OF MOPAC FILE' in line:
+                sections.append((start, lineno))
+            lineno += 1
+            if 'START OF MOPAC FILE' in line:
+                start = lineno
+
+        # Loop through our subnodes. Get the first real node
+        node = self.mopac_workflow.get_node('1').next()
+        for start, end in sections:
+            node.analyze(lines[start:end])
+            node = node.next()
