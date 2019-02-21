@@ -3,6 +3,7 @@
 
 import molssi_workflow
 import molssi_workflow.data as data
+import mopac_step
 import logging
 import os
 import os.path
@@ -23,6 +24,7 @@ class MOPAC(molssi_workflow.Node):
         self.mopac_workflow = molssi_workflow.Workflow(
             name='MOPAC',
             namespace=namespace,
+            directory=workflow.root_directory
         )
         self._data = {}
 
@@ -37,12 +39,31 @@ class MOPAC(molssi_workflow.Node):
 
         return self.next()
 
+    def describe(self, indent='', json_dict=None):
+        """Write out information about what this node will do
+        If json_dict is passed in, add information to that dictionary
+        so that it can be written out by the controller as appropriate.
+        """
+
+        next_node = super().describe(indent, json_dict)
+
+        # Work through children. Get the first real node
+        node = self.mopac_workflow.get_node('1').next()
+
+        while node:
+            node.describe(indent=indent+'    ', json_dict=json_dict)
+            node = node.next()
+
+        return next_node
+
     def run(self):
         """Run MOPAC"""
 
         if data.structure is None:
             logger.error('MOPAC run(): there is no structure!')
             raise RuntimeError('MOPAC run(): there is no structure!')
+
+        next_node = super().run()
 
         # Get the first real node
         node = self.mopac_workflow.get_node('1').next()
@@ -116,20 +137,21 @@ class MOPAC(molssi_workflow.Node):
         # Analyze the results
         self.analyze()
 
-        return super().run()
+        return next_node
 
-    def analyze(self, lines=[]):
+    def analyze(self, indent='', lines=[]):
         """Read the results from MOPAC calculations and analyze them,
         putting key results into variables for subsequent use by
         other stages
         """
 
         filename = 'molssi.aux'
-        with open(os.path.join(self.directory, filename), mode='w') as fd:
-            lines = fd.read().splitlines
+        with open(os.path.join(self.directory, filename), mode='r') as fd:
+            lines = fd.read().splitlines()
 
         # Find the sections in the file corresponding to sub-tasks
         sections = []
+        start = 0
         lineno = 0
         for line in lines:
             if 'END OF MOPAC FILE' in line:
@@ -140,6 +162,104 @@ class MOPAC(molssi_workflow.Node):
 
         # Loop through our subnodes. Get the first real node
         node = self.mopac_workflow.get_node('1').next()
+        section = 0
         for start, end in sections:
-            node.analyze(lines[start:end])
+            section += 1
+            data = self.parse_aux(lines[start:end])
+
+            logger.debug('\nAUX file section {}'.format(section))
+            logger.debug('------------------')
+            logger.debug(pprint.pformat(data, width=170, compact=True))
+
+            output = node.analyze(data=data)
+            for line in output.split('\n'):
+                self.log(indent + '    ' + line)
+
             node = node.next()
+
+        self.log()
+
+    def parse_aux(self, lines):
+        """Digest a section of the aux file"""
+
+        properties = mopac_step.properties
+        trans = str.maketrans('Dd', 'Ee')
+
+        data = {}
+        lineno = -1
+        nlines = len(lines)
+        while True:
+            lineno += 1
+            if lineno >= nlines:
+                break
+            line = lines[lineno].strip()
+            if line[0] == "#":
+                continue
+            if '=' not in line:
+                raise RuntimeError(
+                    "Problem parsing MOPAC aux file: '" + line + "'"
+                )
+            key, rest = line.split('=', maxsplit=1)
+            if key[-1] == ']':
+                name, size = key[0:-1].split('[')
+                size = int(size.lstrip('0'))
+                if ':' in name:
+                    name, units = name.split(':')
+
+                if name not in properties:
+                    raise RuntimeError(
+                        "Property '{}' not recognized.".format(name)
+                    )
+                if 'units' in properties[name]:
+                    data[name + ',units'] = properties[name]['units']
+
+                tmp = rest.split()
+                while len(tmp) < size:
+                    lineno += 1
+                    line = lines[lineno].strip()
+                    if line[0] != '#':
+                        tmp.extend(line.split())
+                if properties[name]['type'] == 'integer':
+                    values = []
+                    for value in tmp:
+                        values.append(int(value))
+                elif properties[name]['type'] == 'float':
+                    values = []
+                    for value in tmp:
+                        values.append(float(value.translate(trans)))
+                else:
+                    values = tmp
+
+                if 'UPDATED' in name:
+                    if name not in data:
+                        data[name] = []
+                    data[name].append(values)
+                else:
+                    data[name] = values
+            else:
+                if ':' in key:
+                    name, units = key.split(':')
+                else:
+                    name = key
+                
+                if name not in properties:
+                    raise RuntimeError(
+                        "Property '{}' not recognized.".format(name)
+                    )
+                if 'units' in properties[name]:
+                    data[name + ',units'] = properties[name]['units']
+
+                if properties[name]['type'] == 'integer':
+                    value = int(rest)
+                elif properties[name]['type'] == 'float':
+                    value = float(rest.translate(trans))
+                else:
+                    value = rest.strip('"')
+
+                if 'UPDATED' in name:
+                    if name not in data:
+                        data[name] = []
+                    data[name].append(value)
+                else:
+                    data[name] = value
+        return data

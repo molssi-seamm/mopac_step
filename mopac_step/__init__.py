@@ -881,3 +881,241 @@ keywords = {
         'description': 'Number of mers in a cluster',
     },
 }
+
+properties = {
+    'AO_ATOMINDEX': {
+        'type': 'integer'
+    },
+    'AO_ZETA': {
+        'type': 'float'
+    },
+    'AREA': {
+        'type': 'float',
+        'units': 'Å^2'
+    },
+    'ATOM_CHARGES': {
+        'type': 'float'
+    },
+    'ATOM_CORE': {
+        'type': 'integer'
+    },
+    'ATOM_EL': {
+        'type': 'string'
+    },
+    'ATOM_PQN': {
+        'type': 'integer'
+    },
+    'ATOM_SYMTYPE': {
+        'type': 'string'
+    },
+    'ATOM_X': {
+        'type': 'float',
+        'units': 'Å'
+    },
+    'ATOM_X_FORCE': {
+        'type': 'float',
+        'units': 'Å'
+    },
+    'ATOM_X_OPT': {
+        'type': 'float',
+        'units': 'Å'
+    },
+    'ATOM_X_UPDATED': {
+        'type': 'float',
+        'units': 'Å'
+    },
+    'COMMENTS': {
+        'type': 'string'
+    },
+    'CPU_TIME': {
+        'type': 'float',
+        'units': 's'
+    },
+    'DATE': {
+        'type': 'date_time'
+    },
+    'DIPOLE': {
+        'type': 'float',
+        'units': 'debye'
+    },
+    'DIP_VEC': {
+        'type': 'float',
+        'units': 'debye'
+    },
+    'EIGENVALUES': {
+        'type': 'float',
+        'units': 'eV'
+    },
+    'EIGENVECTORS': {
+        'type': 'float'
+    },
+    'EMPIRICAL_FORMULA': {
+        'type': 'string'
+    },
+    'ENERGY_ELECTRONIC': {
+        'type': 'float',
+        'units': 'eV'
+    },
+    'ENERGY_NUCLEAR': {
+        'type': 'float',
+        'units': 'eV'
+    },
+    'ENTHALPY_TOT': {
+        'type': 'float',
+        'units': 'cal/mol'
+    },
+    'ENTROPY_TOT': {
+        'type': 'float',
+        'units': 'cal/K/mol'
+    },
+    'GRADIENTS': {
+        'type': 'float',
+        'units': 'kcal/mol/Å'
+    },
+    'GRADIENT_UPDATED': {
+        'type': 'float',
+        'units': 'kcal/mol/Å'
+    },
+    'GRADIENT_NORM': {
+        'type': 'float',
+        'units': 'kcal/mol/Å'
+    },
+    'HEAT_CAPACITY_TOT': {
+        'type': 'float',
+        'units': 'cal/K/mol'
+    },
+    'HEAT_OF_FORMATION': {
+        'type': 'float',
+        'units': 'kcal/mol'
+    },
+    'HEAT_OF_FORM_UPDATED': {
+        'type': 'float',
+        'units': 'kcal/mol'
+    },
+    'HESSIAN_MATRIX': {
+        'type': 'float',
+        'units': 'mdynes/Å/Da'
+    },
+    'H_O_F(T)': {
+        'type': 'float',
+        'units': 'kcal/mol'
+    },
+    'INT_FORCE_CONSTS': {
+        'type': 'float',
+        'units': 'mdyne/Å'
+    },
+    'IONIZATION_POTENTIAL': {
+        'type': 'float',
+        'units': 'eV'
+    },
+    'ISOTOPIC_MASSES': {
+        'type': 'float',
+        'units': 'Da'
+    },
+    'KEYWORDS': {
+        'type': 'string'
+    },
+    'M.O.SYMMETRY_LABELS': {
+        'type': 'string'
+    },
+    'METHOD': {
+        'type': 'string'
+    },
+    'MOLECULAR_ORBITAL_OCCUPANCIES': {
+        'type': 'float'
+    },
+    'MOLECULAR_WEIGHT': {
+        'type': 'float',
+        'units': 'Da'
+    },
+    'MOPAC_VERSION': {
+        'type': 'string'
+    },
+    'NORMAL_MODES': {
+        'type': 'float'
+    },
+    'NORMAL_MODE_SYMMETRY_LABELS': {
+        'type': 'string'
+    },
+    'NUMBER_SCF_CYCLES': {
+        'type': 'integer'
+    },
+    'NUM_ALPHA_ELECTRONS': {
+        'type': 'integer'
+    },
+    'NUM_BETA_ELECTRONS': {
+        'type': 'integer'
+    },
+    'NUM_ELECTRONS': {
+        'type': 'integer'
+    },
+    'ORIENTATION_ATOM_X': {
+        'type': 'float',
+        'units': 'Å'
+    },
+    'OVERLAP_MATRIX': {
+        'type': 'float'
+    },
+    'POINT_GROUP': {
+        'type': 'string'
+    },
+    'PRI_MOM_OF_I': {
+        'type': 'float',
+        'units': '10^-40*g*cm^2'
+    },
+    'ROTAT_CONSTS': {
+        'type': 'float',
+        'units': '1/cm'
+    },
+    'SET_OF_MOS': {
+        'type': 'string'
+    },
+    'SPIN_COMPONENT': {
+        'type': 'float'
+    },
+    'THERMODYNAMIC_PROPERTIES_TEMPS': {
+        'type': 'float',
+        'units': 'K'
+    },
+    'TITLE': {
+        'type': 'string'
+    },
+    'TOTAL_DENSITY_MATRIX': {
+        'type': 'float'
+    },
+    'TOTAL_ENERGY': {
+        'type': 'float',
+        'units': 'eV'
+    },
+    'TOTAL_SPIN': {
+        'type': 'float'
+    },
+    'VIB._EFF_MASS': {
+        'type': 'float',
+        'units': 'Da'
+    },
+    'VIB._FREQ': {
+        'type': 'float',
+        'units': '1/cm'
+    },
+    'VIB._RED_MASS': {
+        'type': 'float',
+        'units': 'Da'
+    },
+    'VIB._TRAVEL': {
+        'type': 'float',
+        'units': 'Å'
+    },
+    'VIB._T_DIP': {
+        'type': 'float',
+        'units': 'electrons'
+    },
+    'VOLUME': {
+        'type': 'float',
+        'units': 'Å^3'
+    },
+    'ZERO_POINT_ENERGY': {
+        'type': 'float',
+        'units': 'kcal/mol'
+    }
+}
