@@ -129,13 +129,13 @@ class Energy(molssi_workflow.Node):
         elif self.convergence == 'precise':
             tmp = " converged to the 'precise' level of 1.0e-06 kcal/mol"
         elif self.convergence == 'relative':
-            value = molssi_workflow.workflow_variables.value(self.relscf)
+            value = self.get_value(self.relscf)
             tmp = '\n  converged to a factor of' \
                   + ' {}'.format(self.value) \
                   + ' times the normal criteria' \
                   + ' = {} kcal/mol'.format(1.0e-04*value)
         elif self.convergence == 'absolute':
-            value = molssi_workflow.workflow_variables.value(self.scfcrt)
+            value = self.get_value(self.scfcrt)
             tmp = ' converged to {} kcal/mol'.format(self.scfcrt)
                     
         # Hamiltonian followed by converegence
@@ -153,7 +153,7 @@ class Energy(molssi_workflow.Node):
         result += '\n'
 
         # And set the global variables to store key results
-        molssi_workflow.workflow_variables['calculated_heat_of_formation'] \
-            = data['HEAT_OF_FORMATION']
+        self.set_variable('calculated_heat_of_formation',
+                          data['HEAT_OF_FORMATION'])
 
         return result
