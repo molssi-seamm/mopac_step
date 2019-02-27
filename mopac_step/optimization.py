@@ -81,7 +81,7 @@ class Optimization(mopac_step.Energy):
         elif self.convergence == 'absolute':
             tmp = ' {} kcal/mol'.format(self.scfcrt)
         self.job_output(indent + '    The SCF will be converged to ' + tmp)
-        slef.job_output('')
+        self.job_output('')
 
         return next_node
 
