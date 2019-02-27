@@ -153,7 +153,7 @@ class Energy(molssi_workflow.Node):
         result += '\n'
 
         # And set the global variables to store key results
-        molssi_workflow.workflow_variables['calculated heat of formation'] \
+        molssi_workflow.workflow_variables['calculated_heat_of_formation'] \
             = data['HEAT_OF_FORMATION']
 
         return result
