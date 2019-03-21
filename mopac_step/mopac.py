@@ -1,15 +1,19 @@
 # -*- coding: utf-8 -*-
 """Setup and run MOPAC"""
 
+import logging
 import molssi_workflow
 import molssi_workflow.data as data
+import molssi_util.printing as printing
+from molssi_util.printing import FormattedText as __
 import mopac_step
-import logging
 import os
 import os.path
 import pprint
 
 logger = logging.getLogger(__name__)
+job = printing.getPrinter()
+printer = printing.getPrinter('mopac')
 
 
 class MOPAC(molssi_workflow.Node):
@@ -173,11 +177,11 @@ class MOPAC(molssi_workflow.Node):
 
             output = node.analyze(data=data)
             for line in output.split('\n'):
-                self.log(indent + '    ' + line)
+                printer.normal(indent + '    ' + line)
 
             node = node.next()
 
-        self.log()
+        printer.normal('')
 
     def parse_aux(self, lines):
         """Digest a section of the aux file"""
