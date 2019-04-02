@@ -14,6 +14,7 @@ from mopac_step.mopac import MOPAC  # nopep8
 from mopac_step.tk_mopac import TkMOPAC  # nopep8
 from mopac_step.energy_step import EnergyStep  # nopep8
 from mopac_step.energy import Energy  # nopep8
+from mopac_step.energy_parameters import EnergyParameters  # nopep8
 from mopac_step.tk_energy import TkEnergy  # nopep8
 from mopac_step.optimization_step import OptimizationStep  # nopep8
 from mopac_step.optimization import Optimization  # nopep8
@@ -883,239 +884,494 @@ keywords = {
 }
 
 properties = {
-    'AO_ATOMINDEX': {
-        'type': 'integer'
-    },
-    'AO_ZETA': {
-        'type': 'float'
-    },
-    'AREA': {
-        'type': 'float',
-        'units': 'Å^2'
-    },
-    'ATOM_CHARGES': {
-        'type': 'float'
-    },
-    'ATOM_CORE': {
-        'type': 'integer'
-    },
-    'ATOM_EL': {
-        'type': 'string'
-    },
-    'ATOM_PQN': {
-        'type': 'integer'
-    },
-    'ATOM_SYMTYPE': {
-        'type': 'string'
-    },
-    'ATOM_X': {
-        'type': 'float',
-        'units': 'Å'
-    },
-    'ATOM_X_FORCE': {
-        'type': 'float',
-        'units': 'Å'
-    },
-    'ATOM_X_OPT': {
-        'type': 'float',
-        'units': 'Å'
-    },
-    'ATOM_X_UPDATED': {
-        'type': 'float',
-        'units': 'Å'
-    },
-    'COMMENTS': {
-        'type': 'string'
-    },
-    'CPU_TIME': {
-        'type': 'float',
-        'units': 's'
-    },
-    'DATE': {
-        'type': 'date_time'
-    },
-    'DIPOLE': {
-        'type': 'float',
-        'units': 'debye'
-    },
-    'DIP_VEC': {
-        'type': 'float',
-        'units': 'debye'
-    },
-    'EIGENVALUES': {
-        'type': 'float',
-        'units': 'eV'
-    },
-    'EIGENVECTORS': {
-        'type': 'float'
-    },
-    'EMPIRICAL_FORMULA': {
-        'type': 'string'
-    },
-    'ENERGY_ELECTRONIC': {
-        'type': 'float',
-        'units': 'eV'
-    },
-    'ENERGY_NUCLEAR': {
-        'type': 'float',
-        'units': 'eV'
-    },
-    'ENTHALPY_TOT': {
-        'type': 'float',
-        'units': 'cal/mol'
-    },
-    'ENTROPY_TOT': {
-        'type': 'float',
-        'units': 'cal/K/mol'
-    },
-    'GRADIENTS': {
-        'type': 'float',
-        'units': 'kcal/mol/Å'
-    },
-    'GRADIENT_UPDATED': {
-        'type': 'float',
-        'units': 'kcal/mol/Å'
-    },
-    'GRADIENT_NORM': {
-        'type': 'float',
-        'units': 'kcal/mol/Å'
-    },
-    'HEAT_CAPACITY_TOT': {
-        'type': 'float',
-        'units': 'cal/K/mol'
-    },
-    'HEAT_OF_FORMATION': {
-        'type': 'float',
-        'units': 'kcal/mol'
-    },
-    'HEAT_OF_FORM_UPDATED': {
-        'type': 'float',
-        'units': 'kcal/mol'
-    },
-    'HESSIAN_MATRIX': {
-        'type': 'float',
-        'units': 'mdynes/Å/Da'
-    },
-    'H_O_F(T)': {
-        'type': 'float',
-        'units': 'kcal/mol'
-    },
-    'INT_FORCE_CONSTS': {
-        'type': 'float',
-        'units': 'mdyne/Å'
-    },
-    'IONIZATION_POTENTIAL': {
-        'type': 'float',
-        'units': 'eV'
-    },
-    'ISOTOPIC_MASSES': {
-        'type': 'float',
-        'units': 'Da'
-    },
-    'KEYWORDS': {
-        'type': 'string'
-    },
-    'M.O.SYMMETRY_LABELS': {
-        'type': 'string'
-    },
-    'METHOD': {
-        'type': 'string'
-    },
-    'MOLECULAR_ORBITAL_OCCUPANCIES': {
-        'type': 'float'
-    },
-    'MOLECULAR_WEIGHT': {
-        'type': 'float',
-        'units': 'Da'
-    },
-    'MOPAC_VERSION': {
-        'type': 'string'
-    },
-    'NORMAL_MODES': {
-        'type': 'float'
-    },
-    'NORMAL_MODE_SYMMETRY_LABELS': {
-        'type': 'string'
-    },
-    'NUMBER_SCF_CYCLES': {
-        'type': 'integer'
-    },
-    'NUM_ALPHA_ELECTRONS': {
-        'type': 'integer'
-    },
-    'NUM_BETA_ELECTRONS': {
-        'type': 'integer'
-    },
-    'NUM_ELECTRONS': {
-        'type': 'integer'
-    },
-    'ORIENTATION_ATOM_X': {
-        'type': 'float',
-        'units': 'Å'
-    },
-    'OVERLAP_MATRIX': {
-        'type': 'float'
-    },
-    'POINT_GROUP': {
-        'type': 'string'
-    },
-    'PRI_MOM_OF_I': {
-        'type': 'float',
-        'units': '10^-40*g*cm^2'
-    },
-    'ROTAT_CONSTS': {
-        'type': 'float',
-        'units': '1/cm'
-    },
-    'SET_OF_MOS': {
-        'type': 'string'
-    },
-    'SPIN_COMPONENT': {
-        'type': 'float'
-    },
-    'THERMODYNAMIC_PROPERTIES_TEMPS': {
-        'type': 'float',
-        'units': 'K'
-    },
-    'TITLE': {
-        'type': 'string'
-    },
-    'TOTAL_DENSITY_MATRIX': {
-        'type': 'float'
-    },
-    'TOTAL_ENERGY': {
-        'type': 'float',
-        'units': 'eV'
-    },
-    'TOTAL_SPIN': {
-        'type': 'float'
-    },
-    'VIB._EFF_MASS': {
-        'type': 'float',
-        'units': 'Da'
-    },
-    'VIB._FREQ': {
-        'type': 'float',
-        'units': '1/cm'
-    },
-    'VIB._RED_MASS': {
-        'type': 'float',
-        'units': 'Da'
-    },
-    'VIB._TRAVEL': {
-        'type': 'float',
-        'units': 'Å'
-    },
-    'VIB._T_DIP': {
-        'type': 'float',
-        'units': 'electrons'
-    },
-    'VOLUME': {
-        'type': 'float',
-        'units': 'Å^3'
-    },
-    'ZERO_POINT_ENERGY': {
-        'type': 'float',
-        'units': 'kcal/mol'
+    "AO_ATOMINDEX": {
+        "calculation": [
+            "single point energy"
+        ],
+        "description": "atom for AO",
+        "dimensionality": ['n_aos'],
+        "type": "integer"
+    },
+    "AO_ZETA": {
+        "calculation": [
+            "single point energy"
+        ],
+        "description": "Slater exponent",
+        "dimensionality": ['n_aos'],
+        "type": "float"
+    },
+    "AREA": {
+        "calculation": [
+            "single point energy"
+        ],
+        "description": "surface area",
+        "dimensionality": "scalar",
+        "type": "float",
+        "units": "Å^2"
+    },
+    "ATOM_CHARGES": {
+        "calculation": [
+            "single point energy"
+        ],
+        "description": "atom charges",
+        "dimensionality": ["n_atoms"],
+        "type": "float"
+    },
+    "ATOM_CORE": {
+        "calculation": [
+            "single point energy"
+        ],
+        "description": "number of valence electrons",
+        "dimensionality": ["n_atoms"],
+        "type": "integer"
+    },
+    "ATOM_EL": {
+        "calculation": [
+            "single point energy"
+        ],
+        "description": "atomic symbol",
+        "dimensionality": ["n_atoms"],
+        "type": "string"
+    },
+    "ATOM_PQN": {
+        "calculation": [
+            "single point energy"
+        ],
+        "description": "principal quantum number",
+        "dimensionality": ["n_aos"],
+        "type": "integer"
+    },
+    "ATOM_SYMTYPE": {
+        "calculation": [
+            "single point energy"
+        ],
+        "description": "atomic orbital angular shape",
+        "dimensionality": ["n_aos"],
+        "type": "string"
+    },
+    "ATOM_X": {
+        "calculation": [
+            "single point energy"
+        ],
+        "description": "x, y, z coordinates",
+        "dimensionality": [3, "n_atoms"],
+        "type": "float",
+        "units": "Å"
+    },
+    "ATOM_X_FORCE": {
+        "description": "",
+        "dimensionality": [3, "n_atoms"],
+        "type": "float",
+        "units": "Å"
+    },
+    "ATOM_X_OPT": {
+        "calculation": [
+        ],
+        "description": "optimized x, y, z coordinates",
+        "dimensionality": [3, "n_atoms"],
+        "type": "float",
+        "units": "Å"
+    },
+    "ATOM_X_UPDATED": {
+        "description": "",
+        "dimensionality": [3, "n_atoms"],
+        "type": "float",
+        "units": "Å"
+    },
+    "COMMENTS": {
+        "calculation": [
+        ],
+        "description": "",
+        "dimensionality": "scalar",
+        "type": "string"
+    },
+    "CPU_TIME": {
+        "calculation": [
+            "single point energy"
+        ],
+        "description": "cput time for calculation",
+        "dimensionality": "scalar",
+        "type": "float",
+        "units": "s"
+    },
+    "DATE": {
+        "calculation": [
+            "single point energy"
+        ],
+        "description": "date and time of calculation",
+        "dimensionality": "scalar",
+        "type": "date_time"
+    },
+    "DIPOLE": {
+        "calculation": [
+            "single point energy"
+        ],
+        "description": "dipole moment",
+        "dimensionality": "scalar",
+        "type": "float",
+        "units": "debye"
+    },
+    "DIP_VEC": {
+        "calculation": [
+            "single point energy"
+        ],
+        "description": "dipole vector",
+        "dimensionality": [3],
+        "type": "float",
+        "units": "debye"
+    },
+    "EIGENVALUES": {
+        "calculation": [
+            "single point energy"
+        ],
+        "description": "orbital energies",
+        "dimensionality": ["n_aos"],
+        "type": "float",
+        "units": "eV"
+    },
+    "EIGENVECTORS": {
+        "calculation": [
+            "single point energy"
+        ],
+        "description": "orbital coefficients",
+        "dimensionality": ["n_aos"],
+        "type": "float"
+    },
+    "EMPIRICAL_FORMULA": {
+        "calculation": [
+            "single point energy"
+        ],
+        "description": "empirical formula",
+        "dimensionality": "scalar",
+        "type": "string"
+    },
+    "ENERGY_ELECTRONIC": {
+        "calculation": [
+            "single point energy"
+        ],
+        "description": "electronic energy",
+        "dimensionality": "scalar",
+        "type": "float",
+        "units": "eV"
+    },
+    "ENERGY_NUCLEAR": {
+        "calculation": [
+            "single point energy"
+        ],
+        "description": "nuclear repulsion energy",
+        "dimensionality": "scalar",
+        "type": "float",
+        "units": "eV"
+    },
+    "ENTHALPY_TOT": {
+        "description": "",
+        "dimensionality": "scalar",
+        "type": "float",
+        "units": "cal/mol"
+    },
+    "ENTROPY_TOT": {
+        "description": "",
+        "dimensionality": "scalar",
+        "type": "float",
+        "units": "cal/K/mol"
+    },
+    "GRADIENTS": {
+        "description": "",
+        "dimensionality": [3, "n_atoms"],
+        "type": "float",
+        "units": "kcal/mol/Å"
+    },
+    "GRADIENT_NORM": {
+        "calculation": [
+        ],
+        "description": "",
+        "dimensionality": "scalar",
+        "type": "float",
+        "units": "kcal/mol/Å"
+    },
+    "GRADIENT_UPDATED": {
+        "description": "",
+        "dimensionality": [3, "n_atoms"],
+        "type": "float",
+        "units": "kcal/mol/Å"
+    },
+    "HEAT_CAPACITY_TOT": {
+        "description": "",
+        "dimensionality": "scalar",
+        "type": "float",
+        "units": "cal/K/mol"
+    },
+    "HEAT_OF_FORMATION": {
+        "calculation": [
+            "single point energy"
+        ],
+        "description": "heat of formation",
+        "dimensionality": "scalar",
+        "type": "float",
+        "units": "kcal/mol"
+    },
+    "HEAT_OF_FORM_UPDATED": {
+        "description": "",
+        "dimensionality": "scalar",
+        "type": "float",
+        "units": "kcal/mol"
+    },
+    "HESSIAN_MATRIX": {
+        "description": "",
+        "dimensionality": "scalar",
+        "type": "float",
+        "units": "mdynes/Å/Da"
+    },
+    "H_O_F(T)": {
+        "description": "",
+        "dimensionality": "scalar",
+        "type": "float",
+        "units": "kcal/mol"
+    },
+    "INT_FORCE_CONSTS": {
+        "description": "",
+        "dimensionality": "scalar",
+        "type": "float",
+        "units": "mdyne/Å"
+    },
+    "IONIZATION_POTENTIAL": {
+        "calculation": [
+            "single point energy"
+        ],
+        "description": "ionization potential (IP)",
+        "dimensionality": "scalar",
+        "type": "float",
+        "units": "eV"
+    },
+    "ISOTOPIC_MASSES": {
+        "description": "",
+        "dimensionality": ["n_atoms"],
+        "type": "float",
+        "units": "Da"
+    },
+    "KEYWORDS": {
+        "calculation": [
+        ],
+        "description": "",
+        "dimensionality": "scalar",
+        "type": "string"
+    },
+    "M.O.SYMMETRY_LABELS": {
+        "calculation": [
+            "single point energy"
+        ],
+        "description": "molecular orbital symmetries",
+        "dimensionality": ["n_mos"],
+        "type": "string"
+    },
+    "METHOD": {
+        "calculation": [
+            "single point energy"
+        ],
+        "description": "hamiltonian",
+        "dimensionality": "scalar",
+        "type": "string"
+    },
+    "MOLECULAR_ORBITAL_OCCUPANCIES": {
+        "calculation": [
+            "single point energy"
+        ],
+        "description": "orbital occupancies",
+        "dimensionality": ["n_mos"],
+        "type": "float"
+    },
+    "MOLECULAR_WEIGHT": {
+        "calculation": [
+            "single point energy"
+        ],
+        "description": "molecular weight",
+        "dimensionality": "scalar",
+        "type": "float",
+        "units": "Da"
+    },
+    "MOPAC_VERSION": {
+        "calculation": [
+            "single point energy"
+        ],
+        "description": "MOPAC version",
+        "dimensionality": "scalar",
+        "type": "string"
+    },
+    "NORMAL_MODES": {
+        "description": "",
+        "dimensionality": "scalar",
+        "type": "float"
+    },
+    "NORMAL_MODE_SYMMETRY_LABELS": {
+        "description": "",
+        "dimensionality": "scalar",
+        "type": "string"
+    },
+    "NUMBER_SCF_CYCLES": {
+        "calculation": [
+            "single point energy"
+        ],
+        "description": "number of scf's",
+        "dimensionality": "scalar",
+        "type": "integer"
+    },
+    "NUM_ALPHA_ELECTRONS": {
+        "calculation": [
+            "single point energy"
+        ],
+        "description": "number of spin-up electrons",
+        "dimensionality": "scalar",
+        "type": "integer"
+    },
+    "NUM_BETA_ELECTRONS": {
+        "calculation": [
+            "single point energy"
+        ],
+        "description": "number of spin-down electrons",
+        "dimensionality": "scalar",
+        "type": "integer"
+    },
+    "NUM_ELECTRONS": {
+        "calculation": [
+            "single point energy"
+        ],
+        "description": "number of electrons",
+        "dimensionality": "scalar",
+        "type": "integer"
+    },
+    "ORIENTATION_ATOM_X": {
+        "description": "",
+        "dimensionality": "scalar",
+        "type": "float",
+        "units": "Å"
+    },
+    "OVERLAP_MATRIX": {
+        "calculation": [
+            "single point energy"
+        ],
+        "description": "the AO overlap matrix",
+        "dimensionality": "scalar",
+        "type": "float"
+    },
+    "POINT_GROUP": {
+        "calculation": [
+            "single point energy"
+        ],
+        "description": "the molecular symmetry",
+        "dimensionality": "scalar",
+        "type": "string"
+    },
+    "PRI_MOM_OF_I": {
+        "description": "",
+        "dimensionality": "scalar",
+        "type": "float",
+        "units": "10^-40*g*cm^2"
+    },
+    "ROTAT_CONSTS": {
+        "description": "",
+        "dimensionality": "scalar",
+        "type": "float",
+        "units": "1/cm"
+    },
+    "SET_OF_MOS": {
+        "calculation": [
+            "single point energy"
+        ],
+        "description": "set of MOs",
+        "dimensionality": [2],
+        "type": "string"
+    },
+    "SPIN_COMPONENT": {
+        "calculation": [
+            "single point energy"
+        ],
+        "description": "spin component",
+        "dimensionality": "scalar",
+        "type": "float"
+    },
+    "THERMODYNAMIC_PROPERTIES_TEMPS": {
+        "description": "",
+        "dimensionality": ["n_temps"],
+        "type": "float",
+        "units": "K"
+    },
+    "TITLE": {
+        "calculation": [
+            "single point energy"
+        ],
+        "description": "title of calculation",
+        "dimensionality": "scalar",
+        "type": "string"
+    },
+    "TOTAL_DENSITY_MATRIX": {
+        "calculation": [
+            "single point energy"
+        ],
+        "description": "density matrix",
+        "dimensionality": ["n_mos", "n_mos"],
+        "shape": "triangular",
+        "type": "float"
+    },
+    "TOTAL_ENERGY": {
+        "calculation": [
+            "single point energy"
+        ],
+        "description": "total energy",
+        "dimensionality": "scalar",
+        "type": "float",
+        "units": "eV"
+    },
+    "TOTAL_SPIN": {
+        "calculation": [
+            "single point energy"
+        ],
+        "description": "spin",
+        "dimensionality": "scalar",
+        "type": "float"
+    },
+    "VIB._EFF_MASS": {
+        "description": "",
+        "dimensionality": "scalar",
+        "type": "float",
+        "units": "Da"
+    },
+    "VIB._FREQ": {
+        "description": "",
+        "dimensionality": "scalar",
+        "type": "float",
+        "units": "1/cm"
+    },
+    "VIB._RED_MASS": {
+        "description": "",
+        "dimensionality": "scalar",
+        "type": "float",
+        "units": "Da"
+    },
+    "VIB._TRAVEL": {
+        "description": "",
+        "dimensionality": "scalar",
+        "type": "float",
+        "units": "Å"
+    },
+    "VIB._T_DIP": {
+        "description": "",
+        "dimensionality": "scalar",
+        "type": "float",
+        "units": "electrons"
+    },
+    "VOLUME": {
+        "calculation": [
+            "single point energy"
+        ],
+        "description": "volume",
+        "dimensionality": "scalar",
+        "type": "float",
+        "units": "Å^3"
+    },
+    "ZERO_POINT_ENERGY": {
+        "description": "",
+        "dimensionality": "scalar",
+        "type": "float",
+        "units": "kcal/mol"
     }
 }
