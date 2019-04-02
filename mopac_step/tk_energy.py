@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 """The graphical part of a MOPAC Energy node"""
 
+import logging
 import molssi_workflow
+import molssi_util.molssi_widgets as mw
 import mopac_step
 import Pmw
 import tkinter as tk
@@ -9,8 +11,11 @@ import tkinter.ttk as ttk
 
 from itertools import takewhile
 
+logger = logging.getLogger(__name__)
+
 
 def lcp(*s):
+    """Longest common prefix of strings"""
     return ''.join(a for a, b in takewhile(lambda x: x[0] == x[1],
                                            zip(min(s), max(s))))
 
@@ -27,6 +32,7 @@ class TkEnergy(molssi_workflow.TkNode):
         self.value_cb = None
         self.set_keyword_cb = None
         self.tmp_keywords = None
+        self.results_widgets = []
 
         s = ttk.Style()
         s.configure('Red.TEntry', foreground='red')
@@ -56,64 +62,146 @@ class TkEnergy(molssi_workflow.TkNode):
         # The tabbed notebook
         notebook = ttk.Notebook(self.dialog.interior())
         notebook.pack(side='top', fill=tk.BOTH, expand=1)
-        self._widget['notebook'] = notebook
+        self['notebook'] = notebook
 
         # Main frame holding the widgets
         frame = ttk.Frame(notebook)
-        self._widget['frame'] = frame
+        self['frame'] = frame
         notebook.add(frame, text='Parameters', sticky=tk.NW)
 
-        # which structure? may need to set default first...
-        if not self.node.structure:
-            if isinstance(self.node.previous(), molssi_workflow.StartNode):
-                self.node.structure = 'initial'
+        # Create all the widgets
+        P = self.node.parameters
+        for key in P:
+            if key not in ('results', 'extra keywords', 'create tables'):
+                self[key] = P[key].widget(frame)
+
+        # bindings...
+        self['convergence'].combobox.bind(
+            "<<ComboboxSelected>>", self.reset_dialog
+        )
+        self['convergence'].combobox.bind("<Return>", self.reset_dialog)
+        self['convergence'].combobox.bind("<FocusOut>", self.reset_dialog)
+            
+        # Second tab for results
+        rframe = self['results frame'] = ttk.Frame(notebook)
+        notebook.add(rframe, text='Results', sticky=tk.NSEW)
+
+        var = self.tk_var['create tables'] = tk.IntVar()
+        if P['create tables'].value == 'yes':
+            var.set(1)
+        else:
+            var.set(0)
+        self['create tables'] = ttk.Checkbutton(
+            rframe, text='Create tables if needed', variable=var
+        )
+        self['column0'] = ttk.Label(rframe, text='Result')
+        self['column1'] = ttk.Label(rframe, text='Save')
+        self['column2'] = ttk.Label(rframe, text='As variable')
+        self['column3'] = ttk.Label(rframe, text='In Table')
+        self['column4'] = ttk.Label(rframe, text='Column')
+
+        # The scrolled pane for the results. Put a ttk.Frame inside
+        # hoping that it fixes background colors, etc.
+        self['scrolled results'] = Pmw.ScrolledFrame(
+            rframe, hscrollmode='none', vscrollmode='static')
+        self['results'] = ttk.Frame(self['scrolled results'].interior())
+
+        self['create tables'].grid(row=0, column=0, columnspan=6, sticky=tk.W)
+
+        self['column0'].grid(row=1, column=0)
+        self['column1'].grid(row=1, column=1)
+        self['column2'].grid(row=1, column=2)
+        self['column3'].grid(row=1, column=4)
+        self['column4'].grid(row=1, column=5)
+
+        rframe.columnconfigure(6, weight=1)
+        self['scrolled results'].grid(row=2, column=0, columnspan=7,
+                                      sticky=tk.NSEW)
+        self['results'].pack(fill = 'both', expand = 1)
+        rframe.columnconfigure(3, minsize=30)
+
+        # Set up scrolling on the canvas with the mouse scrollwheel or similar
+        self['results'].bind('<Enter>', self._bound_to_mousewheel)
+        self['results'].bind('<Leave>', self._unbound_to_mousewheel)
+
+        self.setup_results()
+        
+        # Third tab for adding keywords
+        self['add_to_input'] = ttk.Frame(notebook)
+        notebook.add(self['add_to_input'], text='Add to input', sticky=tk.NW)
+
+    def setup_results(self):
+        """Layout the results tab of the dialog"""
+        results = self.node.parameters['results'].value
+
+        self.results_widgets = []
+        frame = self['results']
+        row=0
+        for key, entry in mopac_step.properties.items():
+            if 'calculation' not in entry:
+                continue
+            if 'single point energy' not in entry['calculation']:
+                continue
+            if 'dimensionality' not in entry:
+                continue
+            if entry['dimensionality'] != 'scalar':
+                continue
+
+            widgets = []
+            widgets.append(key)
+
+            w = ttk.Label(frame, text=entry['description'])
+            w.grid(row=row, column=0, sticky=tk.E)
+
+            # variable
+            var = self.tk_var[key] = tk.IntVar()
+            var.set(0)
+            w = ttk.Checkbutton(frame, variable=var)
+            w.grid(row=row, column=1)
+            widgets.append(w)
+            e = ttk.Entry(frame, width=15)
+            e.insert(0, key.lower())
+            e.grid(row=row, column=2)
+            widgets.append(e)
+
+            if key in results:
+                if 'variable' in results[key]:
+                    var.set(1)
+                    e.delete(0, tk.END)
+                    e.insert(0, results[key]['variable'])
+
+            # table
+            w = ttk.Combobox(frame, width=10)
+            w.grid(row=row, column=4)
+            widgets.append(w)
+            e = ttk.Entry(frame, width=15)
+            e.insert(0, key.lower())
+            e.grid(row=row, column=5)
+            widgets.append(e)
+
+            if key in results:
+                if 'table' in results[key]:
+                    w.set(results[key]['table'])
+                    e.delete(0, tk.END)
+                    e.insert(0, results[key]['column'])
+
+            self.results_widgets.append(widgets)
+            row += 1
+
+        # Adjust the column widths. rframe is the outer frame, containing
+        # the headers. frame is in the scrollable frame, and contains the
+        # columns.
+
+        frame.update_idletasks()
+        rframe = self['results frame']
+        for column in (0, 1, 2, 3, 4, 5):
+            # bbox returns (x, y, w, h) so we want the third item
+            w = frame.grid_bbox(column, 0)[2]
+            w2 = rframe.grid_bbox(column, 0)[2]
+            if w < w2:
+                frame.columnconfigure(column, minsize=w2)
             else:
-                self.node.structure = 'current'
-
-        structure_label = ttk.Label(frame, text='Structure:')
-        structure = ttk.Combobox(
-            frame,
-            state='readonly',
-            values=list(mopac_step.Energy.structures))
-        structure.set(self.node.structure)
-        self._widget['structure'] = structure
-
-        # which Hamiltonian?
-        hamiltonian_label = ttk.Label(frame, text='Hamiltonian:')
-        hamiltonian = ttk.Combobox(
-            frame,
-            state='readonly',
-            values=list(mopac_step.Energy.hamiltonians))
-        hamiltonian.set(self.node.hamiltonian)
-        self._widget['hamiltonian'] = hamiltonian
-
-        # What convergence?
-        convergence_label = ttk.Label(frame, text='Convergence:')
-        convergence = ttk.Combobox(
-            frame,
-            state='readonly',
-            values=list(mopac_step.Energy.convergences))
-        convergence.bind("<<ComboboxSelected>>", self.reset_dialog)
-        convergence.set(self.node.convergence)
-        self._widget['convergence'] = convergence
-
-        structure_label.grid(row=0, column=0, columnspan=2, sticky=tk.E)
-        structure.grid(row=0, column=2, sticky=tk.W)
-        hamiltonian_label.grid(row=1, column=0, columnspan=2, sticky=tk.E)
-        hamiltonian.grid(row=1, column=2, sticky=tk.W)
-        convergence_label.grid(row=2, column=0, columnspan=2, sticky=tk.E)
-        convergence.grid(row=2, column=2, sticky=tk.W)
-
-        subframe = ttk.Frame(frame)
-        self._widget['subframe'] = subframe
-        subframe.grid(row=3, column=1, columnspan=5)
-
-        frame.grid_columnconfigure(0, minsize=30)
-
-        # Second tab for adding keywords
-        add_to_input = ttk.Frame(notebook)
-        self._widget['add_to_input'] = add_to_input
-        notebook.add(add_to_input, text='Add to input', sticky=tk.NW)
+                rframe.columnconfigure(column, minsize=w)
 
     def edit(self):
         """Present a dialog for editing the input for the MOPAC energy
@@ -129,27 +217,40 @@ class TkEnergy(molssi_workflow.TkNode):
         self.dialog.activate(geometry='centerscreenfirst')
 
     def reset_dialog(self, widget=None):
-        current = self._widget['convergence'].get()
-        frame = self._widget['subframe']
-        for slave in frame.grid_slaves():
-            slave.destroy()
+        convergence = self['convergence'].get()
 
-        if current == 'relative':
-            relscf_label = ttk.Label(frame, text='Relative:')
-            relscf = ttk.Entry(frame, width=15)
-            relscf.insert(0, self.node.relscf)
-            self._widget['relscf'] = relscf
-            relscf_label.grid(row=2, column=1, sticky=tk.E)
-            relscf.grid(row=2, column=2, sticky=tk.W)
-        elif current == 'absolute':
-            scfcrt_label = ttk.Label(frame, text='Absolute:')
-            scfcrt = ttk.Entry(frame, width=15)
-            scfcrt.insert(0, self.node.scfcrt)
-            self._widget['scfcrt'] = scfcrt
-            scfcrt_units = ttk.Label(frame, text='kcal/mol')
-            scfcrt_label.grid(row=2, column=1, sticky=tk.E)
-            scfcrt.grid(row=2, column=2, sticky=tk.W)
-            scfcrt_units.grid(row=2, column=3, sticky=tk.W)
+        frame = self['frame']
+        for slave in frame.grid_slaves():
+            slave.grid_forget()
+
+        widgets = []
+        row = 0
+        self['structure'].grid(row=row, column=0, columnspan=2, sticky=tk.EW)
+        widgets.append(self['structure'])
+        row += 1
+        self['hamiltonian'].grid(row=row, column=0, columnspan=2, sticky=tk.EW)
+        widgets.append(self['hamiltonian'])
+        row += 1
+        self['convergence'].grid(row=row, column=0, columnspan=2, sticky=tk.EW)
+        widgets.append(self['convergence'])
+        row += 1
+        mw.align_labels(widgets)
+
+        if convergence == 'relative':
+            self['relative'].grid(row=row, column=1, sticky=tk.W)
+            row += 1
+        elif convergence == 'absolute':
+            self['absolute'].grid(row=row, column=1, sticky=tk.W)
+            row += 1
+        elif convergence not in ('normal', 'precise'):
+            # variable ... so put in all possibilities
+            self['relative'].grid(row=row, column=1, sticky=tk.W)
+            row += 1
+            self['absolute'].grid(row=row, column=1, sticky=tk.W)
+            row += 1
+            mw.align_labels((self['relative'], self['absolute']))
+
+        frame.columnconfigure(0, minsize=30)
 
     def handle_dialog(self, result):
         if result is None or result == 'Cancel':
@@ -167,13 +268,30 @@ class TkEnergy(molssi_workflow.TkNode):
 
         self.dialog.deactivate(result)
 
-        self.node.structure = self._widget['structure'].get()
-        self.node.hamiltonian = self._widget['hamiltonian'].get()
-        self.node.convergence = self._widget['convergence'].get()
-        if self.node.convergence == 'relative':
-            self.node.relscf = self._widget['relscf'].get()
-        elif self.node.convergence == 'absolute':
-            self.node.scfcrt = self._widget['scfcrt'].get()
+        # Shortcut for parameters
+        P = self.node.parameters
+
+        for key in P:
+            if key not in ('results', 'extra keywords', 'create tables'):
+                P[key].set_from_widget()
+
+        # and from the results tab...
+        if self.tk_var['create tables'].get():
+            P['create tables'].value = 'yes'
+        else:
+            P['create tables'].value = 'no'
+
+        results = P['results'].value = {}
+        for key, w_check, w_variable, w_table, w_column in self.results_widgets:
+            if self.tk_var[key].get():
+                tmp = results[key] = dict()
+                tmp['variable'] = w_variable.get()
+            table = w_table.get()
+            if table != '':
+                if not key in results:
+                    tmp = results[key] = dict()
+                tmp['table'] = table
+                tmp['column'] = w_column.get()
 
     def handle_keyword(self, keyword, w_name, value, before, action, changed):
         """Handle typing in a combobox for the keyword
@@ -192,11 +310,11 @@ class TkEnergy(molssi_workflow.TkNode):
 
         if changed == '\t':
             changed = 'TAB'
-        print('\tkeyword: {}'.format(keyword))
-        print('\t  value: {}'.format(value))
-        print('\t before: {}'.format(before))
-        print('\t action: {}'.format(action))
-        print('\tchanged: {}'.format(changed))
+        logger.debug('\tkeyword: {}'.format(keyword))
+        logger.debug('\t  value: {}'.format(value))
+        logger.debug('\t before: {}'.format(before))
+        logger.debug('\t action: {}'.format(action))
+        logger.debug('\tchanged: {}'.format(changed))
 
         if value in mopac_step.keywords:
             w.configure(style='TEntry')
@@ -212,7 +330,7 @@ class TkEnergy(molssi_workflow.TkNode):
             w_name: the name of the widget (from %W)
         """
 
-        w = self._widget['keyword_'+str(row)]
+        w = self['keyword_'+str(row)]
         current = w.get().upper()
 
         keywords = []
@@ -223,17 +341,16 @@ class TkEnergy(molssi_workflow.TkNode):
         w.configure(values=sorted(keywords))
 
     def set_keyword_cb(self, event, w, row=None):
-        print(event)
-        print(w)
-        print(w.get())
-        print(row)
+        logger.debug(event)
+        logger.debug(w)
+        logger.debug(w.get())
+        logger.debug(row)
 
     def layout_keywords(self):
         """Layout the table of additional keywords and any arguments they
         need"""
 
-        w = self._widget
-        frame = w['add_to_input']
+        frame = self['add_to_input']
 
         # Unpack any widgets
         for slave in frame.grid_slaves():
@@ -304,7 +421,7 @@ class TkEnergy(molssi_workflow.TkNode):
 
         # The button to add a row...
         row += 1
-        w = self._widget['add keyword'] = ttk.Button(
+        w = self['add keyword'] = ttk.Button(
             frame,
             text='+',
             width=5,
@@ -332,9 +449,9 @@ class TkEnergy(molssi_workflow.TkNode):
             self.keyword_dialog.withdraw()
             frame = ttk.Frame(self.keyword_dialog.interior())
             frame.pack(expand=tk.YES, fill=tk.BOTH)
-            self._widget['keyword frame'] = frame
+            self['keyword frame'] = frame
 
-            w = self._widget['keyword tree'] = ttk.Treeview(
+            w = self['keyword tree'] = ttk.Treeview(
                 frame,
                 columns=('Keyword', 'Description'),
             )
@@ -367,8 +484,8 @@ class TkEnergy(molssi_workflow.TkNode):
 
         self.keyword_dialog.deactivate(result)
 
-        keyword = self._widget['keyword tree'].selection()
-        print(keyword)
+        keyword = self['keyword tree'].selection()
+        logger.debug(keyword)
 
     def validate_keyword_value(self, keyword, w_name, value, before, action,
                                changed):
@@ -384,23 +501,23 @@ class TkEnergy(molssi_workflow.TkNode):
         """
 
         w = self.dialog.nametowidget(w_name)  # nopep8
-        print('Validating the value of a keyword')
-        print('\tkeyword: {}'.format(keyword))
-        print('\t  value: {}'.format(value))
-        print('\t before: {}'.format(before))
-        print('\t action: {}'.format(action))
-        print('\tchanged: {}'.format(changed))
+        logger.debug('Validating the value of a keyword')
+        logger.debug('\tkeyword: {}'.format(keyword))
+        logger.debug('\t  value: {}'.format(value))
+        logger.debug('\t before: {}'.format(before))
+        logger.debug('\t action: {}'.format(action))
+        logger.debug('\tchanged: {}'.format(changed))
 
         return True
 
     def remove_keyword(self, row=None):
         """Remove a keyword from dd to input"""
-        print('remove row {}'.format(row))
+        logger.debug('remove row {}'.format(row))
 
     def handle_tab(self, event=None, row=None):
         """Handle a tab in a keyword entry field"""
-        print('Caught tab in row {}'.format(row))
-        print(event)
+        logger.debug('Caught tab in row {}'.format(row))
+        logger.debug(event)
 
         data = self.tmp_keywords[row]
         w = data['widgets']['entry']
@@ -413,7 +530,7 @@ class TkEnergy(molssi_workflow.TkNode):
                 keywords.append(keyword)
 
         prefix = lcp(*keywords)
-        print('prefix = "{}", current = "{}"'.format(prefix, current))
+        logger.debug('prefix = "{}", current = "{}"'.format(prefix, current))
 
         if prefix != current:
             w.delete(0, 'end')
@@ -441,3 +558,39 @@ class TkEnergy(molssi_workflow.TkNode):
         w.delete(0, 'end')
         w.insert('end', keyword)
         w.configure(style='TEntry')
+
+    def _bound_to_mousewheel(self, event):
+        """Set the bindings on the scrolled frame, used when the
+        mouse enters it
+        """
+        self['scrolled results'].bind_all("<MouseWheel>", self._on_mousewheel)
+        # self.canvas.bind_all("<Button-4>", self._on_mousewheel)
+        # self.canvas.bind_all("<Button-5>", self._on_mousewheel)
+
+    def _unbound_to_mousewheel(self, event):
+        """Remove the bindings on the canvas, used when the
+        mouse leaves the canvas
+        """
+        self['scrolled results'].unbind_all("<MouseWheel>")
+        # self.canvas.unbind_all("<Button-4>")
+        # self.canvas.unbind_all("<Button-5>")
+
+    def _on_mousewheel(self, event):
+        """Handle the mousewheel or similar events.
+        There are two choices for how to scroll, and it
+        may differ from OS to OS.
+
+        As set up here on a Mac the mouse drags the canvas in
+        the direction of travel, thus to go down in the canvas
+        you drag upwards, and vice versa.
+
+        Flip the signs to change this
+        """
+
+        if event.num == 5 or event.delta < 0:
+            delta = 1
+        else:
+            delta = -1
+
+        self['scrolled results'].yview(mode='scroll', value=delta,
+                                       units="units")
