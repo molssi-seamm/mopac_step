@@ -1,42 +1,22 @@
 # -*- coding: utf-8 -*-
 """Setup and run MOPAC"""
 
-import molssi_workflow
+import json
 import logging
+import molssi_workflow
+from molssi_workflow import ureg, Q_, units_class, data  # nopep8
+import molssi_util.printing as printing
+from molssi_util.printing import FormattedText as __
+import mopac_step
+import numpy as np
+import pandas
 
 logger = logging.getLogger(__name__)
+job = printing.getPrinter()
+printer = printing.getPrinter('mopac')
 
 
 class Energy(molssi_workflow.Node):
-    structures = {
-        'current': '',
-        'initial': '',
-        'other': '',
-    }
-
-    hamiltonians = {
-        'AM1': '',
-        'MNDO': '',
-        'MNDOD': '',
-        'PM3': '',
-        'PM6': '',
-        'PM6-D3': '',
-        'PM6-DH+': '',
-        'PM6-DH2': '',
-        'PM6-DH2X': '',
-        'PM6-D3H4': '',
-        'PM6-D3H4X': '',
-        'PM7': '',
-        'PM7-TS': '',
-        'RM1': '',
-    }
-
-    convergences = {
-        'default': '',
-        'precise': '',
-        'relative': '',
-        'absolute': '',
-    }
 
     def __init__(self, workflow=None, title='Energy', extension=None):
         """Initialize the node"""
@@ -45,72 +25,76 @@ class Energy(molssi_workflow.Node):
 
         super().__init__(workflow=workflow, title=title, extension=extension)
 
-        self.description = 'A single point energy calculation'
+        self.parameters = mopac_step.EnergyParameters()
 
-        self.structure = None
-        self.hamiltonian = 'PM7'
-        self.convergence = 'default'  # 'precise', 'relative' or 'absolute'
-        self.relscf = 1.0  # SCF relative convergence, > 1 is less accurate
-        self.scfcrt = 0.0001  # kcal/mol, SCF convergence
+        self.description = 'A single point energy calculation'
+        self._long_header = ''
         self.keywords = []  # additional keywords to add
 
-    def describe(self, indent='', json_dict=None):
-        """Write out information about what this node will do
-        If json_dict is passed in, add information to that dictionary
-        so that it can be written out by the controller as appropriate.
+    def description_text(self, P):
+        """Prepare information about what this node will do
         """
 
-        next_node = super().describe(indent, json_dict)
-
+        text = 'Single-point energy using {hamiltonian}, converged to '
         # Convergence
-        if self.convergence == 'default':
-            tmp = ' converged to the normal level of 1.0e-04 kcal/mol'
-        elif self.convergence == 'precise':
-            tmp = " converged to the 'precise' level of 1.0e-06 kcal/mol"
-        elif self.convergence == 'relative':
-            tmp = '\n' + indent + '    converged to a factor of' \
-                  + ' {}'.format(self.relscf) \
-                  + ' times the normal criteria'
-        elif self.convergence == 'absolute':
-            tmp = ' converged to {} kcal/mol'.format(self.scfcrt)
-                    
-        # Hamiltonian followed by converegence
-        self.job_output(indent +
-                        '   Single-point energy using ' +
-                        self.hamiltonian + tmp
-                        )
-        self.job_output('')
+        if P['convergence'] == 'normal':
+            text += "the 'normal' level of 1.0e-04 kcal/mol."
+        elif P['convergence'] == 'precise':
+            text += "the 'precise' level of 1.0e-06 kcal/mol."
+        elif P['convergence'] == 'relative':
+            text += ('a factor of {relative} times the '
+                     'normal criterion.')
+        elif P['convergence'] == 'absolute':
+            text += 'converged to {absolute}'
 
-        return next_node
+        return text
 
     def get_input(self):
         """Get the input for an energy calculation for MOPAC"""
+        self._long_header = []
+        self._long_header.append(__(self.header, indent=3*' '))
 
-        keywords = [self.hamiltonian]
+        P = self.parameters.current_values_to_dict(
+            context=molssi_workflow.workflow_variables._data
+        )
+        # Have to fix formatting for printing...
+        PP = dict(P)
+        for key in PP:
+            if isinstance(PP[key], units_class):
+                PP[key] = '{:~P}'.format(PP[key])
 
-        keywords.append('1SCF')
+        self._long_header.append(
+            __(self.description_text(PP), **PP, indent=7*' ')
+        )
+
+        # Start gathering the keywords
+        keywords = ['1SCF', P['hamiltonian']]
 
         # which structure? may need to set default first...
-        if not self.structure:
-            if isinstance(self.previous(), molssi_workflow.StartNode):
-                self.structure = 'initial'
+        if P['structure'] == 'default':
+            if self._id[-1] == '1':
+                structure = 'initial'
             else:
-                self.structure = 'current'
+                structure = 'current'
+        elif self._id[-1] == '1':
+            structure = 'initial'
+        elif P['structure'] == 'current':
+            structure = 'current'
 
-        if self.structure == 'current':
+        if structure == 'current':
             keywords.append('OLDGEO')
 
-        if self.convergence == 'default':
+        if P['convergence'] == 'normal':
             pass
-        elif self.convergence == 'precise':
+        elif P['convergence'] == 'precise':
             keywords.append('PRECISE')
-        elif self.convergence == 'relative':
-            keywords.append('RELSCF=' + self.relscf)
-        elif self.convergence == 'absolute':
-            keywords.append('SCFSCRT=' + self.scfcrt)
+        elif P['convergence'] == 'relative':
+            keywords.append('RELSCF=' + P['relative'])
+        elif P['convergence'] == 'absolute':
+            keywords.append('SCFSCRT=' + P['absolute'])
         else:
             raise RuntimeError("Don't recognize convergence '{}'".format(
-                self.convergence))
+                P['convergence']))
 
         return keywords
 
@@ -118,42 +102,82 @@ class Energy(molssi_workflow.Node):
         """Parse the output and generating the text output and store the
         data in variables for other stages to access
         """
-        result = ''
 
-        result += 'Step ' + '.'.join(str(e) for e in self._id)
-        result += ': ' + self.title
-
-        # Convergence
-        if self.convergence == 'default':
-            tmp = ' converged to the normal level of 1.0e-04 kcal/mol'
-        elif self.convergence == 'precise':
-            tmp = " converged to the 'precise' level of 1.0e-06 kcal/mol"
-        elif self.convergence == 'relative':
-            value = self.get_value(self.relscf)
-            tmp = '\n  converged to a factor of' \
-                  + ' {}'.format(self.value) \
-                  + ' times the normal criteria' \
-                  + ' = {} kcal/mol'.format(1.0e-04*value)
-        elif self.convergence == 'absolute':
-            value = self.get_value(self.scfcrt)
-            tmp = ' converged to {} kcal/mol'.format(self.scfcrt)
-                    
-        # Hamiltonian followed by converegence
-        result += '\n  Single-point energy using '
-        result += self.hamiltonian + tmp
+        text = self._long_header
 
         # The results
-        result += '\n'
-        result += "\n  The SCF converged in {} iterations".format(
-            data['NUMBER_SCF_CYCLES']
+        printer.normal(
+            __(('\nThe SCF converged in {NUMBER_SCF_CYCLES} iterations '
+                'to a heat of formation of {HEAT_OF_FORMATION} '
+                'kcal/mol.'), **data, indent='   '
+            )
         )
-        result += " to a heat of formation of {} kcal/mol".format(
-            data['HEAT_OF_FORMATION']
-        )
-        result += '\n'
 
-        # And set the global variables to store key results
-        self.set_variable('calculated_heat_of_formation',
-                          data['HEAT_OF_FORMATION'])
+        # Print the amended properties structure, if desired
+        # Used to update the properties data structure
+        if False:
+            properties = dict(mopac_step.properties)
+            for key in data:
+                if key not in properties:
+                    print("key '{}' not in properties!?".format(key))
+                else:
+                    entry = properties[key]
+                    if 'calculation' not in entry:
+                        entry['calculation'] = ['single point energy']
+                    else:
+                        if 'single point energy' not in entry['calculation']:
+                            entry['calculation'].append('single point energy')
+            print('properties:\n')
+            print(json.dumps(properties, indent=4, sort_keys=True))
+            print()
 
-        return result
+        # Put any requested results into variables or tables
+        results = self.parameters['results'].value
+        for key, value in results.items():
+            if 'variable' in value:
+                self.set_variable(value['variable'], data[key])
+
+            if 'table' in value:
+                tablename = value['table']
+                column = value['column']
+                # Does the table exist?
+                if not self.variable_exists(tablename):
+                    if self.parameters['create tables'].get():
+                        table = pandas.DataFrame()
+                        self.set_variable(
+                            tablename, {
+                                'type': 'pandas',
+                                'table': table,
+                                'defaults': {},
+                                'loop index': False,
+                                'current index': 0
+                            }
+                        )
+                    else:
+                        raise RuntimeError(
+                            "Table '{}' does not exist.".format(tablename)
+                        )
+
+                table_handle = self.get_variable(tablename)
+                table = table_handle['table']
+
+                # create the column as needed
+                if column not in table.columns:
+                    kind = mopac_step.properties[key]['type']
+                    if kind == 'boolean':
+                        default = False
+                    elif kind == 'integer':
+                        default = 0
+                    elif kind == 'float':
+                        default = np.nan
+                    else:
+                        default  = ''
+
+                    table_handle['defaults'][column] = default
+                    table[column] = default
+
+                # and put the value in (finally!!!)
+                row_index = table_handle['current index']
+                table.at[row_index, column] = data[key]
+
+        return text
