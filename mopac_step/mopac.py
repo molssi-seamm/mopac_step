@@ -67,7 +67,7 @@ class MOPAC(molssi_workflow.Node):
             logger.error('MOPAC run(): there is no structure!')
             raise RuntimeError('MOPAC run(): there is no structure!')
 
-        next_node = super().run()
+        next_node = super().run(printer)
 
         # Get the first real node
         node = self.mopac_workflow.get_node('1').next()
@@ -79,7 +79,7 @@ class MOPAC(molssi_workflow.Node):
             lines.append(' '.join(keywords) + ' AUX')
             lines.append('Run from MolSSI workflow')
             lines.append('{} using {} hamiltonian'.format(
-                node.description, node.hamiltonian))
+                node.description, node.parameters['hamiltonian']))
 
             if 'OLDGEO' in keywords:
                 input_data.append('\n'.join(lines))
@@ -175,9 +175,7 @@ class MOPAC(molssi_workflow.Node):
             logger.debug('------------------')
             logger.debug(pprint.pformat(data, width=170, compact=True))
 
-            output = node.analyze(data=data)
-            for line in output.split('\n'):
-                printer.normal(indent + '    ' + line)
+            node.analyze(data=data)
 
             node = node.next()
 
