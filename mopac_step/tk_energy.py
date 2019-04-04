@@ -3,7 +3,7 @@
 
 import logging
 import molssi_workflow
-import molssi_util.molssi_widgets as mw
+import molssi_widgets as mw
 import mopac_step
 import Pmw
 import tkinter as tk
@@ -61,7 +61,7 @@ class TkEnergy(molssi_workflow.TkNode):
 
         # The tabbed notebook
         notebook = ttk.Notebook(self.dialog.interior())
-        notebook.pack(side='top', fill=tk.BOTH, expand=1)
+        notebook.pack(side='top', fill=tk.BOTH, expand=tk.YES)
         self['notebook'] = notebook
 
         # Main frame holding the widgets
@@ -94,35 +94,21 @@ class TkEnergy(molssi_workflow.TkNode):
         self['create tables'] = ttk.Checkbutton(
             rframe, text='Create tables if needed', variable=var
         )
-        self['column0'] = ttk.Label(rframe, text='Result')
-        self['column1'] = ttk.Label(rframe, text='Save')
-        self['column2'] = ttk.Label(rframe, text='As variable')
-        self['column3'] = ttk.Label(rframe, text='In Table')
-        self['column4'] = ttk.Label(rframe, text='Column')
+        self['create tables'].grid(row=0, column=0, sticky=tk.W)
 
-        # The scrolled pane for the results. Put a ttk.Frame inside
-        # hoping that it fixes background colors, etc.
-        self['scrolled results'] = Pmw.ScrolledFrame(
-            rframe, hscrollmode='none', vscrollmode='static')
-        self['results'] = ttk.Frame(self['scrolled results'].interior())
-
-        self['create tables'].grid(row=0, column=0, columnspan=6, sticky=tk.W)
-
-        self['column0'].grid(row=1, column=0)
-        self['column1'].grid(row=1, column=1)
-        self['column2'].grid(row=1, column=2)
-        self['column3'].grid(row=1, column=4)
-        self['column4'].grid(row=1, column=5)
-
-        rframe.columnconfigure(6, weight=1)
-        self['scrolled results'].grid(row=2, column=0, columnspan=7,
-                                      sticky=tk.NSEW)
-        self['results'].pack(fill = 'both', expand = 1)
-        rframe.columnconfigure(3, minsize=30)
-
-        # Set up scrolling on the canvas with the mouse scrollwheel or similar
-        self['results'].bind('<Enter>', self._bound_to_mousewheel)
-        self['results'].bind('<Leave>', self._unbound_to_mousewheel)
+        self['results'] = mw.ScrolledColumns(
+            rframe,
+            columns=[
+                'Result',
+                'Save',
+                'Variable name',
+                'In table',
+                'Column name',
+            ]
+        )
+        self['results'].grid(row=1, column=0, sticky=tk.NSEW)
+        rframe.columnconfigure(0, weight=1)
+        rframe.rowconfigure(1, weight=1)
 
         self.setup_results()
         
@@ -135,7 +121,9 @@ class TkEnergy(molssi_workflow.TkNode):
         results = self.node.parameters['results'].value
 
         self.results_widgets = []
-        frame = self['results']
+        table = self['results']
+        frame = table.interior()
+
         row=0
         for key, entry in mopac_step.properties.items():
             if 'calculation' not in entry:
@@ -150,18 +138,17 @@ class TkEnergy(molssi_workflow.TkNode):
             widgets = []
             widgets.append(key)
 
-            w = ttk.Label(frame, text=entry['description'])
-            w.grid(row=row, column=0, sticky=tk.E)
+            table.cell(row, 0, entry['description'])
 
             # variable
             var = self.tk_var[key] = tk.IntVar()
             var.set(0)
             w = ttk.Checkbutton(frame, variable=var)
-            w.grid(row=row, column=1)
+            table.cell(row, 1, w)
             widgets.append(w)
             e = ttk.Entry(frame, width=15)
             e.insert(0, key.lower())
-            e.grid(row=row, column=2)
+            table.cell(row, 2, e)
             widgets.append(e)
 
             if key in results:
@@ -172,11 +159,11 @@ class TkEnergy(molssi_workflow.TkNode):
 
             # table
             w = ttk.Combobox(frame, width=10)
-            w.grid(row=row, column=4)
+            table.cell(row, 3, w)
             widgets.append(w)
             e = ttk.Entry(frame, width=15)
             e.insert(0, key.lower())
-            e.grid(row=row, column=5)
+            table.cell(row, 4, e)
             widgets.append(e)
 
             if key in results:
@@ -188,20 +175,19 @@ class TkEnergy(molssi_workflow.TkNode):
             self.results_widgets.append(widgets)
             row += 1
 
-        # Adjust the column widths. rframe is the outer frame, containing
-        # the headers. frame is in the scrollable frame, and contains the
-        # columns.
-
+        # And make the dialog wide enough
         frame.update_idletasks()
-        rframe = self['results frame']
-        for column in (0, 1, 2, 3, 4, 5):
-            # bbox returns (x, y, w, h) so we want the third item
-            w = frame.grid_bbox(column, 0)[2]
-            w2 = rframe.grid_bbox(column, 0)[2]
-            if w < w2:
-                frame.columnconfigure(column, minsize=w2)
-            else:
-                rframe.columnconfigure(column, minsize=w)
+        width = frame.winfo_width() + 70  # extra space for frame, etc.
+        height = frame.winfo_height()
+        sw = frame.winfo_screenwidth()
+        sh = frame.winfo_screenheight()
+
+        if width > sw:
+            width = int(0.9*sw)
+        if height > sh:
+            height = int(0.9*sh)
+            
+        self.dialog.geometry('{}x{}'.format(width, height))
 
     def edit(self):
         """Present a dialog for editing the input for the MOPAC energy
