@@ -101,11 +101,11 @@ class MOPAC(molssi_workflow.Node):
                                    z, 0 if 'z' in frz else 1)
                     tmp_structure.append(line)
                 input_data.append('\n'.join(lines) + '\n'
-                                  + '\n'.join(tmp_structure))
+                                  + '\n'.join(tmp_structure) + '\n')
 
             node = node.next()
 
-        files = {'molssi.dat': '\n\n'.join(input_data)}
+        files = {'molssi.dat': '\n'.join(input_data)}
         logger.debug('molssi.dat:\n' + files['molssi.dat'])
 
         os.makedirs(self.directory, exist_ok=True)

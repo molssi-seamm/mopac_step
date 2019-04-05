@@ -18,12 +18,15 @@ from mopac_step.energy_parameters import EnergyParameters  # nopep8
 from mopac_step.tk_energy import TkEnergy  # nopep8
 from mopac_step.optimization_step import OptimizationStep  # nopep8
 from mopac_step.optimization import Optimization  # nopep8
+from mopac_step.optimization_parameters import OptimizationParameters  # nopep8
 from mopac_step.tk_optimization import TkOptimization  # nopep8
 from mopac_step.ir_step import IRStep  # nopep8
 from mopac_step.ir import IR  # nopep8
+from mopac_step.ir_parameters import IRParameters  # nopep8
 from mopac_step.tk_ir import TkIR  # nopep8
 from mopac_step.thermodynamics_step import ThermodynamicsStep  # nopep8
 from mopac_step.thermodynamics import Thermodynamics  # nopep8
+from mopac_step.thermodynamics_parameters import ThermodynamicsParameters  # nopep8
 from mopac_step.tk_thermodynamics import TkThermodynamics  # nopep8
 
 keywords = {
@@ -886,23 +889,36 @@ keywords = {
 properties = {
     "AO_ATOMINDEX": {
         "calculation": [
-            "single point energy"
+            "single point energy",
+            "optimization",
+            "thermodynamics",
+            "vibrations"
         ],
         "description": "atom for AO",
-        "dimensionality": ['n_aos'],
+        "dimensionality": [
+            "n_aos"
+        ],
         "type": "integer"
     },
     "AO_ZETA": {
         "calculation": [
-            "single point energy"
+            "single point energy",
+            "optimization",
+            "thermodynamics",
+            "vibrations"
         ],
         "description": "Slater exponent",
-        "dimensionality": ['n_aos'],
+        "dimensionality": [
+            "n_aos"
+        ],
         "type": "float"
     },
     "AREA": {
         "calculation": [
-            "single point energy"
+            "single point energy",
+            "optimization",
+            "thermodynamics",
+            "vibrations"
         ],
         "description": "surface area",
         "dimensionality": "scalar",
@@ -911,92 +927,150 @@ properties = {
     },
     "ATOM_CHARGES": {
         "calculation": [
-            "single point energy"
+            "single point energy",
+            "optimization",
+            "thermodynamics",
+            "vibrations"
         ],
         "description": "atom charges",
-        "dimensionality": ["n_atoms"],
+        "dimensionality": [
+            "n_atoms"
+        ],
         "type": "float"
     },
     "ATOM_CORE": {
         "calculation": [
-            "single point energy"
+            "single point energy",
+            "optimization",
+            "thermodynamics",
+            "vibrations"
         ],
         "description": "number of valence electrons",
-        "dimensionality": ["n_atoms"],
+        "dimensionality": [
+            "n_atoms"
+        ],
         "type": "integer"
     },
     "ATOM_EL": {
         "calculation": [
-            "single point energy"
+            "single point energy",
+            "optimization",
+            "thermodynamics",
+            "vibrations"
         ],
         "description": "atomic symbol",
-        "dimensionality": ["n_atoms"],
+        "dimensionality": [
+            "n_atoms"
+        ],
         "type": "string"
     },
     "ATOM_PQN": {
         "calculation": [
-            "single point energy"
+            "single point energy",
+            "optimization",
+            "thermodynamics",
+            "vibrations"
         ],
         "description": "principal quantum number",
-        "dimensionality": ["n_aos"],
+        "dimensionality": [
+            "n_aos"
+        ],
         "type": "integer"
     },
     "ATOM_SYMTYPE": {
         "calculation": [
-            "single point energy"
+            "single point energy",
+            "optimization",
+            "thermodynamics",
+            "vibrations"
         ],
         "description": "atomic orbital angular shape",
-        "dimensionality": ["n_aos"],
+        "dimensionality": [
+            "n_aos"
+        ],
         "type": "string"
     },
     "ATOM_X": {
         "calculation": [
-            "single point energy"
+            "single point energy",
+            "optimization",
+            "thermodynamics",
+            "vibrations"
         ],
         "description": "x, y, z coordinates",
-        "dimensionality": [3, "n_atoms"],
+        "dimensionality": [
+            3,
+            "n_atoms"
+        ],
         "type": "float",
         "units": "Å"
     },
     "ATOM_X_FORCE": {
-        "description": "",
-        "dimensionality": [3, "n_atoms"],
+        "calculation": [
+            "thermodynamics",
+            "vibrations"
+        ],
+        "description": "reoriented coordinates",
+        "dimensionality": [
+            3,
+            "n_atoms"
+        ],
         "type": "float",
         "units": "Å"
     },
     "ATOM_X_OPT": {
         "calculation": [
+            "optimization",
+            "thermodynamics",
+            "vibrations"
         ],
         "description": "optimized x, y, z coordinates",
-        "dimensionality": [3, "n_atoms"],
+        "dimensionality": [
+            3,
+            "n_atoms"
+        ],
         "type": "float",
         "units": "Å"
     },
     "ATOM_X_UPDATED": {
-        "description": "",
-        "dimensionality": [3, "n_atoms"],
+        "calculation": [
+            "optimization"
+        ],
+        "description": "trajectory coordinates",
+        "dimensionality": [
+            "nsteps", [
+                3,
+                "n_atoms"
+            ]
+        ],
         "type": "float",
         "units": "Å"
     },
     "COMMENTS": {
         "calculation": [
         ],
-        "description": "",
+        "description": "User comment line",
         "dimensionality": "scalar",
         "type": "string"
     },
     "CPU_TIME": {
         "calculation": [
-            "single point energy"
+            "single point energy",
+            "optimization",
+            "thermodynamics",
+            "vibrations"
         ],
-        "description": "cput time for calculation",
+        "description": "cpu time for calculation",
         "dimensionality": "scalar",
         "type": "float",
         "units": "s"
     },
     "DATE": {
         "calculation": [
-            "single point energy"
+            "single point energy",
+            "optimization",
+            "thermodynamics",
+            "vibrations"
         ],
         "description": "date and time of calculation",
         "dimensionality": "scalar",
@@ -1004,7 +1078,10 @@ properties = {
     },
     "DIPOLE": {
         "calculation": [
-            "single point energy"
+            "single point energy",
+            "optimization",
+            "thermodynamics",
+            "vibrations"
         ],
         "description": "dipole moment",
         "dimensionality": "scalar",
@@ -1013,33 +1090,51 @@ properties = {
     },
     "DIP_VEC": {
         "calculation": [
-            "single point energy"
+            "single point energy",
+            "optimization",
+            "thermodynamics",
+            "vibrations"
         ],
         "description": "dipole vector",
-        "dimensionality": [3],
+        "dimensionality": [
+            3
+        ],
         "type": "float",
         "units": "debye"
     },
     "EIGENVALUES": {
         "calculation": [
-            "single point energy"
+            "single point energy",
+            "optimization",
+            "thermodynamics",
+            "vibrations"
         ],
         "description": "orbital energies",
-        "dimensionality": ["n_aos"],
+        "dimensionality": [
+            "n_aos"
+        ],
         "type": "float",
         "units": "eV"
     },
     "EIGENVECTORS": {
         "calculation": [
-            "single point energy"
+            "single point energy",
+            "optimization",
+            "thermodynamics",
+            "vibrations"
         ],
         "description": "orbital coefficients",
-        "dimensionality": ["n_aos"],
+        "dimensionality": [
+            "n_aos"
+        ],
         "type": "float"
     },
     "EMPIRICAL_FORMULA": {
         "calculation": [
-            "single point energy"
+            "single point energy",
+            "optimization",
+            "thermodynamics",
+            "vibrations"
         ],
         "description": "empirical formula",
         "dimensionality": "scalar",
@@ -1047,7 +1142,10 @@ properties = {
     },
     "ENERGY_ELECTRONIC": {
         "calculation": [
-            "single point energy"
+            "single point energy",
+            "optimization",
+            "thermodynamics",
+            "vibrations"
         ],
         "description": "electronic energy",
         "dimensionality": "scalar",
@@ -1056,7 +1154,10 @@ properties = {
     },
     "ENERGY_NUCLEAR": {
         "calculation": [
-            "single point energy"
+            "single point energy",
+            "optimization",
+            "thermodynamics",
+            "vibrations"
         ],
         "description": "nuclear repulsion energy",
         "dimensionality": "scalar",
@@ -1064,46 +1165,86 @@ properties = {
         "units": "eV"
     },
     "ENTHALPY_TOT": {
-        "description": "",
-        "dimensionality": "scalar",
+        "calculation": [
+            "thermodynamics",
+            "vibrations"
+        ],
+        "description": "enthalpy",
+        "dimensionality": [
+            "n_temps",
+        ],
         "type": "float",
         "units": "cal/mol"
     },
     "ENTROPY_TOT": {
-        "description": "",
-        "dimensionality": "scalar",
+        "calculation": [
+            "thermodynamics",
+            "vibrations"
+        ],
+        "description": "entropy",
+        "dimensionality": [
+            "n_temps",
+        ],
         "type": "float",
         "units": "cal/K/mol"
     },
     "GRADIENTS": {
+        "calculation": [
+            "optimization",
+            "thermodynamics",
+            "vibrations"
+        ],
         "description": "",
-        "dimensionality": [3, "n_atoms"],
+        "dimensionality": [
+            3,
+            "n_atoms"
+        ],
         "type": "float",
         "units": "kcal/mol/Å"
     },
     "GRADIENT_NORM": {
         "calculation": [
+            "optimization",
+            "thermodynamics",
+            "vibrations"
         ],
-        "description": "",
+        "description": "final norm of the gradient",
         "dimensionality": "scalar",
         "type": "float",
         "units": "kcal/mol/Å"
     },
     "GRADIENT_UPDATED": {
-        "description": "",
-        "dimensionality": [3, "n_atoms"],
+        "calculation": [
+            "optimization"
+        ],
+        "description": "forces in trajectory",
+        "dimensionality": [
+            "nsteps", [
+                3,
+                "n_atoms"
+            ]
+        ],
         "type": "float",
         "units": "kcal/mol/Å"
     },
     "HEAT_CAPACITY_TOT": {
-        "description": "",
-        "dimensionality": "scalar",
+        "calculation": [
+            "thermodynamics",
+            "vibrations"
+        ],
+        "description": "heat capacity",
+        "dimensionality": [
+            "n_temps",
+        ],
         "type": "float",
         "units": "cal/K/mol"
     },
     "HEAT_OF_FORMATION": {
         "calculation": [
-            "single point energy"
+            "single point energy",
+            "optimization",
+            "thermodynamics",
+            "vibrations"
         ],
         "description": "heat of formation",
         "dimensionality": "scalar",
@@ -1111,32 +1252,57 @@ properties = {
         "units": "kcal/mol"
     },
     "HEAT_OF_FORM_UPDATED": {
-        "description": "",
-        "dimensionality": "scalar",
+        "calculation": [
+            "optimization"
+        ],
+        "description": "heat of formation in trajectory",
+        "dimensionality": [
+            "nsteps"
+        ],
         "type": "float",
         "units": "kcal/mol"
     },
     "HESSIAN_MATRIX": {
+        "calculation": [
+            "thermodynamics",
+            "vibrations"
+        ],
         "description": "",
-        "dimensionality": "scalar",
+        "dimensionality": [
+            "n_dof",
+            "n_dof"
+        ],
         "type": "float",
         "units": "mdynes/Å/Da"
     },
     "H_O_F(T)": {
+        "calculation": [
+            "thermodynamics",
+            "vibrations"
+        ],
         "description": "",
-        "dimensionality": "scalar",
+        "dimensionality": [
+            "n_temps"
+        ],
         "type": "float",
         "units": "kcal/mol"
     },
     "INT_FORCE_CONSTS": {
-        "description": "",
-        "dimensionality": "scalar",
+        "calculation": [
+            "thermodynamics",
+            "vibrations"
+        ],
+        "description": "force constants for internals",
+        "dimensionality": ["n_dofs"],
         "type": "float",
         "units": "mdyne/Å"
     },
     "IONIZATION_POTENTIAL": {
         "calculation": [
-            "single point energy"
+            "single point energy",
+            "optimization",
+            "thermodynamics",
+            "vibrations"
         ],
         "description": "ionization potential (IP)",
         "dimensionality": "scalar",
@@ -1144,8 +1310,14 @@ properties = {
         "units": "eV"
     },
     "ISOTOPIC_MASSES": {
+        "calculation": [
+            "thermodynamics",
+            "vibrations"
+        ],
         "description": "",
-        "dimensionality": ["n_atoms"],
+        "dimensionality": [
+            "n_atoms"
+        ],
         "type": "float",
         "units": "Da"
     },
@@ -1158,15 +1330,23 @@ properties = {
     },
     "M.O.SYMMETRY_LABELS": {
         "calculation": [
-            "single point energy"
+            "single point energy",
+            "optimization",
+            "thermodynamics",
+            "vibrations"
         ],
         "description": "molecular orbital symmetries",
-        "dimensionality": ["n_mos"],
+        "dimensionality": [
+            "n_mos"
+        ],
         "type": "string"
     },
     "METHOD": {
         "calculation": [
-            "single point energy"
+            "single point energy",
+            "optimization",
+            "thermodynamics",
+            "vibrations"
         ],
         "description": "hamiltonian",
         "dimensionality": "scalar",
@@ -1174,15 +1354,23 @@ properties = {
     },
     "MOLECULAR_ORBITAL_OCCUPANCIES": {
         "calculation": [
-            "single point energy"
+            "single point energy",
+            "optimization",
+            "thermodynamics",
+            "vibrations"
         ],
         "description": "orbital occupancies",
-        "dimensionality": ["n_mos"],
+        "dimensionality": [
+            "n_mos"
+        ],
         "type": "float"
     },
     "MOLECULAR_WEIGHT": {
         "calculation": [
-            "single point energy"
+            "single point energy",
+            "optimization",
+            "thermodynamics",
+            "vibrations"
         ],
         "description": "molecular weight",
         "dimensionality": "scalar",
@@ -1191,25 +1379,44 @@ properties = {
     },
     "MOPAC_VERSION": {
         "calculation": [
-            "single point energy"
+            "single point energy",
+            "optimization",
+            "thermodynamics",
+            "vibrations"
         ],
         "description": "MOPAC version",
         "dimensionality": "scalar",
         "type": "string"
     },
     "NORMAL_MODES": {
+        "calculation": [
+            "thermodynamics",
+            "vibrations"
+        ],
         "description": "",
-        "dimensionality": "scalar",
+        "dimensionality": [
+            "n_dof",
+            "n_dof"
+        ],
         "type": "float"
     },
     "NORMAL_MODE_SYMMETRY_LABELS": {
+        "calculation": [
+            "thermodynamics",
+            "vibrations"
+        ],
         "description": "",
-        "dimensionality": "scalar",
+        "dimensionality": [
+            "n_dof"
+        ],
         "type": "string"
     },
     "NUMBER_SCF_CYCLES": {
         "calculation": [
-            "single point energy"
+            "single point energy",
+            "optimization",
+            "thermodynamics",
+            "vibrations"
         ],
         "description": "number of scf's",
         "dimensionality": "scalar",
@@ -1217,7 +1424,10 @@ properties = {
     },
     "NUM_ALPHA_ELECTRONS": {
         "calculation": [
-            "single point energy"
+            "single point energy",
+            "optimization",
+            "thermodynamics",
+            "vibrations"
         ],
         "description": "number of spin-up electrons",
         "dimensionality": "scalar",
@@ -1225,7 +1435,10 @@ properties = {
     },
     "NUM_BETA_ELECTRONS": {
         "calculation": [
-            "single point energy"
+            "single point energy",
+            "optimization",
+            "thermodynamics",
+            "vibrations"
         ],
         "description": "number of spin-down electrons",
         "dimensionality": "scalar",
@@ -1233,71 +1446,116 @@ properties = {
     },
     "NUM_ELECTRONS": {
         "calculation": [
-            "single point energy"
+            "single point energy",
+            "optimization",
+            "thermodynamics",
+            "vibrations"
         ],
         "description": "number of electrons",
         "dimensionality": "scalar",
         "type": "integer"
     },
     "ORIENTATION_ATOM_X": {
+        "calculation": [
+            "thermodynamics",
+            "vibrations"
+        ],
         "description": "",
-        "dimensionality": "scalar",
+        "dimensionality": [
+            3,
+            "n_atoms"
+        ],
         "type": "float",
         "units": "Å"
     },
     "OVERLAP_MATRIX": {
         "calculation": [
-            "single point energy"
+            "single point energy",
+            "optimization",
+            "thermodynamics",
+            "vibrations"
         ],
         "description": "the AO overlap matrix",
-        "dimensionality": "scalar",
+        "dimensionality": [
+            "triangular",
+            "n_aos",
+            "n_aos"
+        ],
         "type": "float"
     },
     "POINT_GROUP": {
         "calculation": [
-            "single point energy"
+            "single point energy",
+            "optimization",
+            "thermodynamics",
+            "vibrations"
         ],
         "description": "the molecular symmetry",
         "dimensionality": "scalar",
         "type": "string"
     },
     "PRI_MOM_OF_I": {
+        "calculation": [
+            "thermodynamics",
+            "vibrations"
+        ],
         "description": "",
-        "dimensionality": "scalar",
+        "dimensionality": [
+            3
+        ],
         "type": "float",
         "units": "10^-40*g*cm^2"
     },
     "ROTAT_CONSTS": {
+        "calculation": [
+            "thermodynamics",
+            "vibrations"
+        ],
         "description": "",
-        "dimensionality": "scalar",
+        "dimensionality": [
+            3
+        ],
         "type": "float",
         "units": "1/cm"
     },
     "SET_OF_MOS": {
         "calculation": [
-            "single point energy"
+            "single point energy",
+            "optimization",
+            "thermodynamics",
+            "vibrations"
         ],
         "description": "set of MOs",
-        "dimensionality": [2],
+        "dimensionality": [
+            2
+        ],
         "type": "string"
     },
     "SPIN_COMPONENT": {
         "calculation": [
-            "single point energy"
+            "single point energy",
+            "optimization",
+            "thermodynamics",
+            "vibrations"
         ],
         "description": "spin component",
-        "dimensionality": "scalar",
+        "dimensionality": [3],
         "type": "float"
     },
     "THERMODYNAMIC_PROPERTIES_TEMPS": {
+        "calculation": [
+            "thermodynamics",
+            "vibrations"
+        ],
         "description": "",
-        "dimensionality": ["n_temps"],
+        "dimensionality": [
+            "n_temps"
+        ],
         "type": "float",
         "units": "K"
     },
     "TITLE": {
         "calculation": [
-            "single point energy"
         ],
         "description": "title of calculation",
         "dimensionality": "scalar",
@@ -1305,16 +1563,25 @@ properties = {
     },
     "TOTAL_DENSITY_MATRIX": {
         "calculation": [
-            "single point energy"
+            "single point energy",
+            "optimization",
+            "thermodynamics",
+            "vibrations"
         ],
         "description": "density matrix",
-        "dimensionality": ["n_mos", "n_mos"],
+        "dimensionality": [
+            "n_mos",
+            "n_mos"
+        ],
         "shape": "triangular",
         "type": "float"
     },
     "TOTAL_ENERGY": {
         "calculation": [
-            "single point energy"
+            "single point energy",
+            "optimization",
+            "thermodynamics",
+            "vibrations"
         ],
         "description": "total energy",
         "dimensionality": "scalar",
@@ -1323,45 +1590,81 @@ properties = {
     },
     "TOTAL_SPIN": {
         "calculation": [
-            "single point energy"
+            "single point energy",
+            "optimization",
+            "thermodynamics",
+            "vibrations"
         ],
         "description": "spin",
         "dimensionality": "scalar",
         "type": "float"
     },
     "VIB._EFF_MASS": {
+        "calculation": [
+            "thermodynamics",
+            "vibrations"
+        ],
         "description": "",
-        "dimensionality": "scalar",
+        "dimensionality": [
+            "n_dof"
+        ],
         "type": "float",
         "units": "Da"
     },
     "VIB._FREQ": {
+        "calculation": [
+            "thermodynamics",
+            "vibrations"
+        ],
         "description": "",
-        "dimensionality": "scalar",
+        "dimensionality": [
+            "n_dof"
+        ],
         "type": "float",
         "units": "1/cm"
     },
     "VIB._RED_MASS": {
+        "calculation": [
+            "thermodynamics",
+            "vibrations"
+        ],
         "description": "",
-        "dimensionality": "scalar",
+        "dimensionality": [
+            "n_dof"
+        ],
         "type": "float",
         "units": "Da"
     },
     "VIB._TRAVEL": {
+        "calculation": [
+            "thermodynamics",
+            "vibrations"
+        ],
         "description": "",
-        "dimensionality": "scalar",
+        "dimensionality": [
+            "n_dof"
+        ],
         "type": "float",
         "units": "Å"
     },
     "VIB._T_DIP": {
+        "calculation": [
+            "thermodynamics",
+            "vibrations"
+        ],
         "description": "",
-        "dimensionality": "scalar",
+        "dimensionality": [
+            "n_dof"
+        ],
         "type": "float",
         "units": "electrons"
     },
     "VOLUME": {
         "calculation": [
-            "single point energy"
+            "single point energy",
+            "optimization",
+            "thermodynamics",
+            "vibrations"
         ],
         "description": "volume",
         "dimensionality": "scalar",
@@ -1369,7 +1672,11 @@ properties = {
         "units": "Å^3"
     },
     "ZERO_POINT_ENERGY": {
-        "description": "",
+        "calculation": [
+            "thermodynamics",
+            "vibrations"
+        ],
+        "description": "zero point energy",
         "dimensionality": "scalar",
         "type": "float",
         "units": "kcal/mol"

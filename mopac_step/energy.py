@@ -4,7 +4,7 @@
 import json
 import logging
 import molssi_workflow
-from molssi_workflow import ureg, Q_, units_class, data  # nopep8
+from molssi_workflow import units_class  # nopep8
 import molssi_util.printing as printing
 from molssi_util.printing import FormattedText as __
 import mopac_step
@@ -51,8 +51,9 @@ class Energy(molssi_workflow.Node):
 
     def get_input(self):
         """Get the input for an energy calculation for MOPAC"""
-        self._long_header = []
-        self._long_header.append(__(self.header, indent=3*' '))
+        self._long_header = ''
+        self._long_header += str(__(self.header, indent=3*' '))
+        self._long_header += '\n'
 
         P = self.parameters.current_values_to_dict(
             context=molssi_workflow.workflow_variables._data
@@ -63,7 +64,7 @@ class Energy(molssi_workflow.Node):
             if isinstance(PP[key], units_class):
                 PP[key] = '{:~P}'.format(PP[key])
 
-        self._long_header.append(
+        self._long_header += str(
             __(self.description_text(PP), **PP, indent=7*' ')
         )
 
@@ -103,81 +104,14 @@ class Energy(molssi_workflow.Node):
         data in variables for other stages to access
         """
 
-        text = self._long_header
-
-        # The results
-        printer.normal(
-            __(('\nThe SCF converged in {NUMBER_SCF_CYCLES} iterations '
-                'to a heat of formation of {HEAT_OF_FORMATION} '
-                'kcal/mol.'), **data, indent='   '
-            )
-        )
-
-        # Print the amended properties structure, if desired
-        # Used to update the properties data structure
-        if False:
-            properties = dict(mopac_step.properties)
-            for key in data:
-                if key not in properties:
-                    print("key '{}' not in properties!?".format(key))
-                else:
-                    entry = properties[key]
-                    if 'calculation' not in entry:
-                        entry['calculation'] = ['single point energy']
-                    else:
-                        if 'single point energy' not in entry['calculation']:
-                            entry['calculation'].append('single point energy')
-            print('properties:\n')
-            print(json.dumps(properties, indent=4, sort_keys=True))
-            print()
+        printer.normal(self._long_header)
 
         # Put any requested results into variables or tables
-        results = self.parameters['results'].value
-        for key, value in results.items():
-            if 'variable' in value:
-                self.set_variable(value['variable'], data[key])
+        self.store_results(
+            data=data,
+            properties=mopac_step.properties,
+            results=self.parameters['results'].value,
+            create_tables=self.parameters['create tables'].get()
+        )
 
-            if 'table' in value:
-                tablename = value['table']
-                column = value['column']
-                # Does the table exist?
-                if not self.variable_exists(tablename):
-                    if self.parameters['create tables'].get():
-                        table = pandas.DataFrame()
-                        self.set_variable(
-                            tablename, {
-                                'type': 'pandas',
-                                'table': table,
-                                'defaults': {},
-                                'loop index': False,
-                                'current index': 0
-                            }
-                        )
-                    else:
-                        raise RuntimeError(
-                            "Table '{}' does not exist.".format(tablename)
-                        )
-
-                table_handle = self.get_variable(tablename)
-                table = table_handle['table']
-
-                # create the column as needed
-                if column not in table.columns:
-                    kind = mopac_step.properties[key]['type']
-                    if kind == 'boolean':
-                        default = False
-                    elif kind == 'integer':
-                        default = 0
-                    elif kind == 'float':
-                        default = np.nan
-                    else:
-                        default  = ''
-
-                    table_handle['defaults'][column] = default
-                    table[column] = default
-
-                # and put the value in (finally!!!)
-                row_index = table_handle['current index']
-                table.at[row_index, column] = data[key]
-
-        return text
+        printer.normal('\n')

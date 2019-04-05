@@ -116,7 +116,7 @@ class TkEnergy(molssi_workflow.TkNode):
         self['add_to_input'] = ttk.Frame(notebook)
         notebook.add(self['add_to_input'], text='Add to input', sticky=tk.NW)
 
-    def setup_results(self):
+    def setup_results(self, calculation='single point energy'):
         """Layout the results tab of the dialog"""
         results = self.node.parameters['results'].value
 
@@ -124,11 +124,11 @@ class TkEnergy(molssi_workflow.TkNode):
         table = self['results']
         frame = table.interior()
 
-        row=0
+        row = 0
         for key, entry in mopac_step.properties.items():
             if 'calculation' not in entry:
                 continue
-            if 'single point energy' not in entry['calculation']:
+            if calculation not in entry['calculation']:
                 continue
             if 'dimensionality' not in entry:
                 continue
@@ -237,6 +237,8 @@ class TkEnergy(molssi_workflow.TkNode):
             mw.align_labels((self['relative'], self['absolute']))
 
         frame.columnconfigure(0, minsize=30)
+
+        return row
 
     def handle_dialog(self, result):
         if result is None or result == 'Cancel':

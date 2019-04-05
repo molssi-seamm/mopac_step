@@ -1,22 +1,18 @@
 # -*- coding: utf-8 -*-
 """Setup and run MOPAC"""
 
+import json
 import logging
 import molssi_workflow
+import molssi_util.printing as printing
+from molssi_util.printing import FormattedText as __
 import mopac_step
+import numpy as np
+import pandas
 
 logger = logging.getLogger(__name__)
-
-
-methods = (
-    'default',
-    'EF -- eigenvector following',
-    'BFGS -- Broyden-Fletcher-Goldfarb-Shanno algorithm',
-    'L-BFGS -- smaller memory BFGS for larger systems',
-    'TS -- transition state with EF method',
-    'SIGMA -- transition state with McIver-Komornicki method',
-    "NLLSQ -- nonlinear least squares of gradient, Bartel's method",
-    )
+job = printing.getPrinter()
+printer = printing.getPrinter('mopac')
 
 
 class Optimization(mopac_step.Energy):
@@ -25,68 +21,59 @@ class Optimization(mopac_step.Energy):
 
         logger.debug('Creating Optimization {}'.format(self))
 
-        self.method = 'default'  # The optimization method to use
-        self.cycles = None  # Maximum number of geometry steps
-        self.recalc = None  # How often to recalculate the hessian in EF method
-        self.dmax = None  # initial trust radius in EF method, default 0.2
-        self.gnorm = None  # gradient norm for convergence, dflt 1.0 kcal/mol/Å
-   
         super().__init__(workflow=workflow, title=title, extension=extension)
+
+        self.parameters = mopac_step.OptimizationParameters()
 
         self.description = 'A structural optimization'
 
-    def describe(self, indent='', json_dict=None):
-        """Write out information about what this node will do
-        If json_dict is passed in, add information to that dictionary
-        so that it can be written out by the controller as appropriate.
+    def description_text(self, P):
+        """Prepare information about what this node will do
         """
 
-        next_node = molssi_workflow.Node.describe(self, indent, json_dict)
-                    
         # Hamiltonian followed by convergence
-        if self.method == 'default':
-            tmp = ' and default optimizer (EF for small systems,' + \
-                  ' L-BFGS for larger)'
-        elif self.method[0:1] == 'EF':
-            tmp = ' and the eigenvector following (EF) method'
-        elif self.method[0:3] == 'BFGS':
-            tmp = ' and the BFGS method'
-        elif self.method[0:5] == 'L-BFGS':
-            tmp = ' and the L-BFGS small memory version of the BFGS method'
+        text = 'Geometry optimization using {hamiltonian}'
+        if P['method'] == 'default':
+            text += (' and default optimizer (EF for small systems,'
+                     ' L-BFGS for larger).')
+        elif P['method'][0:1] == 'EF':
+            text += ' and the eigenvector following (EF) method.'
+        elif P['method'][0:3] == 'BFGS':
+            text += ' and the BFGS method.'
+        elif P['method'][0:5] == 'L-BFGS':
+            text += ' and the L-BFGS small memory version of the BFGS method.'
         else:
-            raise RuntimeError("Don't understand optimizer '{}'".format(
-                self.method)
-            )
+            text += (". The optimization method will be determined at runtime "
+                     "by '{method}'.")
 
-        self.job_output(indent + '   Geometry optimization using ' +
-                        self.hamiltonian + tmp)
-
-        if self.gnorm is None:
-            self.job_output(indent + '   The geometrical convergence is ' +
-                            'the default of 1.0 kcal/mol/Å'
-                            )
+        if P['gnorm'] == 'default':
+            text += (' The geometrical convergence is the default of '
+                     '1.0 kcal/mol/Å.')
+        elif P['gnorm'][0] == '$':
+            text += (' The geometrical convergence will be determined '
+                     "at runtime by '{gnorm}'.")
         else:
-            self.job_output(indent + '   The geometrical convergence is ' +
-                            '{} kcal/mol/Å'.format(self.gnorm)
-                            )
-            
+            text += ' The geometrical convergence is {gnorm} kcal/mol/Å.'
+
         # SCF convergence
-        if self.convergence == 'default':
-            tmp = 'the normal level of 1.0e-04 kcal/mol'
-        elif self.convergence == 'precise':
-            tmp = "the 'precise' level of 1.0e-06 kcal/mol"
-        elif self.convergence == 'relative':
-            tmp = 'a factor of {}'.format(self.relscf) \
-                  + ' times the normal criteria'
-        elif self.convergence == 'absolute':
-            tmp = ' {} kcal/mol'.format(self.scfcrt)
-        self.job_output(indent + '    The SCF will be converged to ' + tmp)
-        self.job_output('')
+        text += ' The SCF will be converged to '
+        if P['convergence'] == 'normal':
+            text += 'the normal level of 1.0e-04 kcal/mol'
+        elif P['convergence'] == 'precise':
+            text += "the 'precise' level of 1.0e-06 kcal/mol"
+        elif P['convergence'] == 'relative':
+            text += 'a factor of {relative} times the normal criteria'
+        elif P['convergence'] == 'absolute':
+            text += ' {absolute} kcal/mol'
 
-        return next_node
+        return text
 
     def get_input(self):
         """Get the input for an optimization MOPAC"""
+
+        P = self.parameters.current_values_to_dict(
+            context=molssi_workflow.workflow_variables._data
+        )
 
         # Remove the 1SCF keyword from the energy setup
         keywords = []
@@ -94,4 +81,62 @@ class Optimization(mopac_step.Energy):
             if keyword != '1SCF':
                 keywords.append(keyword)
 
+        # and the optimization-specific parts
+        
+        method = P['method']
+        if method == 'default':
+            pass
+        elif method[0:2] == 'EF':
+            keywords.append('EF')
+            if P['recalc'] != 'never':
+                keywords.append(P['recalc'])
+            if P['dmax'] != self.parameters['dmax'].default:
+                keywords.append(P['dmax'])
+            elif method[0:4] == 'BFGS':
+                keywords.append('BFGS')
+            elif method[0:6] == 'L-BFGS':
+                keywords.append('L-BFGS')
+            elif method[0:2] == 'TS':
+                keywords.append('TS')
+            elif method[0:5] == 'SIGMA':
+                keywords.append('SIGMA')
+            elif method[0:5] == 'NLLSQ':
+                keywords.append('NLLSQ')
+            else:
+                text = ("Don't recognize optimization method '{}'"
+                        .format(P['method'])
+                )
+                logger.critical(text)
+                raise RuntimeError(text)
+
+            if P['cycles'] != 'unlimited':
+                keywords.append(P['cycles'])
+            if P['convergence'] == 'absolute':
+                if P['gnorm'] != self.parameters['gnorm'].default:
+                    keywords.append(P['gnorm'])
+
         return keywords
+
+    def analyze(self, indent='', data={}):
+        """Parse the output and generating the text output and store the
+        data in variables for other stages to access
+        """
+
+        printer.normal(self._long_header)
+
+        # The results
+        printer.normal(
+            __(('\nThe geometry converged in {NUMBER_SCF_CYCLES} iterations '
+                'to a heat of formation of {HEAT_OF_FORMATION} '
+                'kcal/mol.'), **data, indent=7*' ')
+        )
+
+        # Put any requested results into variables or tables
+        self.store_results(
+            data=data,
+            properties=mopac_step.properties,
+            results=self.parameters['results'].value,
+            create_tables=self.parameters['create tables'].get()
+        )
+
+        printer.normal('\n')

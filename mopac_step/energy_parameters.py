@@ -4,8 +4,6 @@
 
 import logging
 import molssi_workflow
-import mopac_step
-import pprint
 
 logger = logging.getLogger(__name__)
 
@@ -130,13 +128,11 @@ class EnergyParameters(molssi_workflow.Parameters):
         },
     }
 
-    def __init__(self, data=None):
+    def __init__(self, defaults={}, data=None):
         """Initialize the instance, by default from the default
         parameters given in the class"""
 
-        logger.debug('EnergyParameters.__init__')
-        logger.debug("Initializing EnergyParameters object:")
-        logger.debug("\n{}\n".format(pprint.pformat(data)))
-
-        super().__init__(EnergyParameters.parameters, data=data)
-
+        super().__init__(
+            defaults={**EnergyParameters.parameters, **defaults},
+            data=data
+        )

@@ -2,8 +2,8 @@
 """The graphical part of a MOPAC Energy node"""
 
 import mopac_step
-# import tkinter as tk
-# import tkinter.ttk as ttk
+import molssi_widgets as mw
+import tkinter as tk
 
 
 class TkThermodynamics(mopac_step.TkEnergy):
@@ -16,15 +16,6 @@ class TkThermodynamics(mopac_step.TkEnergy):
         super().__init__(tk_workflow=tk_workflow, node=node,
                          canvas=canvas, x=x, y=y, w=w, h=h)
 
-    def right_click(self, event):
-        """Probably need to add our dialog...
-        """
-
-        super().right_click(event)
-        self.popup_menu.add_command(label="Edit..", command=self.edit)
-
-        self.popup_menu.tk_popup(event.x_root, event.y_root, 0)
-
     def edit(self):
         """Present a dialog for editing the input for the MOPAC energy
         calculation"""
@@ -32,3 +23,25 @@ class TkThermodynamics(mopac_step.TkEnergy):
         super().edit()
 
         self.dialog.title('MOPAC Thermodynamic Functions')
+
+    def reset_dialog(self, widget=None):
+        """Layout the widgets in the main frame
+
+        We'll let 'TkEnergy' layout the initial set of widgets,
+        then add the extra widgets for controlling optimization
+        """
+        row = super().reset_dialog()
+        
+        widgets = []
+        for key in ('Tmin', 'Tmax', 'Tstep', 'trans'):
+            self[key].grid(row=row, column=0, columnspan=2, sticky=tk.EW)
+            widgets.append(self[key])
+            row += 1
+
+        mw.align_labels(widgets)
+
+        return row
+
+    def setup_results(self, calculation='thermodynamics'):
+        """Layout the results tab of the dialog"""
+        super().setup_results(calculation)
