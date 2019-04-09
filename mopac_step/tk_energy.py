@@ -270,13 +270,15 @@ class TkEnergy(molssi_workflow.TkNode):
             P['create tables'].value = 'no'
 
         results = P['results'].value = {}
-        for key, w_check, w_variable, w_table, w_column in self.results_widgets:
+        for key, w_check, w_variable, w_table, w_column \
+            in self.results_widgets:
+
             if self.tk_var[key].get():
                 tmp = results[key] = dict()
                 tmp['variable'] = w_variable.get()
             table = w_table.get()
             if table != '':
-                if not key in results:
+                if key not in results:
                     tmp = results[key] = dict()
                 tmp['table'] = table
                 tmp['column'] = w_column.get()
@@ -546,39 +548,3 @@ class TkEnergy(molssi_workflow.TkNode):
         w.delete(0, 'end')
         w.insert('end', keyword)
         w.configure(style='TEntry')
-
-    def _bound_to_mousewheel(self, event):
-        """Set the bindings on the scrolled frame, used when the
-        mouse enters it
-        """
-        self['scrolled results'].bind_all("<MouseWheel>", self._on_mousewheel)
-        # self.canvas.bind_all("<Button-4>", self._on_mousewheel)
-        # self.canvas.bind_all("<Button-5>", self._on_mousewheel)
-
-    def _unbound_to_mousewheel(self, event):
-        """Remove the bindings on the canvas, used when the
-        mouse leaves the canvas
-        """
-        self['scrolled results'].unbind_all("<MouseWheel>")
-        # self.canvas.unbind_all("<Button-4>")
-        # self.canvas.unbind_all("<Button-5>")
-
-    def _on_mousewheel(self, event):
-        """Handle the mousewheel or similar events.
-        There are two choices for how to scroll, and it
-        may differ from OS to OS.
-
-        As set up here on a Mac the mouse drags the canvas in
-        the direction of travel, thus to go down in the canvas
-        you drag upwards, and vice versa.
-
-        Flip the signs to change this
-        """
-
-        if event.num == 5 or event.delta < 0:
-            delta = 1
-        else:
-            delta = -1
-
-        self['scrolled results'].yview(mode='scroll', value=delta,
-                                       units="units")
