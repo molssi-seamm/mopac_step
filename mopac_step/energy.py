@@ -3,8 +3,8 @@
 
 import json
 import logging
-import molssi_workflow
-from molssi_workflow import units_class  # nopep8
+import seamm
+from seamm import units_class  # nopep8
 import molssi_util.printing as printing
 from molssi_util.printing import FormattedText as __
 import mopac_step
@@ -16,14 +16,14 @@ job = printing.getPrinter()
 printer = printing.getPrinter('mopac')
 
 
-class Energy(molssi_workflow.Node):
+class Energy(seamm.Node):
 
-    def __init__(self, workflow=None, title='Energy', extension=None):
+    def __init__(self, flowchart=None, title='Energy', extension=None):
         """Initialize the node"""
 
         logger.debug('Creating Energy {}'.format(self))
 
-        super().__init__(workflow=workflow, title=title, extension=extension)
+        super().__init__(flowchart=flowchart, title=title, extension=extension)
 
         self.parameters = mopac_step.EnergyParameters()
 
@@ -56,7 +56,7 @@ class Energy(molssi_workflow.Node):
         self._long_header += '\n'
 
         P = self.parameters.current_values_to_dict(
-            context=molssi_workflow.workflow_variables._data
+            context=seamm.flowchart_variables._data
         )
         # Have to fix formatting for printing...
         PP = dict(P)

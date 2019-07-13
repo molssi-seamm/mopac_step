@@ -2,18 +2,18 @@
 """The graphical part of a MOPAC Energy node"""
 
 import mopac_step
-import molssi_widgets as mw
+import seamm_widgets as sw
 import tkinter as tk
 
 
 class TkThermodynamics(mopac_step.TkEnergy):
-    def __init__(self, tk_workflow=None, node=None, canvas=None,
+    def __init__(self, tk_flowchart=None, node=None, canvas=None,
                  x=120, y=20, w=200, h=50):
         '''Initialize a node
 
         Keyword arguments:
         '''
-        super().__init__(tk_workflow=tk_workflow, node=node,
+        super().__init__(tk_flowchart=tk_flowchart, node=node,
                          canvas=canvas, x=x, y=y, w=w, h=h)
 
     def edit(self):
@@ -38,7 +38,7 @@ class TkThermodynamics(mopac_step.TkEnergy):
             widgets.append(self[key])
             row += 1
 
-        mw.align_labels(widgets)
+        sw.align_labels(widgets)
 
         return row
 

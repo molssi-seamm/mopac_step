@@ -2,8 +2,8 @@
 """Setup and run MOPAC"""
 
 import logging
-import molssi_workflow
-import molssi_workflow.data as data
+import seamm
+import seamm.data as data
 import molssi_util.printing as printing
 from molssi_util.printing import FormattedText as __
 import mopac_step
@@ -16,30 +16,30 @@ job = printing.getPrinter()
 printer = printing.getPrinter('mopac')
 
 
-class MOPAC(molssi_workflow.Node):
+class MOPAC(seamm.Node):
     def __init__(self,
-                 workflow=None,
-                 namespace='org.molssi.workflow.mopac',
+                 flowchart=None,
+                 namespace='org.molssi.seamm.mopac',
                  extension=None):
         """Initialize the node"""
 
         logger.debug('Creating MOPAC {}'.format(self))
 
-        self.mopac_workflow = molssi_workflow.Workflow(
+        self.mopac_flowchart = seamm.Flowchart(
             name='MOPAC',
             namespace=namespace,
-            directory=workflow.root_directory
+            directory=flowchart.root_directory
         )
         self._data = {}
 
-        super().__init__(workflow=workflow, title='MOPAC', extension=extension)
+        super().__init__(flowchart=flowchart, title='MOPAC', extension=extension)
 
     def set_id(self, node_id):
         """Set the id for node to a given tuple"""
         self._id = node_id
 
         # and set our subnodes
-        self.mopac_workflow.set_ids(self._id)
+        self.mopac_flowchart.set_ids(self._id)
 
         return self.next()
 
@@ -52,7 +52,7 @@ class MOPAC(molssi_workflow.Node):
         next_node = super().describe(indent, json_dict)
 
         # Work through children. Get the first real node
-        node = self.mopac_workflow.get_node('1').next()
+        node = self.mopac_flowchart.get_node('1').next()
 
         while node:
             node.describe(indent=indent+'    ', json_dict=json_dict)
@@ -70,14 +70,14 @@ class MOPAC(molssi_workflow.Node):
         next_node = super().run(printer)
 
         # Get the first real node
-        node = self.mopac_workflow.get_node('1').next()
+        node = self.mopac_flowchart.get_node('1').next()
 
         input_data = []
         while node:
             keywords = node.get_input()
             lines = []
             lines.append(' '.join(keywords) + ' AUX')
-            lines.append('Run from MolSSI workflow')
+            lines.append('Run from MolSSI flowchart')
             lines.append('{} using {} hamiltonian'.format(
                 node.description, node.parameters['hamiltonian']))
 
@@ -85,7 +85,7 @@ class MOPAC(molssi_workflow.Node):
                 input_data.append('\n'.join(lines))
             else:
                 tmp_structure = []
-                structure = molssi_workflow.data.structure
+                structure = seamm.data.structure
                 elements = structure['atoms']['elements']
                 coordinates = structure['atoms']['coordinates']
                 if 'freeze' in structure['atoms']:
@@ -114,7 +114,7 @@ class MOPAC(molssi_workflow.Node):
                       mode='w') as fd:
                 fd.write(files[filename])
 
-        local = molssi_workflow.ExecLocal()
+        local = seamm.ExecLocal()
         return_files = ['molssi.arc', 'molssi.out', 'molssi.aux']
         result = local.run(
             cmd=['mopac', 'molssi.dat'],
@@ -165,7 +165,7 @@ class MOPAC(molssi_workflow.Node):
                 start = lineno
 
         # Loop through our subnodes. Get the first real node
-        node = self.mopac_workflow.get_node('1').next()
+        node = self.mopac_flowchart.get_node('1').next()
         section = 0
         for start, end in sections:
             section += 1

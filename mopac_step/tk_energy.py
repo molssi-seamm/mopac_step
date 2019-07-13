@@ -2,8 +2,8 @@
 """The graphical part of a MOPAC Energy node"""
 
 import logging
-import molssi_workflow
-import molssi_widgets as mw
+import seamm
+import seamm_widgets as sw
 import mopac_step
 import Pmw
 import tkinter as tk
@@ -20,8 +20,8 @@ def lcp(*s):
                                            zip(min(s), max(s))))
 
 
-class TkEnergy(molssi_workflow.TkNode):
-    def __init__(self, tk_workflow=None, node=None, canvas=None,
+class TkEnergy(seamm.TkNode):
+    def __init__(self, tk_flowchart=None, node=None, canvas=None,
                  x=120, y=20, w=200, h=50):
         '''Initialize a node
 
@@ -37,7 +37,7 @@ class TkEnergy(molssi_workflow.TkNode):
         s = ttk.Style()
         s.configure('Red.TEntry', foreground='red')
 
-        super().__init__(tk_workflow=tk_workflow, node=node,
+        super().__init__(tk_flowchart=tk_flowchart, node=node,
                          canvas=canvas, x=x, y=y, w=w, h=h)
 
     def right_click(self, event):
@@ -96,7 +96,7 @@ class TkEnergy(molssi_workflow.TkNode):
         )
         self['create tables'].grid(row=0, column=0, sticky=tk.W)
 
-        self['results'] = mw.ScrolledColumns(
+        self['results'] = sw.ScrolledColumns(
             rframe,
             columns=[
                 'Result',
@@ -220,7 +220,7 @@ class TkEnergy(molssi_workflow.TkNode):
         self['convergence'].grid(row=row, column=0, columnspan=2, sticky=tk.EW)
         widgets.append(self['convergence'])
         row += 1
-        mw.align_labels(widgets)
+        sw.align_labels(widgets)
 
         if convergence == 'relative':
             self['relative'].grid(row=row, column=1, sticky=tk.W)
@@ -234,7 +234,7 @@ class TkEnergy(molssi_workflow.TkNode):
             row += 1
             self['absolute'].grid(row=row, column=1, sticky=tk.W)
             row += 1
-            mw.align_labels((self['relative'], self['absolute']))
+            sw.align_labels((self['relative'], self['absolute']))
 
         frame.columnconfigure(0, minsize=30)
 

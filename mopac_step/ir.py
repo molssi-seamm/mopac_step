@@ -3,7 +3,7 @@
 
 import json
 import logging
-import molssi_workflow
+import seamm
 import molssi_util.printing as printing
 from molssi_util.printing import FormattedText as __
 import mopac_step
@@ -14,12 +14,12 @@ printer = printing.getPrinter('mopac')
 
 
 class IR(mopac_step.Energy):
-    def __init__(self, workflow=None, title='IR Spectrum', extension=None):
+    def __init__(self, flowchart=None, title='IR Spectrum', extension=None):
         """Initialize the node"""
 
         logger.debug('Creating IR {}'.format(self))
 
-        super().__init__(workflow=workflow, title=title, extension=extension)
+        super().__init__(flowchart=flowchart, title=title, extension=extension)
 
         self.parameters = mopac_step.IRParameters()
         self.description = 'Infrared (vibrational) spectroscopy calculation'
@@ -51,7 +51,7 @@ class IR(mopac_step.Energy):
         """Get the input for an optimization MOPAC"""
 
         P = self.parameters.current_values_to_dict(
-            context=molssi_workflow.workflow_variables._data
+            context=seamm.flowchart_variables._data
         )
 
         # Remove the 1SCF keyword from the energy setup
