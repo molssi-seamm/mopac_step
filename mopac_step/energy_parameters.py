@@ -3,12 +3,12 @@
 """
 
 import logging
-import molssi_workflow
+import seamm
 
 logger = logging.getLogger(__name__)
 
 
-class EnergyParameters(molssi_workflow.Parameters):
+class EnergyParameters(seamm.Parameters):
     """The control parameters for creating a structure from SMILES"""
 
     parameters = {

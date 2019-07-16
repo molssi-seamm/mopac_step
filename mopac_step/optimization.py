@@ -3,9 +3,9 @@
 
 import json
 import logging
-import molssi_workflow
-import molssi_util.printing as printing
-from molssi_util.printing import FormattedText as __
+import seamm
+import seamm_util.printing as printing
+from seamm_util.printing import FormattedText as __
 import mopac_step
 import numpy as np
 import pandas
@@ -16,12 +16,12 @@ printer = printing.getPrinter('mopac')
 
 
 class Optimization(mopac_step.Energy):
-    def __init__(self, workflow=None, title='Optimization', extension=None):
+    def __init__(self, flowchart=None, title='Optimization', extension=None):
         """Initialize the node"""
 
         logger.debug('Creating Optimization {}'.format(self))
 
-        super().__init__(workflow=workflow, title=title, extension=extension)
+        super().__init__(flowchart=flowchart, title=title, extension=extension)
 
         self.parameters = mopac_step.OptimizationParameters()
 
@@ -72,7 +72,7 @@ class Optimization(mopac_step.Energy):
         """Get the input for an optimization MOPAC"""
 
         P = self.parameters.current_values_to_dict(
-            context=molssi_workflow.workflow_variables._data
+            context=seamm.flowchart_variables._data
         )
 
         # Remove the 1SCF keyword from the energy setup

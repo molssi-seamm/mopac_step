@@ -14,13 +14,13 @@ with open('HISTORY.rst') as history_file:
 requirements = [
     'Pmw',
     'logging',
-    'molssi_workflow',
+    'seamm',
     'pprint',
 ]
 #    'itertools',
 
 setup_requirements = [
-    'pytest-runner',
+    # 'pytest-runner',
     # TODO(paulsaxe): put setup requirements (distutils extensions, etc.) here
 ]
 
@@ -32,11 +32,12 @@ test_requirements = [
 setup(
     name='mopac_step',
     version='0.1.0',
-    description="A step for a MolSSI workflow for handling the semiempirical quantum code MOPAC",
+    description=("A step in SEAMM for handling the semiempirical quantum "
+                 "code MOPAC"),
     long_description=readme + '\n\n' + history,
     author="Paul Saxe",
     author_email='psaxe@molssi.org',
-    url='https://github.com/paulsaxe/mopac_step',
+    url='https://github.com/molssi-seamm/mopac_step',
     packages=find_packages(include=['mopac_step']),
     include_package_data=True,
     install_requires=requirements,
@@ -48,31 +49,30 @@ setup(
         'Intended Audience :: Developers',
         'License :: OSI Approved :: BSD License',
         'Natural Language :: English',
-        "Programming Language :: Python :: 2",
-        'Programming Language :: Python :: 2.6',
-        'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
     ],
     test_suite='tests',
     tests_require=test_requirements,
     setup_requires=setup_requirements,
     entry_points={
-        'org.molssi.workflow': [
+        'org.molssi.seamm': [
             'MOPAC = mopac_step:MOPACStep',
         ],
-        'org.molssi.workflow.tk': [
+        'org.molssi.seamm.tk': [
             'MOPAC = mopac_step:MOPACStep',
         ],
-        'org.molssi.workflow.mopac': [
+        'org.molssi.seamm.mopac': [
             'Energy = mopac_step:EnergyStep',
             'Optimization = mopac_step:OptimizationStep',
             'IR Spectrum = mopac_step:IRStep',
             'Thermodynamics = mopac_step:ThermodynamicsStep',
         ],
-        'org.molssi.workflow.mopac.tk': [
+        'org.molssi.seamm.mopac.tk': [
             'Energy = mopac_step:EnergyStep',
             'Optimization = mopac_step:OptimizationStep',
             'IR Spectrum = mopac_step:IRStep',

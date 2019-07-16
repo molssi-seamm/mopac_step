@@ -1,19 +1,19 @@
 # -*- coding: utf-8 -*-
 """The graphical part of a MolSII MOPAC node"""
 
-import molssi_workflow
+import seamm
 import Pmw
 import tkinter as tk
 import tkinter.ttk as ttk
 
 
-class TkMOPAC(molssi_workflow.TkNode):
+class TkMOPAC(seamm.TkNode):
     """The node_class is the class of the 'real' node that this
     class is the Tk graphics partner for
     """
 
-    def __init__(self, tk_workflow=None, node=None, canvas=None,
-                 namespace='org.molssi.workflow.mopac.tk',
+    def __init__(self, tk_flowchart=None, node=None, canvas=None,
+                 namespace='org.molssi.seamm.mopac.tk',
                  x=120, y=20, w=200, h=50):
         '''Initialize a node
 
@@ -21,7 +21,7 @@ class TkMOPAC(molssi_workflow.TkNode):
         '''
         self.namespace = namespace
 
-        super().__init__(tk_workflow=tk_workflow, node=node,
+        super().__init__(tk_flowchart=tk_flowchart, node=node,
                          canvas=canvas, x=x, y=y, w=w, h=h)
 
         self.create_dialog()
@@ -49,11 +49,11 @@ class TkMOPAC(molssi_workflow.TkNode):
 
         frame = ttk.Frame(self.dialog.interior())
         frame.pack(expand=tk.YES, fill=tk.BOTH)
-        self.mopac_tk_workflow = molssi_workflow.TkWorkflow(
+        self.mopac_tk_flowchart = seamm.TkFlowchart(
             master=frame,
             namespace=self.namespace,
-            workflow=self.node.mopac_workflow)
-        self.mopac_tk_workflow.draw()
+            flowchart=self.node.mopac_flowchart)
+        self.mopac_tk_flowchart.draw()
 
     def handle_dialog(self, result):
         if result is None or result == 'Cancel':
@@ -89,20 +89,20 @@ class TkMOPAC(molssi_workflow.TkNode):
 
         self.dialog.activate(geometry='centerscreenfirst')
 
-    def update_workflow(self, tk_workflow=None, workflow=None):
-        """Update the nongraphical workflow. Only used in nodes that contain
-        workflows"""
+    def update_flowchart(self, tk_flowchart=None, flowchart=None):
+        """Update the nongraphical flowchart. Only used in nodes that contain
+        flowcharts"""
 
-        super().update_workflow(
-            workflow=self.node.mopac_workflow,
-            tk_workflow=self.mopac_tk_workflow
+        super().update_flowchart(
+            flowchart=self.node.mopac_flowchart,
+            tk_flowchart=self.mopac_tk_flowchart
         )
 
-    def from_workflow(self, tk_workflow=None, workflow=None):
-        """Recreate the graphics from the non-graphical workflow.
-        Only used in nodes that contain workflow"""
+    def from_flowchart(self, tk_flowchart=None, flowchart=None):
+        """Recreate the graphics from the non-graphical flowchart.
+        Only used in nodes that contain flowchart"""
 
-        super().from_workflow(
-            workflow=self.node.mopac_workflow,
-            tk_workflow=self.mopac_tk_workflow
+        super().from_flowchart(
+            flowchart=self.node.mopac_flowchart,
+            tk_flowchart=self.mopac_tk_flowchart
         )

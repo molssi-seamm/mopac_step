@@ -3,9 +3,9 @@
 
 import json
 import logging
-import molssi_workflow
-import molssi_util.printing as printing
-from molssi_util.printing import FormattedText as __
+import seamm
+import seamm_util.printing as printing
+from seamm_util.printing import FormattedText as __
 import mopac_step
 
 logger = logging.getLogger(__name__)
@@ -14,12 +14,12 @@ printer = printing.getPrinter('mopac')
 
 
 class Thermodynamics(mopac_step.Energy):
-    def __init__(self, workflow=None, title='Thermodynamics', extension=None):
+    def __init__(self, flowchart=None, title='Thermodynamics', extension=None):
         """Initialize the node"""
 
         logger.debug('Creating Thermodynamics {}'.format(self))
 
-        super().__init__(workflow=workflow, title=title, extension=extension)
+        super().__init__(flowchart=flowchart, title=title, extension=extension)
 
         self.parameters = mopac_step.ThermodynamicsParameters()
 
@@ -52,7 +52,7 @@ class Thermodynamics(mopac_step.Energy):
         """Get the input for thermodynamics in MOPAC"""
 
         P = self.parameters.current_values_to_dict(
-            context=molssi_workflow.workflow_variables._data
+            context=seamm.flowchart_variables._data
         )
 
         # Convert values with unts to the right units, and remove

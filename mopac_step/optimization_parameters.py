@@ -3,7 +3,6 @@
 """
 
 import logging
-import molssi_workflow
 import mopac_step
 import pprint
 
