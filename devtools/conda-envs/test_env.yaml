@@ -13,4 +13,4 @@ dependencies:
   - pip:
     - codecov
     - seamm
-
+    - seamm-widgets
