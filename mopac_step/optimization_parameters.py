@@ -4,7 +4,6 @@
 
 import logging
 import mopac_step
-import pprint
 
 logger = logging.getLogger(__name__)
 

@@ -7,8 +7,7 @@ import mopac_step
 
 class ThermodynamicsStep(object):
     my_description = {
-        'description':
-        'Harmonic approximation to the thermodynamic functions',
+        'description': 'Harmonic approximation to the thermodynamic functions',
         'group': 'Calculations',
         'name': 'Thermodynamic functions'
     }

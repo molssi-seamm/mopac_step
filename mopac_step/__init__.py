@@ -9,25 +9,25 @@ __version__ = '0.1.0'
 # Bring up the classes so that they appear to be directly in
 # the package.
 
-from mopac_step.mopac_step import MOPACStep  # nopep8
-from mopac_step.mopac import MOPAC  # nopep8
-from mopac_step.tk_mopac import TkMOPAC  # nopep8
-from mopac_step.energy_step import EnergyStep  # nopep8
-from mopac_step.energy import Energy  # nopep8
-from mopac_step.energy_parameters import EnergyParameters  # nopep8
-from mopac_step.tk_energy import TkEnergy  # nopep8
-from mopac_step.optimization_step import OptimizationStep  # nopep8
-from mopac_step.optimization import Optimization  # nopep8
-from mopac_step.optimization_parameters import OptimizationParameters  # nopep8
-from mopac_step.tk_optimization import TkOptimization  # nopep8
-from mopac_step.ir_step import IRStep  # nopep8
-from mopac_step.ir import IR  # nopep8
-from mopac_step.ir_parameters import IRParameters  # nopep8
-from mopac_step.tk_ir import TkIR  # nopep8
-from mopac_step.thermodynamics_step import ThermodynamicsStep  # nopep8
-from mopac_step.thermodynamics import Thermodynamics  # nopep8
-from mopac_step.thermodynamics_parameters import ThermodynamicsParameters  # nopep8
-from mopac_step.tk_thermodynamics import TkThermodynamics  # nopep8
+from mopac_step.mopac_step import MOPACStep  # noqa: F401
+from mopac_step.mopac import MOPAC  # noqa: F401
+from mopac_step.tk_mopac import TkMOPAC  # noqa: F401
+from mopac_step.energy_step import EnergyStep  # noqa: F401
+from mopac_step.energy import Energy  # noqa: F401
+from mopac_step.energy_parameters import EnergyParameters  # noqa: F401
+from mopac_step.tk_energy import TkEnergy  # noqa: F401
+from mopac_step.optimization_step import OptimizationStep  # noqa: F401
+from mopac_step.optimization import Optimization  # noqa: F401
+from mopac_step.optimization_parameters import OptimizationParameters  # noqa: F401 E501
+from mopac_step.tk_optimization import TkOptimization  # noqa: F401
+from mopac_step.ir_step import IRStep  # noqa: F401
+from mopac_step.ir import IR  # noqa: F401
+from mopac_step.ir_parameters import IRParameters  # noqa: F401
+from mopac_step.tk_ir import TkIR  # noqa: F401
+from mopac_step.thermodynamics_step import ThermodynamicsStep  # noqa: F401
+from mopac_step.thermodynamics import Thermodynamics  # noqa: F401
+from mopac_step.thermodynamics_parameters import ThermodynamicsParameters  # noqa: F401 E501
+from mopac_step.tk_thermodynamics import TkThermodynamics  # noqa: F401
 
 keywords = {
     '0SCF': {
@@ -40,7 +40,8 @@ keywords = {
         'description': 'Do one scf and then stop',
     },
     'ADD-H': {
-        'description': 'Add hydrogen atoms (intended for use with organic compounds)',  # nopep8
+        'description': ('Add hydrogen atoms (intended for use with organic '
+                        'compounds)'),
     },
     'A0': {
         'description': 'Input geometry is in atomic units',
@@ -55,7 +56,8 @@ keywords = {
         'description': 'Print the geometry in Gaussian format in the ARC file',
     },
     'ALLBONDS': {
-        'description': 'Print final bond-order matrix, including bonds to hydrogen',  # nopep8
+        'description': ('Print final bond-order matrix, including bonds to '
+                        'hydrogen'),
     },
     'ALLVEC': {
         'description': 'Print all vectors (keywords vectors also needed)',
@@ -64,7 +66,8 @@ keywords = {
         'description': 'In PDB files with alternative atoms, select atoms A',
     },
     'ALT_R=A': {
-        'description': 'Deleted. All inserted residues are automatically recognized',  # nopep8
+        'description': ('Deleted. All inserted residues are automatically '
+                        'recognized'),
     },
     'ANGSTROMS': {
         'description': 'Input geometry is in Angstroms',
@@ -73,7 +76,8 @@ keywords = {
         'description': 'Symmetry to be imposed automatically',
     },
     'AUX': {
-        'description': 'Output auxiliary information for use by other programs',  # nopep8
+        'description': ('Output auxiliary information for use by other '
+                        'programs'),
     },
     'AM1': {
         'description': 'Use the AM1 hamiltonian',
@@ -109,7 +113,8 @@ keywords = {
         'description': 'A multi-electron configuration interaction specified',
     },
     'CHAINS(text)': {
-        'description': 'In a protein, explicitely define the letters of chains.',  # nopep8
+        'description': ('In a protein, explicitly define the letters of '
+                        'chains.'),
     },
     'CHECK': {
         'description': 'Report possible faults in input geometry',
@@ -118,7 +123,8 @@ keywords = {
         'description': 'Charge on system = n (e.g. NH4 = +1)',
     },
     'CHARGES': {
-        'description': 'Print net charge on system, and all charges in the system',  # nopep8
+        'description': ('Print net charge on the system, and all charges in '
+                        'the system'),
     },
     'CHARST': {
         'description': 'Print details of working in CHARST',
@@ -142,13 +148,15 @@ keywords = {
         'description': 'Add in COSMO charge corrections',
     },
     'COSWRT': {
-        'description': 'Write details of the solvent accessible surface to a file',  # nopep8
+        'description': ('Write details of the solvent accessible surface to a '
+                        'file'),
     },
     'CUTOFP=n.nn': {
         'description': 'Madelung distance cutoff is n .nn Angstroms',
     },
     'CUTOFF=n.nn': {
-        'description': 'In MOZYME, the interatomic distance where the NDDO approximation stops',  # nopep8
+        'description': ('In MOZYME, the interatomic distance where the NDDO '
+                        'approximation stops'),
     },
     'CYCLES=n': {
         'description': 'Do a maximum of n steps',
@@ -156,10 +164,12 @@ keywords = {
         'value': 'integer',
     },
     'CVB': {
-        'description': 'In MOZYME. add and remove specific bonds to allow a Lewis or PDB structure.',  # nopep8
+        'description': ('In MOZYME. add and remove specific bonds to allow a '
+                        'Lewis or PDB structure.'),
     },
     'DAMP=n.nn': {
-        'description': 'in MOZYME. damp SCF oscillations using a factor of n.nn',  # nopep8
+        'description': ('in MOZYME. damp SCF oscillations using a factor of '
+                        'n.nn'),
     },
     'DATA=text': {
         'description': 'Input data set is re-defined to text',
@@ -207,13 +217,15 @@ keywords = {
         'description': 'Force calculation specified, also print force matrix.',
     },
     'DFP': {
-        'description': 'Use Davidson-Fletcher-Powell method to optimize geometries',  # nopep8
+        'description': ('Use Davidson-Fletcher-Powell method to optimize '
+                        'geometries'),
     },
     'DISEX=n.nn': {
         'description': 'Distance for interactions in fine grid in COSMO',
     },
     'DISP': {
-        'description': 'Print the hydrogen bonding and dispersion contributions to the heat of formation',  # nopep8
+        'description': ('Print the hydrogen bonding and dispersion '
+                        'contributions to the heat of formation'),
     },
     'DMAX=n.nn': {
         'description': 'Maximum stepsize in eigenvector following',
@@ -235,10 +247,12 @@ keywords = {
         'description': 'Data are echoed back before calculation starts',
     },
     'EF': {
-        'description': 'Use the EigenFollowing routine for geometry optimization',  # nopep8
+        'description': ('Use the EigenFollowing routine for geometry '
+                        'optimization'),
     },
     'EIGEN': {
-        'description': 'Print canonical eigenvectors instead of LMOs in MOZYME calculations',  # nopep8
+        'description': ('Print canonical eigenvectors instead of LMOs in a '
+                        'MOZYME calculations'),
     },
     'EIGS': {
         'description': 'Print all eigenvalues in ITER',
@@ -272,7 +286,8 @@ keywords = {
         'value': ('float', 'float', 'float'),
     },
     'FILL=n': {
-        'description': 'In RHF open and closed shell, force M.O. n to be filled',  # nopep8
+        'description': ('In RHF open and closed shell, force M.O. n to be '
+                        'filled'),
         'value optional': False,
         'value': 'integer',
     },
@@ -292,7 +307,8 @@ keywords = {
         'description': 'Calculate vibrational frequencies',
     },
     'FORCETS': {
-        'description': 'Calculate vibrational frequencies for atoms in a transition state',  # nopep8
+        'description': ('Calculate the vibrational frequencies for atoms in a '
+                        'transition state'),
     },
     'GEO-OK': {
         'description': 'Override some safety checks',
@@ -308,7 +324,8 @@ keywords = {
         'value': 'filename',
     },
     'GNORM=n.nn': {
-        'description': 'Exit when gradient norm drops below n .n kcal/mol/Angstrom',  # nopep8
+        'description': ('Exit when the gradient norm drops below n.nn '
+                        'kcal/mol/Angstrom'),
         'value optional': False,
         'value': 'float',
     },
@@ -319,10 +336,12 @@ keywords = {
         'description': 'Generate unformatted file for graphics',
     },
     'GRAPHF': {
-        'description': 'Generate formatted file for graphics suitable for  Jmol and MOPETE.',  # nopep8
+        'description': ('Generate a formatted file for graphics suitable for '
+                        'Jmol and MOPETE.'),
     },
     'HCORE': {
-        'description': 'Print all parameters used, the one-electron matrix, and two-electron integrals',  # nopep8
+        'description': ('Print all parameters used, the one-electron matrix, '
+                        'and two-electron integrals'),
     },
     'HESSIAN': {
         'description': 'Print Hessian from geometry optimization',
@@ -397,10 +416,12 @@ keywords = {
         'description': 'Print details of line minimization',
     },
     'LOCALIZE': {
-        'description': 'Print localized orbitals.  These are also called Natural Bond Orbitals or NBO',  # nopep8
+        'description': ('Print the localized orbitals. These are also called '
+                        'Natural Bond Orbitals or NBO'),
     },
     'LOCATE-TS': {
-        'description': 'Given reactants and products, locate the transition state connecting them',  # nopep8
+        'description': ('Given reactants and products, locate the transition '
+                        'state connecting them'),
     },
     'LOG': {
         'description': 'Generate a log file',
@@ -420,7 +441,8 @@ keywords = {
         'value': 'integer',
     },
     'MINI': {
-        'description': 'Reduce the size of the output by only printing specified atoms',  # nopep8
+        'description': ('Reduce the size of the output by only printing '
+                        'specified atoms'),
     },
     'MINMEP': {
         'description': 'Minimize MEP minima in the plane defined',
@@ -440,7 +462,8 @@ keywords = {
         'value': 'integer',
     },
     'MOL_QMMM': {
-        'description': 'Incorporate environmental effects in the QM/MM approach',  # nopep8
+        'description': ('Incorporate environmental effects in the QM/MM '
+                        'approach'),
     },
     'MOLDAT': {
         'description': 'Print details of working in MOLDAT',
@@ -452,7 +475,8 @@ keywords = {
         'description': 'Use old MOPAC definition for 2nd and 3rd atoms',
     },
     'MOZYME': {
-        'description': 'Use the Localized Molecular Orbital method to speed up the SCF',  # nopep8
+        'description': ('Use the Localized Molecular Orbital method to speed '
+                        'up the SCF'),
     },
     'MS=n': {
         'description': 'In MECI, magnetic component of spin',
@@ -464,7 +488,8 @@ keywords = {
         'description': 'Print the Mulliken population analysis',
     },
     'N**2=n.nn': {
-        'description': 'In excited state COSMO calculations, set the value of N**2',  # nopep8
+        'description': ('In excited state COSMO calculations, set the value '
+                        'of N**2'),
         'value optional': False,
         'value': 'float',
     },
@@ -475,7 +500,8 @@ keywords = {
         'description': 'Do not use analytical C.I. derivatives',
     },
     'NOCOMMENTS': {
-        'description': 'Ignore all lines except ATOM, HETATM, and TER in PDB files',  # nopep8
+        'description': ('Ignore all lines except ATOM, HETATM, and TER in PDB '
+                        'files'),
     },
     'NOGPU': {
         'description': 'Do not use GPU acceleration',
@@ -484,7 +510,8 @@ keywords = {
         'description': 'Suppress log file trail, where possible',
     },
     'NOMM': {
-        'description': 'Do not use molecular mechanics correction to CONH bonds',  # nopep8
+        'description': ('Do not use molecular mechanics correction to CONH '
+                        'bonds'),
     },
     'NONET': {
         'description': 'NONET state required',
@@ -493,16 +520,19 @@ keywords = {
         'description': 'Do not use Newton-Raphson method in EF',
     },
     'NOOPT': {
-        'description': 'Do not optimize the coordinates of all atoms (see OPT-X)',  # nopep8
+        'description': ('Do not optimize the coordinates of all atoms '
+                        '(see OPT-X)'),
     },
     'NOOPT-X': {
-        'description': 'Do not optimize the coordinates of all atoms of type X',  # nopep8
+        'description': ('Do not optimize the coordinates of all atoms of type '
+                        'X'),
     },
     'NOREOR': {
         'description': 'In symmetry work, use supplied orientation',
     },
     'NORESEQ': {
-        'description': 'Suppress the default re-sequencing of atoms to the PDB sequence',  # nopep8
+        'description': ('Suppress the default re-sequencing of atoms to the '
+                        'PDB sequence'),
     },
     'NOSWAP': {
         'description': 'Do not allow atom swapping when GEO_REF is used',
@@ -534,7 +564,8 @@ keywords = {
         'description': 'Octet state required',
     },
     'OLDCAV': {
-        'description': 'In COSMO, use the old Solvent Accessible Surface calculation',  # nopep8
+        'description': ('In COSMO, use the old Solvent Accessible Surface '
+                        'calculation'),
     },
     'OLDENS': {
         'description': 'Read initial density matrix off disk',
@@ -560,10 +591,12 @@ keywords = {
         'description': 'Optimize the coordinates of all atoms of type X',
     },
     'OPT(text=n.nn)': {
-        'description': 'Optimize coordinates of all atoms within n.nn Ångstroms of atoms labeled "text"',  # nopep8
+        'description': ('Optimize the coordinates of all atoms within n.nn '
+                        'Ångstroms of atoms labeled "text"'),
     },
     'OUTPUT': {
-        'description': 'Reduce the amount of output (useful for large systems)',  # nopep8
+        'description': ('Reduce the amount of output (useful for large '
+                        'systems)'),
     },
     'P=n.nn': {
         'description': 'An applied pressure of n.nn Newtons/m2 to be used',
@@ -584,7 +617,8 @@ keywords = {
         'description': 'Resolve density matrix into σ, π, and δ components',
     },
     'pKa': {
-        'description': 'Print the pKa for ionizable hydrogen atoms attached to oxygen atoms',  # nopep8
+        'description': ('Print the pKa for ionizable hydrogen atoms attached '
+                        'to oxygen atoms'),
     },
     'PL': {
         'description': 'Monitor convergence of density matrix in ITER',
@@ -596,22 +630,27 @@ keywords = {
         'description': 'Use the PM6 Hamiltonian'
     },
     'PM6-D3': {
-        'description': "Use the PM6 Hamiltonian with Grimme's corrections for dispersion",  # nopep8
+        'description': ("Use the PM6 Hamiltonian with Grimme's corrections "
+                        "for dispersion"),
     },
     'PM6-DH+': {
-        'description': 'Use the PM6 Hamiltonian with corrections for dispersion and hydrogen-bonding',  # nopep8
+        'description': ('Use the PM6 Hamiltonian with corrections for '
+                        'dispersion and hydrogen-bonding'),
     },
     'PM6-DH2': {
-        'description': 'Use the PM6 Hamiltonian with corrections for dispersion and hydrogen-bonding',  # nopep8
+        'description': ('Use the PM6 Hamiltonian with corrections for '
+                        'dispersion and hydrogen-bonding'),
     },
     'PM6-DH2X': {
-        'description': 'Use PM6 with corrections for dispersion and hydrogen and halogen bonding',  # nopep8
+        'description': ('Use PM6 with corrections for dispersion and hydrogen '
+                        'and halogen bonding'),
     },
     'PM6-D3H4': {
         'description': "Use PM6 with Řezáč and Hobza's D3H4 correction",
     },
     'PM6-D3H4X': {
-        'description': "Use PM6 with Brahmkshatriya, et al.'s D3H4X correction",  # nopep8
+        'description': ("Use PM6 with Brahmkshatriya, et al.'s D3H4X "
+                        "correction"),
     },
     'PMEP': {
         'description': 'Complete semiempirical MEP calculation',
@@ -631,17 +670,20 @@ keywords = {
         'value': 'integer',
     },
     'POINT1=n': {
-        'description': 'Number of points in first direction in grid calculation',  # nopep8
+        'description': ('Number of points in first direction in grid '
+                        'calculation'),
         'value optional': False,
         'value': 'integer',
     },
     'POINT2=n': {
-        'description': 'Number of points in second direction in grid calculation',  # nopep8
+        'description': ('Number of points in second direction in grid '
+                        'calculation'),
         'value optional': False,
         'value': 'integer',
     },
     'POLAR': {
-        'description': 'Calculate first, second and third order polarizabilities',  # nopep8
+        'description': ('Calculate first, second and third order '
+                        'polarizabilities'),
     },
     'POTWRT': {
         'description': 'In ESP, write out electrostatic potential to unit 21',
@@ -674,7 +716,8 @@ keywords = {
         'description': "Use Pulay's converger to obtain a SCF",
     },
     'QMMM': {
-        'description': 'Incorporate environmental effects in the QM/MM approach',  # nopep8
+        'description': ('Incorporate environmental effects in the QM/MM '
+                        'approach'),
     },
     'QPMEP': {
         'description': 'Charges derived from Wang-Ford type AM1 MEP',
@@ -686,7 +729,8 @@ keywords = {
         'description': 'Quintet state required',
     },
     'RAPID': {
-        'description': 'In MOZYME geometry optimizations, only use atoms being optimized in the SCF',  # nopep8
+        'description': ('In MOZYME geometry optimizations, only use atoms '
+                        'being optimized in the SCF'),
     },
     'RECALC=n': {
         'description': 'In EF, recalculate Hessian every n steps',
@@ -694,10 +738,12 @@ keywords = {
         'value': 'integer',
     },
     'RE-LOCAL': {
-        'description': 'At the end of MOZYME calculation, re-localize the LMOs',  # nopep8
+        'description': ('At the end of a MOZYME calculation, re-localize the '
+                        'LMOs'),
     },
     'RE-LOCAL=n': {
-        'description': 'During and at end of MOZYME calculation, re-localize the LMOs',  # nopep8
+        'description': ('During and at end of a MOZYME calculation, '
+                        're-localize the LMOs'),
         'value optional': True,
         'value': 'integer',
     },
@@ -705,13 +751,15 @@ keywords = {
         'description': 'Default SCF criterion multiplied by n',
     },
     'REORTHOG': {
-        'description': "In MOZYME, re-orthogonalize LMO's each 10 SCF calculations.",  # nopep8
+        'description': ("In MOZYME, re-orthogonalize LMO's each 10 SCF "
+                        "calculations."),
     },
     'RESEQ': {
         'description': 'Re-arrange the atoms to match the PDB convention',
     },
     'RESIDUES': {
-        'description': 'Label each atom in a polypeptide with the amino acid residue.',  # nopep8
+        'description': ('Label each atom in a polypeptide with the amino acid '
+                        'residue.'),
     },
     'RESTART': {
         'description': 'Calculation restarted',
@@ -753,7 +801,8 @@ keywords = {
         'description': 'Septet state required',
     },
     'SETPI': {
-        'description': 'In MOZYME, some π bonds are explicitly set by the user',  # nopep8
+        'description': ('In MOZYME, some π bonds are explicitly set by the '
+                        'user'),
     },
     'SETUP': {
         'description': 'Extra keywords to be read from setup file',
@@ -765,7 +814,8 @@ keywords = {
         'description': 'a damping factor of n defined to start SCF',
     },
     # 'SHUT <file>': {
-    #     'description': 'Send a command to MOPAC to make a restart and density file, then stop.',  # nopep8
+    #     'description': ('Send a command to MOPAC to make a restart and '
+    #                     'density file, then stop.'),
     # },
     'SIGMA': {
         'description': 'Minimize gradients using SIGMA',
@@ -777,13 +827,15 @@ keywords = {
         'description': 'Define ionization state of residues in proteins',
     },
     'SLOG=n.nn': {
-        'description': 'In L-BFGS optimization, use fixed step of length n .nn',  # nopep8
+        'description': ('In L-BFGS optimization, use fixed step of length '
+                        'n .nn'),
     },
     'SLOPE': {
         'description': 'Multiplier used to scale MNDO charges',
     },
     'SMOOTH': {
-        'description': 'In a GRID calculation, remove artifacts caused by the order in which points are calculated',  # nopep8
+        'description': ('In a GRID calculation, remove artifacts caused by '
+                        'the order in which points are calculated'),
     },
     'SNAP': {
         'description': 'Increase precision of symmetry angles',
@@ -795,7 +847,8 @@ keywords = {
         'description': 'Print final UHF spin matrix',
     },
     'START_RES(text)': {
-        'description': 'Define starting residue numbers in a protein, if different from the default',  # nopep8
+        'description': ('Define starting residue numbers in a protein, if '
+                        'different from the default'),
     },
     'STATIC': {
         'description': 'Calculate Polarizability using electric fields',
@@ -822,7 +875,8 @@ keywords = {
         'description': 'Average symmetry equivalent ESP charges',
     },
     'SYMOIR': {
-        'description': 'Print characters of eigenvectors and print number of I.R.s',  # nopep8
+        'description': ('Print characters of eigenvectors and print number of '
+                        'I.R.s'),
     },
     'SYMTRZ': {
         'description': 'Print details of working in subroutine SYMTRZ.',
@@ -837,7 +891,8 @@ keywords = {
         'description': 'Perform a thermodynamics calculation',
     },
     'THREADS=n': {
-        'description': 'Set the number of threads to be used in parallelization to n',  # nopep8
+        'description': ('Set the number of threads to be used in '
+                        'parallelization to n'),
     },
     'TIMES': {
         'description': 'Print times of various stages',
@@ -846,7 +901,8 @@ keywords = {
         'description': 'Time takes priority in DRC',
     },
     'TRANS=n': {
-        'description': 'The system is a transition state (used in thermodynamics calculation)',  # nopep8
+        'description': ('The system is a transition state (used in '
+                        'thermodynamics calculation)'),
     },
     'TRIPLET': {
         'description': 'Triplet state required',
@@ -858,16 +914,19 @@ keywords = {
         'description': 'Use the Unrestricted Hartree-Fock method',
     },
     'VDW(text)': {
-        'description': 'Van der waals radius for atoms in COSMO defined by user',  # nopep8
+        'description': ('Van der waals radius for atoms in COSMO defined by '
+                        'user'),
     },
     'VDWM(text)': {
-        'description': 'Van der waals radius for atoms in MOZYME defined by user',  # nopep8
+        'description': ('Van der waals radius for atoms in MOZYME defined by '
+                        'user'),
     },
     'VECTORS': {
         'description': 'Print final eigenvectors',
     },
     'VELOCITY': {
-        'description': 'Supply the initial velocity vector in a DRC calculation',  # nopep8
+        'description': ('Supply the initial velocity vector in a DRC '
+                        'calculation'),
     },
     'WILLIAMS': {
         'description': 'Use Williams surface',
@@ -876,7 +935,8 @@ keywords = {
         'description': 'Geometry changes take priority in DRC',
     },
     'XENO': {
-        'description': 'Allow non-standard residues in proteins to be labeled.',  # nopep8
+        'description': ('Allow non-standard residues in proteins to be '
+                        'labeled.'),
     },
     'XYZ': {
         'description': 'Do all geometric operations in Cartesian coordinates',

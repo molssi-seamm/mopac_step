@@ -1,14 +1,12 @@
 # -*- coding: utf-8 -*-
+
 """Setup and run MOPAC"""
 
-import json
 import logging
 import seamm
 import seamm_util.printing as printing
 from seamm_util.printing import FormattedText as __
 import mopac_step
-import numpy as np
-import pandas
 
 logger = logging.getLogger(__name__)
 job = printing.getPrinter()
@@ -16,6 +14,7 @@ printer = printing.getPrinter('mopac')
 
 
 class Optimization(mopac_step.Energy):
+
     def __init__(self, flowchart=None, title='Optimization', extension=None):
         """Initialize the node"""
 
@@ -34,8 +33,10 @@ class Optimization(mopac_step.Energy):
         # Hamiltonian followed by convergence
         text = 'Geometry optimization using {hamiltonian}'
         if P['method'] == 'default':
-            text += (' and default optimizer (EF for small systems,'
-                     ' L-BFGS for larger).')
+            text += (
+                ' and default optimizer (EF for small systems,'
+                ' L-BFGS for larger).'
+            )
         elif P['method'][0:1] == 'EF':
             text += ' and the eigenvector following (EF) method.'
         elif P['method'][0:3] == 'BFGS':
@@ -43,15 +44,21 @@ class Optimization(mopac_step.Energy):
         elif P['method'][0:5] == 'L-BFGS':
             text += ' and the L-BFGS small memory version of the BFGS method.'
         else:
-            text += (". The optimization method will be determined at runtime "
-                     "by '{method}'.")
+            text += (
+                ". The optimization method will be determined at runtime "
+                "by '{method}'."
+            )
 
         if P['gnorm'] == 'default':
-            text += (' The geometrical convergence is the default of '
-                     '1.0 kcal/mol/Å.')
+            text += (
+                ' The geometrical convergence is the default of '
+                '1.0 kcal/mol/Å.'
+            )
         elif P['gnorm'][0] == '$':
-            text += (' The geometrical convergence will be determined '
-                     "at runtime by '{gnorm}'.")
+            text += (
+                ' The geometrical convergence will be determined '
+                "at runtime by '{gnorm}'."
+            )
         else:
             text += ' The geometrical convergence is {gnorm} kcal/mol/Å.'
 
@@ -82,7 +89,6 @@ class Optimization(mopac_step.Energy):
                 keywords.append(keyword)
 
         # and the optimization-specific parts
-        
         method = P['method']
         if method == 'default':
             pass
@@ -103,8 +109,10 @@ class Optimization(mopac_step.Energy):
             elif method[0:5] == 'NLLSQ':
                 keywords.append('NLLSQ')
             else:
-                text = ("Don't recognize optimization method '{}'"
-                        .format(P['method'])
+                text = (
+                    "Don't recognize optimization method '{}'".format(
+                        P['method']
+                    )
                 )
                 logger.critical(text)
                 raise RuntimeError(text)
@@ -126,9 +134,15 @@ class Optimization(mopac_step.Energy):
 
         # The results
         printer.normal(
-            __(('\nThe geometry converged in {NUMBER_SCF_CYCLES} iterations '
-                'to a heat of formation of {HEAT_OF_FORMATION} '
-                'kcal/mol.'), **data, indent=7*' ')
+            __(
+                (
+                    '\nThe geometry converged in {NUMBER_SCF_CYCLES} '
+                    'iterations to a heat of formation of {HEAT_OF_FORMATION} '
+                    'kcal/mol.'
+                ),
+                **data,
+                indent=7 * ' '
+            )
         )
 
         # Put any requested results into variables or tables

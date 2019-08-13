@@ -4,7 +4,7 @@
 """Tests for `mopac_step` package."""
 
 import pytest
-from mopac_step import mopac_step  # nopep8
+import mopac_step  # noqa: F401
 
 
 @pytest.fixture

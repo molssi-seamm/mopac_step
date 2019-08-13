@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
+
 """Setup and run MOPAC"""
 
 import logging
 import seamm
 import seamm.data as data
 import seamm_util.printing as printing
-from seamm_util.printing import FormattedText as __
 import mopac_step
 import os
 import os.path
@@ -17,10 +17,13 @@ printer = printing.getPrinter('mopac')
 
 
 class MOPAC(seamm.Node):
-    def __init__(self,
-                 flowchart=None,
-                 namespace='org.molssi.seamm.mopac',
-                 extension=None):
+
+    def __init__(
+        self,
+        flowchart=None,
+        namespace='org.molssi.seamm.mopac',
+        extension=None
+    ):
         """Initialize the node"""
 
         logger.debug('Creating MOPAC {}'.format(self))
@@ -32,7 +35,9 @@ class MOPAC(seamm.Node):
         )
         self._data = {}
 
-        super().__init__(flowchart=flowchart, title='MOPAC', extension=extension)
+        super().__init__(
+            flowchart=flowchart, title='MOPAC', extension=extension
+        )
 
     def set_id(self, node_id):
         """Set the id for node to a given tuple"""
@@ -55,7 +60,7 @@ class MOPAC(seamm.Node):
         node = self.mopac_flowchart.get_node('1').next()
 
         while node:
-            node.describe(indent=indent+'    ', json_dict=json_dict)
+            node.describe(indent=indent + '    ', json_dict=json_dict)
             node = node.next()
 
         return next_node
@@ -78,8 +83,11 @@ class MOPAC(seamm.Node):
             lines = []
             lines.append(' '.join(keywords) + ' AUX')
             lines.append('Run from MolSSI flowchart')
-            lines.append('{} using {} hamiltonian'.format(
-                node.description, node.parameters['hamiltonian']))
+            lines.append(
+                '{} using {} hamiltonian'.format(
+                    node.description, node.parameters['hamiltonian']
+                )
+            )
 
             if 'OLDGEO' in keywords:
                 input_data.append('\n'.join(lines))
@@ -100,8 +108,9 @@ class MOPAC(seamm.Node):
                                    y, 0 if 'y' in frz else 1,
                                    z, 0 if 'z' in frz else 1)
                     tmp_structure.append(line)
-                input_data.append('\n'.join(lines) + '\n'
-                                  + '\n'.join(tmp_structure) + '\n')
+                input_data.append(
+                    '\n'.join(lines) + '\n' + '\n'.join(tmp_structure) + '\n'
+                )
 
             node = node.next()
 
@@ -110,8 +119,7 @@ class MOPAC(seamm.Node):
 
         os.makedirs(self.directory, exist_ok=True)
         for filename in files:
-            with open(os.path.join(self.directory, filename),
-                      mode='w') as fd:
+            with open(os.path.join(self.directory, filename), mode='w') as fd:
                 fd.write(files[filename])
 
         local = seamm.ExecLocal()
@@ -128,8 +136,9 @@ class MOPAC(seamm.Node):
 
         logger.debug('\n' + pprint.pformat(result))
 
-        logger.debug('\n\nOutput from MOPAC\n\n' +
-                     result['molssi.out']['data'] + '\n\n')
+        logger.debug(
+            '\n\nOutput from MOPAC\n\n' + result['molssi.out']['data'] + '\n\n'
+        )
 
         for filename in result['files']:
             with open(os.path.join(self.directory, filename), mode='w') as fd:
@@ -243,7 +252,7 @@ class MOPAC(seamm.Node):
                     name, units = key.split(':')
                 else:
                     name = key
-                
+
                 if name not in properties:
                     raise RuntimeError(
                         "Property '{}' not recognized.".format(name)

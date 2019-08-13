@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+
 """The graphical part of a MOPAC Energy node"""
 
 import logging
@@ -16,13 +17,23 @@ logger = logging.getLogger(__name__)
 
 def lcp(*s):
     """Longest common prefix of strings"""
-    return ''.join(a for a, b in takewhile(lambda x: x[0] == x[1],
-                                           zip(min(s), max(s))))
+    return ''.join(
+        a for a, b in takewhile(lambda x: x[0] == x[1], zip(min(s), max(s)))
+    )
 
 
 class TkEnergy(seamm.TkNode):
-    def __init__(self, tk_flowchart=None, node=None, canvas=None,
-                 x=120, y=20, w=200, h=50):
+
+    def __init__(
+        self,
+        tk_flowchart=None,
+        node=None,
+        canvas=None,
+        x=120,
+        y=20,
+        w=200,
+        h=50
+    ):
         '''Initialize a node
 
         Keyword arguments:
@@ -37,8 +48,15 @@ class TkEnergy(seamm.TkNode):
         s = ttk.Style()
         s.configure('Red.TEntry', foreground='red')
 
-        super().__init__(tk_flowchart=tk_flowchart, node=node,
-                         canvas=canvas, x=x, y=y, w=w, h=h)
+        super().__init__(
+            tk_flowchart=tk_flowchart,
+            node=node,
+            canvas=canvas,
+            x=x,
+            y=y,
+            w=w,
+            h=h
+        )
 
     def right_click(self, event):
         """Probably need to add our dialog...
@@ -56,7 +74,8 @@ class TkEnergy(seamm.TkNode):
             buttons=('OK', 'Help', 'Cancel'),
             master=self.toplevel,
             title='Edit Energy step',
-            command=self.handle_dialog)
+            command=self.handle_dialog
+        )
         self.dialog.withdraw()
 
         # The tabbed notebook
@@ -81,7 +100,7 @@ class TkEnergy(seamm.TkNode):
         )
         self['convergence'].combobox.bind("<Return>", self.reset_dialog)
         self['convergence'].combobox.bind("<FocusOut>", self.reset_dialog)
-            
+
         # Second tab for results
         rframe = self['results frame'] = ttk.Frame(notebook)
         notebook.add(rframe, text='Results', sticky=tk.NSEW)
@@ -111,7 +130,7 @@ class TkEnergy(seamm.TkNode):
         rframe.rowconfigure(1, weight=1)
 
         self.setup_results()
-        
+
         # Third tab for adding keywords
         self['add_to_input'] = ttk.Frame(notebook)
         notebook.add(self['add_to_input'], text='Add to input', sticky=tk.NW)
@@ -183,10 +202,10 @@ class TkEnergy(seamm.TkNode):
         sh = frame.winfo_screenheight()
 
         if width > sw:
-            width = int(0.9*sw)
+            width = int(0.9 * sw)
         if height > sh:
-            height = int(0.9*sh)
-            
+            height = int(0.9 * sh)
+
         self.dialog.geometry('{}x{}'.format(width, height))
 
     def edit(self):
@@ -252,7 +271,8 @@ class TkEnergy(seamm.TkNode):
         if result != "OK":
             self.dialog.deactivate(result)
             raise RuntimeError(
-                "Don't recognize dialog result '{}'".format(result))
+                "Don't recognize dialog result '{}'".format(result)
+            )
 
         self.dialog.deactivate(result)
 
@@ -271,7 +291,7 @@ class TkEnergy(seamm.TkNode):
 
         results = P['results'].value = {}
         for key, w_check, w_variable, w_table, w_column \
-            in self.results_widgets:
+                in self.results_widgets:
 
             if self.tk_var[key].get():
                 tmp = results[key] = dict()
@@ -320,7 +340,7 @@ class TkEnergy(seamm.TkNode):
             w_name: the name of the widget (from %W)
         """
 
-        w = self['keyword_'+str(row)]
+        w = self['keyword_' + str(row)]
         current = w.get().upper()
 
         keywords = []
@@ -371,19 +391,23 @@ class TkEnergy(seamm.TkNode):
             w.grid(row=row, column=0, sticky=tk.W)
 
             # the name of the keyword
-            w = ttk.Entry(frame,
-                          width=30,
-                          validate='key',
-                          validatecommand=(self.keyword_cb, keyword,
-                                           '%W', '%P', '%s', '%d', '%S'),
-                          takefocus=False,
-                          style='Red.TEntry',
-                          )
+            w = ttk.Entry(
+                frame,
+                width=30,
+                validate='key',
+                validatecommand=(
+                    self.keyword_cb, keyword, '%W', '%P', '%s', '%d', '%S'
+                ),
+                takefocus=False,
+                style='Red.TEntry',
+            )
             widgets['entry'] = w
             col = 0
             w.grid(row=row, column=col, stick=tk.EW)
-            w.bind('<KeyPress-Tab>',
-                   lambda event=None, row=row: self.handle_tab(event, row))
+            w.bind(
+                '<KeyPress-Tab>',
+                lambda event=None, row=row: self.handle_tab(event, row)
+            )
             col += 1
 
             if keyword == '':
@@ -398,13 +422,15 @@ class TkEnergy(seamm.TkNode):
                     else:
                         keyword['value'] = definition['default']
 
-                w = ttk.Entry(frame,
-                              width=15,
-                              validate='key',
-                              validatecommand=(self.value_cb, keyword,
-                                               '%W', '%P', '%s', '%d', '%S'),
-                              takefocus=False,
-                              )
+                w = ttk.Entry(
+                    frame,
+                    width=15,
+                    validate='key',
+                    validatecommand=(
+                        self.value_cb, keyword, '%W', '%P', '%s', '%d', '%S'
+                    ),
+                    takefocus=False,
+                )
                 widgets['value'] = w
                 w.insert('end', keyword['value'])
                 w.grid(row=row, column=col, sticky=tk.EW)
@@ -435,7 +461,8 @@ class TkEnergy(seamm.TkNode):
                 defaultbutton='OK',
                 master=self.dialog,
                 title='Add keyword',
-                command=self.handle_keyword_dialog)
+                command=self.handle_keyword_dialog
+            )
             self.keyword_dialog.withdraw()
             frame = ttk.Frame(self.keyword_dialog.interior())
             frame.pack(expand=tk.YES, fill=tk.BOTH)
@@ -470,15 +497,17 @@ class TkEnergy(seamm.TkNode):
         if result != "OK":
             self.keyword_dialog.deactivate(result)
             raise RuntimeError(
-                "Don't recognize dialog result '{}'".format(result))
+                "Don't recognize dialog result '{}'".format(result)
+            )
 
         self.keyword_dialog.deactivate(result)
 
         keyword = self['keyword tree'].selection()
         logger.debug(keyword)
 
-    def validate_keyword_value(self, keyword, w_name, value, before, action,
-                               changed):
+    def validate_keyword_value(
+        self, keyword, w_name, value, before, action, changed
+    ):
         """Handle typing in a combobox for the keyword
 
         Arguments:
@@ -490,7 +519,7 @@ class TkEnergy(seamm.TkNode):
             changed: the text being inserted or deleted
         """
 
-        w = self.dialog.nametowidget(w_name)  # nopep8
+        # w = self.dialog.nametowidget(w_name)
         logger.debug('Validating the value of a keyword')
         logger.debug('\tkeyword: {}'.format(keyword))
         logger.debug('\t  value: {}'.format(value))

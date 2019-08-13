@@ -7,8 +7,7 @@ import mopac_step
 
 class OptimizationStep(object):
     my_description = {
-        'description':
-        'Optimization of the structure',
+        'description': 'Optimization of the structure',
         'group': 'Calculations',
         'name': 'Optimization'
     }
