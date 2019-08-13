@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
+
 """Run a vibrational frequency calculation in MOPAC"""
 
-import json
 import logging
 import seamm
 import seamm_util.printing as printing
@@ -14,6 +14,7 @@ printer = printing.getPrinter('mopac')
 
 
 class IR(mopac_step.Energy):
+
     def __init__(self, flowchart=None, title='IR Spectrum', extension=None):
         """Initialize the node"""
 
@@ -28,23 +29,26 @@ class IR(mopac_step.Energy):
         """Prepare information about what this node will do
         """
 
-        text = ('Harmonic vibrational calculation using {hamiltonian}, '
-                'with the SCF converged to ')
+        text = (
+            'Harmonic vibrational calculation using {hamiltonian}, '
+            'with the SCF converged to '
+        )
         # Convergence
         if P['convergence'] == 'normal':
             text += "the 'normal' level of 1.0e-07 kcal/mol."
         elif P['convergence'] == 'precise':
             text += "the 'precise' level of 1.0e-09 kcal/mol."
         elif P['convergence'] == 'relative':
-            text += ('a factor of {relative} times the '
-                     'normal criterion.')
+            text += ('a factor of {relative} times the ' 'normal criterion.')
         elif P['convergence'] == 'absolute':
             text += 'converged to {absolute}.'
 
         if P['trans'] != 0:
-            text += ('\n\nA total of {trans} lowest modes will be ignored to '
-                     'approximately account for {trans} internal rotations.')
-        
+            text += (
+                '\n\nA total of {trans} lowest modes will be ignored to '
+                'approximately account for {trans} internal rotations.'
+            )
+
         return text
 
     def get_input(self):
@@ -77,9 +81,15 @@ class IR(mopac_step.Energy):
 
         # The results
         printer.normal(
-            __(('\nThe geometry converged in {NUMBER_SCF_CYCLES} iterations '
-                'to a heat of formation of {HEAT_OF_FORMATION} '
-                'kcal/mol.'), **data, indent=7*' ')
+            __(
+                (
+                    '\nThe geometry converged in {NUMBER_SCF_CYCLES} '
+                    'iterations to a heat of formation of {HEAT_OF_FORMATION} '
+                    'kcal/mol.'
+                ),
+                **data,
+                indent=7 * ' '
+            )
         )
 
         # Put any requested results into variables or tables

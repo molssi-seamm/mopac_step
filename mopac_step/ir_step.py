@@ -7,8 +7,7 @@ import mopac_step
 
 class IRStep(object):
     my_description = {
-        'description':
-        'Infrared (vibrational) spectrum',
+        'description': 'Infrared (vibrational) spectrum',
         'group': 'Calculations',
         'name': 'IR Spectrum'
     }

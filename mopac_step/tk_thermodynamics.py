@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+
 """The graphical part of a MOPAC Energy node"""
 
 import mopac_step
@@ -7,14 +8,30 @@ import tkinter as tk
 
 
 class TkThermodynamics(mopac_step.TkEnergy):
-    def __init__(self, tk_flowchart=None, node=None, canvas=None,
-                 x=120, y=20, w=200, h=50):
+
+    def __init__(
+        self,
+        tk_flowchart=None,
+        node=None,
+        canvas=None,
+        x=120,
+        y=20,
+        w=200,
+        h=50
+    ):
         '''Initialize a node
 
         Keyword arguments:
         '''
-        super().__init__(tk_flowchart=tk_flowchart, node=node,
-                         canvas=canvas, x=x, y=y, w=w, h=h)
+        super().__init__(
+            tk_flowchart=tk_flowchart,
+            node=node,
+            canvas=canvas,
+            x=x,
+            y=y,
+            w=w,
+            h=h
+        )
 
     def edit(self):
         """Present a dialog for editing the input for the MOPAC energy
@@ -31,7 +48,7 @@ class TkThermodynamics(mopac_step.TkEnergy):
         then add the extra widgets for controlling optimization
         """
         row = super().reset_dialog()
-        
+
         widgets = []
         for key in ('Tmin', 'Tmax', 'Tstep', 'trans'):
             self[key].grid(row=row, column=0, columnspan=2, sticky=tk.EW)

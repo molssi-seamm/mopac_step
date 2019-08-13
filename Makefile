@@ -46,9 +46,20 @@ clean-test: ## remove test and coverage artifacts
 	rm -fr .tox/
 	rm -f .coverage
 	rm -fr htmlcov/
+	find . -name '.pytype' -exec rm -fr {} +
 
 lint: ## check style with flake8
 	flake8 mopac_step tests
+	yapf --diff --recursive  mopac_step tests
+#	isort --check-only --diff --recursive mopac_step tests
+
+format: ## reformat with with yapf and isort
+	yapf --recursive --in-place mopac_step tests
+#	isort --recursive --atomic mopac tests
+
+typing: ## check typing
+	pytype mopac_step
+#	mypy -p mopac_step
 
 test: ## run tests quickly with the default Python
 	py.test
@@ -78,8 +89,8 @@ servedocs: docs ## compile the docs watching for changes
 	watchmedo shell-command -p '*.rst' -c '$(MAKE) -C docs html' -R -D .
 
 release: clean ## package and upload a release
-	python setup.py sdist upload
-	python setup.py bdist_wheel upload
+	python setup.py sdist bdist_wheel
+	python -m twine upload dist/*
 
 dist: clean ## builds source and wheel package
 	python setup.py sdist

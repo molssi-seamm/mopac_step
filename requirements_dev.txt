@@ -1,5 +1,4 @@
 pip
-bumpversion
 wheel
 watchdog
 flake8
@@ -10,3 +9,5 @@ cryptography
 PyYAML>=5.1
 pytest
 pytest-runner
+twine
+yapf

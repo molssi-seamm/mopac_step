@@ -1,15 +1,13 @@
 # -*- coding: utf-8 -*-
+
 """Setup and run MOPAC"""
 
-import json
 import logging
 import seamm
 from seamm_util import ureg, Q_, units_class  # noqa: F401
 import seamm_util.printing as printing
 from seamm_util.printing import FormattedText as __
 import mopac_step
-import numpy as np
-import pandas
 
 logger = logging.getLogger(__name__)
 job = printing.getPrinter()
@@ -42,8 +40,7 @@ class Energy(seamm.Node):
         elif P['convergence'] == 'precise':
             text += "the 'precise' level of 1.0e-06 kcal/mol."
         elif P['convergence'] == 'relative':
-            text += ('a factor of {relative} times the '
-                     'normal criterion.')
+            text += ('a factor of {relative} times the ' 'normal criterion.')
         elif P['convergence'] == 'absolute':
             text += 'converged to {absolute}'
 
@@ -52,7 +49,7 @@ class Energy(seamm.Node):
     def get_input(self):
         """Get the input for an energy calculation for MOPAC"""
         self._long_header = ''
-        self._long_header += str(__(self.header, indent=3*' '))
+        self._long_header += str(__(self.header, indent=3 * ' '))
         self._long_header += '\n'
 
         P = self.parameters.current_values_to_dict(
@@ -65,7 +62,7 @@ class Energy(seamm.Node):
                 PP[key] = '{:~P}'.format(PP[key])
 
         self._long_header += str(
-            __(self.description_text(PP), **PP, indent=7*' ')
+            __(self.description_text(PP), **PP, indent=7 * ' ')
         )
 
         # Start gathering the keywords
@@ -94,8 +91,9 @@ class Energy(seamm.Node):
         elif P['convergence'] == 'absolute':
             keywords.append('SCFSCRT=' + P['absolute'])
         else:
-            raise RuntimeError("Don't recognize convergence '{}'".format(
-                P['convergence']))
+            raise RuntimeError(
+                "Don't recognize convergence '{}'".format(P['convergence'])
+            )
 
         return keywords
 

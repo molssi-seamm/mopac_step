@@ -7,8 +7,7 @@ import mopac_step
 
 class MOPACStep(object):
     my_description = {
-        'description':
-        'Setup and run MOPAC',
+        'description': 'Setup and run MOPAC',
         'group': 'Simulations',
         'name': 'MolSSI MOPAC'
     }

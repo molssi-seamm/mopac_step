@@ -7,8 +7,7 @@ import mopac_step
 
 class EnergyStep(object):
     my_description = {
-        'description':
-        'A single-point energy calculation',
+        'description': 'A single-point energy calculation',
         'group': 'Calculations',
         'name': 'Energy'
     }

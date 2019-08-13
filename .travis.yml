@@ -1,29 +1,41 @@
-# Config file for automatic testing at travis-ci.org
-# This file will be regenerated if you run travis_pypi_setup.py
-
 language: python
-python:
-  - 3.5
-  - 3.4
-  - 3.3
-  - 2.7
-  - 2.6
-
-# command to install dependencies, e.g. pip install -r requirements.txt --use-mirrors
-install: pip install -U tox-travis
-
-# command to run tests, e.g. python setup.py test
-script: tox
-
-# After you create the Github repo and add it to Travis, run the
-# travis_pypi_setup.py script to finish PyPI deployment setup
+matrix:
+  include:
+  - os: osx
+    language: generic
+    env: PYTHON_VER=3.6
+  - os: osx
+    language: generic
+    env: PYTHON_VER=3.7
+  - os: linux
+    language: generic
+    env: PYTHON_VER=3.6
+  - os: linux
+    language: generic
+    env: PYTHON_VER=3.7
+before_install:
+- uname -a
+- df -h
+- ulimit -a
+- source devtools/travis-ci/before_install.sh
+- python -V
+install:
+- python devtools/scripts/create_conda_env.py -n=test -p=$PYTHON_VER devtools/conda-envs/test_env.yaml
+- conda activate test
+- python setup.py develop --no-deps
+script:
+- pytest -v --cov=mopac_step tests/
+notifications:
+  email: false
+after_success:
+- codecov
 deploy:
   provider: pypi
   distributions: sdist bdist_wheel
-  user: paulsaxe
-  password:
-    secure: PLEASE_REPLACE_ME
   on:
+    condition: "$TRAVIS_OS_NAME = linux"
+    repo: molssi-seamm/mopac_step
     tags: true
-    repo: paulsaxe/mopac_step
-    python: 2.7
+  user: seamm
+  password:
+    secure: FrHw5LJxsfOEXiRYW5orqRnwNGLT59VzKdeNXR0LUkNO/9iA3oeClOsc/plEaWtRPFHYSWHKE5j+VCPkRjW8bNiGw3CzPlsbxSyTeyOWSEZJx2k4z3txMV69RWJatQSeCNEpZNRmipSAm8SfvEAt0GASoCGo6NBTTWFHC2yvgm6ohzherSTz857VlXFL9DG+oZ/F2cgqgu3EZNIlQiHk9zno515ed90bLU6aA5UbsZzVD0mDynB9m2fjumiwmEtvH1owpxpyZ+Nc6OO/AXcOpsMb3evrIZyGwUkYc+papeBtzmf9tc23LyEJIF0DRl6hCM8Toiu+ei5pr9UJkO1HXdUFl5QlwLAq3OWIV+TFj3Hgci0/e4xd7hCsYMleag5ApekjU9L2E6Viggw6Wzgsv1I0Lc9zxUpu80a6ANtSY7ZekpLJ86zpYub2SunR2RwNPkI04bn+OvYp4W90f4SJ/84Ozp8tYwwFBhi7tl83n01a/PJQ8yZ8SajoUgWRixkZ35UCu52kSaWfud9GzCagNt3NL8vzraI8pDYtRgKv6uPj+DICtk3ZY1cyqVc3yuepw88ONp/XdLdZgDpi0644K1DzT57eEMI6bxrTmv08muuynLxVzUZm+mMnlDkDKTZVnyIGUwrJcDN1dPEhhVas2lBU/9yLfXx697wMeUDtSoA=

@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+
 """Control parameters for a MOPAC vibrational (IR/Raman) calculation
 """
 
@@ -13,27 +14,31 @@ class IRParameters(mopac_step.EnergyParameters):
 
     parameters = {
         "let": {
-            "default": "no",
-            "kind": "boolean",
-            "default_units": "",
+            "default": ("no"),
+            "kind": ("boolean"),
+            "default_units": (""),
             "enumeration": ("yes", "no"),
-            "format_string": "",
-            "group": "",
-            "description": "Use structure even if not a minimum:",
-            "help_text": ("Don't stop if the initial structure is not "
-                          "a minimum or other stationary point."),
+            "format_string": (""),
+            "group": (""),
+            "description": ("Use structure even if not a minimum:"),
+            "help_text": (
+                "Don't stop if the initial structure is not "
+                "a minimum or other stationary point."
+            )
         },
         "trans": {
-            "default": "0",
-            "kind": "integer",
-            "default_units": "",
+            "default": ("0"),
+            "kind": ("integer"),
+            "default_units": (""),
             "enumeration": tuple(),
-            "format_string": "d",
-            "group": "",
-            "description": "Number of internal rotations to ignore:",
-            "help_text": ("The number of internal rotations to ignore. "
-                          "A corresponding number of the lowest modes "
-                          "will be ignored, which is a first approximation.")
+            "format_string": ("d"),
+            "group": (""),
+            "description": ("Number of internal rotations to ignore:"),
+            "help_text": (
+                "The number of internal rotations to ignore. "
+                "A corresponding number of the lowest modes "
+                "will be ignored, which is a first approximation."
+            )
         },
     }
 
@@ -42,6 +47,9 @@ class IRParameters(mopac_step.EnergyParameters):
         parameters given in the class"""
 
         super().__init__(
-            defaults={**IRParameters.parameters, **defaults},
+            defaults={
+                **IRParameters.parameters,
+                **defaults
+            },
             data=data
         )

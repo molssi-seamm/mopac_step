@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+
 """The graphical part of a MolSII MOPAC node"""
 
 import seamm
@@ -12,17 +13,32 @@ class TkMOPAC(seamm.TkNode):
     class is the Tk graphics partner for
     """
 
-    def __init__(self, tk_flowchart=None, node=None, canvas=None,
-                 namespace='org.molssi.seamm.mopac.tk',
-                 x=120, y=20, w=200, h=50):
+    def __init__(
+        self,
+        tk_flowchart=None,
+        node=None,
+        canvas=None,
+        namespace='org.molssi.seamm.mopac.tk',
+        x=120,
+        y=20,
+        w=200,
+        h=50
+    ):
         '''Initialize a node
 
         Keyword arguments:
         '''
         self.namespace = namespace
 
-        super().__init__(tk_flowchart=tk_flowchart, node=node,
-                         canvas=canvas, x=x, y=y, w=w, h=h)
+        super().__init__(
+            tk_flowchart=tk_flowchart,
+            node=node,
+            canvas=canvas,
+            x=x,
+            y=y,
+            w=w,
+            h=h
+        )
 
         self.create_dialog()
 
@@ -34,7 +50,8 @@ class TkMOPAC(seamm.TkNode):
             defaultbutton='OK',
             master=self.toplevel,
             title='Edit LAMMPS step',
-            command=self.handle_dialog)
+            command=self.handle_dialog
+        )
         self.dialog.withdraw()
 
         # make it large!
@@ -52,7 +69,8 @@ class TkMOPAC(seamm.TkNode):
         self.mopac_tk_flowchart = seamm.TkFlowchart(
             master=frame,
             namespace=self.namespace,
-            flowchart=self.node.mopac_flowchart)
+            flowchart=self.node.mopac_flowchart
+        )
         self.mopac_tk_flowchart.draw()
 
     def handle_dialog(self, result):
@@ -67,7 +85,8 @@ class TkMOPAC(seamm.TkNode):
         if result != "OK":
             self.dialog.deactivate(result)
             raise RuntimeError(
-                "Don't recognize dialog result '{}'".format(result))
+                "Don't recognize dialog result '{}'".format(result)
+            )
 
         self.dialog.deactivate(result)
 
