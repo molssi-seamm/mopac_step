@@ -25,9 +25,12 @@ class IR(mopac_step.Energy):
         self.parameters = mopac_step.IRParameters()
         self.description = 'Infrared (vibrational) spectroscopy calculation'
 
-    def description_text(self, P):
+    def description_text(self, P=None):
         """Prepare information about what this node will do
         """
+
+        if not P:
+            P = self.parameters.values_to_dict()
 
         text = (
             'Harmonic vibrational calculation using {hamiltonian}, '
@@ -49,7 +52,7 @@ class IR(mopac_step.Energy):
                 'approximately account for {trans} internal rotations.'
             )
 
-        return text
+        return self.header + '\n' + __(text, **P, indent=4*' ').__str__()
 
     def get_input(self):
         """Get the input for an optimization MOPAC"""

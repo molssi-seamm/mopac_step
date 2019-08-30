@@ -26,9 +26,12 @@ class Thermodynamics(mopac_step.Energy):
 
         self.description = 'Thermodynamic functions'
 
-    def description_text(self, P):
+    def description_text(self, P=None):
         """Prepare information about what this node will do
         """
+
+        if not P:
+            P = self.parameters.values_to_dict()
 
         text = 'Thermodynamics calculation using {hamiltonian}, converged to '
         # Convergence
@@ -48,7 +51,7 @@ class Thermodynamics(mopac_step.Energy):
             'internal rotations.'
         )
 
-        return text
+        return self.header + '\n' + __(text, **P, indent=4*' ').__str__()
 
     def get_input(self):
         """Get the input for thermodynamics in MOPAC"""
