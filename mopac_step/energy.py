@@ -29,9 +29,33 @@ class Energy(seamm.Node):
         self._long_header = ''
         self.keywords = []  # additional keywords to add
 
-    def description_text(self, P):
+    @property
+    def header(self):
+        """A printable header for this section of output"""
+        return (
+            'Step {}: {}'.format(
+                '.'.join(str(e) for e in self._id), self.title
+            )
+        )
+
+    @property
+    def version(self):
+        """The semantic version of this module.
+        """
+        return mopac_step.__version__
+
+    @property
+    def git_revision(self):
+        """The git version of this module.
+        """
+        return mopac_step.__git_revision__
+
+    def description_text(self, P=None):
         """Prepare information about what this node will do
         """
+
+        if not P:
+            P = self.parameters.values_to_dict()
 
         text = 'Single-point energy using {hamiltonian}, converged to '
         # Convergence
@@ -44,7 +68,7 @@ class Energy(seamm.Node):
         elif P['convergence'] == 'absolute':
             text += 'converged to {absolute}'
 
-        return text
+        return self.header + '\n' + __(text, **P, indent=4 * ' ').__str__()
 
     def get_input(self):
         """Get the input for an energy calculation for MOPAC"""

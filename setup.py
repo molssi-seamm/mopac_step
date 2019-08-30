@@ -36,7 +36,6 @@ setup(
     description=short_description[1],
     long_description=readme + '\n\n' + history,
     version=versioneer.get_version(),
-    # version='0.1.0',
     cmdclass=versioneer.get_cmdclass(),
     license='BSD-3-Clause',
     url='https://github.com/molssi-seam/mopac_step',

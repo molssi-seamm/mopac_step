@@ -26,9 +26,12 @@ class Optimization(mopac_step.Energy):
 
         self.description = 'A structural optimization'
 
-    def description_text(self, P):
+    def description_text(self, P=None):
         """Prepare information about what this node will do
         """
+
+        if not P:
+            P = self.parameters.values_to_dict()
 
         # Hamiltonian followed by convergence
         text = 'Geometry optimization using {hamiltonian}'
@@ -73,7 +76,7 @@ class Optimization(mopac_step.Energy):
         elif P['convergence'] == 'absolute':
             text += ' {absolute} kcal/mol'
 
-        return text
+        return self.header + '\n' + __(text, **P, indent=4 * ' ').__str__()
 
     def get_input(self):
         """Get the input for an optimization MOPAC"""

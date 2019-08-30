@@ -69,7 +69,7 @@ class TkMOPAC(seamm.TkNode):
         self.mopac_tk_flowchart = seamm.TkFlowchart(
             master=frame,
             namespace=self.namespace,
-            flowchart=self.node.mopac_flowchart
+            flowchart=self.node.subflowchart
         )
         self.mopac_tk_flowchart.draw()
 
@@ -113,7 +113,7 @@ class TkMOPAC(seamm.TkNode):
         flowcharts"""
 
         super().update_flowchart(
-            flowchart=self.node.mopac_flowchart,
+            flowchart=self.node.subflowchart,
             tk_flowchart=self.mopac_tk_flowchart
         )
 
@@ -122,6 +122,6 @@ class TkMOPAC(seamm.TkNode):
         Only used in nodes that contain flowchart"""
 
         super().from_flowchart(
-            flowchart=self.node.mopac_flowchart,
+            flowchart=self.node.subflowchart,
             tk_flowchart=self.mopac_tk_flowchart
         )

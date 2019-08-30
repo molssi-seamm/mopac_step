@@ -6,6 +6,7 @@ import logging
 import seamm
 import seamm.data as data
 import seamm_util.printing as printing
+from seamm_util.printing import FormattedText as __
 import mopac_step
 import os
 import os.path
@@ -28,7 +29,7 @@ class MOPAC(seamm.Node):
 
         logger.debug('Creating MOPAC {}'.format(self))
 
-        self.mopac_flowchart = seamm.Flowchart(
+        self.subflowchart = seamm.Flowchart(
             name='MOPAC',
             namespace=namespace,
             directory=flowchart.root_directory
@@ -39,31 +40,49 @@ class MOPAC(seamm.Node):
             flowchart=flowchart, title='MOPAC', extension=extension
         )
 
+    @property
+    def version(self):
+        """The semantic version of this module.
+        """
+        return mopac_step.__version__
+
+    @property
+    def git_revision(self):
+        """The git version of this module.
+        """
+        return mopac_step.__git_revision__
+
     def set_id(self, node_id):
         """Set the id for node to a given tuple"""
         self._id = node_id
 
         # and set our subnodes
-        self.mopac_flowchart.set_ids(self._id)
+        self.subflowchart.set_ids(self._id)
 
         return self.next()
 
-    def describe(self, indent='', json_dict=None):
-        """Write out information about what this node will do
-        If json_dict is passed in, add information to that dictionary
-        so that it can be written out by the controller as appropriate.
+    def description_text(self, P=None):
+        """Return a short description of this step.
+
+        Return a nicely formatted string describing what this step will
+        do.
+
+        Keyword arguments:
+            P: a dictionary of parameter values, which may be variables
+                or final values. If None, then the parameters values will
+                be used as is.
         """
 
-        next_node = super().describe(indent, json_dict)
-
         # Work through children. Get the first real node
-        node = self.mopac_flowchart.get_node('1').next()
+        node = self.subflowchart.get_node('1').next()
 
-        while node:
-            node.describe(indent=indent + '    ', json_dict=json_dict)
+        text = self.header + '\n\n'
+        while node is not None:
+            text += __(node.description_text(), indent=3 * ' ').__str__()
+            text += '\n'
             node = node.next()
 
-        return next_node
+        return text
 
     def run(self):
         """Run MOPAC"""
@@ -72,10 +91,12 @@ class MOPAC(seamm.Node):
             logger.error('MOPAC run(): there is no structure!')
             raise RuntimeError('MOPAC run(): there is no structure!')
 
+        self.subflowchart.root_directory = self.flowchart.root_directory
+
         next_node = super().run(printer)
 
         # Get the first real node
-        node = self.mopac_flowchart.get_node('1').next()
+        node = self.subflowchart.get_node('1').next()
 
         input_data = []
         while node:
@@ -174,7 +195,7 @@ class MOPAC(seamm.Node):
                 start = lineno
 
         # Loop through our subnodes. Get the first real node
-        node = self.mopac_flowchart.get_node('1').next()
+        node = self.subflowchart.get_node('1').next()
         section = 0
         for start, end in sections:
             section += 1
