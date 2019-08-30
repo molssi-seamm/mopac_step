@@ -78,7 +78,7 @@ class MOPAC(seamm.Node):
 
         text = self.header + '\n\n'
         while node is not None:
-            text += __(node.description_text(), indent=3*' ').__str__()
+            text += __(node.description_text(), indent=3 * ' ').__str__()
             text += '\n'
             node = node.next()
 

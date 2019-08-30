@@ -42,13 +42,13 @@ class Energy(seamm.Node):
     def version(self):
         """The semantic version of this module.
         """
-        return lammps_step.__version__
+        return mopac_step.__version__
 
     @property
     def git_revision(self):
         """The git version of this module.
         """
-        return lammps_step.__git_revision__
+        return mopac_step.__git_revision__
 
     def description_text(self, P=None):
         """Prepare information about what this node will do
@@ -68,7 +68,7 @@ class Energy(seamm.Node):
         elif P['convergence'] == 'absolute':
             text += 'converged to {absolute}'
 
-        return self.header + '\n' + __(text, **P, indent=4*' ').__str__()
+        return self.header + '\n' + __(text, **P, indent=4 * ' ').__str__()
 
     def get_input(self):
         """Get the input for an energy calculation for MOPAC"""

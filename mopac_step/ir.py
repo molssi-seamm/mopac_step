@@ -52,7 +52,7 @@ class IR(mopac_step.Energy):
                 'approximately account for {trans} internal rotations.'
             )
 
-        return self.header + '\n' + __(text, **P, indent=4*' ').__str__()
+        return self.header + '\n' + __(text, **P, indent=4 * ' ').__str__()
 
     def get_input(self):
         """Get the input for an optimization MOPAC"""
