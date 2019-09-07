@@ -32,6 +32,7 @@ after_success:
 deploy:
   provider: pypi
   distributions: sdist bdist_wheel
+  skip_existing: true
   on:
     condition: "$TRAVIS_OS_NAME = linux"
     repo: molssi-seamm/mopac_step
