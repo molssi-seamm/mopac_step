@@ -34,7 +34,8 @@ deploy:
   distributions: sdist bdist_wheel
   skip_existing: true
   on:
-    condition: "$TRAVIS_OS_NAME = linux"
+    condition: $TRAVIS_OS_NAME = linux
+    condition: $PYTHON_VER = 3.7
     repo: molssi-seamm/mopac_step
     tags: true
   user: seamm
