@@ -1,43 +1,98 @@
 language: python
-matrix:
-  include:
-  - os: osx
-    language: generic
-    env: PYTHON_VER=3.6
-  - os: osx
-    language: generic
-    env: PYTHON_VER=3.7
-  - os: linux
-    language: generic
-    env: PYTHON_VER=3.6
-  - os: linux
-    language: generic
-    env: PYTHON_VER=3.7
+
 before_install:
-- uname -a
-- df -h
-- ulimit -a
-- source devtools/travis-ci/before_install.sh
-- python -V
+    # Additional info about the build
+  - uname -a
+  - df -h
+  - ulimit -a
+
+    # Install the Python environment
+  - source devtools/travis-ci/before_install.sh
+  - python -V
+
 install:
-- python devtools/scripts/create_conda_env.py -n=test -p=$PYTHON_VER devtools/conda-envs/test_env.yaml
-- conda activate test
-- python setup.py develop --no-deps
-script:
-- pytest -v --cov=mopac_step tests/
+    # Create test environment for package
+  - python devtools/scripts/create_conda_env.py -n=test -p=$PYTHON_VER devtools/conda-envs/test_env.yaml
+    # Activate the test environment
+  - conda activate test
+    # Build and install package
+    #- python setup.py develop --no-deps
+  - pip install -e .
+    # Print details of the environment
+  - conda list
+  - pip freeze
+
+matrix:
+  fast_finish: true
+
 notifications:
-  email: false
-after_success:
-- codecov
-deploy:
-  provider: pypi
-  distributions: sdist bdist_wheel
-  skip_existing: true
-  on:
-    condition: $TRAVIS_OS_NAME = linux
-    condition: $PYTHON_VER = 3.7
-    repo: molssi-seamm/mopac_step
-    tags: true
-  user: seamm
-  password:
-    secure: FrHw5LJxsfOEXiRYW5orqRnwNGLT59VzKdeNXR0LUkNO/9iA3oeClOsc/plEaWtRPFHYSWHKE5j+VCPkRjW8bNiGw3CzPlsbxSyTeyOWSEZJx2k4z3txMV69RWJatQSeCNEpZNRmipSAm8SfvEAt0GASoCGo6NBTTWFHC2yvgm6ohzherSTz857VlXFL9DG+oZ/F2cgqgu3EZNIlQiHk9zno515ed90bLU6aA5UbsZzVD0mDynB9m2fjumiwmEtvH1owpxpyZ+Nc6OO/AXcOpsMb3evrIZyGwUkYc+papeBtzmf9tc23LyEJIF0DRl6hCM8Toiu+ei5pr9UJkO1HXdUFl5QlwLAq3OWIV+TFj3Hgci0/e4xd7hCsYMleag5ApekjU9L2E6Viggw6Wzgsv1I0Lc9zxUpu80a6ANtSY7ZekpLJ86zpYub2SunR2RwNPkI04bn+OvYp4W90f4SJ/84Ozp8tYwwFBhi7tl83n01a/PJQ8yZ8SajoUgWRixkZ35UCu52kSaWfud9GzCagNt3NL8vzraI8pDYtRgKv6uPj+DICtk3ZY1cyqVc3yuepw88ONp/XdLdZgDpi0644K1DzT57eEMI6bxrTmv08muuynLxVzUZm+mMnlDkDKTZVnyIGUwrJcDN1dPEhhVas2lBU/9yLfXx697wMeUDtSoA=
+    email: false
+
+stages:
+  - lint
+  - test
+  - deploy
+
+jobs:
+  include:
+    - stage: lint
+      name: "Check formatting of code for PEP-8"
+      os: linux
+      language: generic
+      env: PYTHON_VER=3.7
+      script:
+        - flake8 mopac_step tests
+        - yapf --diff --recursive  mopac_step tests
+
+    - stage: test
+      name: "Tests on MacOS Python 3.6"
+      script:
+        - pytest -v tests/
+      os: osx
+      language: generic
+      env: PYTHON_VER=3.6
+
+    - stage: test
+      name: "Tests on MacOS Python 3.7"
+      script:
+        - pytest -v tests/
+      os: osx
+      language: generic
+      env: PYTHON_VER=3.7
+
+    - stage: test
+      name: "Tests on Linux Python 3.6"
+      script:
+        - pytest -v tests/
+      os: linux
+      language: generic  # No need to set Python version since its conda
+      env: PYTHON_VER=3.6
+
+    - stage: test
+      name: "Tests and coverage on Linux Python 3.7"
+      script:
+        - pytest -v --cov=mopac_step tests/
+      after_success:
+        - codecov
+      os: linux
+      language: generic
+      env: PYTHON_VER=3.7
+
+    - stage: deploy
+      name: "Deploy to PyPi"
+      if: tag IS present
+      dist: xenial
+      python: 3.7
+      script: skip
+      deploy:
+        provider: pypi
+        distributions: sdist bdist_wheel
+        skip_existing: true
+        on:
+          condition: $PYTHON_VER = 3.7
+          condition: $TRAVIS_OS_NAME = linux
+          repo: molssi-seamm/mopac_step
+          tags: true
+        user: seamm
+        password:
+          secure: FrHw5LJxsfOEXiRYW5orqRnwNGLT59VzKdeNXR0LUkNO/9iA3oeClOsc/plEaWtRPFHYSWHKE5j+VCPkRjW8bNiGw3CzPlsbxSyTeyOWSEZJx2k4z3txMV69RWJatQSeCNEpZNRmipSAm8SfvEAt0GASoCGo6NBTTWFHC2yvgm6ohzherSTz857VlXFL9DG+oZ/F2cgqgu3EZNIlQiHk9zno515ed90bLU6aA5UbsZzVD0mDynB9m2fjumiwmEtvH1owpxpyZ+Nc6OO/AXcOpsMb3evrIZyGwUkYc+papeBtzmf9tc23LyEJIF0DRl6hCM8Toiu+ei5pr9UJkO1HXdUFl5QlwLAq3OWIV+TFj3Hgci0/e4xd7hCsYMleag5ApekjU9L2E6Viggw6Wzgsv1I0Lc9zxUpu80a6ANtSY7ZekpLJ86zpYub2SunR2RwNPkI04bn+OvYp4W90f4SJ/84Ozp8tYwwFBhi7tl83n01a/PJQ8yZ8SajoUgWRixkZ35UCu52kSaWfud9GzCagNt3NL8vzraI8pDYtRgKv6uPj+DICtk3ZY1cyqVc3yuepw88ONp/XdLdZgDpi0644K1DzT57eEMI6bxrTmv08muuynLxVzUZm+mMnlDkDKTZVnyIGUwrJcDN1dPEhhVas2lBU/9yLfXx697wMeUDtSoA=
