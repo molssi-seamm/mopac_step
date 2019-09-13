@@ -4,13 +4,20 @@ dependencies:
     # Base depends
   - python
   - pip
+  - configargparse
+  - py-cpuinfo
 
     # Testing
+  - coverage
+  - flake8
   - pytest
   - pytest-cov
+  - pytest-runner
 
     # Pip-only installs
   - pip:
-    - codecov
-    - seamm
-    - seamm-widgets
+    - seamm>0.6
+    - seamm-widgets>0.6
+
+      # Testing
+    - yapf
