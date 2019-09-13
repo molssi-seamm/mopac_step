@@ -3,7 +3,6 @@
 """Setup and run MOPAC"""
 
 import logging
-import math
 import seamm
 import seamm_util.printing as printing
 from seamm_util.printing import FormattedText as __
