@@ -1,5 +1,5 @@
 configargparse
 Pmw
-py-cpuinfo
+py-cpuinfo==5.0.0
 seamm>=0.6
 seamm-widgets>=0.6
