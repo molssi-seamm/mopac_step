@@ -22,13 +22,8 @@ with open('README.rst') as readme_file:
 with open('HISTORY.rst') as history_file:
     history = history_file.read()
 
-requirements = [
-    'configargparse',
-    'Pmw>=2.0.1',
-    'py-cpuinfo',
-    'seamm>=0.3.8',
-    'seamm-widgets>=0.2.1',
-]
+with open('requirements_install.txt') as fd:
+    requirements = fd.read()
 
 setup(
     # Descriptive entries which should always be present
