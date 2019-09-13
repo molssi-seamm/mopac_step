@@ -3,6 +3,7 @@
 """Setup and run MOPAC"""
 
 import logging
+import math
 import seamm
 import seamm_util.printing as printing
 from seamm_util.printing import FormattedText as __
@@ -120,11 +121,11 @@ class Optimization(mopac_step.Energy):
                 logger.critical(text)
                 raise RuntimeError(text)
 
-            if P['cycles'] != 'unlimited':
-                keywords.append(P['cycles'])
-            if P['convergence'] == 'absolute':
-                if P['gnorm'] != self.parameters['gnorm'].default:
-                    keywords.append(P['gnorm'])
+        if P['cycles'] != 'unlimited':
+            keywords.append('CYCLES={}'.format(P['cycles']))
+        if P['convergence'] == 'absolute':
+            if P['gnorm'] != self.parameters['gnorm'].default:
+                keywords.append('GNORM={}'.format(P['gnorm']))
 
         return keywords
 
@@ -136,17 +137,36 @@ class Optimization(mopac_step.Energy):
         printer.normal(self._long_header)
 
         # The results
-        printer.normal(
-            __(
-                (
-                    '\nThe geometry converged in {NUMBER_SCF_CYCLES} '
-                    'iterations to a heat of formation of {HEAT_OF_FORMATION} '
-                    'kcal/mol.'
-                ),
-                **data,
-                indent=7 * ' '
+        if 'NUMBER_SCF_CYCLES' in data:
+            printer.normal(
+                __(
+                    (
+                        '\nThe geometry optimization converged in '
+                        '{NUMBER_SCF_CYCLES} iterations to a heat of '
+                        'formation of {HEAT_OF_FORMATION} kcal/mol and '
+                        'gradient norm of {GRADIENT_NORM} kcal/mol/Å.'
+                    ),
+                    **data,
+                    indent=7 * ' '
+                )
             )
-        )
+        else:
+            data['NUMBER_SCF_CYCLES'] = len(data['HEAT_OF_FORM_UPDATED'])
+            data['HEAT_OF_FORMATION'] = data['HEAT_OF_FORM_UPDATED'][-1]
+            data['GRADIENT_NORM'] = data['GRADIENT_UPDATED'][-1]
+            printer.normal(
+                __(
+                    (
+                        '\nThe geometry optimization did not converge!\n'
+                        'It ran for {NUMBER_SCF_CYCLES} '
+                        'iterations to a final heat of formation of '
+                        '{HEAT_OF_FORMATION} kcal/mol and gradient norm '
+                        'of {GRADIENT_NORM} kcal/mol/Å.'
+                    ),
+                    **data,
+                    indent=7 * ' '
+                )
+            )
 
         # Put any requested results into variables or tables
         self.store_results(
