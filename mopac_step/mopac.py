@@ -174,25 +174,28 @@ class MOPAC(seamm.Node):
             n_cores = int(n_cores / 2)
         if n_cores < 1:
             n_cores = 1
-        logger.info(
-            'The number of cores is {}'.format(n_cores)
-        )
+        logger.info('The number of cores is {}'.format(n_cores))
 
-        n_atoms = len(seamm.data.structure['atoms']['elements'])
+        # Currently, on the Mac, it is not clear that any parallelism helps
+        # much.
+        n_atoms = len(seamm.data.structure['atoms']['elements'])  # noqa: F841
 
         if o.mopac_mkl_num_threads == 'default':
             # Wild guess!
-            mopac_mkl_num_threads = int(pow(n_atoms/16, 0.3333))
+            # mopac_mkl_num_threads = int(pow(n_atoms / 16, 0.3333))
+            mopac_mkl_num_threads = 1
         else:
             mopac_mkl_num_threads = int(o.mopac_mkl_num_threads)
         if mopac_mkl_num_threads > n_cores:
             mopac_mkl_num_threads = n_cores
         elif mopac_mkl_num_threads < 1:
             mopac_mkl_num_threads = 1
+        logger.info('MKL will use {} threads.'.format(mopac_mkl_num_threads))
 
         if o.mopac_num_threads == 'default':
             # Wild guess!
-            mopac_num_threads = int(pow(n_atoms/32, 0.5))
+            # mopac_num_threads = int(pow(n_atoms / 32, 0.5))
+            mopac_num_threads = 1
             if mopac_num_threads > n_cores:
                 mopac_num_threads = n_cores
         else:
@@ -201,7 +204,8 @@ class MOPAC(seamm.Node):
             mopac_num_threads = n_cores
         if mopac_num_threads < 1:
             mopac_num_threads = 1
-        
+        logger.info('MOPAC will use {} threads.'.format(mopac_num_threads))
+
         env = {
             'MKL_NUM_THREADS': str(mopac_mkl_num_threads),
             'OMP_NUM_THREADS': str(mopac_num_threads)
@@ -382,7 +386,7 @@ class MOPAC(seamm.Node):
                             n_values = len(tmp) - 1
                             # blanks at front have been stripped, so count back
                             start = 0
-                            end = len(value) - (n_values-1) * n
+                            end = len(value) - (n_values - 1) * n
                             while start < len(value):
                                 values.append(value[start:end])
                                 start = end
