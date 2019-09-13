@@ -1,0 +1,5 @@
+configargparse
+Pmw
+py-cpuinfo
+seamm>=0.6
+seamm-widgets>=0.6

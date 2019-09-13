@@ -2,9 +2,12 @@
 
 """Setup and run MOPAC"""
 
+import configargparse
+import cpuinfo
 import logging
 import seamm
 import seamm.data as data
+import seamm_util
 import seamm_util.printing as printing
 from seamm_util.printing import FormattedText as __
 import mopac_step
@@ -15,6 +18,14 @@ import pprint
 logger = logging.getLogger(__name__)
 job = printing.getPrinter()
 printer = printing.getPrinter('mopac')
+
+
+def upcase(string):
+    """Return an uppercase version of the string.
+
+    Used for the type argument in argparse/
+    """
+    return string.upper()
 
 
 class MOPAC(seamm.Node):
@@ -29,6 +40,63 @@ class MOPAC(seamm.Node):
 
         logger.debug('Creating MOPAC {}'.format(self))
 
+        # Argument/config parsing
+        self.parser = configargparse.ArgParser(
+            auto_env_var_prefix='',
+            default_config_files=[
+                '/etc/seamm/mopac.ini',
+                '/etc/seamm/mopac_step.ini',
+                '/etc/seamm/seamm.ini',
+                '~/.seamm/mopac.ini',
+                '~/.seamm/mopac_step.ini',
+                '~/.seamm/seamm.ini',
+            ]
+        )
+
+        self.parser.add_argument(
+            '--seamm-configfile',
+            is_config_file=True,
+            default=None,
+            help='a configuration file to override others'
+        )
+
+        # Options for this plugin
+        self.parser.add_argument(
+            "--mopac-log-level",
+            default=configargparse.SUPPRESS,
+            choices=[
+                'CRITICAL', 'ERROR', 'WARNING', 'INFO', 'DEBUG', 'NOTSET'
+            ],
+            type=upcase,
+            help="the logging level for the Mopac step"
+        )
+
+        # Options for Mopac
+        self.parser.add_argument(
+            '--mopac-exe',
+            default='mopac',
+            help='the path to the MOPAC executable'
+        )
+
+        self.parser.add_argument(
+            '--mopac-num-threads',
+            default='default',
+            help='How many threads to use in MOPAC'
+        )
+
+        self.parser.add_argument(
+            '--mopac-mkl-num-threads',
+            default='default',
+            help='How many threads to use with MKL in MOPAC'
+        )
+
+        self.options, self.unknown = self.parser.parse_known_args()
+
+        # Set the logging level for this module if requested
+        if 'mopac_log_level' in self.options:
+            logger.setLevel(self.options.mopac_log_level)
+
+        # Create the subflowchart and proceed
         self.subflowchart = seamm.Flowchart(
             name='MOPAC',
             namespace=namespace,
@@ -91,6 +159,62 @@ class MOPAC(seamm.Node):
             logger.error('MOPAC run(): there is no structure!')
             raise RuntimeError('MOPAC run(): there is no structure!')
 
+        # Access the options and find the executable
+        o = self.options
+
+        mopac_exe = seamm_util.check_executable(
+            o.mopac_exe, key='--mopac-exe', parser=self.parser
+        )
+
+        # How many processors does this node have?
+        info = cpuinfo.get_cpu_info()
+        n_cores = info['count']
+        # Account for Intel hyperthreading
+        if info['arch'][0:3] == 'X86':
+            n_cores = int(n_cores / 2)
+        if n_cores < 1:
+            n_cores = 1
+        logger.info('The number of cores is {}'.format(n_cores))
+
+        # Currently, on the Mac, it is not clear that any parallelism helps
+        # much.
+        n_atoms = len(seamm.data.structure['atoms']['elements'])  # noqa: F841
+
+        if o.mopac_mkl_num_threads == 'default':
+            # Wild guess!
+            # mopac_mkl_num_threads = int(pow(n_atoms / 16, 0.3333))
+            mopac_mkl_num_threads = 1
+        else:
+            mopac_mkl_num_threads = int(o.mopac_mkl_num_threads)
+        if mopac_mkl_num_threads > n_cores:
+            mopac_mkl_num_threads = n_cores
+        elif mopac_mkl_num_threads < 1:
+            mopac_mkl_num_threads = 1
+        logger.info('MKL will use {} threads.'.format(mopac_mkl_num_threads))
+
+        if o.mopac_num_threads == 'default':
+            # Wild guess!
+            # mopac_num_threads = int(pow(n_atoms / 32, 0.5))
+            mopac_num_threads = 1
+            if mopac_num_threads > n_cores:
+                mopac_num_threads = n_cores
+        else:
+            mopac_num_threads = int(o.mopac_num_threads)
+        if mopac_num_threads > n_cores:
+            mopac_num_threads = n_cores
+        if mopac_num_threads < 1:
+            mopac_num_threads = 1
+        logger.info('MOPAC will use {} threads.'.format(mopac_num_threads))
+
+        env = {
+            'MKL_NUM_THREADS': str(mopac_mkl_num_threads),
+            'OMP_NUM_THREADS': str(mopac_num_threads)
+        }
+        extra_keywords = ['AUX']
+        if mopac_num_threads > 1:
+            extra_keywords.append('THREADS={}'.format(mopac_num_threads))
+
+        # Work through the subflowchart to find out what to do.
         self.subflowchart.root_directory = self.flowchart.root_directory
 
         next_node = super().run(printer)
@@ -102,7 +226,7 @@ class MOPAC(seamm.Node):
         while node:
             keywords = node.get_input()
             lines = []
-            lines.append(' '.join(keywords) + ' AUX')
+            lines.append(' '.join(keywords + extra_keywords))
             lines.append('Run from MolSSI flowchart')
             lines.append(
                 '{} using {} hamiltonian'.format(
@@ -146,9 +270,10 @@ class MOPAC(seamm.Node):
         local = seamm.ExecLocal()
         return_files = ['molssi.arc', 'molssi.out', 'molssi.aux']
         result = local.run(
-            cmd=['mopac', 'molssi.dat'],
+            cmd=[mopac_exe, 'molssi.dat'],
             files=files,
-            return_files=return_files
+            return_files=return_files,
+            env=env
         )
 
         if not result:
@@ -245,7 +370,31 @@ class MOPAC(seamm.Node):
                 if 'units' in properties[name]:
                     data[name + ',units'] = properties[name]['units']
 
-                tmp = rest.split()
+                # Check for floating point numbers run together
+                if properties[name]['type'] == 'float':
+                    values = []
+                    for value in rest.split():
+                        tmp = value.split('.')
+                        if len(tmp) <= 2:
+                            values.append(value)
+                        else:
+                            # Run together ... lets see how many decimals
+                            n_decimals = len(tmp[-1])
+                            # and before the decimal
+                            n_digits = len(tmp[-2]) - n_decimals
+                            n = n_digits + 1 + n_decimals
+                            n_values = len(tmp) - 1
+                            # blanks at front have been stripped, so count back
+                            start = 0
+                            end = len(value) - (n_values - 1) * n
+                            while start < len(value):
+                                values.append(value[start:end])
+                                start = end
+                                end += n
+                    tmp = values
+                else:
+                    tmp = rest.split()
+
                 while len(tmp) < size:
                     lineno += 1
                     line = lines[lineno].strip()
@@ -267,7 +416,11 @@ class MOPAC(seamm.Node):
                         data[name] = []
                     data[name].append(values)
                 else:
-                    data[name] = values
+                    if properties[name]['dimensionality'] == 'scalar':
+                        if not (units == 'ARBITRARY_UNITS' and name in data):
+                            data[name] = values[0]
+                    else:
+                        data[name] = values
             else:
                 if ':' in key:
                     name, units = key.split(':')

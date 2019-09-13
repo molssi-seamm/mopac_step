@@ -90,7 +90,9 @@ class Energy(seamm.Node):
         )
 
         # Start gathering the keywords
-        keywords = ['1SCF', P['hamiltonian']]
+        keywords = P['extra keywords']
+        keywords.append('1SCF')
+        keywords.append(P['hamiltonian'])
 
         # which structure? may need to set default first...
         if P['structure'] == 'default':
