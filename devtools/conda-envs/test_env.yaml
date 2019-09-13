@@ -16,8 +16,8 @@ dependencies:
 
     # Pip-only installs
   - pip:
-    - seamm>0.6
-    - seamm-widgets>0.6
+    - seamm>=0.6
+    - seamm-widgets>=0.6
 
       # Testing
     - yapf
