@@ -105,7 +105,8 @@ class MOPAC(seamm.Node):
         self._data = {}
 
         super().__init__(
-            flowchart=flowchart, title='MOPAC', extension=extension
+            flowchart=flowchart, title='MOPAC', extension=extension,
+            module=__name__
         )
 
     @property
@@ -165,7 +166,7 @@ class MOPAC(seamm.Node):
         mopac_exe = seamm_util.check_executable(
             o.mopac_exe, key='--mopac-exe', parser=self.parser
         )
-
+        
         # How many processors does this node have?
         info = cpuinfo.get_cpu_info()
         n_cores = info['count']
@@ -224,6 +225,7 @@ class MOPAC(seamm.Node):
 
         input_data = []
         while node:
+            node.parent = self
             keywords = node.get_input()
             lines = []
             lines.append(' '.join(keywords + extra_keywords))
@@ -296,6 +298,22 @@ class MOPAC(seamm.Node):
         # Analyze the results
         self.analyze()
 
+        # print citations
+        # job.job(
+        #     'There are {} citations:'.format(self.references.total_citations())
+        # )
+        # lines = self.references.dump(fmt='text')
+        # i = 0
+        # for line in lines:
+        #     i += 1
+        #     job.job(
+        #         '{:6d} ({:d}/{:d}) {:s}'.format(i, line[2], line[3], line[1])
+        #     )
+        
+        # Close the reference handler, which should force it to close the
+        # connection.
+        self.references = None
+
         return next_node
 
     def analyze(self, indent='', lines=[]):
@@ -326,6 +344,15 @@ class MOPAC(seamm.Node):
             section += 1
             data = self.parse_aux(lines[start:end])
 
+            # Add main citation for MOPAC
+            if section == 1 and 'MOPAC_VERSION' in data:
+                self.references.cite(
+                    raw=self.bibliography['MOPAC_2016'],
+                    alias='mopac',
+                    module='mopac_step',
+                    level=1,
+                    note='The principle MOPAC citation.'
+                )
             logger.debug('\nAUX file section {}'.format(section))
             logger.debug('------------------')
             logger.debug(pprint.pformat(data, width=170, compact=True))
