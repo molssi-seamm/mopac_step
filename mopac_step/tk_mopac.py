@@ -49,7 +49,7 @@ class TkMOPAC(seamm.TkNode):
             buttons=('OK', 'Help', 'Cancel'),
             defaultbutton='OK',
             master=self.toplevel,
-            title='Edit LAMMPS step',
+            title='Edit MOPAC step',
             command=self.handle_dialog
         )
         self.dialog.withdraw()
