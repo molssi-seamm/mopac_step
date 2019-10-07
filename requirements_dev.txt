@@ -2,7 +2,7 @@
 
 coverage
 flake8
-pytest
+pytest==5.2.1
 pytest-runner
 sphinx
 tox
