@@ -4,7 +4,7 @@ coverage
 flake8
 pytest
 pytest-runner
-sphinx
+sphinx==2.2.1
 tox
 twine
 yapf
