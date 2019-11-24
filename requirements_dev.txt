@@ -6,5 +6,5 @@ pytest
 pytest-runner
 sphinx
 tox
-twine
+twine==3.1.0
 yapf
