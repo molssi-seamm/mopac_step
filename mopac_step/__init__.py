@@ -1591,6 +1591,19 @@ properties = {
         ],
         "type": "string"
     },
+    "SET_OF_ALPHA_MOS": {
+        "calculation": [
+            "single point energy",
+            "optimization",
+            "thermodynamics",
+            "vibrations"
+        ],
+        "description": "set of MOs",
+        "dimensionality": [
+            2
+        ],
+        "type": "string"
+    },
     "SPIN_COMPONENT": {
         "calculation": [
             "single point energy",
