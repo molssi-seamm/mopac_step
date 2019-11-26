@@ -1176,7 +1176,61 @@ properties = {
         "type": "float",
         "units": "eV"
     },
+    "ALPHA_EIGENVALUES": {
+        "calculation": [
+            "single point energy",
+            "optimization",
+            "thermodynamics",
+            "vibrations"
+        ],
+        "description": "orbital energies",
+        "dimensionality": [
+            "n_aos"
+        ],
+        "type": "float",
+        "units": "eV"
+    },
+    "BETA_EIGENVALUES": {
+        "calculation": [
+            "single point energy",
+            "optimization",
+            "thermodynamics",
+            "vibrations"
+        ],
+        "description": "orbital energies",
+        "dimensionality": [
+            "n_aos"
+        ],
+        "type": "float",
+        "units": "eV"
+    },
     "EIGENVECTORS": {
+        "calculation": [
+            "single point energy",
+            "optimization",
+            "thermodynamics",
+            "vibrations"
+        ],
+        "description": "orbital coefficients",
+        "dimensionality": [
+            "n_aos"
+        ],
+        "type": "float"
+    },
+    "ALPHA_EIGENVECTORS": {
+        "calculation": [
+            "single point energy",
+            "optimization",
+            "thermodynamics",
+            "vibrations"
+        ],
+        "description": "orbital coefficients",
+        "dimensionality": [
+            "n_aos"
+        ],
+        "type": "float"
+    },
+    "BETA_EIGENVECTORS": {
         "calculation": [
             "single point energy",
             "optimization",
@@ -1401,6 +1455,32 @@ properties = {
         ],
         "type": "string"
     },
+    "ALPHA_M.O.SYMMETRY_LABELS": {
+        "calculation": [
+            "single point energy",
+            "optimization",
+            "thermodynamics",
+            "vibrations"
+        ],
+        "description": "molecular orbital symmetries",
+        "dimensionality": [
+            "n_mos"
+        ],
+        "type": "string"
+    },
+    "BETA_M.O.SYMMETRY_LABELS": {
+        "calculation": [
+            "single point energy",
+            "optimization",
+            "thermodynamics",
+            "vibrations"
+        ],
+        "description": "molecular orbital symmetries",
+        "dimensionality": [
+            "n_mos"
+        ],
+        "type": "string"
+    },
     "METHOD": {
         "calculation": [
             "single point energy",
@@ -1413,6 +1493,32 @@ properties = {
         "type": "string"
     },
     "MOLECULAR_ORBITAL_OCCUPANCIES": {
+        "calculation": [
+            "single point energy",
+            "optimization",
+            "thermodynamics",
+            "vibrations"
+        ],
+        "description": "orbital occupancies",
+        "dimensionality": [
+            "n_mos"
+        ],
+        "type": "float"
+    },
+    "ALPHA_MOLECULAR_ORBITAL_OCCUPANCIES": {
+        "calculation": [
+            "single point energy",
+            "optimization",
+            "thermodynamics",
+            "vibrations"
+        ],
+        "description": "orbital occupancies",
+        "dimensionality": [
+            "n_mos"
+        ],
+        "type": "float"
+    },
+    "BETA_MOLECULAR_ORBITAL_OCCUPANCIES": {
         "calculation": [
             "single point energy",
             "optimization",
@@ -1604,6 +1710,19 @@ properties = {
         ],
         "type": "string"
     },
+    "SET_OF_BETA_MOS": {
+        "calculation": [
+            "single point energy",
+            "optimization",
+            "thermodynamics",
+            "vibrations"
+        ],
+        "description": "set of MOs",
+        "dimensionality": [
+            2
+        ],
+        "type": "string"
+    },
     "SPIN_COMPONENT": {
         "calculation": [
             "single point energy",
@@ -1635,6 +1754,36 @@ properties = {
         "type": "string"
     },
     "TOTAL_DENSITY_MATRIX": {
+        "calculation": [
+            "single point energy",
+            "optimization",
+            "thermodynamics",
+            "vibrations"
+        ],
+        "description": "density matrix",
+        "dimensionality": [
+            "n_mos",
+            "n_mos"
+        ],
+        "shape": "triangular",
+        "type": "float"
+    },
+    "ALPHA_DENSITY_MATRIX": {
+        "calculation": [
+            "single point energy",
+            "optimization",
+            "thermodynamics",
+            "vibrations"
+        ],
+        "description": "density matrix",
+        "dimensionality": [
+            "n_mos",
+            "n_mos"
+        ],
+        "shape": "triangular",
+        "type": "float"
+    },
+    "BETA_DENSITY_MATRIX": {
         "calculation": [
             "single point energy",
             "optimization",
