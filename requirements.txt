@@ -4,7 +4,7 @@ ConfigArgParse==0.14.0
 numpy==1.17.2
 pandas==0.25.1
 patsy==0.5.1
-pbr==5.4.3
+pbr==5.4.4
 Pillow==6.1.0
 Pint==0.9
 Pmw==2.0.1
