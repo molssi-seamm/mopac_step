@@ -14,6 +14,7 @@ import mopac_step
 import os
 import os.path
 import pprint
+import re
 
 logger = logging.getLogger(__name__)
 job = printing.getPrinter()
@@ -261,7 +262,6 @@ class MOPAC(seamm.Node):
 
         files = {'molssi.dat': '\n'.join(input_data)}
         logger.debug('molssi.dat:\n' + files['molssi.dat'])
-
         os.makedirs(self.directory, exist_ok=True)
         for filename in files:
             with open(os.path.join(self.directory, filename), mode='w') as fd:
@@ -325,7 +325,6 @@ class MOPAC(seamm.Node):
         for start, end in sections:
             section += 1
             data = self.parse_aux(lines[start:end])
-
             logger.debug('\nAUX file section {}'.format(section))
             logger.debug('------------------')
             logger.debug(pprint.pformat(data, width=170, compact=True))
@@ -433,14 +432,12 @@ class MOPAC(seamm.Node):
                     )
                 if 'units' in properties[name]:
                     data[name + ',units'] = properties[name]['units']
-
                 if properties[name]['type'] == 'integer':
                     value = int(rest)
                 elif properties[name]['type'] == 'float':
-                    value = float(rest.translate(trans))
+                    value = float(self._sanitize_value(rest))
                 else:
                     value = rest.strip('"')
-
                 if 'UPDATED' in name:
                     if name not in data:
                         data[name] = []
@@ -448,3 +445,11 @@ class MOPAC(seamm.Node):
                 else:
                     data[name] = value
         return data
+
+
+    def _sanitize_value(self, value):
+
+        ret = re.sub(r"^([-+]?[.0-9]+)([EeDd]*)([-+][0-9]+)$",\
+                r"\1E\3", value)
+        ret = float(ret)
+        return ret
