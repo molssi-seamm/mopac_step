@@ -446,10 +446,8 @@ class MOPAC(seamm.Node):
                     data[name] = value
         return data
 
-
     def _sanitize_value(self, value):
-
-        ret = re.sub(r"^([-+]?[.0-9]+)([EeDd]*)([-+][0-9]+)$",\
-                r"\1E\3", value)
-        ret = float(ret)
+        regex = r"^([-+]?[.0-9]+)([EeDd]*)([-+][0-9]+)$"
+        subs = r"\1E\3"
+        ret = float(re.sub(regex, subs, value))
         return ret

@@ -8,6 +8,7 @@ from seamm_util import ureg, Q_, units_class  # noqa: F401
 import seamm_util.printing as printing
 from seamm_util.printing import FormattedText as __
 import mopac_step
+import copy
 
 logger = logging.getLogger(__name__)
 job = printing.getPrinter()
@@ -90,7 +91,7 @@ class Energy(seamm.Node):
         )
 
         # Start gathering the keywords
-        keywords = P['extra keywords']
+        keywords = copy.deepcopy(P['extra keywords'])
         keywords.append('1SCF')
         keywords.append(P['hamiltonian'])
 
