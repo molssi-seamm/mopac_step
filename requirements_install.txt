@@ -1,4 +1,4 @@
-configargparse
+configargparse==0.15.2
 Pmw
 py-cpuinfo
 seamm>=0.6
