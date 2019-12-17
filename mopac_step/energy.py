@@ -2,7 +2,6 @@
 
 """Setup and run MOPAC"""
 
-import copy
 import logging
 import seamm
 from seamm_util import ureg, Q_, units_class  # noqa: F401
@@ -127,8 +126,8 @@ class Energy(seamm.Node):
             if '=' in keyword:
                 keyword, value = keyword.split('=')
                 if (
-                        keyword not in metadata or
-                        'format' not in metadata[keyword]
+                    keyword not in metadata or
+                    'format' not in metadata[keyword]
                 ):
                     keywords.append(keyword + '=' + value)
                 else:
