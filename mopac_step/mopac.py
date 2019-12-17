@@ -45,10 +45,8 @@ class MOPAC(seamm.Node):
             auto_env_var_prefix='',
             default_config_files=[
                 '/etc/seamm/mopac.ini',
-                '/etc/seamm/mopac_step.ini',
                 '/etc/seamm/seamm.ini',
                 '~/.seamm/mopac.ini',
-                '~/.seamm/mopac_step.ini',
                 '~/.seamm/seamm.ini',
             ]
         )
