@@ -29,7 +29,7 @@ from mopac_step.thermodynamics import Thermodynamics  # noqa: F401
 from mopac_step.thermodynamics_parameters import ThermodynamicsParameters  # noqa: F401 E501
 from mopac_step.tk_thermodynamics import TkThermodynamics  # noqa: F401
 
-keywords = {
+keyword_metadata = {
     '0SCF': {
         'description': 'Read in data, then stop',
     },
@@ -62,12 +62,11 @@ keywords = {
     'ALLVEC': {
         'description': 'Print all vectors (keywords vectors also needed)',
     },
-    'ALT_A=A': {
+    'ALT_A': {
         'description': 'In PDB files with alternative atoms, select atoms A',
-    },
-    'ALT_R=A': {
-        'description': ('Deleted. All inserted residues are automatically '
-                        'recognized'),
+        'takes values': 1,
+        'default': 'A',
+        'format': '{keyword}={value}'
     },
     'ANGSTROMS': {
         'description': 'Input geometry is in Angstroms',
@@ -82,14 +81,20 @@ keywords = {
     'AM1': {
         'description': 'Use the AM1 hamiltonian',
     },
-    'BAR=n.nn': {
+    'BAR': {
         'description': 'reduce bar length by a maximum of n.nn%',
+        'takes values': 1,
+        'default': '0.01',
+        'format': '{keyword}={value}'
     },
     'BCC': {
         'description': 'Only even unit cells used (used by BZ)',
     },
-    'BIGCYCLES=n': {
+    'BIGCYCLES': {
         'description': 'Do a maximum of n big steps',
+        'takes values': 1,
+        'default': '1',
+        'format': '{keyword}={value}'
     },
     'BIRADICAL': {
         'description': 'System has two unpaired electrons',
@@ -106,11 +111,11 @@ keywords = {
     'CARTAB': {
         'description': 'Print point-group character table',
     },
-    'C.I.=n ': {
+    'C.I.': {
         'description': 'A multi-electron configuration interaction specified',
-    },
-    'C.I.=(n,m)': {
-        'description': 'A multi-electron configuration interaction specified',
+        'takes values': [1, 2],
+        'default': '2',
+        'format': ['{keyword}={value}', '{keyword}=({value1},{value2}}']
     },
     'CHAINS(text)': {
         'description': ('In a protein, explicitly define the letters of '
@@ -119,8 +124,11 @@ keywords = {
     'CHECK': {
         'description': 'Report possible faults in input geometry',
     },
-    'CHARGE=n': {
+    'CHARGE': {
         'description': 'Charge on system = n (e.g. NH4 = +1)',
+        'takes values': 1,
+        'default': '+1',
+        'format': '{keyword}={value}'
     },
     'CHARGES': {
         'description': ('Print net charge on the system, and all charges in '
@@ -151,37 +159,78 @@ keywords = {
         'description': ('Write details of the solvent accessible surface to a '
                         'file'),
     },
-    'CUTOFP=n.nn': {
+    'CUTOFP': {
         'description': 'Madelung distance cutoff is n .nn Angstroms',
+        'takes values': 1,
+        'default': '15.0',
+        'format': '{keyword}={value}'
     },
-    'CUTOFF=n.nn': {
+    'CUTOFF': {
         'description': ('In MOZYME, the interatomic distance where the NDDO '
                         'approximation stops'),
+        'takes values': 1,
+        'default': '6.0',
+        'format': '{keyword}={value}'
     },
-    'CYCLES=n': {
-        'description': 'Do a maximum of n steps',
-        'value optional': False,
-        'value': 'integer',
+    'CUTOF1': {
+        'description': 'In MOZYME, the cutoff distance for polarization',
+        'takes values': 1,
+        'default': '10.0',
+        'format': '{keyword}={value}'
+    },
+    'CUTOF2': {
+        'description': ('In MOZYME, the cutoff distance for two-center '
+                        'integral'),
+        'takes values': 1,
+        'default': '9.9',
+        'format': '{keyword}={value}'
+    },
+    'CUTOFS': {
+        'description': 'In MOZYME, the cutoff distance for overlap integrals',
+        'takes values': 1,
+        'default': '9.0',
+        'format': '{keyword}={value}'
+    },
+    'CYCLES': {
+        'description': 'Do a maximum of n steps of geometry optimization',
+        'takes values': 1,
+        'default': '50',
+        'format': '{keyword}={value}'
     },
     'CVB': {
         'description': ('In MOZYME. add and remove specific bonds to allow a '
                         'Lewis or PDB structure.'),
     },
-    'DAMP=n.nn': {
+    'DAMP': {
         'description': ('in MOZYME. damp SCF oscillations using a factor of '
-                        'n.nn'),
+                        'n.nn, 0<n.nn<1.0, <0.5 for solids'),
+        'takes values': 1,
+        'default': '0.5',
+        'format': '{keyword}={value}'
     },
-    'DATA=text': {
+    'DATA': {
         'description': 'Input data set is re-defined to text',
+        'takes values': 1,
+        'default': '/file.dat',
+        'format': '{keyword}={value}'
     },
     'DCART': {
         'description': 'Print part of working in DCART',
     },
-    'DDMAX=n.nn': {
-        'description': 'See EF code',
+    'DDMAX': {
+        'description': ('The maximum value of the trust radius in EF and TS. '
+                        'Defaults to 0.3 in TS and 0.5 in EF'),
+        'takes values': 1,
+        'default': '0.3',
+        'format': '{keyword}={value}'
     },
-    'DDMIN=n.nn': {
-        'description': 'Minimum trust radius in a EF/TS calculation',
+    'DDMIN': {
+        'description': ('Minimum trust radius in a EF/TS calculation. '
+                        'Defaults to 0.001. Use smaller values close to '
+                        'minimium'),
+        'takes values': 1,
+        'default': '0.00001',
+        'format': '{keyword}={value}'
     },
     'DEBUG': {
         'description': 'Debug option turned on',
@@ -220,28 +269,40 @@ keywords = {
         'description': ('Use Davidson-Fletcher-Powell method to optimize '
                         'geometries'),
     },
-    'DISEX=n.nn': {
-        'description': 'Distance for interactions in fine grid in COSMO',
+    'DISEX': {
+        'description': ('Distance for interactions in fine grid in COSMO. '
+                        'Defaults is 2.0, should converge results using '
+                        'smaller values if needed.'),
+        'takes values': 1,
+        'default': '2.0',
+        'format': '{keyword}={value}'
     },
     'DISP': {
         'description': ('Print the hydrogen bonding and dispersion '
                         'contributions to the heat of formation'),
     },
-    'DMAX=n.nn': {
+    'DMAX': {
         'description': 'Maximum stepsize in eigenvector following',
+        'takes values': 1,
+        'default': '2.0',
+        'format': '{keyword}={value}'
     },
     'DOUBLET': {
         'description': 'Doublet state required',
     },
-    'DRC=n.nnn': {
-        'description': 'Dynamic reaction coordinate calculation',
-        'value optional': True,
-        'value': 'float',
+    'DRC': {
+        'description': ('Dynamic reaction coordinate calculation. The '
+                        'parameter, if given, is the cooling half-life in fs'),
+        'takes values': [0, 1],
+        'default': '50',
+        'format': ['{keyword}', '{keyword}={value}']
     },
-    'DUMP=nn.nn': {
-        'description': 'Write restart files every n seconds',
-        'value optional': False,
-        'value': 'float',
+    'DUMP': {
+        'description': ('Write restart files every n seconds, or minutes or '
+                        'hours with "m" or "h" suffix'),
+        'takes values': 1,
+        'default': '2h',
+        'format': '{keyword}={value}'
     },
     'ECHO': {
         'description': 'Data are echoed back before calculation starts',
@@ -260,10 +321,11 @@ keywords = {
     'ENPART': {
         'description': 'Partition energy into components'
     },
-    'EPS=n.nn': {
+    'EPS': {
         'description': 'Dielectric constant in COSMO calculation',
-        'value optional': False,
-        'value': 'float',
+        'takes values': 1,
+        'default': '78.4',
+        'format': '{keyword}={value}'
     },
     'ESP': {
         'description': 'Electrostatic potential calculation',
@@ -277,19 +339,25 @@ keywords = {
     'EXCITED': {
         'description': 'Optimize first excited singlet state',
     },
-    'EXTERNAL=name': {
-        'description': 'Read parameters off disk',
+    'EXTERNAL': {
+        'description': 'Read parameters from a file',
+        'takes values': 1,
+        'default': '"file name"',
+        'format': '{keyword}={value}'
     },
     'FIELD=(n.nn,m.mm,l.ll)': {
-        'description': 'An external electric field is to be used',
-        'value optional': False,
-        'value': ('float', 'float', 'float'),
+        'description': ('Apply an external electric field of a,b,c V/Å in the'
+                        'Cartesian directions'),
+        'takes values': 3,
+        'default': '0,0,1',
+        'format': '{keyword}=({value1},{value2},{value3})'
     },
-    'FILL=n': {
+    'FILL': {
         'description': ('In RHF open and closed shell, force M.O. n to be '
                         'filled'),
-        'value optional': False,
-        'value': 'integer',
+        'takes values': 1,
+        'default': '0',
+        'format': '{keyword}={value}'
     },
     'FLEPO': {
         'description': 'Print details of geometry optimization',
@@ -313,21 +381,24 @@ keywords = {
     'GEO-OK': {
         'description': 'Override some safety checks',
     },
-    'GEO_DAT=<text>': {
+    'GEO_DAT': {
         'description': 'Read in geometry from the file <text>',
-        'value optional': False,
-        'value': 'filename',
+        'takes values': 1,
+        'default': '"file name"',
+        'format': '{keyword}={value}'
     },
     'GEO_REF=<text>': {
         'description': 'Read in a second geometry from the file <text>',
-        'value optional': False,
-        'value': 'filename',
+        'takes values': 1,
+        'default': '"SELF"',
+        'format': '{keyword}={value}'
     },
-    'GNORM=n.nn': {
+    'GNORM': {
         'description': ('Exit when the gradient norm drops below n.nn '
                         'kcal/mol/Angstrom'),
-        'value optional': False,
-        'value': 'float',
+        'takes values': 1,
+        'default': '10.0',
+        'format': '{keyword}={value}'
     },
     'GRADIENTS': {
         'description': 'Print all gradients',
@@ -346,16 +417,19 @@ keywords = {
     'HESSIAN': {
         'description': 'Print Hessian from geometry optimization',
     },
-    'HESS=n': {
+    'HESS': {
         'description': 'Options for calculating Hessian matrices in EF',
-        'value optional': False,
-        'value': 'integer',
+        'takes values': 1,
+        'default': '1',
+        'format': '{keyword}={value}',
         'allowed values': (0, 1, 2),
     },
-    'H-PRIORITY=n.nn': {
-        'description': 'Heat of formation takes priority in DRC',
-        'value optional': True,
-        'value': 'float',
+    'H-PRIORITY': {
+        'description': ('Heat of formation takes priority in DRC. Print '
+                        'whenever the energy changes by this many kcal/mol'),
+        'takes values': 1,
+        'default': '0.1',
+        'format': '{keyword}={value}'
     },
     'HTML': {
         'description': 'Write a web-page for displaying and editing a protein',
@@ -369,10 +443,11 @@ keywords = {
     'INVERT': {
         'description': 'Reverse all optimization flags',
     },
-    'IRC=n': {
+    'IRC': {
         'description': 'Intrinsic reaction coordinate calculation',
-        'value optional': True,
-        'value': 'integer',
+        'takes values': [0, 1],
+        'default': '',
+        'format': ['{keyword}', '{keyword}={value}']
     },
     'ISOTOPE': {
         'description': 'Force matrix written to disk (channel 9 )',
@@ -380,22 +455,25 @@ keywords = {
     'ITER': {
         'description': 'Print details of working in ITER',
     },
-    'ITRY=nn': {
+    'ITRY': {
         'description': 'Set limit of number of SCF iterations to n',
-        'value optional': False,
-        'value': 'integer',
-        'default': 2000,
-        'minimum': 0,
+        'takes values': 1,
+        'default': '2000',
+        'format': '{keyword}={value}'
     },
-    'IUPD=n': {
-        'description': 'Mode of Hessian update in eigenvector following',
-        'value optional': False,
-        'value': 'integer',
+    'IUPD': {
+        'description': ('Mode of Hessian update in eigenvector following: '
+                        '0: skip, 1: Powell, 2: BFGS'),
+        'takes values': 1,
+        'default': '2',
+        'format': '{keyword}={value}',
+        'allowed values': (0, 1, 2)
     },
-    'KINETIC=n.nnn': {
+    'KINETIC': {
         'description': 'Excess kinetic energy added to DRC calculation',
-        'value optional': False,
-        'value': 'float',
+        'takes values': 1,
+        'default': 20,
+        'format': '{keyword}={value}',
     },
     'KING': {
         'description': 'Use Camp-King converger for SCF',
@@ -431,14 +509,21 @@ keywords = {
     },
     'MERS=(n1,n2,n3)': {
         'description': 'Keyword generated by MAKPOL for use with program BZ',
+        'takes values': [1, 2, 3],
+        'default': 'n1[,n2[,n3]]',
+        'format': '{keyword}=({value})',
     },
-    'METAL=(a[,b[,c[...]]])': {
+    'METAL': {
         'description': 'Make specified atoms 100% ionic',
+        'takes values': '0+',
+        'default': '(Au(+3),Fe)',
+        'format': '{keyword}=({value})',
     },
-    'MICROS=n': {
+    'MICROS': {
         'description': 'Use specific microstates in the C.I.',
-        'value optional': False,
-        'value': 'integer',
+        'takes values': 1,
+        'default': '0000',
+        'format': '{keyword}\n{value}',
     },
     'MINI': {
         'description': ('Reduce the size of the output by only printing '
@@ -456,10 +541,11 @@ keywords = {
     'MNDOD': {
         'description': 'Use the MNDO-d hamiltonian'
     },
-    'MODE=n': {
+    'MODE': {
         'description': 'In EF, follow Hessian mode no. n',
-        'value optional': False,
-        'value': 'integer',
+        'takes values': 1,
+        'default': 1,
+        'format': '{keyword}={value}',
     },
     'MOL_QMMM': {
         'description': ('Incorporate environmental effects in the QM/MM '
@@ -478,20 +564,22 @@ keywords = {
         'description': ('Use the Localized Molecular Orbital method to speed '
                         'up the SCF'),
     },
-    'MS=n': {
+    'MS': {
         'description': 'In MECI, magnetic component of spin',
-        'value optional': False,
-        'value': 'float',
+        'takes values': 1,
+        'default': '1.5',
+        'format': '{keyword}={value}',
         'allowed value test': '2*value',
     },
     'MULLIK': {
         'description': 'Print the Mulliken population analysis',
     },
-    'N**2=n.nn': {
+    'N**2': {
         'description': ('In excited state COSMO calculations, set the value '
                         'of N**2'),
-        'value optional': False,
-        'value': 'float',
+        'takes values': 1,
+        'default': 2,
+        'format': '{keyword}={value}',
     },
     'NLLSQ': {
         'description': 'Minimize gradients using NLLSQ',
@@ -552,10 +640,12 @@ keywords = {
     'NOXYZ': {
         'description': 'Do not print Cartesian coordinates',
     },
-    'NSPA=n': {
-        'description': 'Sets number of geometric segments in COSMO',
-        'value optional': False,
-        'value': 'integer',
+    'NSPA': {
+        'description': ('Sets number of geometric segments in COSMO '
+                        'use 42, 92, 122 or 162'),
+        'takes values': 1,
+        'default': 42,
+        'format': '{keyword}={value}',
     },
     'NSURF': {
         'description': 'Number of surfaces in an ESP calculation',
@@ -578,34 +668,52 @@ keywords = {
     },
     'OMIN=n.nn': {
         'description': 'In TS, minimum allowed overlap of eigenvectors',
-        'value optional': False,
-        'value': 'float',
+        'takes values': 1,
+        'default': 0.8,
+        'format': '{keyword}={value}',
     },
-    'OPEN(n1,n2)': {
+    'OPEN': {
         'description': 'Open-shell UHF or RHF calculation requested',
+        'takes values': 2,
+        'default': '2,2',
+        'format': '{keyword}({value})',
     },
     'OPT': {
-        'description': 'Optimize coordinates of all atoms',
+        'description': (
+            'OPT: Optimize coordinates of all atoms -- or --'
+            'OPT(text=n.nn): Optimize the coordinates of all atoms within'
+            'n.nn Ångstroms of atoms labeled "text" -- or --'
+            'OPT("Label1"[,"Label1"[,"Label1"...]]) where labels are residues'
+        ),
+        'takes values': [0, 1],
+        'default': '',
+        'format': 'OPT({value})',
     },
     'OPT-X': {
         'description': 'Optimize the coordinates of all atoms of type X',
-    },
-    'OPT(text=n.nn)': {
-        'description': ('Optimize the coordinates of all atoms within n.nn '
-                        'Ångstroms of atoms labeled "text"'),
+        'takes values': 1,
+        'default': 'H',
+        'format': 'OPT-X={value}',
     },
     'OUTPUT': {
         'description': ('Reduce the amount of output (useful for large '
                         'systems)'),
     },
-    'P=n.nn': {
-        'description': 'An applied pressure of n.nn Newtons/m2 to be used',
+    'P': {
+        'description': ('An applied pressure of n.nn Newtons/m2 to be used'
+                        ' A suffix of GPa may be used to indicate GPa=10^9 '
+                        'N/m^2'),
+        'takes values': 1,
+        'default': '10.0GPa',
+        'format': '{keyword}={value}',
     },
     'PDB': {
-        'description': 'Input geometry is in protein data bank format',
-    },
-    'PDB=(text)': {
-        'description': 'User defined chemical symbols in protein data base',
+        'description': ('Input geometry is in protein data bank format. '
+                        'Arguments give nonstandard element name:atno, e.g. '
+                        'D:1 or LP:0'),
+        'takes values': 1,
+        'default': 'D:1,LP:0',
+        'format': '{keyword}({value})',
     },
     'PDBOUT	': {
         'description': 'Output geometry in pdb format',
@@ -664,22 +772,25 @@ keywords = {
     'PMEPR': {
         'description': 'Complete semiempirical MEP in a plane to be defined',
     },
-    'POINT=n': {
+    'POINT': {
         'description': 'Number of points in reaction path',
-        'value optional': False,
-        'value': 'integer',
+        'takes values': 1,
+        'default': '40',
+        'format': '{keyword}={value}',
     },
-    'POINT1=n': {
+    'POINT1': {
         'description': ('Number of points in first direction in grid '
                         'calculation'),
-        'value optional': False,
-        'value': 'integer',
+        'takes values': 1,
+        'default': '11',
+        'format': '{keyword}={value}',
     },
-    'POINT2=n': {
+    'POINT2': {
         'description': ('Number of points in second direction in grid '
                         'calculation'),
-        'value optional': False,
-        'value': 'integer',
+        'takes values': 1,
+        'default': '11',
+        'format': '{keyword}={value}',
     },
     'POLAR': {
         'description': ('Calculate first, second and third order '
@@ -697,8 +808,13 @@ keywords = {
     'PRESSURE': {
         'description': 'Apply pressure or tension to a solid or polymer',
     },
-    'PRNT=n': {
-        'description': 'Print details of geometry optimization in EF',
+    'PRNT': {
+        'description': ('Print details of geometry optimization in EF, 1 = '
+                        'most, 5=least'),
+        'takes values': 1,
+        'default': 1,
+        'format': '{keyword}={value}',
+        'allowed values': (0, 1, 2, 3, 4, 5)
     },
     'PRTCHAR': {
         'description': 'Print charges in ARC file',
@@ -732,20 +848,18 @@ keywords = {
         'description': ('In MOZYME geometry optimizations, only use atoms '
                         'being optimized in the SCF'),
     },
-    'RECALC=n': {
+    'RECALC': {
         'description': 'In EF, recalculate Hessian every n steps',
-        'value optional': False,
-        'value': 'integer',
+        'takes values': 1,
+        'default': 10,
+        'format': '{keyword}={value}',
     },
     'RE-LOCAL': {
-        'description': ('At the end of a MOZYME calculation, re-localize the '
-                        'LMOs'),
-    },
-    'RE-LOCAL=n': {
         'description': ('During and at end of a MOZYME calculation, '
-                        're-localize the LMOs'),
-        'value optional': True,
-        'value': 'integer',
+                        're-localize the LMOs. Default is just at end.'),
+        'takes values': [0, 1],
+        'default': 1,
+        'format': '{keyword}={value}',
     },
     'RELSCF': {
         'description': 'Default SCF criterion multiplied by n',
@@ -770,14 +884,25 @@ keywords = {
     'RM1': {
         'description': 'Use the RM1 Hamiltonian',
     },
-    'RMAX=n.nn': {
+    'RMAX': {
         'description': 'In TS, maximum allowed ratio for energy change',
+        'takes values': 1,
+        'default': 4.0,
+        'format': '{keyword}={value}',
     },
-    'RMIN=n.nn': {
+    'RMIN': {
         'description': 'In TS, minimum allowed ratio for energy change',
+        'takes values': 1,
+        'default': 0.0,
+        'format': '{keyword}={value}',
     },
-    'ROOT=n': {
-        'description': 'Root n to be optimized in a C.I. calculation',
+    'ROOT': {
+        'description': ('Root n to be optimized in a C.I. calculation. '
+                        'Either an integer or with a symmetry label, e.g.'
+                        '2T2g'),
+        'takes values': 1,
+        'default': "1",
+        'format': '{keyword}={value}',
     },
     'RSCAL': {
         'description': 'In EF, scale p-RFO to trust radius',

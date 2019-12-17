@@ -28,7 +28,6 @@ class Energy(seamm.Node):
 
         self.description = 'A single point energy calculation'
         self._long_header = ''
-        self.keywords = []  # additional keywords to add
 
     @property
     def header(self):
@@ -121,6 +120,21 @@ class Energy(seamm.Node):
             raise RuntimeError(
                 "Don't recognize convergence '{}'".format(P['convergence'])
             )
+
+        # Add any extra keywords so that they appear at the end
+        metadata = mopac_step.keyword_metadata
+        for keyword in P['extra keywords']:
+            if '=' in keyword:
+                keyword, value = keyword.split('=')
+                if (
+                    keyword not in metadata or
+                    'format' not in metadata[keyword]
+                ):
+                    keywords.append(keyword + '=' + value)
+                else:
+                    keywords.append(
+                        metadata[keyword]['format'].format(keyword, value)
+                    )
 
         return keywords
 
