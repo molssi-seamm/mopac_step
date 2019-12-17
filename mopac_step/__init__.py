@@ -778,14 +778,14 @@ keyword_metadata = {
         'default': '40',
         'format': '{keyword}={value}',
     },
-    'POINT1=n': {
+    'POINT1': {
         'description': ('Number of points in first direction in grid '
                         'calculation'),
         'takes values': 1,
         'default': '11',
         'format': '{keyword}={value}',
     },
-    'POINT2=n': {
+    'POINT2': {
         'description': ('Number of points in second direction in grid '
                         'calculation'),
         'takes values': 1,
@@ -808,8 +808,13 @@ keyword_metadata = {
     'PRESSURE': {
         'description': 'Apply pressure or tension to a solid or polymer',
     },
-    'PRNT=n': {
-        'description': 'Print details of geometry optimization in EF',
+    'PRNT': {
+        'description': ('Print details of geometry optimization in EF, 1 = '
+                        'most, 5=least'),
+        'takes values': 1,
+        'default': 1,
+        'format': '{keyword}={value}',
+        'allowed values': (0, 1, 2, 3, 4, 5)
     },
     'PRTCHAR': {
         'description': 'Print charges in ARC file',
@@ -843,20 +848,18 @@ keyword_metadata = {
         'description': ('In MOZYME geometry optimizations, only use atoms '
                         'being optimized in the SCF'),
     },
-    'RECALC=n': {
+    'RECALC': {
         'description': 'In EF, recalculate Hessian every n steps',
-        'value optional': False,
-        'value': 'integer',
+        'takes values': 1,
+        'default': 10,
+        'format': '{keyword}={value}',
     },
     'RE-LOCAL': {
-        'description': ('At the end of a MOZYME calculation, re-localize the '
-                        'LMOs'),
-    },
-    'RE-LOCAL=n': {
         'description': ('During and at end of a MOZYME calculation, '
-                        're-localize the LMOs'),
-        'value optional': True,
-        'value': 'integer',
+                        're-localize the LMOs. Default is just at end.'),
+        'takes values': [0, 1],
+        'default': 1,
+        'format': '{keyword}={value}',
     },
     'RELSCF': {
         'description': 'Default SCF criterion multiplied by n',
@@ -881,14 +884,25 @@ keyword_metadata = {
     'RM1': {
         'description': 'Use the RM1 Hamiltonian',
     },
-    'RMAX=n.nn': {
+    'RMAX': {
         'description': 'In TS, maximum allowed ratio for energy change',
+        'takes values': 1,
+        'default': 4.0,
+        'format': '{keyword}={value}',
     },
-    'RMIN=n.nn': {
+    'RMIN': {
         'description': 'In TS, minimum allowed ratio for energy change',
+        'takes values': 1,
+        'default': 0.0,
+        'format': '{keyword}={value}',
     },
-    'ROOT=n': {
-        'description': 'Root n to be optimized in a C.I. calculation',
+    'ROOT': {
+        'description': ('Root n to be optimized in a C.I. calculation. '
+                        'Either an integer or with a symmetry label, e.g.'
+                        '2T2g'),
+        'takes values': 1,
+        'default': "1",
+        'format': '{keyword}={value}',
     },
     'RSCAL': {
         'description': 'In EF, scale p-RFO to trust radius',
