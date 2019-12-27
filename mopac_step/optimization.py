@@ -81,6 +81,9 @@ class Optimization(mopac_step.Energy):
     def get_input(self):
         """Get the input for an optimization MOPAC"""
 
+        references = self.parent.references
+        bibliography = self.parent.bibliography
+
         P = self.parameters.current_values_to_dict(
             context=seamm.flowchart_variables._data
         )
@@ -99,26 +102,103 @@ class Optimization(mopac_step.Energy):
             keywords.append('EF')
             if P['recalc'] != 'never':
                 keywords.append(P['recalc'])
-            if P['dmax'] != self.parameters['dmax'].default:
-                keywords.append(P['dmax'])
-            elif method[0:4] == 'BFGS':
-                keywords.append('BFGS')
-            elif method[0:6] == 'L-BFGS':
-                keywords.append('L-BFGS')
-            elif method[0:2] == 'TS':
-                keywords.append('TS')
-            elif method[0:5] == 'SIGMA':
-                keywords.append('SIGMA')
-            elif method[0:5] == 'NLLSQ':
-                keywords.append('NLLSQ')
-            else:
-                text = (
-                    "Don't recognize optimization method '{}'".format(
-                        P['method']
-                    )
+            if str(P['dmax']) != self.parameters['dmax'].default:
+                keywords.append('DMAX={}'.format(P['dmax']))
+            references.cite(
+                raw=bibliography['Baker_1986'],
+                alias='Baker_1986',
+                module='mopac_step',
+                level=1,
+                note='Eigenvector-following minimizer.'
+            )
+        elif method[0:4] == 'BFGS':
+            keywords.append('BFGS')
+            references.cite(
+                raw=bibliography['Broyden_1970'],
+                alias='Broyden_1970',
+                module='mopac_step',
+                level=1,
+                note='Broyden-Fletcher-Goldfarb-Shanno (BFGS) minimizer.'
+            )
+            references.cite(
+                raw=bibliography['Fletcher_1970'],
+                alias='Fletcher_1970',
+                module='mopac_step',
+                level=1,
+                note='Broyden-Fletcher-Goldfarb-Shanno (BFGS) minimizer.'
+            )
+            references.cite(
+                raw=bibliography['Goldfarb_1970'],
+                alias='Goldfarb_1970',
+                module='mopac_step',
+                level=1,
+                note='Broyden-Fletcher-Goldfarb-Shanno (BFGS) minimizer.'
+            )
+            references.cite(
+                raw=bibliography['Shanno_1970'],
+                alias='Shanno_1970',
+                module='mopac_step',
+                level=1,
+                note='Broyden-Fletcher-Goldfarb-Shanno (BFGS) minimizer.'
+            )
+            references.cite(
+                raw=bibliography['Thiel_1988'],
+                alias='Thiel_1988',
+                module='mopac_step',
+                level=1,
+                note='Broyden-Fletcher-Goldfarb-Shanno (BFGS) minimizer.'
+            )
+        elif method[0:6] == 'L-BFGS':
+            keywords.append('LBFGS')
+            references.cite(
+                raw=bibliography['Nocedal_1980'],
+                alias='Nocedal_1980',
+                module='mopac_step',
+                level=1,
+                note='Limited-memory BFGS (L-BFGS) minimizer.'
+            )
+        elif method[0:2] == 'TS':
+            keywords.append('TS')
+            references.cite(
+                raw=bibliography['Baker_1986'],
+                alias='Baker_1986',
+                module='mopac_step',
+                level=1,
+                note='Eigenvector-following minimizer for transition states.'
+            )
+        elif method[0:5] == 'SIGMA':
+            keywords.append('SIGMA')
+            references.cite(
+                raw=bibliography['McIver_1971'],
+                alias='McIver_1971',
+                module='mopac_step',
+                level=1,
+                note='Gradient-norm minimizer for transition states.'
+            )
+            references.cite(
+                raw=bibliography['McIver_1972'],
+                alias='McIver_1972',
+                module='mopac_step',
+                level=1,
+                note='Gradient-norm minimizer for transition states.'
+            )
+        elif method[0:5] == 'NLLSQ':
+            keywords.append('NLLSQ')
+            references.cite(
+                raw=bibliography['Bartels_1972'],
+                alias='Bartels_1972',
+                module='mopac_step',
+                level=1,
+                note='NLLSQ gradient-norm minimizer for transition states.'
+            )
+        else:
+            text = (
+                "Don't recognize optimization method '{}'".format(
+                    P['method']
                 )
-                logger.critical(text)
-                raise RuntimeError(text)
+            )
+            logger.critical(text)
+            raise RuntimeError(text)
 
         if P['cycles'] != 'unlimited':
             keywords.append('CYCLES={}'.format(P['cycles']))
@@ -128,7 +208,7 @@ class Optimization(mopac_step.Energy):
 
         return keywords
 
-    def analyze(self, indent='', data={}):
+    def analyze(self, indent='', data={}, out=[]):
         """Parse the output and generating the text output and store the
         data in variables for other stages to access
         """
@@ -174,5 +254,64 @@ class Optimization(mopac_step.Energy):
             results=self.parameters['results'].value,
             create_tables=self.parameters['create tables'].get()
         )
+
+        # If the optimizer used was the default, put in the correct citations
+
+        references = self.parent.references
+        bibliography = self.parent.bibliography
+
+        P = self.parameters.current_values_to_dict(
+            context=seamm.flowchart_variables._data
+        )
+
+        if P['method'] == 'default':
+            tmp = '\n'.join(out)
+            if 'GEOMETRY OPTIMISED USING EIGENVECTOR FOLLOWING (EF)' in tmp:
+                references.cite(
+                    raw=bibliography['Baker_1986'],
+                    alias='Baker_1986',
+                    module='mopac_step',
+                    level=1,
+                    note='Eigenvector-following minimizer.'
+                )
+            elif ('Geometry optimization using BFGS' in tmp or
+                  'SATISFIED IN BFGS' in tmp):
+                references.cite(
+                    raw=bibliography['Broyden_1970'],
+                    alias='Broyden_1970',
+                    module='mopac_step',
+                    level=1,
+                    note='Broyden-Fletcher-Goldfarb-Shanno (BFGS) minimizer.'
+                )
+                references.cite(
+                    raw=bibliography['Fletcher_1970'],
+                    alias='Fletcher_1970',
+                    module='mopac_step',
+                    level=1,
+                    note='Broyden-Fletcher-Goldfarb-Shanno (BFGS) minimizer.'
+                )
+                references.cite(
+                    raw=bibliography['Goldfarb_1970'],
+                    alias='Goldfarb_1970',
+                    module='mopac_step',
+                    level=1,
+                    note='Broyden-Fletcher-Goldfarb-Shanno (BFGS) minimizer.'
+                )
+                references.cite(
+                    raw=bibliography['Shanno_1970'],
+                    alias='Shanno_1970',
+                    module='mopac_step',
+                    level=1,
+                    note='Broyden-Fletcher-Goldfarb-Shanno (BFGS) minimizer.'
+                )
+                references.cite(
+                    raw=bibliography['Thiel_1988'],
+                    alias='Thiel_1988',
+                    module='mopac_step',
+                    level=1,
+                    note='Broyden-Fletcher-Goldfarb-Shanno (BFGS) minimizer.'
+                )
+            else:
+                logger.warning('Could not find which minimizer was used!')
 
         printer.normal('\n')

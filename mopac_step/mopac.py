@@ -104,7 +104,8 @@ class MOPAC(seamm.Node):
         self._data = {}
 
         super().__init__(
-            flowchart=flowchart, title='MOPAC', extension=extension
+            flowchart=flowchart, title='MOPAC', extension=extension,
+            module=__name__
         )
 
     @property
@@ -164,7 +165,7 @@ class MOPAC(seamm.Node):
         mopac_exe = seamm_util.check_executable(
             o.mopac_exe, key='--mopac-exe', parser=self.parser
         )
-
+        
         # How many processors does this node have?
         info = cpuinfo.get_cpu_info()
         n_cores = info['count']
@@ -223,6 +224,7 @@ class MOPAC(seamm.Node):
 
         input_data = []
         while node:
+            node.parent = self
             keywords = node.get_input()
             lines = []
             lines.append(' '.join(keywords + extra_keywords))
@@ -258,17 +260,17 @@ class MOPAC(seamm.Node):
 
             node = node.next()
 
-        files = {'molssi.dat': '\n'.join(input_data)}
-        logger.debug('molssi.dat:\n' + files['molssi.dat'])
+        files = {'mopac.dat': '\n'.join(input_data)}
+        logger.debug('mopac.dat:\n' + files['mopac.dat'])
         os.makedirs(self.directory, exist_ok=True)
         for filename in files:
             with open(os.path.join(self.directory, filename), mode='w') as fd:
                 fd.write(files[filename])
 
         local = seamm.ExecLocal()
-        return_files = ['molssi.arc', 'molssi.out', 'molssi.aux']
+        return_files = ['mopac.arc', 'mopac.out', 'mopac.aux']
         result = local.run(
-            cmd=[mopac_exe, 'molssi.dat'],
+            cmd=[mopac_exe, 'mopac.dat'],
             files=files,
             return_files=return_files,
             env=env
@@ -281,7 +283,7 @@ class MOPAC(seamm.Node):
         logger.debug('\n' + pprint.pformat(result))
 
         logger.debug(
-            '\n\nOutput from MOPAC\n\n' + result['molssi.out']['data'] + '\n\n'
+            '\n\nOutput from MOPAC\n\n' + result['mopac.out']['data'] + '\n\n'
         )
 
         for filename in result['files']:
@@ -294,6 +296,10 @@ class MOPAC(seamm.Node):
         # Analyze the results
         self.analyze()
 
+        # Close the reference handler, which should force it to close the
+        # connection.
+        self.references = None
+
         return next_node
 
     def analyze(self, indent='', lines=[]):
@@ -302,20 +308,40 @@ class MOPAC(seamm.Node):
         other stages
         """
 
-        filename = 'molssi.aux'
+        # Split the aux files into sections for each step
+        filename = 'mopac.aux'
         with open(os.path.join(self.directory, filename), mode='r') as fd:
             lines = fd.read().splitlines()
 
         # Find the sections in the file corresponding to sub-tasks
-        sections = []
+        aux = []
         start = 0
         lineno = 0
         for line in lines:
             if 'END OF MOPAC FILE' in line:
-                sections.append((start, lineno))
+                aux.append(lines[start:lineno])
             lineno += 1
             if 'START OF MOPAC FILE' in line:
                 start = lineno
+
+        # Split the output file into sections for each step
+        filename = 'mopac.out'
+        with open(os.path.join(self.directory, filename), mode='r') as fd:
+            lines = fd.read().splitlines()
+
+        # Find the sections in the file corresponding to sub-tasks
+        out = []
+        start = 0
+        lineno = 0
+        n_star_lines = 0
+        for line in lines:
+            if line[1:51] == 50 * '*':
+                n_star_lines += 1
+                if n_star_lines == 7:
+                    out.append(lines[start:lineno])
+                    start = lineno
+            lineno += 1
+        out.append(lines[start:])
 
         # Loop through our subnodes. Get the first real node
         node = self.subflowchart.get_node('1').next()
@@ -327,7 +353,17 @@ class MOPAC(seamm.Node):
             logger.debug('------------------')
             logger.debug(pprint.pformat(data, width=170, compact=True))
 
-            node.analyze(data=data)
+            # Add main citation for MOPAC
+            if section == 1 and 'MOPAC_VERSION' in data:
+                self.references.cite(
+                    raw=self.bibliography['MOPAC_2016'],
+                    alias='mopac',
+                    module='mopac_step',
+                    level=1,
+                    note='The principle MOPAC citation.'
+                )
+
+            node.analyze(data=data, out=out[section])
 
             node = node.next()
 
