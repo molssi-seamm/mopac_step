@@ -261,8 +261,8 @@ class MOPAC(seamm.Node):
 
             node = node.next()
 
-        files = {'molssi.dat': '\n'.join(input_data)}
-        logger.debug('molssi.dat:\n' + files['molssi.dat'])
+        files = {'mopac.dat': '\n'.join(input_data)}
+        logger.debug('mopac.dat:\n' + files['mopac.dat'])
 
         os.makedirs(self.directory, exist_ok=True)
         for filename in files:
@@ -270,9 +270,9 @@ class MOPAC(seamm.Node):
                 fd.write(files[filename])
 
         local = seamm.ExecLocal()
-        return_files = ['molssi.arc', 'molssi.out', 'molssi.aux']
+        return_files = ['mopac.arc', 'mopac.out', 'mopac.aux']
         result = local.run(
-            cmd=[mopac_exe, 'molssi.dat'],
+            cmd=[mopac_exe, 'mopac.dat'],
             files=files,
             return_files=return_files,
             env=env
@@ -285,7 +285,7 @@ class MOPAC(seamm.Node):
         logger.debug('\n' + pprint.pformat(result))
 
         logger.debug(
-            '\n\nOutput from MOPAC\n\n' + result['molssi.out']['data'] + '\n\n'
+            '\n\nOutput from MOPAC\n\n' + result['mopac.out']['data'] + '\n\n'
         )
 
         for filename in result['files']:
@@ -298,18 +298,6 @@ class MOPAC(seamm.Node):
         # Analyze the results
         self.analyze()
 
-        # print citations
-        # job.job(
-        #     'There are {} citations:'.format(self.references.total_citations())
-        # )
-        # lines = self.references.dump(fmt='text')
-        # i = 0
-        # for line in lines:
-        #     i += 1
-        #     job.job(
-        #         '{:6d} ({:d}/{:d}) {:s}'.format(i, line[2], line[3], line[1])
-        #     )
-        
         # Close the reference handler, which should force it to close the
         # connection.
         self.references = None
@@ -322,27 +310,50 @@ class MOPAC(seamm.Node):
         other stages
         """
 
-        filename = 'molssi.aux'
+        # Split the aux files into sections for each step
+        filename = 'mopac.aux'
         with open(os.path.join(self.directory, filename), mode='r') as fd:
             lines = fd.read().splitlines()
 
         # Find the sections in the file corresponding to sub-tasks
-        sections = []
+        aux = []
         start = 0
         lineno = 0
         for line in lines:
             if 'END OF MOPAC FILE' in line:
-                sections.append((start, lineno))
+                aux.append(lines[start:lineno])
             lineno += 1
             if 'START OF MOPAC FILE' in line:
                 start = lineno
 
+        # Split the output file into sections for each step
+        filename = 'mopac.out'
+        with open(os.path.join(self.directory, filename), mode='r') as fd:
+            lines = fd.read().splitlines()
+
+        # Find the sections in the file corresponding to sub-tasks
+        out = []
+        start = 0
+        lineno = 0
+        n_star_lines = 0
+        for line in lines:
+            if line[1:51] == 50 * '*':
+                n_star_lines += 1
+                if n_star_lines == 7:
+                    out.append(lines[start:lineno])
+                    start = lineno
+            lineno += 1
+        out.append(lines[start:])
+
         # Loop through our subnodes. Get the first real node
         node = self.subflowchart.get_node('1').next()
         section = 0
-        for start, end in sections:
-            section += 1
-            data = self.parse_aux(lines[start:end])
+        for section in range(len(aux)):
+            data = self.parse_aux(aux[section])
+
+            logger.debug('\nAUX file section {}'.format(section))
+            logger.debug('------------------')
+            logger.debug(pprint.pformat(data, width=170, compact=True))
 
             # Add main citation for MOPAC
             if section == 1 and 'MOPAC_VERSION' in data:
@@ -353,11 +364,8 @@ class MOPAC(seamm.Node):
                     level=1,
                     note='The principle MOPAC citation.'
                 )
-            logger.debug('\nAUX file section {}'.format(section))
-            logger.debug('------------------')
-            logger.debug(pprint.pformat(data, width=170, compact=True))
 
-            node.analyze(data=data)
+            node.analyze(data=data, out=out[section])
 
             node = node.next()
 
