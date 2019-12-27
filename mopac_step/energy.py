@@ -97,97 +97,100 @@ class Energy(seamm.Node):
         keywords.append('1SCF')
         keywords.append(P['hamiltonian'])
 
-        if P['hamiltonian'] == 'PM7':
-            references.cite(
-                raw=self.parent.bibliography['Stewart_2012'],
-                alias='Stewart_2012',
-                module='mopac_step',
-                level=1,
-                note='The PM7 parameterization in MOPAC.'
-            )
-        elif 'PM6' in P['hamiltonian']:
-            references.cite(
-                raw=self.parent.bibliography['Stewart_2007'],
-                alias='Stewart_2007',
-                module='mopac_step',
-                level=1,
-                note='The PM6 parameterization in MOPAC.'
-            )
-            if P['hamiltonian'] == 'PM6-D3':
-                references.cite(
-                    raw=self.parent.bibliography['Grimme_2010'],
-                    alias='Grimme_2010',
-                    module='mopac_step',
-                    level=1,
-                    note='Dispersion correction by Grimme, et al.'
-                )
-            if P['hamiltonian'] == 'PM6-DH+':
-                references.cite(
-                    raw=self.parent.bibliography['Korth_2010'],
-                    alias='Korth_2010',
-                    module='mopac_step',
-                    level=1,
-                    note='Hydrogen-bonding correction by Korth.'
-                )
-            if 'PM6-DH2' in P['hamiltonian']:
-                references.cite(
-                    raw=self.parent.bibliography['Korth_2009'],
-                    alias='Korth_2009',
-                    module='mopac_step',
-                    level=1,
-                    note='Hydrogen-bonding and dispersion correction.'
-                )
-                references.cite(
-                    raw=self.parent.bibliography['Rezac_2009'],
-                    alias='Rezac_2009',
-                    module='mopac_step',
-                    level=1,
-                    note='Hydrogen-bonding and dispersion correction.'
-                )
-            if P['hamiltonian'] == 'PM6-DH2x':
-                references.cite(
-                    raw=self.parent.bibliography['Rezac_2011'],
-                    alias='Rezac_2011',
-                    module='mopac_step',
-                    level=1,
-                    note='Halogen-bonding correction.'
-                )
-        elif P['hamiltonian'] == 'PM3':
+        if P['hamiltonian'] == 'AM1':
             elements = seamm.data.structure['atoms']['elements']
             references.cite(
-                raw=self.parent.bibliography['Stewart_1989'],
-                alias='Stewart_1989',
+                raw=self.parent.bibliography['Dewar_1985c'],
+                alias='Dewar_1985c',
                 module='mopac_step',
                 level=1,
-                note='The citation for the MOPAC parameterization.'
+                note='Main reference for AM1 + C, H, N, O.'
             )
-            for element in ('Be', 'Mg', 'Zn', 'Ga', 'Ge', 'As', 'Se', 'Cd',
-                            'In', 'Sn', 'Sb', 'Te', 'Hg', 'Tl', 'Pb', 'Bi'):
+            for element in ('F', 'Cl', 'Br', 'I'):
                 if element in elements:
                     references.cite(
-                        raw=self.parent.bibliography['Stewart_1991'],
-                        alias='Stewart_1991',
+                        raw=self.parent.bibliography['Dewar_1988'],
+                        alias='Dewar_1988',
                         module='mopac_step',
                         level=1,
-                        note='The citation for the MOPAC parameterization.'
+                        note='AM1 parameters for F, Cl, Br, I.'
                     )
                     break
-            if 'Li' in elements:
+            if 'Al' in elements:
                 references.cite(
-                    raw=self.parent.bibliography['Anders_1993'],
-                    alias='Anders_1993',
+                    raw=self.parent.bibliography['Dewar_1990'],
+                    alias='Dewar_1990',
                     module='mopac_step',
                     level=1,
-                    note='The citation for the MOPAC parameterization.'
+                    note='AM1 parameters for Al.'
                 )
-            for element in ('B', 'Na', 'K', 'Ca', 'Rb', 'Sr', 'Cs', 'Ba'):
+            if 'Si' in elements:
+                references.cite(
+                    raw=self.parent.bibliography['Dewar_1987b'],
+                    alias='Dewar_1987b',
+                    module='mopac_step',
+                    level=1,
+                    note='AM1 parameters for Si.'
+                )
+            if 'P' in elements:
+                references.cite(
+                    raw=self.parent.bibliography['Dewar_1989'],
+                    alias='Dewar_1989',
+                    module='mopac_step',
+                    level=1,
+                    note='AM1 parameters for P.'
+                )
+            if 'S' in elements:
+                references.cite(
+                    raw=self.parent.bibliography['Dewar_1990b'],
+                    alias='Dewar_1990b',
+                    module='mopac_step',
+                    level=1,
+                    note='AM1 parameters for S.'
+                )
+            if 'Zn' in elements:
+                references.cite(
+                    raw=self.parent.bibliography['Dewar_1988b'],
+                    alias='Dewar_1988b',
+                    module='mopac_step',
+                    level=1,
+                    note='AM1 parameters for Zn.'
+                )
+            if 'Ge' in elements:
+                references.cite(
+                    raw=self.parent.bibliography['Dewar_1989b'],
+                    alias='Dewar_1989b',
+                    module='mopac_step',
+                    level=1,
+                    note='AM1 parameters for Ge.'
+                )
+            if 'Mo' in elements:
+                references.cite(
+                    raw=self.parent.bibliography['Voityuk_2000'],
+                    alias='Voityuk_2000',
+                    module='mopac_step',
+                    level=1,
+                    note='AM1 parameters for Mo.'
+                )
+            if 'Hg' in elements:
+                references.cite(
+                    raw=self.parent.bibliography['Dewar_1989c'],
+                    alias='Dewar_1989c',
+                    module='mopac_step',
+                    level=1,
+                    note='AM1 parameters for Hg.'
+                )
+            for element in (
+                    'Li', 'Be', 'Na', 'Mg', 'K', 'Ca', 'Ga', 'As', 'Se', 'Rb',
+                    'Sr', 'In', 'Sn', 'Sb', 'Te', 'Cs', 'Ba', 'Pb', 'Bi'
+            ):
                 if element in elements:
                     references.cite(
                         raw=self.parent.bibliography['Stewart_2004'],
                         alias='Stewart_2004',
                         module='mopac_step',
                         level=1,
-                        note='The citation for the MOPAC parameterization.'
+                        note='AM1 parameterization for main-group elements.'
                     )
                     break
         elif P['hamiltonian'] == 'MNDO' or P['hamiltonian'] == 'MNDOD':
@@ -348,102 +351,122 @@ class Energy(seamm.Node):
                             )
                         )
                         break
-        elif P['hamiltonian'] == 'AM1':
+        elif P['hamiltonian'] == 'PM3':
             elements = seamm.data.structure['atoms']['elements']
             references.cite(
-                raw=self.parent.bibliography['Dewar_1985c'],
-                alias='Dewar_1985c',
+                raw=self.parent.bibliography['Stewart_1989'],
+                alias='Stewart_1989',
                 module='mopac_step',
                 level=1,
-                note='Main reference for AM1 + C, H, N, O.'
+                note='The citation for the MOPAC parameterization.'
             )
-            for element in ('F', 'Cl', 'Br', 'I'):
+            for element in ('Be', 'Mg', 'Zn', 'Ga', 'Ge', 'As', 'Se', 'Cd',
+                            'In', 'Sn', 'Sb', 'Te', 'Hg', 'Tl', 'Pb', 'Bi'):
                 if element in elements:
                     references.cite(
-                        raw=self.parent.bibliography['Dewar_1988'],
-                        alias='Dewar_1988',
+                        raw=self.parent.bibliography['Stewart_1991'],
+                        alias='Stewart_1991',
                         module='mopac_step',
                         level=1,
-                        note='AM1 parameters for F, Cl, Br, I.'
+                        note='The citation for the MOPAC parameterization.'
                     )
                     break
-            if 'Al' in elements:
+            if 'Li' in elements:
                 references.cite(
-                    raw=self.parent.bibliography['Dewar_1990'],
-                    alias='Dewar_1990',
+                    raw=self.parent.bibliography['Anders_1993'],
+                    alias='Anders_1993',
                     module='mopac_step',
                     level=1,
-                    note='AM1 parameters for Al.'
+                    note='The citation for the MOPAC parameterization.'
                 )
-            if 'Si' in elements:
-                references.cite(
-                    raw=self.parent.bibliography['Dewar_1987b'],
-                    alias='Dewar_1987b',
-                    module='mopac_step',
-                    level=1,
-                    note='AM1 parameters for Si.'
-                )
-            if 'P' in elements:
-                references.cite(
-                    raw=self.parent.bibliography['Dewar_1989'],
-                    alias='Dewar_1989',
-                    module='mopac_step',
-                    level=1,
-                    note='AM1 parameters for P.'
-                )
-            if 'S' in elements:
-                references.cite(
-                    raw=self.parent.bibliography['Dewar_1990b'],
-                    alias='Dewar_1990b',
-                    module='mopac_step',
-                    level=1,
-                    note='AM1 parameters for S.'
-                )
-            if 'Zn' in elements:
-                references.cite(
-                    raw=self.parent.bibliography['Dewar_1988b'],
-                    alias='Dewar_1988b',
-                    module='mopac_step',
-                    level=1,
-                    note='AM1 parameters for Zn.'
-                )
-            if 'Ge' in elements:
-                references.cite(
-                    raw=self.parent.bibliography['Dewar_1989b'],
-                    alias='Dewar_1989b',
-                    module='mopac_step',
-                    level=1,
-                    note='AM1 parameters for Ge.'
-                )
-            if 'Mo' in elements:
-                references.cite(
-                    raw=self.parent.bibliography['Voityuk_2000'],
-                    alias='Voityuk_2000',
-                    module='mopac_step',
-                    level=1,
-                    note='AM1 parameters for Mo.'
-                )
-            if 'Hg' in elements:
-                references.cite(
-                    raw=self.parent.bibliography['Dewar_1989c'],
-                    alias='Dewar_1989c',
-                    module='mopac_step',
-                    level=1,
-                    note='AM1 parameters for Hg.'
-                )
-            for element in (
-                    'Li', 'Be', 'Na', 'Mg', 'K', 'Ca', 'Ga', 'As', 'Se', 'Rb',
-                    'Sr', 'In', 'Sn', 'Sb', 'Te', 'Cs', 'Ba', 'Pb', 'Bi'
-            ):
+            for element in ('B', 'Na', 'K', 'Ca', 'Rb', 'Sr', 'Cs', 'Ba'):
                 if element in elements:
                     references.cite(
                         raw=self.parent.bibliography['Stewart_2004'],
                         alias='Stewart_2004',
                         module='mopac_step',
                         level=1,
-                        note='AM1 parameterization for main-group elements.'
+                        note='The citation for the MOPAC parameterization.'
                     )
                     break
+        elif 'PM6' in P['hamiltonian']:
+            references.cite(
+                raw=self.parent.bibliography['Stewart_2007'],
+                alias='Stewart_2007',
+                module='mopac_step',
+                level=1,
+                note='The PM6 parameterization in MOPAC.'
+            )
+            if P['hamiltonian'] == 'PM6-D3':
+                references.cite(
+                    raw=self.parent.bibliography['Grimme_2010'],
+                    alias='Grimme_2010',
+                    module='mopac_step',
+                    level=1,
+                    note='Dispersion correction by Grimme, et al.'
+                )
+            if P['hamiltonian'] == 'PM6-DH+':
+                references.cite(
+                    raw=self.parent.bibliography['Korth_2010'],
+                    alias='Korth_2010',
+                    module='mopac_step',
+                    level=1,
+                    note='Hydrogen-bonding correction by Korth.'
+                )
+            if 'PM6-DH2' in P['hamiltonian']:
+                references.cite(
+                    raw=self.parent.bibliography['Korth_2009'],
+                    alias='Korth_2009',
+                    module='mopac_step',
+                    level=1,
+                    note='Hydrogen-bonding and dispersion correction.'
+                )
+                references.cite(
+                    raw=self.parent.bibliography['Rezac_2009'],
+                    alias='Rezac_2009',
+                    module='mopac_step',
+                    level=1,
+                    note='Hydrogen-bonding and dispersion correction.'
+                )
+            if P['hamiltonian'] == 'PM6-DH2x':
+                references.cite(
+                    raw=self.parent.bibliography['Rezac_2011'],
+                    alias='Rezac_2011',
+                    module='mopac_step',
+                    level=1,
+                    note='Halogen-bonding correction.'
+                )
+            if 'PM6-D3H4' in P['hamiltonian']:
+                references.cite(
+                    raw=self.parent.bibliography['Rezac_2011'],
+                    alias='Rezac_2011',
+                    module='mopac_step',
+                    level=1,
+                    note='Hydrogen-bonding and dispersion correction.'
+                )
+                references.cite(
+                    raw=self.parent.bibliography['Vorlova_2015'],
+                    alias='Vorlova_2015',
+                    module='mopac_step',
+                    level=1,
+                    note='Hydrogen-hydrogen repulsion correction.'
+                )
+            if P['hamiltonian'] == 'PM6-D3H4x':
+                references.cite(
+                    raw=self.parent.bibliography['Brahmkshatriya_2013'],
+                    alias='Brahmkshatriya_2013',
+                    module='mopac_step',
+                    level=1,
+                    note='Halogen-oxygen and halogen-nitrogen correction.'
+                )
+        elif 'PM7' in P['hamiltonian']:
+            references.cite(
+                raw=self.parent.bibliography['Stewart_2012'],
+                alias='Stewart_2012',
+                module='mopac_step',
+                level=1,
+                note='The PM7 parameterization in MOPAC.'
+            )
         elif P['hamiltonian'] == 'RM1':
             references.cite(
                 raw=self.parent.bibliography['Rocha_2006'],
@@ -482,7 +505,7 @@ class Energy(seamm.Node):
 
         return keywords
 
-    def analyze(self, indent='', data={}):
+    def analyze(self, indent='', data={}, out=[]):
         """Parse the output and generating the text output and store the
         data in variables for other stages to access
         """
