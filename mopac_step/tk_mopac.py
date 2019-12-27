@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 
-"""The graphical part of a MolSII MOPAC node"""
+"""The graphical part of a MOPAC step in SEAMM"""
 
+import configargparse
+import logging
 import seamm
-import Pmw
-import tkinter as tk
-import tkinter.ttk as ttk
+
+logger = logging.getLogger(__name__)
 
 
 class TkMOPAC(seamm.TkNode):
@@ -22,14 +23,54 @@ class TkMOPAC(seamm.TkNode):
         x=120,
         y=20,
         w=200,
-        h=50
+        h=50,
+        my_logger=logger
     ):
-        '''Initialize a node
+        """Initialize the graphical Tk node for MOPAC
 
         Keyword arguments:
-        '''
+        """
         self.namespace = namespace
 
+        # Argument/config parsing
+        self.parser = configargparse.ArgParser(
+            auto_env_var_prefix='',
+            default_config_files=[
+                '/etc/seamm/mopac.ini',
+                '/etc/seamm/seamm.ini',
+                '~/.seamm/mopac.ini',
+                '~/.seamm/seamm.ini',
+            ]
+        )
+
+        self.parser.add_argument(
+            '--seamm-configfile',
+            is_config_file=True,
+            default=None,
+            help='a configuration file to override others'
+        )
+
+        # Options for this plugin
+        self.parser.add_argument(
+            "--tk-mopac-log-level",
+            default=configargparse.SUPPRESS,
+            choices=[
+                'CRITICAL', 'ERROR', 'WARNING', 'INFO', 'DEBUG', 'NOTSET'
+            ],
+            type=lambda string: string.upper(),
+            help="the logging level for the Tk_Mopac step"
+        )
+
+        self.options, self.unknown = self.parser.parse_known_args()
+
+        # Set the logging level for this module if requested
+        if 'tk_mopac_log_level' in self.options:
+            logger.setLevel(self.options.tk_mopac_log_level)
+            logger.critical(
+                'Set log level to {}'.format(self.options.tk_mopac_log_level)
+            )
+
+        # Call the constructor for the energy
         super().__init__(
             tk_flowchart=tk_flowchart,
             node=node,
@@ -37,22 +78,15 @@ class TkMOPAC(seamm.TkNode):
             x=x,
             y=y,
             w=w,
-            h=h
+            h=h,
+            my_logger=my_logger
         )
 
         self.create_dialog()
 
     def create_dialog(self):
         """Create the dialog!"""
-        self.dialog = Pmw.Dialog(
-            self.toplevel,
-            buttons=('OK', 'Help', 'Cancel'),
-            defaultbutton='OK',
-            master=self.toplevel,
-            title='Edit MOPAC step',
-            command=self.handle_dialog
-        )
-        self.dialog.withdraw()
+        frame = super().create_dialog('Edit MOPAC Step')
 
         # make it large!
         sw = self.dialog.winfo_screenwidth()
@@ -64,31 +98,12 @@ class TkMOPAC(seamm.TkNode):
 
         self.dialog.geometry('{}x{}+{}+{}'.format(w, h, x, y))
 
-        frame = ttk.Frame(self.dialog.interior())
-        frame.pack(expand=tk.YES, fill=tk.BOTH)
-        self.mopac_tk_flowchart = seamm.TkFlowchart(
+        self.tk_subflowchart = seamm.TkFlowchart(
             master=frame,
             namespace=self.namespace,
             flowchart=self.node.subflowchart
         )
-        self.mopac_tk_flowchart.draw()
-
-    def handle_dialog(self, result):
-        if result is None or result == 'Cancel':
-            self.dialog.deactivate(result)
-            return
-
-        if result == 'Help':
-            # display help!!!
-            return
-
-        if result != "OK":
-            self.dialog.deactivate(result)
-            raise RuntimeError(
-                "Don't recognize dialog result '{}'".format(result)
-            )
-
-        self.dialog.deactivate(result)
+        self.tk_subflowchart.draw()
 
     def right_click(self, event):
         """Probably need to add our dialog...
@@ -99,22 +114,13 @@ class TkMOPAC(seamm.TkNode):
 
         self.popup_menu.tk_popup(event.x_root, event.y_root, 0)
 
-    def edit(self):
-        """Present a dialog for editing the SMILES string
-        """
-
-        if self.dialog is None:
-            self.create_dialog()
-
-        self.dialog.activate(geometry='centerscreenfirst')
-
     def update_flowchart(self, tk_flowchart=None, flowchart=None):
         """Update the nongraphical flowchart. Only used in nodes that contain
         flowcharts"""
 
         super().update_flowchart(
             flowchart=self.node.subflowchart,
-            tk_flowchart=self.mopac_tk_flowchart
+            tk_flowchart=self.tk_subflowchart
         )
 
     def from_flowchart(self, tk_flowchart=None, flowchart=None):
@@ -123,5 +129,5 @@ class TkMOPAC(seamm.TkNode):
 
         super().from_flowchart(
             flowchart=self.node.subflowchart,
-            tk_flowchart=self.mopac_tk_flowchart
+            tk_flowchart=self.tk_subflowchart
         )

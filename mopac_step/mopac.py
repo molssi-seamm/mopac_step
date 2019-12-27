@@ -14,6 +14,7 @@ import mopac_step
 import os
 import os.path
 import pprint
+import re
 
 logger = logging.getLogger(__name__)
 job = printing.getPrinter()
@@ -45,10 +46,8 @@ class MOPAC(seamm.Node):
             auto_env_var_prefix='',
             default_config_files=[
                 '/etc/seamm/mopac.ini',
-                '/etc/seamm/mopac_step.ini',
                 '/etc/seamm/seamm.ini',
                 '~/.seamm/mopac.ini',
-                '~/.seamm/mopac_step.ini',
                 '~/.seamm/seamm.ini',
             ]
         )
@@ -263,7 +262,6 @@ class MOPAC(seamm.Node):
 
         files = {'mopac.dat': '\n'.join(input_data)}
         logger.debug('mopac.dat:\n' + files['mopac.dat'])
-
         os.makedirs(self.directory, exist_ok=True)
         for filename in files:
             with open(os.path.join(self.directory, filename), mode='w') as fd:
@@ -348,9 +346,9 @@ class MOPAC(seamm.Node):
         # Loop through our subnodes. Get the first real node
         node = self.subflowchart.get_node('1').next()
         section = 0
-        for section in range(len(aux)):
-            data = self.parse_aux(aux[section])
-
+        for start, end in sections:
+            section += 1
+            data = self.parse_aux(lines[start:end])
             logger.debug('\nAUX file section {}'.format(section))
             logger.debug('------------------')
             logger.debug(pprint.pformat(data, width=170, compact=True))
@@ -468,14 +466,12 @@ class MOPAC(seamm.Node):
                     )
                 if 'units' in properties[name]:
                     data[name + ',units'] = properties[name]['units']
-
                 if properties[name]['type'] == 'integer':
                     value = int(rest)
                 elif properties[name]['type'] == 'float':
-                    value = float(rest.translate(trans))
+                    value = float(self._sanitize_value(rest))
                 else:
                     value = rest.strip('"')
-
                 if 'UPDATED' in name:
                     if name not in data:
                         data[name] = []
@@ -483,3 +479,9 @@ class MOPAC(seamm.Node):
                 else:
                     data[name] = value
         return data
+
+    def _sanitize_value(self, value):
+        regex = r"^([-+]?[.0-9]+)([EeDd]*)([-+][0-9]+)$"
+        subs = r"\1E\3"
+        ret = float(re.sub(regex, subs, value))
+        return ret

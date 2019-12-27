@@ -9,6 +9,7 @@ from seamm_util import ureg, Q_, units_class  # noqa: F401
 import seamm_util.printing as printing
 from seamm_util.printing import FormattedText as __
 import mopac_step
+import copy
 
 logger = logging.getLogger(__name__)
 job = printing.getPrinter()
@@ -28,7 +29,6 @@ class Energy(seamm.Node):
 
         self.description = 'A single point energy calculation'
         self._long_header = ''
-        self.keywords = []  # additional keywords to add
 
     @property
     def header(self):
@@ -93,7 +93,7 @@ class Energy(seamm.Node):
         )
 
         # Start gathering the keywords
-        keywords = P['extra keywords']
+        keywords = copy.deepcopy(P['extra keywords'])
         keywords.append('1SCF')
         keywords.append(P['hamiltonian'])
 
@@ -502,6 +502,21 @@ class Energy(seamm.Node):
             raise RuntimeError(
                 "Don't recognize convergence '{}'".format(P['convergence'])
             )
+
+        # Add any extra keywords so that they appear at the end
+        metadata = mopac_step.keyword_metadata
+        for keyword in P['extra keywords']:
+            if '=' in keyword:
+                keyword, value = keyword.split('=')
+                if (
+                    keyword not in metadata or
+                    'format' not in metadata[keyword]
+                ):
+                    keywords.append(keyword + '=' + value)
+                else:
+                    keywords.append(
+                        metadata[keyword]['format'].format(keyword, value)
+                    )
 
         return keywords
 
