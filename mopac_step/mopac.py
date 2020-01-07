@@ -339,18 +339,19 @@ class MOPAC(seamm.Node):
         putting key results into variables for subsequent use by
         other stages
         """
+
         # Split the aux files into sections for each step
         filename = 'mopac.aux'
         with open(os.path.join(self.directory, filename), mode='r') as fd:
-            lines = fd.read().splitlines()
+            lines_aux = fd.read().splitlines()
         
         # Find the sections in the file corresponding to sub-tasks
         aux = []
         start = 0
         lineno = 0
-        for line in lines:
+        for line in lines_aux:
             if 'END OF MOPAC FILE' in line:
-                aux.append(lines[start:lineno])
+                aux.append((start,lineno))
             lineno += 1
             if 'START OF MOPAC FILE' in line:
                 start = lineno
@@ -378,9 +379,8 @@ class MOPAC(seamm.Node):
         node = self.subflowchart.get_node('1').next()
         section = 0
         
-        for start, end in sections:
-            section += 1
-            data = self.parse_aux(lines[start:end])
+        for start, end in aux:
+            data = self.parse_aux(lines_aux[start:end])
             logger.debug('\nAUX file section {}'.format(section))
             logger.debug('------------------')
             logger.debug(pprint.pformat(data, width=170, compact=True))
@@ -388,7 +388,7 @@ class MOPAC(seamm.Node):
             # Add main citation for MOPAC
             if section == 1 and 'MOPAC_VERSION' in data:
                 self.references.cite(
-                    raw=self.bibliography['MOPAC_2016'],
+                    raw=self.bibliography['Stewart_2016'],
                     alias='mopac',
                     module='mopac_step',
                     level=1,
@@ -398,6 +398,7 @@ class MOPAC(seamm.Node):
             node.analyze(data=data, out=out[section])
 
             node = node.next()
+            section += 1
 
         
         printer.normal('')
