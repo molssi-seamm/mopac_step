@@ -1723,7 +1723,97 @@ properties = {
         ],
         "type": "string"
     },
-    "SPIN_COMPONENT": {
+    "SIZE_OF_ACTIVE_SPACE": {
+        "calculation": [
+            "optimization",
+        ],
+        "description": "size of active space",
+        "dimensionality": [
+            1
+        ],
+        "type": "string"
+    },
+    "NUMBER_MICROSTATES": {
+        "calculation": [
+            "optimization",
+        ],
+        "description": "number of microstates",
+        "dimensionality": [
+            1
+        ],
+        "type": "string"
+    },
+    "MICROSTATE_CONFIGURATIONS": {
+        "calculation": [
+            "optimization",
+        ],
+        "description": "microstate configurations",
+        "dimensionality": [
+           "n_microstates",
+        ],
+        "type": "integer"
+    },
+    "STATE_REQUESTED": {
+        "calculation": [
+            "optimization",
+        ],
+        "description": "state requested",
+        "dimensionality": [
+            1
+        ],
+        "type": "integer"
+    },
+    "STATE_DEGENERACY": {
+        "calculation": [
+            "optimization",
+        ],
+        "description": "number of microstates",
+        "dimensionality": [
+            1
+        ],
+        "type": "string"
+    },
+    "STATE_VECTOR": {
+        "calculation": [
+            "optimization",
+        ],
+        "description": "state vector",
+        "dimensionality": [
+            1
+        ],
+        "type": "float"
+    },
+    "STATE": {
+        "calculation": [
+            "optimization",
+        ],
+        "description": "state",
+        "dimensionality": [
+            1
+        ],
+        "type": "string"
+    },
+    "STATE_ENERGY_ABSOLUTE": {
+        "calculation": [
+            "optimization",
+        ],
+        "description": "state energy absolute",
+        "dimensionality": [
+            1
+        ],
+        "type": "string"
+    },
+    "STATE_ENERGY_RELATIVE": {
+        "calculation": [
+            "optimization",
+        ],
+        "description": "state",
+        "dimensionality": [
+            1
+        ],
+        "type": "string"
+    },
+    "SPIN_COMPONENT":  {
         "calculation": [
             "single point energy",
             "optimization",

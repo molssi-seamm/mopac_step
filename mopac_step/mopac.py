@@ -155,7 +155,7 @@ class MOPAC(seamm.Node):
 
     def run(self):
         """Run MOPAC"""
-
+        
         if data.structure is None:
             logger.error('MOPAC run(): there is no structure!')
             raise RuntimeError('MOPAC run(): there is no structure!')
@@ -211,7 +211,32 @@ class MOPAC(seamm.Node):
             'MKL_NUM_THREADS': str(mopac_mkl_num_threads),
             'OMP_NUM_THREADS': str(mopac_num_threads)
         }
+
         extra_keywords = ['AUX']
+
+        La = ["La", "Ce", "Pr", "Nd", "Pm", "Sm", "Eu", "Gd", "Tb", "Dy", "Ho", "Er", "Tm", "Yb", "Lu"]
+
+        La_list  = set(La) & set(seamm.data.structure['atoms']['elements'])
+       
+        if len(La_list) > 0:
+            extra_keywords.append("SPARKLES")
+
+        if 'extras' in seamm.data.structure.keys():
+            extras = seamm.data.structure['extras']
+
+            for k, v in extras.items():
+                if v is not None:
+                    if k == 'net_charge':
+                        extra_keywords.append('CHARGE={}'.format(v))
+                    elif k == 'field':
+                        extra_keywords.append('FIELD=({},{},{})'.format(v[0], v[1], v[2]))
+                    elif k== 'open':
+                        extra_keywords.append('OPEN({},{})'.format(v[0], v[1]))
+        #            if k=='symmetry':
+        #                extra_keywords.append('SYMMETRY')
+                    else:
+                        extra_keywords.append(v)
+
         if mopac_num_threads > 1:
             extra_keywords.append('THREADS={}'.format(mopac_num_threads))
 
@@ -254,9 +279,17 @@ class MOPAC(seamm.Node):
                                    y, 0 if 'y' in frz else 1,
                                    z, 0 if 'z' in frz else 1)
                     tmp_structure.append(line)
+
+#                if "extras" in seamm.data.structure.keys():
+#                    extras = seamm.data.structure['extras']
+#                    if extras["symmetry"] is not None:
+#                        tmp_structure.append(
+#                                "\n" + extras["symmetry"])
+                        
                 input_data.append(
                     '\n'.join(lines) + '\n' + '\n'.join(tmp_structure) + '\n'
                 )
+
 
             node = node.next()
 
@@ -266,8 +299,8 @@ class MOPAC(seamm.Node):
         for filename in files:
             with open(os.path.join(self.directory, filename), mode='w') as fd:
                 fd.write(files[filename])
-
         local = seamm.ExecLocal()
+
         return_files = ['molssi.arc', 'molssi.out', 'molssi.aux']
         result = local.run(
             cmd=[mopac_exe, 'molssi.dat'],
@@ -295,7 +328,7 @@ class MOPAC(seamm.Node):
 
         # Analyze the results
         self.analyze()
-
+       
         return next_node
 
     def analyze(self, indent='', lines=[]):
@@ -303,11 +336,10 @@ class MOPAC(seamm.Node):
         putting key results into variables for subsequent use by
         other stages
         """
-
         filename = 'molssi.aux'
         with open(os.path.join(self.directory, filename), mode='r') as fd:
             lines = fd.read().splitlines()
-
+        
         # Find the sections in the file corresponding to sub-tasks
         sections = []
         start = 0
@@ -322,17 +354,19 @@ class MOPAC(seamm.Node):
         # Loop through our subnodes. Get the first real node
         node = self.subflowchart.get_node('1').next()
         section = 0
+        
         for start, end in sections:
             section += 1
             data = self.parse_aux(lines[start:end])
             logger.debug('\nAUX file section {}'.format(section))
             logger.debug('------------------')
             logger.debug(pprint.pformat(data, width=170, compact=True))
-
+            
             node.analyze(data=data)
 
             node = node.next()
 
+        
         printer.normal('')
 
     def parse_aux(self, lines):
@@ -344,6 +378,7 @@ class MOPAC(seamm.Node):
         data = {}
         lineno = -1
         nlines = len(lines)
+        
         while True:
             lineno += 1
             if lineno >= nlines:
@@ -361,7 +396,7 @@ class MOPAC(seamm.Node):
                 size = int(size.lstrip('0'))
                 if ':' in name:
                     name, units = name.split(':')
-
+                
                 if name not in properties:
                     raise RuntimeError(
                         "Property '{}' not recognized.".format(name)
@@ -369,7 +404,9 @@ class MOPAC(seamm.Node):
                 if 'units' in properties[name]:
                     data[name + ',units'] = properties[name]['units']
 
+                
                 # Check for floating point numbers run together
+                
                 if properties[name]['type'] == 'float':
                     values = []
                     for value in rest.split():
@@ -394,11 +431,16 @@ class MOPAC(seamm.Node):
                 else:
                     tmp = rest.split()
 
+                # AUX file contains alpha and beta orbitals, that's why we are doubling it
+                if name == 'MICROSTATE_CONFIGURATIONS':
+                    size = size * 2
+
                 while len(tmp) < size:
                     lineno += 1
                     line = lines[lineno].strip()
                     if line[0] != '#':
                         tmp.extend(line.split())
+
                 if properties[name]['type'] == 'integer':
                     values = []
                     for value in tmp:
@@ -409,6 +451,7 @@ class MOPAC(seamm.Node):
                         values.append(float(value.translate(trans)))
                 else:
                     values = tmp
+                
 
                 if 'UPDATED' in name:
                     if name not in data:
@@ -420,6 +463,7 @@ class MOPAC(seamm.Node):
                             data[name] = values[0]
                     else:
                         data[name] = values
+                
             else:
                 if ':' in key:
                     name, units = key.split(':')
@@ -438,12 +482,14 @@ class MOPAC(seamm.Node):
                     value = float(self._sanitize_value(rest))
                 else:
                     value = rest.strip('"')
+
                 if 'UPDATED' in name:
                     if name not in data:
                         data[name] = []
                     data[name].append(value)
                 else:
                     data[name] = value
+
         return data
 
     def _sanitize_value(self, value):
