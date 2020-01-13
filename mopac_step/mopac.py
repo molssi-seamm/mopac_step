@@ -290,7 +290,6 @@ class MOPAC(seamm.Node):
                     '\n'.join(lines) + '\n' + '\n'.join(tmp_structure) + '\n'
                 )
 
-
             node = node.next()
 
         files = {'mopac.dat': '\n'.join(input_data)}
@@ -400,7 +399,6 @@ class MOPAC(seamm.Node):
             node = node.next()
             section += 1
 
-        
         printer.normal('')
 
     def parse_aux(self, lines):
@@ -438,9 +436,7 @@ class MOPAC(seamm.Node):
                 if 'units' in properties[name]:
                     data[name + ',units'] = properties[name]['units']
 
-                
                 # Check for floating point numbers run together
-                
                 if properties[name]['type'] == 'float':
                     values = []
                     for value in rest.split():
@@ -465,7 +461,8 @@ class MOPAC(seamm.Node):
                 else:
                     tmp = rest.split()
 
-                # AUX file contains alpha and beta orbitals, that's why we are doubling it
+                # AUX file contains alpha and beta orbitals, that's why we are
+                # doubling it
                 if name == 'MICROSTATE_CONFIGURATIONS':
                     size = size * 2
 
@@ -485,7 +482,6 @@ class MOPAC(seamm.Node):
                         values.append(float(value.translate(trans)))
                 else:
                     values = tmp
-                
 
                 if 'UPDATED' in name:
                     if name not in data:
