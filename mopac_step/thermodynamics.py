@@ -76,7 +76,7 @@ class Thermodynamics(mopac_step.Energy):
 
         return keywords
 
-    def analyze(self, indent='', data={}):
+    def analyze(self, indent='', data={}, out=[]):
         """Parse the output and generating the text output and store the
         data in variables for other stages to access
         """
