@@ -266,7 +266,8 @@ class Optimization(mopac_step.Energy):
 
         if P['method'] == 'default':
             tmp = '\n'.join(out)
-            if 'GEOMETRY OPTIMISED USING EIGENVECTOR FOLLOWING (EF)' in tmp:
+            if ('GEOMETRY OPTIMISED USING EIGENVECTOR FOLLOWING (EF)' in tmp
+                    or 'Geometry optimization using EF' in tmp):
                 references.cite(
                     raw=bibliography['Baker_1986'],
                     alias='Baker_1986',
