@@ -181,8 +181,8 @@ class Energy(seamm.Node):
                     note='AM1 parameters for Hg.'
                 )
             for element in (
-                    'Li', 'Be', 'Na', 'Mg', 'K', 'Ca', 'Ga', 'As', 'Se', 'Rb',
-                    'Sr', 'In', 'Sn', 'Sb', 'Te', 'Cs', 'Ba', 'Pb', 'Bi'
+                'Li', 'Be', 'Na', 'Mg', 'K', 'Ca', 'Ga', 'As', 'Se', 'Rb',
+                'Sr', 'In', 'Sn', 'Sb', 'Te', 'Cs', 'Ba', 'Pb', 'Bi'
             ):
                 if element in elements:
                     references.cite(
@@ -316,8 +316,8 @@ class Energy(seamm.Node):
                     note='MNDO parameters for Pb.'
                 )
             for element in (
-                    'Na', 'Mg', 'K', 'Ca', 'Ga', 'As', 'Se', 'Rb', 'Sr', 'In',
-                    'Sb', 'Te', 'Cs', 'Ba', 'Tl', 'Bi'
+                'Na', 'Mg', 'K', 'Ca', 'Ga', 'As', 'Se', 'Rb', 'Sr', 'In',
+                'Sb', 'Te', 'Cs', 'Ba', 'Tl', 'Bi'
             ):
                 if element in elements:
                     references.cite(
@@ -330,7 +330,7 @@ class Energy(seamm.Node):
                     break
             if P['hamiltonian'] == 'MNDOD':
                 for element in (
-                        'Al', 'Si', 'P', 'S', 'Cl', 'Br', 'I', 'Zn', 'Cd', 'Hg'
+                    'Al', 'Si', 'P', 'S', 'Cl', 'Br', 'I', 'Zn', 'Cd', 'Hg'
                 ):
                     if element in elements:
                         references.cite(
@@ -360,8 +360,10 @@ class Energy(seamm.Node):
                 level=1,
                 note='The citation for the MOPAC parameterization.'
             )
-            for element in ('Be', 'Mg', 'Zn', 'Ga', 'Ge', 'As', 'Se', 'Cd',
-                            'In', 'Sn', 'Sb', 'Te', 'Hg', 'Tl', 'Pb', 'Bi'):
+            for element in (
+                'Be', 'Mg', 'Zn', 'Ga', 'Ge', 'As', 'Se', 'Cd', 'In', 'Sn',
+                'Sb', 'Te', 'Hg', 'Tl', 'Pb', 'Bi'
+            ):
                 if element in elements:
                     references.cite(
                         raw=self.parent.bibliography['Stewart_1991'],

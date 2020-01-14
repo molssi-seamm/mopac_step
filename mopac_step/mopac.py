@@ -104,7 +104,9 @@ class MOPAC(seamm.Node):
         self._data = {}
 
         super().__init__(
-            flowchart=flowchart, title='MOPAC', extension=extension,
+            flowchart=flowchart,
+            title='MOPAC',
+            extension=extension,
             module=__name__
         )
 
@@ -154,7 +156,6 @@ class MOPAC(seamm.Node):
 
     def run(self):
         """Run MOPAC"""
-        
         if data.structure is None:
             logger.error('MOPAC run(): there is no structure!')
             raise RuntimeError('MOPAC run(): there is no structure!')
@@ -165,7 +166,7 @@ class MOPAC(seamm.Node):
         mopac_exe = seamm_util.check_executable(
             o.mopac_exe, key='--mopac-exe', parser=self.parser
         )
-        
+
         # How many processors does this node have?
         info = cpuinfo.get_cpu_info()
         n_cores = info['count']
@@ -213,10 +214,13 @@ class MOPAC(seamm.Node):
 
         extra_keywords = ['AUX']
 
-        La = ["La", "Ce", "Pr", "Nd", "Pm", "Sm", "Eu", "Gd", "Tb", "Dy", "Ho", "Er", "Tm", "Yb", "Lu"]
+        La = [
+            "La", "Ce", "Pr", "Nd", "Pm", "Sm", "Eu", "Gd", "Tb", "Dy", "Ho",
+            "Er", "Tm", "Yb", "Lu"
+        ]
 
-        La_list  = set(La) & set(seamm.data.structure['atoms']['elements'])
-       
+        La_list = set(La) & set(seamm.data.structure['atoms']['elements'])
+
         if len(La_list) > 0:
             extra_keywords.append("SPARKLES")
 
@@ -228,11 +232,11 @@ class MOPAC(seamm.Node):
                     if k == 'net_charge':
                         extra_keywords.append('CHARGE={}'.format(v))
                     elif k == 'field':
-                        extra_keywords.append('FIELD=({},{},{})'.format(v[0], v[1], v[2]))
-                    elif k== 'open':
+                        extra_keywords.append(
+                            'FIELD=({},{},{})'.format(v[0], v[1], v[2])
+                        )
+                    elif k == 'open':
                         extra_keywords.append('OPEN({},{})'.format(v[0], v[1]))
-        #            if k=='symmetry':
-        #                extra_keywords.append('SYMMETRY')
                     else:
                         extra_keywords.append(v)
 
@@ -280,12 +284,6 @@ class MOPAC(seamm.Node):
                                    z, 0 if 'z' in frz else 1)
                     tmp_structure.append(line)
 
-#                if "extras" in seamm.data.structure.keys():
-#                    extras = seamm.data.structure['extras']
-#                    if extras["symmetry"] is not None:
-#                        tmp_structure.append(
-#                                "\n" + extras["symmetry"])
-                        
                 input_data.append(
                     '\n'.join(lines) + '\n' + '\n'.join(tmp_structure) + '\n'
                 )
@@ -343,14 +341,14 @@ class MOPAC(seamm.Node):
         filename = 'mopac.aux'
         with open(os.path.join(self.directory, filename), mode='r') as fd:
             lines_aux = fd.read().splitlines()
-        
+
         # Find the sections in the file corresponding to sub-tasks
         aux = []
         start = 0
         lineno = 0
         for line in lines_aux:
             if 'END OF MOPAC FILE' in line:
-                aux.append((start,lineno))
+                aux.append((start, lineno))
             lineno += 1
             if 'START OF MOPAC FILE' in line:
                 start = lineno
@@ -377,7 +375,7 @@ class MOPAC(seamm.Node):
         # Loop through our subnodes. Get the first real node
         node = self.subflowchart.get_node('1').next()
         section = 0
-        
+
         for start, end in aux:
             data = self.parse_aux(lines_aux[start:end])
             logger.debug('\nAUX file section {}'.format(section))
@@ -410,7 +408,7 @@ class MOPAC(seamm.Node):
         data = {}
         lineno = -1
         nlines = len(lines)
-        
+
         while True:
             lineno += 1
             if lineno >= nlines:
@@ -428,7 +426,7 @@ class MOPAC(seamm.Node):
                 size = int(size.lstrip('0'))
                 if ':' in name:
                     name, units = name.split(':')
-                
+
                 if name not in properties:
                     raise RuntimeError(
                         "Property '{}' not recognized.".format(name)
@@ -493,7 +491,6 @@ class MOPAC(seamm.Node):
                             data[name] = values[0]
                     else:
                         data[name] = values
-                
             else:
                 if ':' in key:
                     name, units = key.split(':')
