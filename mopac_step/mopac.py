@@ -179,7 +179,7 @@ class MOPAC(seamm.Node):
 
         # Currently, on the Mac, it is not clear that any parallelism helps
         # much.
-        n_atoms = len(seamm.data.structure['atoms']['elements'])  # noqa: F841
+        # n_atoms = len(seamm.data.structure['atoms']['elements'])
 
         if o.mopac_mkl_num_threads == 'default':
             # Wild guess!
