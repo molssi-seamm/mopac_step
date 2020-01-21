@@ -214,9 +214,13 @@ class MOPAC(seamm.Node):
 
         extra_keywords = ['AUX']
 
+        # All Lanthanides (except La and Lu) must use the SPARKLES keyword.
+        # La and Lu use the SPARKLES keyword optionally, depending 
+        # if you're looking for good structure (do use SPARKLES) or
+        # energy (do not use SPARKLES)
         La = [
-            "La", "Ce", "Pr", "Nd", "Pm", "Sm", "Eu", "Gd", "Tb", "Dy", "Ho",
-            "Er", "Tm", "Yb", "Lu"
+            "Ce", "Pr", "Nd", "Pm", "Sm", "Eu", "Gd", "Tb", "Dy", "Ho",
+            "Er", "Tm", "Yb"
         ]
 
         La_list = set(La) & set(seamm.data.structure['atoms']['elements'])
