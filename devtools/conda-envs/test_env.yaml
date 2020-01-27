@@ -1,5 +1,8 @@
 name: test
+
 channels:
+  - default
+  
 dependencies:
     # Base depends
   - python
@@ -20,4 +23,5 @@ dependencies:
     - seamm-widgets>=0.6
 
       # Testing
+    - codecov
     - yapf
