@@ -129,7 +129,7 @@ class MOPAC(seamm.Node):
         # and set our subnodes
         self.subflowchart.set_ids(self._id)
 
-        return self.next()
+        return 'next'
 
     def description_text(self, P=None):
         """Return a short description of this step.
@@ -144,14 +144,14 @@ class MOPAC(seamm.Node):
         """
 
         # Work through children. Get the first real node
-        node = self.subflowchart.get_node('1').next()
+        node = self.subflowchart.get_node('1')
+        node = self.subflowchart.next_node(node)
 
         text = self.header + '\n\n'
         while node is not None:
             text += __(node.description_text(), indent=3 * ' ').__str__()
             text += '\n'
-            node = node.next()
-
+            node = self.subflowchart.next_node(node)
         return text
 
     def run(self):
@@ -250,10 +250,11 @@ class MOPAC(seamm.Node):
         # Work through the subflowchart to find out what to do.
         self.subflowchart.root_directory = self.flowchart.root_directory
 
-        next_node = super().run(printer)
+        super().run(printer)
 
         # Get the first real node
-        node = self.subflowchart.get_node('1').next()
+        node = self.subflowchart.get_node('1')
+        node = self.subflowchart.next_node(node)
 
         input_data = []
         while node:
@@ -291,8 +292,7 @@ class MOPAC(seamm.Node):
                 input_data.append(
                     '\n'.join(lines) + '\n' + '\n'.join(tmp_structure) + '\n'
                 )
-
-            node = node.next()
+            node = self.subflowchart.next_node(node)
 
         files = {'mopac.dat': '\n'.join(input_data)}
         logger.debug('mopac.dat:\n' + files['mopac.dat'])
@@ -333,7 +333,7 @@ class MOPAC(seamm.Node):
         # connection.
         self.references = None
 
-        return next_node
+        return 'next'
 
     def analyze(self, indent='', lines=[]):
         """Read the results from MOPAC calculations and analyze them,
@@ -377,7 +377,8 @@ class MOPAC(seamm.Node):
         out.append(lines[start:])
 
         # Loop through our subnodes. Get the first real node
-        node = self.subflowchart.get_node('1').next()
+        node = self.subflowchart.get_node('1')
+        node = self.subflowchart.next_node(node)
         section = 0
 
         for start, end in aux:
@@ -398,7 +399,7 @@ class MOPAC(seamm.Node):
 
             node.analyze(data=data, out=out[section])
 
-            node = node.next()
+            node = self.subflowchart.next_node(node)
             section += 1
 
         printer.normal('')
