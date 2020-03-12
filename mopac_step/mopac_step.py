@@ -24,9 +24,9 @@ class MOPACStep(object):
         """
         return MOPACStep.my_description
 
-    def create_node(self, flowchart=None, **kwargs):
+    def create_node(self, **kwargs):
         """Return the new node object"""
-        return mopac_step.MOPAC(flowchart=flowchart, **kwargs)
+        return mopac_step.MOPAC(**kwargs)
 
     def create_tk_node(self, canvas=None, **kwargs):
         """Return the graphical Tk node object"""

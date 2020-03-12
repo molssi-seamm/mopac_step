@@ -4,20 +4,19 @@
 
 import configargparse
 import logging
+from mopac_step import __version__, __git_revision__
 import seamm
 
 logger = logging.getLogger(__name__)
 
 
 class TkMOPAC(seamm.TkNode):
-    """The node_class is the class of the 'real' node that this
-    class is the Tk graphics partner for
+    """The Tk graphical node for the MOPAC GUI
+
     """
 
     def __init__(
         self,
-        tk_flowchart=None,
-        node=None,
         canvas=None,
         namespace='org.molssi.seamm.mopac.tk',
         x=120,
@@ -72,17 +71,28 @@ class TkMOPAC(seamm.TkNode):
 
         # Call the constructor for the energy
         super().__init__(
-            tk_flowchart=tk_flowchart,
-            node=node,
             canvas=canvas,
             x=x,
             y=y,
             w=w,
             h=h,
+            title='MOPAC',
             my_logger=my_logger
         )
 
         self.create_dialog()
+
+    @property
+    def version(self):
+        """The semantic version of this module.
+        """
+        return __version__
+
+    @property
+    def git_revision(self):
+        """The git version of this module.
+        """
+        return __git_revision__
 
     def create_dialog(self):
         """Create the dialog!"""
@@ -101,7 +111,6 @@ class TkMOPAC(seamm.TkNode):
         self.tk_subflowchart = seamm.TkFlowchart(
             master=frame,
             namespace=self.namespace,
-            flowchart=self.node.subflowchart
         )
         self.tk_subflowchart.draw()
 

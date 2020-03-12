@@ -4,9 +4,9 @@
 
 import configargparse
 import logging
+from mopac_step import __version__, __git_revision__, keywords
 import seamm
 import seamm_widgets as sw
-import mopac_step
 import tkinter as tk
 
 logger = logging.getLogger(__name__)
@@ -74,7 +74,7 @@ class TkEnergy(seamm.TkNode):
 
         # Call the constructor for the energy
         if keyword_metadata is None:
-            keyword_metadata = mopac_step.keyword_metadata
+            keyword_metadata = keywords
 
         super().__init__(
             tk_flowchart=tk_flowchart,
@@ -87,6 +87,18 @@ class TkEnergy(seamm.TkNode):
             my_logger=my_logger,
             keyword_metadata=keyword_metadata
         )
+
+    @property
+    def version(self):
+        """The semantic version of this module.
+        """
+        return __version__
+
+    @property
+    def git_revision(self):
+        """The git version of this module.
+        """
+        return __git_revision__
 
     def right_click(self, event):
         """Probably need to add our dialog...
