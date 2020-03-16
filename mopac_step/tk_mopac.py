@@ -69,7 +69,7 @@ class TkMOPAC(seamm.TkNode):
                 'Set log level to {}'.format(self.options.tk_mopac_log_level)
             )
 
-        # Call the constructor for the energy
+        # Call the constructor for the superclass
         super().__init__(
             canvas=canvas,
             x=x,
@@ -108,11 +108,11 @@ class TkMOPAC(seamm.TkNode):
 
         self.dialog.geometry('{}x{}+{}+{}'.format(w, h, x, y))
 
-        self.tk_subflowchart = seamm.TkFlowchart(
+        self.subflowchart = seamm.TkFlowchart(
             master=frame,
             namespace=self.namespace,
         )
-        self.tk_subflowchart.draw()
+        self.subflowchart.draw()
 
     def right_click(self, event):
         """Probably need to add our dialog...
@@ -128,8 +128,7 @@ class TkMOPAC(seamm.TkNode):
         flowcharts"""
 
         super().update_flowchart(
-            flowchart=self.node.subflowchart,
-            tk_flowchart=self.tk_subflowchart
+            flowchart=self.node.subflowchart, tk_flowchart=self.subflowchart
         )
 
     def from_flowchart(self, tk_flowchart=None, flowchart=None):
@@ -137,6 +136,5 @@ class TkMOPAC(seamm.TkNode):
         Only used in nodes that contain flowchart"""
 
         super().from_flowchart(
-            flowchart=self.node.subflowchart,
-            tk_flowchart=self.tk_subflowchart
+            flowchart=self.node.subflowchart, tk_flowchart=self.subflowchart
         )

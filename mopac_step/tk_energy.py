@@ -5,6 +5,7 @@
 import configargparse
 import logging
 from mopac_step import __version__, __git_revision__, keywords
+from mopac_step import EnergyParameters
 import seamm
 import seamm_widgets as sw
 import tkinter as tk
@@ -16,13 +17,12 @@ class TkEnergy(seamm.TkNode):
 
     def __init__(
         self,
-        tk_flowchart=None,
-        node=None,
         canvas=None,
         x=120,
         y=20,
         w=200,
         h=50,
+        title='Energy',
         my_logger=logger,
         keyword_metadata=None
     ):
@@ -77,16 +77,16 @@ class TkEnergy(seamm.TkNode):
             keyword_metadata = keywords
 
         super().__init__(
-            tk_flowchart=tk_flowchart,
-            node=node,
             canvas=canvas,
             x=x,
             y=y,
             w=w,
             h=h,
+            title=title,
             my_logger=my_logger,
             keyword_metadata=keyword_metadata
         )
+        self.parameters = EnergyParameters()
 
     @property
     def version(self):
@@ -121,7 +121,7 @@ class TkEnergy(seamm.TkNode):
         )
 
         # Create all the widgets
-        P = self.node.parameters
+        P = self.parameters
         for key in P:
             if key not in ('results', 'extra keywords', 'create tables'):
                 self[key] = P[key].widget(frame)

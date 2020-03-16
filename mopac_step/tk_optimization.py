@@ -2,36 +2,60 @@
 
 """The graphical part of a MOPAC Energy node"""
 
-import mopac_step
+import logging
+from mopac_step import __version__, __git_revision__, keywords
+from mopac_step import TkEnergy, OptimizationParameters
 import seamm_widgets as sw
 import tkinter as tk
 
+logger = logging.getLogger(__name__)
 
-class TkOptimization(mopac_step.TkEnergy):
+
+class TkOptimization(TkEnergy):
 
     def __init__(
         self,
-        tk_flowchart=None,
-        node=None,
+        title='Optimization',
         canvas=None,
         x=120,
         y=20,
         w=200,
-        h=50
+        h=50,
+        my_logger=logger,
+        keyword_metadata=None
     ):
         '''Initialize a node
 
         Keyword arguments:
         '''
+
+        # Call the constructor for the energy
+        if keyword_metadata is None:
+            keyword_metadata = keywords
+
         super().__init__(
-            tk_flowchart=tk_flowchart,
-            node=node,
             canvas=canvas,
             x=x,
             y=y,
             w=w,
-            h=h
+            h=h,
+            title=title,
+            my_logger=my_logger,
+            keyword_metadata=keyword_metadata
         )
+        self.parameters = OptimizationParameters()
+
+    @property
+    def version(self):
+        """The semantic version of this module.
+        """
+        return __version__
+
+    @property
+    def git_revision(self):
+        """The git version of this module.
+        """
+        return __git_revision__
 
     def right_click(self, event):
         """Probably need to add our dialog...

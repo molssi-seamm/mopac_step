@@ -9,7 +9,6 @@ import seamm
 import seamm.data as data
 import seamm_util
 import seamm_util.printing as printing
-from seamm_util.printing import FormattedText as __
 import mopac_step
 import os
 import os.path
@@ -31,12 +30,7 @@ def upcase(string):
 
 class MOPAC(seamm.Node):
 
-    def __init__(
-        self,
-        flowchart=None,
-        namespace='org.molssi.seamm.mopac',
-        extension=None
-    ):
+    def __init__(self, namespace='org.molssi.seamm.mopac'):
         """Initialize the node"""
 
         logger.debug('Creating MOPAC {}'.format(self))
@@ -99,16 +93,10 @@ class MOPAC(seamm.Node):
         self.subflowchart = seamm.Flowchart(
             name='MOPAC',
             namespace=namespace,
-            directory=flowchart.root_directory
         )
         self._data = {}
 
-        super().__init__(
-            flowchart=flowchart,
-            title='MOPAC',
-            extension=extension,
-            module=__name__
-        )
+        super().__init__(title='MOPAC')
 
     @property
     def version(self):
@@ -121,15 +109,6 @@ class MOPAC(seamm.Node):
         """The git version of this module.
         """
         return mopac_step.__git_revision__
-
-    def set_id(self, node_id):
-        """Set the id for node to a given tuple"""
-        self._id = node_id
-
-        # and set our subnodes
-        self.subflowchart.set_ids(self._id)
-
-        return 'next'
 
     def description_text(self, P=None):
         """Return a short description of this step.
@@ -145,13 +124,12 @@ class MOPAC(seamm.Node):
 
         # Work through children. Get the first real node
         node = self.subflowchart.get_node('1')
-        node = self.subflowchart.next_node(node)
 
-        text = self.header + '\n\n'
+        text = self.header + '\n'
         while node is not None:
-            text += __(node.description_text(), indent=3 * ' ').__str__()
+            text += node.description_text()
             text += '\n'
-            node = self.subflowchart.next_node(node)
+            node = node.next()
         return text
 
     def run(self):
@@ -254,12 +232,16 @@ class MOPAC(seamm.Node):
 
         # Get the first real node
         node = self.subflowchart.get_node('1')
-        node = self.subflowchart.next_node(node)
+
+        # print the start of the output from running
+        printer.normal(self.header)
+        printer.normal(node.description_text())
+
+        node = node.next()
 
         input_data = []
         while node:
-            node.parent = self
-            keywords = node.get_input()
+            keywords = node.get_input(self.references)
             lines = []
             lines.append(' '.join(keywords + extra_keywords))
             lines.append('Run from MolSSI flowchart')
@@ -292,7 +274,7 @@ class MOPAC(seamm.Node):
                 input_data.append(
                     '\n'.join(lines) + '\n' + '\n'.join(tmp_structure) + '\n'
                 )
-            node = self.subflowchart.next_node(node)
+            node = node.next()
 
         files = {'mopac.dat': '\n'.join(input_data)}
         logger.debug('mopac.dat:\n' + files['mopac.dat'])
@@ -333,7 +315,7 @@ class MOPAC(seamm.Node):
         # connection.
         self.references = None
 
-        return 'next'
+        return self.next()
 
     def analyze(self, indent='', lines=[]):
         """Read the results from MOPAC calculations and analyze them,
@@ -378,7 +360,7 @@ class MOPAC(seamm.Node):
 
         # Loop through our subnodes. Get the first real node
         node = self.subflowchart.get_node('1')
-        node = self.subflowchart.next_node(node)
+        node = node.next()
         section = 0
 
         for start, end in aux:
@@ -397,12 +379,12 @@ class MOPAC(seamm.Node):
                     note='The principle MOPAC citation.'
                 )
 
-            node.analyze(data=data, out=out[section])
+            node.analyze(
+                data=data, out=out[section], references=self.references
+            )
 
-            node = self.subflowchart.next_node(node)
+            node = node.next()
             section += 1
-
-        printer.normal('')
 
     def parse_aux(self, lines):
         """Digest a section of the aux file"""

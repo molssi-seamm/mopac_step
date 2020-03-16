@@ -12,7 +12,7 @@ class EnergyStep(object):
         'name': 'Energy'
     }
 
-    def __init__(self, flowchart=None, gui=None):
+    def __init__(self, gui=None):
         """Initialize this helper class, which is used by
         the application via stevedore to get information about
         and create node objects for the flowchart
@@ -24,9 +24,9 @@ class EnergyStep(object):
         """
         return EnergyStep.my_description
 
-    def create_node(self, flowchart=None, **kwargs):
+    def create_node(self, **kwargs):
         """Return the new node object"""
-        return mopac_step.Energy(flowchart=flowchart, **kwargs)
+        return mopac_step.Energy(**kwargs)
 
     def create_tk_node(self, canvas=None, **kwargs):
         """Return the graphical Tk node object"""
