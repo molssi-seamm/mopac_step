@@ -19,8 +19,8 @@ dependencies:
 
     # Pip-only installs
   - pip:
-    - seamm>=0.6
-    - seamm-widgets>=0.6
+    - seamm>=0.9
+    - seamm-widgets>=0.9
 
       # Testing
     - codecov
