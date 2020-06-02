@@ -373,6 +373,7 @@ class MOPAC(seamm.Node):
                 if n_star_lines == 7:
                     out.append(lines[start:lineno])
                     start = lineno
+                    n_star_lines = 0
             lineno += 1
         out.append(lines[start:])
 
