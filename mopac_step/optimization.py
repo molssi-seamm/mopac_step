@@ -213,6 +213,16 @@ class Optimization(mopac_step.Energy):
 
         printer.normal(self._long_header)
 
+        # Update the structure
+        if 'ATOM_X_OPT' in data:
+            system = seamm.data.structure
+            atoms = system['atoms']
+            xyz = []
+            it = iter(data['ATOM_X_OPT'])
+            for x in it:
+                xyz.append([x, next(it), next(it)])
+            atoms['coordinates'] = xyz
+
         # The results
         if 'NUMBER_SCF_CYCLES' in data:
             printer.normal(

@@ -83,6 +83,16 @@ class Thermodynamics(mopac_step.Energy):
 
         printer.normal(self._long_header)
 
+        # Update the structure
+        if 'ORIENTATION_ATOM_X' in data:
+            system = seamm.data.structure
+            atoms = system['atoms']
+            xyz = []
+            it = iter(data['ORIENTATION_ATOM_X'])
+            for x in it:
+                xyz.append([x, next(it), next(it)])
+            atoms['coordinates'] = xyz
+
         # The results
         printer.normal(
             __(
