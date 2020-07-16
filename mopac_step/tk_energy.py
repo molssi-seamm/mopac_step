@@ -98,9 +98,7 @@ class TkEnergy(seamm.TkNode):
         self.popup_menu.tk_popup(event.x_root, event.y_root, 0)
 
     def create_dialog(
-        self,
-        title='Edit MOPAC Energy Step',
-        calculation='single point energy'
+        self, title='Edit MOPAC Energy Step', calculation='energy'
     ):
         """Create the dialog!"""
         self.logger.debug('Creating the dialog')
@@ -120,6 +118,8 @@ class TkEnergy(seamm.TkNode):
         )
         self['convergence'].combobox.bind("<Return>", self.reset_dialog)
         self['convergence'].combobox.bind("<FocusOut>", self.reset_dialog)
+
+        self.setup_results(mopac_step.properties, calculation=calculation)
 
         self.logger.debug('Finished creating the dialog')
 

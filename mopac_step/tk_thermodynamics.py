@@ -33,13 +33,15 @@ class TkThermodynamics(mopac_step.TkEnergy):
             h=h
         )
 
-    def edit(self):
-        """Present a dialog for editing the input for the MOPAC energy
-        calculation"""
-
-        super().edit()
-
-        self.dialog.title('MOPAC Thermodynamic Functions')
+    def create_dialog(
+        self,
+        title='MOPAC Thermodynamic Functions',
+        calculation='thermodynamics'
+    ):
+        """Create the dialog!"""
+        self.logger.debug('Creating the dialog')
+        super().create_dialog(title=title, calculation='thermodynamics')
+        self.logger.debug('Finished creating the dialog')
 
     def reset_dialog(self, widget=None):
         """Layout the widgets in the main frame
@@ -58,7 +60,3 @@ class TkThermodynamics(mopac_step.TkEnergy):
         sw.align_labels(widgets)
 
         return row
-
-    def setup_results(self, calculation='thermodynamics'):
-        """Layout the results tab of the dialog"""
-        super().setup_results(calculation)
