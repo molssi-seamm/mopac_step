@@ -2,10 +2,6 @@
 
 """Top-level package for MOPAC step."""
 
-__author__ = """Paul Saxe"""
-__email__ = 'psaxe@molssi.org'
-__version__ = '0.1.0'
-
 # Bring up the classes so that they appear to be directly in
 # the package.
 
@@ -28,6 +24,15 @@ from mopac_step.thermodynamics_step import ThermodynamicsStep  # noqa: F401
 from mopac_step.thermodynamics import Thermodynamics  # noqa: F401
 from mopac_step.thermodynamics_parameters import ThermodynamicsParameters  # noqa: F401 E501
 from mopac_step.tk_thermodynamics import TkThermodynamics  # noqa: F401
+
+# Handle versioneer
+from ._version import get_versions
+__author__ = """Paul Saxe"""
+__email__ = 'psaxe@molssi.org'
+versions = get_versions()
+__version__ = versions['version']
+__git_revision__ = versions['full-revisionid']
+del get_versions, versions
 
 keyword_metadata = {
     '0SCF': {
