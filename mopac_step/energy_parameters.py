@@ -75,6 +75,18 @@ class EnergyParameters(seamm.Parameters):
                           "the tolerance, while values <1 tighten it."
                           "* 'absolute' sets the criterion directly.")
         },
+        "calculate gradients": {
+            "default": "yes",
+            "kind": "enumeration",
+            "default_units": "",
+            "enumeration": (
+                'yes',
+                'no',
+            ),
+            "format_string": "s",
+            "description": "Calculate gradients:",
+            "help_text": "Whether to calculate the gradients."
+        },
         "relative": {
             "default": "0.1",
             "kind": "float",
