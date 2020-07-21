@@ -5,6 +5,7 @@
 import logging
 import seamm
 import seamm_util.printing as printing
+from seamm_util import units_class
 from seamm_util.printing import FormattedText as __
 import mopac_step
 
@@ -68,13 +69,13 @@ class Optimization(mopac_step.Energy):
         # SCF convergence
         text += ' The SCF will be converged to '
         if P['convergence'] == 'normal':
-            text += 'the normal level of 1.0e-04 kcal/mol'
+            text += 'the normal level of 1.0e-04 kcal/mol.'
         elif P['convergence'] == 'precise':
-            text += "the 'precise' level of 1.0e-06 kcal/mol"
+            text += "the 'precise' level of 1.0e-06 kcal/mol."
         elif P['convergence'] == 'relative':
-            text += 'a factor of {relative} times the normal criteria'
+            text += 'a factor of {relative} times the normal criteria.'
         elif P['convergence'] == 'absolute':
-            text += ' {absolute} kcal/mol'
+            text += ' {absolute} kcal/mol.'
 
         return self.header + '\n' + __(text, **P, indent=4 * ' ').__str__()
 
@@ -86,6 +87,18 @@ class Optimization(mopac_step.Energy):
 
         P = self.parameters.current_values_to_dict(
             context=seamm.flowchart_variables._data
+        )
+
+        # Have to fix formatting for printing...
+        PP = dict(P)
+        for key in PP:
+            if isinstance(PP[key], units_class):
+                PP[key] = '{:~P}'.format(PP[key])
+
+        # Save the description for later printing
+        self.description = []
+        self.description.append(
+            __(self.description_text(PP), **PP, indent=self.indent).__str__()
         )
 
         # Remove the 1SCF keyword from the energy setup
@@ -211,8 +224,6 @@ class Optimization(mopac_step.Energy):
         data in variables for other stages to access
         """
 
-        printer.normal(self._long_header)
-
         # Update the structure
         if 'ATOM_X_OPT' in data:
             system = seamm.data.structure
@@ -225,35 +236,28 @@ class Optimization(mopac_step.Energy):
 
         # The results
         if 'NUMBER_SCF_CYCLES' in data:
-            printer.normal(
-                __(
-                    (
-                        '\nThe geometry optimization converged in '
-                        '{NUMBER_SCF_CYCLES} iterations to a heat of '
-                        'formation of {HEAT_OF_FORMATION} kcal/mol and '
-                        'gradient norm of {GRADIENT_NORM} kcal/mol/Å.'
-                    ),
-                    **data,
-                    indent=7 * ' '
-                )
+            text = (
+                'The geometry optimization converged in '
+                '{NUMBER_SCF_CYCLES} iterations to a heat of '
+                'formation of {HEAT_OF_FORMATION} kcal/mol and '
+                'gradient norm of {GRADIENT_NORM} kcal/mol/Å.'
             )
         else:
             data['NUMBER_SCF_CYCLES'] = len(data['HEAT_OF_FORM_UPDATED'])
             data['HEAT_OF_FORMATION'] = data['HEAT_OF_FORM_UPDATED'][-1]
             data['GRADIENT_NORM'] = data['GRADIENT_UPDATED'][-1]
-            printer.normal(
-                __(
-                    (
-                        '\nThe geometry optimization did not converge!\n'
-                        'It ran for {NUMBER_SCF_CYCLES} '
-                        'iterations to a final heat of formation of '
-                        '{HEAT_OF_FORMATION} kcal/mol and gradient norm '
-                        'of {GRADIENT_NORM} kcal/mol/Å.'
-                    ),
-                    **data,
-                    indent=7 * ' '
-                )
+            text = (
+                'The geometry optimization did not converge!\n'
+                'It ran for {NUMBER_SCF_CYCLES} '
+                'iterations to a final heat of formation of '
+                '{HEAT_OF_FORMATION} kcal/mol and gradient norm '
+                'of {GRADIENT_NORM} kcal/mol/Å.'
             )
+
+        if 'POINT_GROUP' in data:
+            text += ' The system has {POINT_GROUP} symmetry.'
+
+        printer.normal(__(text, **data, indent=self.indent + 4 * ' '))
 
         # Put any requested results into variables or tables
         self.store_results(
@@ -326,5 +330,3 @@ class Optimization(mopac_step.Energy):
                 )
             else:
                 logger.warning('Could not find which minimizer was used!')
-
-        printer.normal('\n')

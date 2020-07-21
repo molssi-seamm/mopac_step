@@ -160,6 +160,10 @@ class MOPAC(seamm.Node):
             logger.error('MOPAC run(): there is no structure!')
             raise RuntimeError('MOPAC run(): there is no structure!')
 
+        # Print our header to the main output
+        printer.important(self.header)
+        printer.important('')
+
         # Access the options and find the executable
         o = self.options
 
@@ -396,13 +400,63 @@ class MOPAC(seamm.Node):
                     level=1,
                     note='The principle MOPAC citation.'
                 )
+            # Print the header for the node
+            for value in node.description:
+                printer.important(value)
 
             node.analyze(data=data, out=out[section])
+
+            printer.normal('')
 
             node = node.next()
             section += 1
 
-        printer.normal('')
+        # Update the final structure
+        xyz = self.parse_arc(os.path.join(self.directory, 'mopac.arc'))
+        if xyz is not None:
+            system = seamm.data.structure
+            atoms = system['atoms']
+            atoms['coordinates'] = xyz
+            printer.normal(
+                self.indent +
+                '    Updated the system with the structure from MOPAC.'
+            )
+            printer.normal('')
+
+    def parse_arc(self, filename='mopac.arc'):
+        """Digest the ARC file and get the coordinates.
+
+        Parameters
+        ----------
+        filename : str
+            The name of the ARC file
+
+        Returns
+        -------
+        coordinates : [n_atoms*[3]]
+        """
+        xyz = None
+        with open(filename, 'r') as fd:
+            for line in fd:
+                if 'FINAL GEOMETRY OBTAINED' in line:
+                    xyz = []
+                    ii = 0
+                    for line in fd:
+                        if (
+                            ' &' not in line and ' +' not in line and
+                            line[0] != '*'
+                        ):
+                            ii += 1
+                            if ii == 3:
+                                break
+                    for line in fd:
+                        line = line.strip()
+                        if line == '':
+                            break
+                        if line[0] != '*':
+                            symbol, x, fx, y, fy, z, fz = line.split()
+                            xyz.append([x, y, z])
+        return xyz
 
     def parse_aux(self, lines):
         """Digest a section of the aux file"""

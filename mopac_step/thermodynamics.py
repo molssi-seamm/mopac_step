@@ -5,6 +5,7 @@
 import logging
 import seamm
 import seamm_util.printing as printing
+from seamm_util import units_class
 from seamm_util.printing import FormattedText as __
 import mopac_step
 
@@ -60,7 +61,19 @@ class Thermodynamics(mopac_step.Energy):
             context=seamm.flowchart_variables._data
         )
 
-        # Convert values with unts to the right units, and remove
+        # Have to fix formatting for printing...
+        PP = dict(P)
+        for key in PP:
+            if isinstance(PP[key], units_class):
+                PP[key] = '{:~P}'.format(PP[key])
+
+        # Save the description for later printing
+        self.description = []
+        self.description.append(
+            __(self.description_text(PP), **PP, indent=self.indent)
+        )
+
+        # Convert values with units to the right units, and remove
         # the unit string.
         for key in ('Tmax', 'Tmin', 'Tstep'):
             P[key] = P[key].to('K').magnitude
@@ -80,9 +93,6 @@ class Thermodynamics(mopac_step.Energy):
         """Parse the output and generating the text output and store the
         data in variables for other stages to access
         """
-
-        printer.normal(self._long_header)
-
         # Update the structure
         if 'ORIENTATION_ATOM_X' in data:
             system = seamm.data.structure
@@ -97,12 +107,12 @@ class Thermodynamics(mopac_step.Energy):
         printer.normal(
             __(
                 (
-                    '\nThe geometry converged in {NUMBER_SCF_CYCLES} '
+                    'The geometry converged in {NUMBER_SCF_CYCLES} '
                     'iterations to a heat of formation of {HEAT_OF_FORMATION} '
                     'kcal/mol.'
                 ),
                 **data,
-                indent=7 * ' '
+                indent=self.indent + 4 * ' '
             )
         )
 
@@ -113,5 +123,3 @@ class Thermodynamics(mopac_step.Energy):
             results=self.parameters['results'].value,
             create_tables=self.parameters['create tables'].get()
         )
-
-        printer.normal('\n')

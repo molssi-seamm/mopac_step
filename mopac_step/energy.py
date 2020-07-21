@@ -28,7 +28,6 @@ class Energy(seamm.Node):
         self.parameters = mopac_step.EnergyParameters()
 
         self.description = 'A single point energy calculation'
-        self._long_header = ''
 
     @property
     def header(self):
@@ -73,10 +72,6 @@ class Energy(seamm.Node):
 
     def get_input(self):
         """Get the input for an energy calculation for MOPAC"""
-        self._long_header = ''
-        self._long_header += str(__(self.header, indent=3 * ' '))
-        self._long_header += '\n'
-
         references = self.parent.references
 
         P = self.parameters.current_values_to_dict(
@@ -88,8 +83,10 @@ class Energy(seamm.Node):
             if isinstance(PP[key], units_class):
                 PP[key] = '{:~P}'.format(PP[key])
 
-        self._long_header += str(
-            __(self.description_text(PP), **PP, indent=7 * ' ')
+        # Save the description for later printing
+        self.description = []
+        self.description.append(
+            __(self.description_text(PP), **PP, indent=self.indent)
         )
 
         # Start gathering the keywords
@@ -505,6 +502,9 @@ class Energy(seamm.Node):
                 "Don't recognize convergence '{}'".format(P['convergence'])
             )
 
+        if P['calculate gradients']:
+            keywords.append('GRADIENTS')
+
         # Add any extra keywords so that they appear at the end
         metadata = mopac_step.keyword_metadata
         for keyword in P['extra keywords']:
@@ -526,8 +526,20 @@ class Energy(seamm.Node):
         """Parse the output and generating the text output and store the
         data in variables for other stages to access
         """
+        P = self.parameters.current_values_to_dict(
+            context=seamm.flowchart_variables._data
+        )
 
-        printer.normal(self._long_header)
+        text = 'The heat of formation is {HEAT_OF_FORMATION} kcal/mol'
+
+        if P['calculate gradients']:
+            text += ' with a gradient norm of {GRADIENT_NORM} kcal/mol/Å.'
+        else:
+            text += ". The gradients weren't calculated."
+
+        text += ' The system has {POINT_GROUP} symmetry.'
+
+        printer.normal(__(text, **data, indent=self.indent + 4 * ' '))
 
         # Put any requested results into variables or tables
         self.store_results(
@@ -536,5 +548,3 @@ class Energy(seamm.Node):
             results=self.parameters['results'].value,
             create_tables=self.parameters['create tables'].get()
         )
-
-        printer.normal('\n')
