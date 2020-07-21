@@ -5,6 +5,7 @@
 import logging
 import seamm
 import seamm_util.printing as printing
+from seamm_util import units_class
 from seamm_util.printing import FormattedText as __
 import mopac_step
 
@@ -61,6 +62,18 @@ class IR(mopac_step.Energy):
             context=seamm.flowchart_variables._data
         )
 
+        # Have to fix formatting for printing...
+        PP = dict(P)
+        for key in PP:
+            if isinstance(PP[key], units_class):
+                PP[key] = '{:~P}'.format(PP[key])
+
+        # Save the description for later printing
+        self.description = []
+        self.description.append(
+            __(self.description_text(PP), **PP, indent=self.indent)
+        )
+
         # Remove the 1SCF keyword from the energy setup
         keywords = []
         for keyword in super().get_input():
@@ -80,18 +93,16 @@ class IR(mopac_step.Energy):
         data in variables for other stages to access
         """
 
-        printer.normal(self._long_header)
-
         # The results
         printer.normal(
             __(
                 (
-                    '\nThe geometry converged in {NUMBER_SCF_CYCLES} '
+                    'The geometry converged in {NUMBER_SCF_CYCLES} '
                     'iterations to a heat of formation of {HEAT_OF_FORMATION} '
                     'kcal/mol.'
                 ),
                 **data,
-                indent=7 * ' '
+                indent=self.indent + 4 * ' '
             )
         )
 
@@ -102,5 +113,3 @@ class IR(mopac_step.Energy):
             results=self.parameters['results'].value,
             create_tables=self.parameters['create tables'].get()
         )
-
-        printer.normal('\n')

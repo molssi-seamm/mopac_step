@@ -42,13 +42,13 @@ class TkOptimization(mopac_step.TkEnergy):
 
         self.popup_menu.tk_popup(event.x_root, event.y_root, 0)
 
-    def edit(self):
-        """Present a dialog for editing the input for the MOPAC energy
-        calculation"""
-
-        super().edit()
-
-        self.dialog.title('MOPAC Optimization')
+    def create_dialog(
+        self, title='MOPAC Optimization', calculation='optimization'
+    ):
+        """Create the dialog!"""
+        self.logger.debug('Creating the dialog')
+        super().create_dialog(title=title, calculation='optimization')
+        self.logger.debug('Finished creating the dialog')
 
     def reset_dialog(self, widget=None):
         """Layout the widgets in the main frame
@@ -85,7 +85,3 @@ class TkOptimization(mopac_step.TkEnergy):
         sw.align_labels(widgets_2)
 
         return row
-
-    def setup_results(self, calculation='optimization'):
-        """Layout the results tab of the dialog"""
-        super().setup_results(calculation)

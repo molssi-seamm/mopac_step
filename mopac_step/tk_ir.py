@@ -33,14 +33,15 @@ class TkIR(mopac_step.TkEnergy):
             h=h
         )
 
-    def edit(self):
-        """Present a dialog for editing the input for the MOPAC vibrational
-        calculation
-        """
-
-        super().edit()
-
-        self.dialog.title('MOPAC Infrared (Vibrational) Spectrum')
+    def create_dialog(
+        self,
+        title='MOPAC Infrared (Vibrational) Spectrum',
+        calculation='vibrations'
+    ):
+        """Create the dialog!"""
+        self.logger.debug('Creating the dialog')
+        super().create_dialog(title=title, calculation='vibrations')
+        self.logger.debug('Finished creating the dialog')
 
     def reset_dialog(self, widget=None):
         """Layout the widgets in the main frame
@@ -59,7 +60,3 @@ class TkIR(mopac_step.TkEnergy):
         sw.align_labels(widgets)
 
         return row
-
-    def setup_results(self, calculation='vibrations'):
-        """Layout the results tab of the dialog"""
-        super().setup_results(calculation)

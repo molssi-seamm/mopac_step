@@ -2,10 +2,6 @@
 
 """Top-level package for MOPAC step."""
 
-__author__ = """Paul Saxe"""
-__email__ = 'psaxe@molssi.org'
-__version__ = '0.1.0'
-
 # Bring up the classes so that they appear to be directly in
 # the package.
 
@@ -28,6 +24,15 @@ from mopac_step.thermodynamics_step import ThermodynamicsStep  # noqa: F401
 from mopac_step.thermodynamics import Thermodynamics  # noqa: F401
 from mopac_step.thermodynamics_parameters import ThermodynamicsParameters  # noqa: F401 E501
 from mopac_step.tk_thermodynamics import TkThermodynamics  # noqa: F401
+
+# Handle versioneer
+from ._version import get_versions
+__author__ = """Paul Saxe"""
+__email__ = 'psaxe@molssi.org'
+versions = get_versions()
+__version__ = versions['version']
+__git_revision__ = versions['full-revisionid']
+del get_versions, versions
 
 keyword_metadata = {
     '0SCF': {
@@ -1074,7 +1079,7 @@ keyword_metadata = {
 properties = {
     "AO_ATOMINDEX": {
         "calculation": [
-            "single point energy",
+            "energy",
             "optimization",
             "thermodynamics",
             "vibrations"
@@ -1087,7 +1092,7 @@ properties = {
     },
     "AO_ZETA": {
         "calculation": [
-            "single point energy",
+            "energy",
             "optimization",
             "thermodynamics",
             "vibrations"
@@ -1100,7 +1105,7 @@ properties = {
     },
     "AREA": {
         "calculation": [
-            "single point energy",
+            "energy",
             "optimization",
             "thermodynamics",
             "vibrations"
@@ -1112,7 +1117,7 @@ properties = {
     },
     "ATOM_CHARGES": {
         "calculation": [
-            "single point energy",
+            "energy",
             "optimization",
             "thermodynamics",
             "vibrations"
@@ -1125,7 +1130,7 @@ properties = {
     },
     "ATOM_CORE": {
         "calculation": [
-            "single point energy",
+            "energy",
             "optimization",
             "thermodynamics",
             "vibrations"
@@ -1138,7 +1143,7 @@ properties = {
     },
     "ATOM_EL": {
         "calculation": [
-            "single point energy",
+            "energy",
             "optimization",
             "thermodynamics",
             "vibrations"
@@ -1151,7 +1156,7 @@ properties = {
     },
     "ATOM_PQN": {
         "calculation": [
-            "single point energy",
+            "energy",
             "optimization",
             "thermodynamics",
             "vibrations"
@@ -1164,7 +1169,7 @@ properties = {
     },
     "ATOM_SYMTYPE": {
         "calculation": [
-            "single point energy",
+            "energy",
             "optimization",
             "thermodynamics",
             "vibrations"
@@ -1177,7 +1182,7 @@ properties = {
     },
     "ATOM_X": {
         "calculation": [
-            "single point energy",
+            "energy",
             "optimization",
             "thermodynamics",
             "vibrations"
@@ -1240,7 +1245,7 @@ properties = {
     },
     "CPU_TIME": {
         "calculation": [
-            "single point energy",
+            "energy",
             "optimization",
             "thermodynamics",
             "vibrations"
@@ -1252,7 +1257,7 @@ properties = {
     },
     "DATE": {
         "calculation": [
-            "single point energy",
+            "energy",
             "optimization",
             "thermodynamics",
             "vibrations"
@@ -1263,7 +1268,7 @@ properties = {
     },
     "DIPOLE": {
         "calculation": [
-            "single point energy",
+            "energy",
             "optimization",
             "thermodynamics",
             "vibrations"
@@ -1275,7 +1280,7 @@ properties = {
     },
     "DIP_VEC": {
         "calculation": [
-            "single point energy",
+            "energy",
             "optimization",
             "thermodynamics",
             "vibrations"
@@ -1289,7 +1294,7 @@ properties = {
     },
     "EIGENVALUES": {
         "calculation": [
-            "single point energy",
+            "energy",
             "optimization",
             "thermodynamics",
             "vibrations"
@@ -1303,7 +1308,7 @@ properties = {
     },
     "ALPHA_EIGENVALUES": {
         "calculation": [
-            "single point energy",
+            "energy",
             "optimization",
             "thermodynamics",
             "vibrations"
@@ -1317,7 +1322,7 @@ properties = {
     },
     "BETA_EIGENVALUES": {
         "calculation": [
-            "single point energy",
+            "energy",
             "optimization",
             "thermodynamics",
             "vibrations"
@@ -1331,7 +1336,7 @@ properties = {
     },
     "EIGENVECTORS": {
         "calculation": [
-            "single point energy",
+            "energy",
             "optimization",
             "thermodynamics",
             "vibrations"
@@ -1344,7 +1349,7 @@ properties = {
     },
     "ALPHA_EIGENVECTORS": {
         "calculation": [
-            "single point energy",
+            "energy",
             "optimization",
             "thermodynamics",
             "vibrations"
@@ -1357,7 +1362,7 @@ properties = {
     },
     "BETA_EIGENVECTORS": {
         "calculation": [
-            "single point energy",
+            "energy",
             "optimization",
             "thermodynamics",
             "vibrations"
@@ -1370,7 +1375,7 @@ properties = {
     },
     "EMPIRICAL_FORMULA": {
         "calculation": [
-            "single point energy",
+            "energy",
             "optimization",
             "thermodynamics",
             "vibrations"
@@ -1381,7 +1386,7 @@ properties = {
     },
     "ENERGY_ELECTRONIC": {
         "calculation": [
-            "single point energy",
+            "energy",
             "optimization",
             "thermodynamics",
             "vibrations"
@@ -1393,7 +1398,7 @@ properties = {
     },
     "ENERGY_NUCLEAR": {
         "calculation": [
-            "single point energy",
+            "energy",
             "optimization",
             "thermodynamics",
             "vibrations"
@@ -1480,7 +1485,7 @@ properties = {
     },
     "HEAT_OF_FORMATION": {
         "calculation": [
-            "single point energy",
+            "energy",
             "optimization",
             "thermodynamics",
             "vibrations"
@@ -1538,7 +1543,7 @@ properties = {
     },
     "IONIZATION_POTENTIAL": {
         "calculation": [
-            "single point energy",
+            "energy",
             "optimization",
             "thermodynamics",
             "vibrations"
@@ -1569,7 +1574,7 @@ properties = {
     },
     "M.O.SYMMETRY_LABELS": {
         "calculation": [
-            "single point energy",
+            "energy",
             "optimization",
             "thermodynamics",
             "vibrations"
@@ -1582,7 +1587,7 @@ properties = {
     },
     "ALPHA_M.O.SYMMETRY_LABELS": {
         "calculation": [
-            "single point energy",
+            "energy",
             "optimization",
             "thermodynamics",
             "vibrations"
@@ -1595,7 +1600,7 @@ properties = {
     },
     "BETA_M.O.SYMMETRY_LABELS": {
         "calculation": [
-            "single point energy",
+            "energy",
             "optimization",
             "thermodynamics",
             "vibrations"
@@ -1608,7 +1613,7 @@ properties = {
     },
     "METHOD": {
         "calculation": [
-            "single point energy",
+            "energy",
             "optimization",
             "thermodynamics",
             "vibrations"
@@ -1619,7 +1624,7 @@ properties = {
     },
     "MOLECULAR_ORBITAL_OCCUPANCIES": {
         "calculation": [
-            "single point energy",
+            "energy",
             "optimization",
             "thermodynamics",
             "vibrations"
@@ -1632,7 +1637,7 @@ properties = {
     },
     "ALPHA_MOLECULAR_ORBITAL_OCCUPANCIES": {
         "calculation": [
-            "single point energy",
+            "energy",
             "optimization",
             "thermodynamics",
             "vibrations"
@@ -1645,7 +1650,7 @@ properties = {
     },
     "BETA_MOLECULAR_ORBITAL_OCCUPANCIES": {
         "calculation": [
-            "single point energy",
+            "energy",
             "optimization",
             "thermodynamics",
             "vibrations"
@@ -1658,7 +1663,7 @@ properties = {
     },
     "MOLECULAR_WEIGHT": {
         "calculation": [
-            "single point energy",
+            "energy",
             "optimization",
             "thermodynamics",
             "vibrations"
@@ -1670,7 +1675,7 @@ properties = {
     },
     "MOPAC_VERSION": {
         "calculation": [
-            "single point energy",
+            "energy",
             "optimization",
             "thermodynamics",
             "vibrations"
@@ -1704,7 +1709,7 @@ properties = {
     },
     "NUMBER_SCF_CYCLES": {
         "calculation": [
-            "single point energy",
+            "energy",
             "optimization",
             "thermodynamics",
             "vibrations"
@@ -1715,7 +1720,7 @@ properties = {
     },
     "NUM_ALPHA_ELECTRONS": {
         "calculation": [
-            "single point energy",
+            "energy",
             "optimization",
             "thermodynamics",
             "vibrations"
@@ -1726,7 +1731,7 @@ properties = {
     },
     "NUM_BETA_ELECTRONS": {
         "calculation": [
-            "single point energy",
+            "energy",
             "optimization",
             "thermodynamics",
             "vibrations"
@@ -1737,7 +1742,7 @@ properties = {
     },
     "NUM_ELECTRONS": {
         "calculation": [
-            "single point energy",
+            "energy",
             "optimization",
             "thermodynamics",
             "vibrations"
@@ -1761,7 +1766,7 @@ properties = {
     },
     "OVERLAP_MATRIX": {
         "calculation": [
-            "single point energy",
+            "energy",
             "optimization",
             "thermodynamics",
             "vibrations"
@@ -1776,7 +1781,7 @@ properties = {
     },
     "POINT_GROUP": {
         "calculation": [
-            "single point energy",
+            "energy",
             "optimization",
             "thermodynamics",
             "vibrations"
@@ -1811,7 +1816,7 @@ properties = {
     },
     "SET_OF_MOS": {
         "calculation": [
-            "single point energy",
+            "energy",
             "optimization",
             "thermodynamics",
             "vibrations"
@@ -1824,7 +1829,7 @@ properties = {
     },
     "SET_OF_ALPHA_MOS": {
         "calculation": [
-            "single point energy",
+            "energy",
             "optimization",
             "thermodynamics",
             "vibrations"
@@ -1837,7 +1842,7 @@ properties = {
     },
     "SET_OF_BETA_MOS": {
         "calculation": [
-            "single point energy",
+            "energy",
             "optimization",
             "thermodynamics",
             "vibrations"
@@ -1940,7 +1945,7 @@ properties = {
     },
     "SPIN_COMPONENT":  {
         "calculation": [
-            "single point energy",
+            "energy",
             "optimization",
             "thermodynamics",
             "vibrations"
@@ -1970,7 +1975,7 @@ properties = {
     },
     "TOTAL_DENSITY_MATRIX": {
         "calculation": [
-            "single point energy",
+            "energy",
             "optimization",
             "thermodynamics",
             "vibrations"
@@ -1985,7 +1990,7 @@ properties = {
     },
     "ALPHA_DENSITY_MATRIX": {
         "calculation": [
-            "single point energy",
+            "energy",
             "optimization",
             "thermodynamics",
             "vibrations"
@@ -2000,7 +2005,7 @@ properties = {
     },
     "BETA_DENSITY_MATRIX": {
         "calculation": [
-            "single point energy",
+            "energy",
             "optimization",
             "thermodynamics",
             "vibrations"
@@ -2015,7 +2020,7 @@ properties = {
     },
     "TOTAL_ENERGY": {
         "calculation": [
-            "single point energy",
+            "energy",
             "optimization",
             "thermodynamics",
             "vibrations"
@@ -2027,7 +2032,7 @@ properties = {
     },
     "TOTAL_SPIN": {
         "calculation": [
-            "single point energy",
+            "energy",
             "optimization",
             "thermodynamics",
             "vibrations"
@@ -2098,7 +2103,7 @@ properties = {
     },
     "VOLUME": {
         "calculation": [
-            "single point energy",
+            "energy",
             "optimization",
             "thermodynamics",
             "vibrations"
