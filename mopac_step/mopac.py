@@ -455,7 +455,7 @@ class MOPAC(seamm.Node):
                             break
                         if line[0] != '*':
                             symbol, x, fx, y, fy, z, fz = line.split()
-                            xyz.append([x, y, z])
+                            xyz.append([float(x), float(y), float(z)])
         return xyz
 
     def parse_aux(self, lines):
