@@ -6,7 +6,6 @@ import configargparse
 import cpuinfo
 import logging
 import seamm
-import seamm.data as data
 import seamm_util
 import seamm_util.printing as printing
 from seamm_util.printing import FormattedText as __
@@ -156,7 +155,9 @@ class MOPAC(seamm.Node):
 
     def run(self):
         """Run MOPAC"""
-        if data.structure is None:
+        system = self.get_variable('_system')
+        n_atoms = system.n_atoms()
+        if n_atoms == 0:
             logger.error('MOPAC run(): there is no structure!')
             raise RuntimeError('MOPAC run(): there is no structure!')
 
@@ -183,7 +184,6 @@ class MOPAC(seamm.Node):
 
         # Currently, on the Mac, it is not clear that any parallelism helps
         # much.
-        # n_atoms = len(seamm.data.structure['atoms']['elements'])
 
         if o.mopac_mkl_num_threads == 'default':
             # Wild guess!
@@ -227,13 +227,13 @@ class MOPAC(seamm.Node):
             "Tm", "Yb"
         ]
 
-        La_list = set(La) & set(seamm.data.structure['atoms']['elements'])
+        La_list = set(La) & set(system.atoms.symbols())
 
         if len(La_list) > 0:
             extra_keywords.append("SPARKLES")
 
-        if 'extras' in seamm.data.structure.keys():
-            extras = seamm.data.structure['extras']
+        if 'extras' in system:
+            extras = system['extras']
 
             for k, v in extras.items():
                 if v is not None:
@@ -265,10 +265,10 @@ class MOPAC(seamm.Node):
             keywords = node.get_input()
             lines = []
             lines.append(' '.join(keywords + extra_keywords))
-            lines.append('Run from MolSSI flowchart')
+            lines.append('Run from MolSSI-SEAMM flowchart')
             lines.append(
                 '{} using {} hamiltonian'.format(
-                    node.description, node.parameters['hamiltonian']
+                    node.title, node.parameters['hamiltonian']
                 )
             )
 
@@ -276,11 +276,10 @@ class MOPAC(seamm.Node):
                 input_data.append('\n'.join(lines))
             else:
                 tmp_structure = []
-                structure = seamm.data.structure
-                elements = structure['atoms']['elements']
-                coordinates = structure['atoms']['coordinates']
-                if 'freeze' in structure['atoms']:
-                    freeze = structure['atoms']['freeze']
+                elements = system.atoms.symbols()
+                coordinates = system.atoms.coordinates()
+                if 'freeze' in system.atoms:
+                    freeze = system.atoms['freeze']
                 else:
                     freeze = [''] * len(elements)
                 for element, xyz, frz in zip(elements, coordinates, freeze):
@@ -414,9 +413,19 @@ class MOPAC(seamm.Node):
         # Update the final structure
         xyz = self.parse_arc(os.path.join(self.directory, 'mopac.arc'))
         if xyz is not None:
-            system = seamm.data.structure
-            atoms = system['atoms']
-            atoms['coordinates'] = xyz
+            system = self.get_variable('_system')
+            xs = []
+            ys = []
+            zs = []
+            for tmp in xyz:
+                x, y, z = tmp
+                xs.append(float(x))
+                ys.append(float(y))
+                zs.append(float(z))
+            system.atoms['x'][0:] = xs
+            system.atoms['y'][0:] = ys
+            system.atoms['z'][0:] = zs
+
             printer.normal(
                 self.indent +
                 '    Updated the system with the structure from MOPAC.'
