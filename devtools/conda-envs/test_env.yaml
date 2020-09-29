@@ -2,12 +2,14 @@ name: test
 
 channels:
   - default
+  - conda-forge
   
 dependencies:
     # Base depends
   - python
   - pip
   - configargparse
+  - openbabel
   - py-cpuinfo
 
     # Testing
