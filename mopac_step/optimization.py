@@ -83,7 +83,7 @@ class Optimization(mopac_step.Energy):
         """Get the input for an optimization MOPAC"""
 
         references = self.parent.references
-        bibliography = self.parent.bibliography
+        bibliography = self.parent._bibliography
 
         P = self.parameters.current_values_to_dict(
             context=seamm.flowchart_variables._data
@@ -275,7 +275,7 @@ class Optimization(mopac_step.Energy):
         # If the optimizer used was the default, put in the correct citations
 
         references = self.parent.references
-        bibliography = self.parent.bibliography
+        bibliography = self.parent._bibliography
 
         P = self.parameters.current_values_to_dict(
             context=seamm.flowchart_variables._data

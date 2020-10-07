@@ -393,7 +393,7 @@ class MOPAC(seamm.Node):
             # Add main citation for MOPAC
             if section == 1 and 'MOPAC_VERSION' in data:
                 self.references.cite(
-                    raw=self.bibliography['Stewart_2016'],
+                    raw=self._bibliography['Stewart_2016'],
                     alias='mopac',
                     module='mopac_step',
                     level=1,

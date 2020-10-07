@@ -98,7 +98,7 @@ class Energy(seamm.Node):
         if P['hamiltonian'] == 'AM1':
             elements = system.atoms.symbols()
             references.cite(
-                raw=self.parent.bibliography['Dewar_1985c'],
+                raw=self.parent._bibliography['Dewar_1985c'],
                 alias='Dewar_1985c',
                 module='mopac_step',
                 level=1,
@@ -107,7 +107,7 @@ class Energy(seamm.Node):
             for element in ('F', 'Cl', 'Br', 'I'):
                 if element in elements:
                     references.cite(
-                        raw=self.parent.bibliography['Dewar_1988'],
+                        raw=self.parent._bibliography['Dewar_1988'],
                         alias='Dewar_1988',
                         module='mopac_step',
                         level=1,
@@ -116,7 +116,7 @@ class Energy(seamm.Node):
                     break
             if 'Al' in elements:
                 references.cite(
-                    raw=self.parent.bibliography['Dewar_1990'],
+                    raw=self.parent._bibliography['Dewar_1990'],
                     alias='Dewar_1990',
                     module='mopac_step',
                     level=1,
@@ -124,7 +124,7 @@ class Energy(seamm.Node):
                 )
             if 'Si' in elements:
                 references.cite(
-                    raw=self.parent.bibliography['Dewar_1987b'],
+                    raw=self.parent._bibliography['Dewar_1987b'],
                     alias='Dewar_1987b',
                     module='mopac_step',
                     level=1,
@@ -132,7 +132,7 @@ class Energy(seamm.Node):
                 )
             if 'P' in elements:
                 references.cite(
-                    raw=self.parent.bibliography['Dewar_1989'],
+                    raw=self.parent._bibliography['Dewar_1989'],
                     alias='Dewar_1989',
                     module='mopac_step',
                     level=1,
@@ -140,7 +140,7 @@ class Energy(seamm.Node):
                 )
             if 'S' in elements:
                 references.cite(
-                    raw=self.parent.bibliography['Dewar_1990b'],
+                    raw=self.parent._bibliography['Dewar_1990b'],
                     alias='Dewar_1990b',
                     module='mopac_step',
                     level=1,
@@ -148,7 +148,7 @@ class Energy(seamm.Node):
                 )
             if 'Zn' in elements:
                 references.cite(
-                    raw=self.parent.bibliography['Dewar_1988b'],
+                    raw=self.parent._bibliography['Dewar_1988b'],
                     alias='Dewar_1988b',
                     module='mopac_step',
                     level=1,
@@ -156,7 +156,7 @@ class Energy(seamm.Node):
                 )
             if 'Ge' in elements:
                 references.cite(
-                    raw=self.parent.bibliography['Dewar_1989b'],
+                    raw=self.parent._bibliography['Dewar_1989b'],
                     alias='Dewar_1989b',
                     module='mopac_step',
                     level=1,
@@ -164,7 +164,7 @@ class Energy(seamm.Node):
                 )
             if 'Mo' in elements:
                 references.cite(
-                    raw=self.parent.bibliography['Voityuk_2000'],
+                    raw=self.parent._bibliography['Voityuk_2000'],
                     alias='Voityuk_2000',
                     module='mopac_step',
                     level=1,
@@ -172,7 +172,7 @@ class Energy(seamm.Node):
                 )
             if 'Hg' in elements:
                 references.cite(
-                    raw=self.parent.bibliography['Dewar_1989c'],
+                    raw=self.parent._bibliography['Dewar_1989c'],
                     alias='Dewar_1989c',
                     module='mopac_step',
                     level=1,
@@ -184,7 +184,7 @@ class Energy(seamm.Node):
             ):
                 if element in elements:
                     references.cite(
-                        raw=self.parent.bibliography['Stewart_2004'],
+                        raw=self.parent._bibliography['Stewart_2004'],
                         alias='Stewart_2004',
                         module='mopac_step',
                         level=1,
@@ -194,7 +194,7 @@ class Energy(seamm.Node):
         elif P['hamiltonian'] == 'MNDO' or P['hamiltonian'] == 'MNDOD':
             elements = system.atoms.symbols()
             references.cite(
-                raw=self.parent.bibliography['Dewar_1977'],
+                raw=self.parent._bibliography['Dewar_1977'],
                 alias='Dewar_1977',
                 module='mopac_step',
                 level=1,
@@ -202,7 +202,7 @@ class Energy(seamm.Node):
             )
             if 'Be' in elements:
                 references.cite(
-                    raw=self.parent.bibliography['Dewar_1978'],
+                    raw=self.parent._bibliography['Dewar_1978'],
                     alias='Dewar_1978',
                     module='mopac_step',
                     level=1,
@@ -211,7 +211,7 @@ class Energy(seamm.Node):
             if 'B' in elements or 'Al' in elements:
                 if 'B' in elements or P['hamiltonian'] == 'MNDO':
                     references.cite(
-                        raw=self.parent.bibliography['Davis_1981'],
+                        raw=self.parent._bibliography['Davis_1981'],
                         alias='Davis_1981',
                         module='mopac_step',
                         level=1,
@@ -219,7 +219,7 @@ class Energy(seamm.Node):
                     )
             if 'F' in elements:
                 references.cite(
-                    raw=self.parent.bibliography['Dewar_1978b'],
+                    raw=self.parent._bibliography['Dewar_1978b'],
                     alias='Dewar_1978b',
                     module='mopac_step',
                     level=1,
@@ -227,7 +227,7 @@ class Energy(seamm.Node):
                 )
             if 'Si' in elements and P['hamiltonian'] == 'MNDO':
                 references.cite(
-                    raw=self.parent.bibliography['Dewar_1986'],
+                    raw=self.parent._bibliography['Dewar_1986'],
                     alias='Dewar_1986',
                     module='mopac_step',
                     level=1,
@@ -235,7 +235,7 @@ class Energy(seamm.Node):
                 )
             if 'P' in elements and P['hamiltonian'] == 'MNDO':
                 references.cite(
-                    raw=self.parent.bibliography['Dewar_1978b'],
+                    raw=self.parent._bibliography['Dewar_1978b'],
                     alias='Dewar_1978b',
                     module='mopac_step',
                     level=1,
@@ -243,7 +243,7 @@ class Energy(seamm.Node):
                 )
             if 'S' in elements and P['hamiltonian'] == 'MNDO':
                 references.cite(
-                    raw=self.parent.bibliography['Dewar_1986b'],
+                    raw=self.parent._bibliography['Dewar_1986b'],
                     alias='Dewar_1986b',
                     module='mopac_step',
                     level=1,
@@ -251,7 +251,7 @@ class Energy(seamm.Node):
                 )
             if 'Cl' in elements and P['hamiltonian'] == 'MNDO':
                 references.cite(
-                    raw=self.parent.bibliography['Dewar_1983'],
+                    raw=self.parent._bibliography['Dewar_1983'],
                     alias='Dewar_1983',
                     module='mopac_step',
                     level=1,
@@ -259,7 +259,7 @@ class Energy(seamm.Node):
                 )
             if 'Zn' in elements and P['hamiltonian'] == 'MNDO':
                 references.cite(
-                    raw=self.parent.bibliography['Dewar_1986c'],
+                    raw=self.parent._bibliography['Dewar_1986c'],
                     alias='Dewar_1986c',
                     module='mopac_step',
                     level=1,
@@ -267,7 +267,7 @@ class Energy(seamm.Node):
                 )
             if 'Ge' in elements:
                 references.cite(
-                    raw=self.parent.bibliography['Dewar_1987'],
+                    raw=self.parent._bibliography['Dewar_1987'],
                     alias='Dewar_1987',
                     module='mopac_step',
                     level=1,
@@ -275,7 +275,7 @@ class Energy(seamm.Node):
                 )
             if 'Br' in elements and P['hamiltonian'] == 'MNDO':
                 references.cite(
-                    raw=self.parent.bibliography['Dewar_1983b'],
+                    raw=self.parent._bibliography['Dewar_1983b'],
                     alias='Dewar_1983b',
                     module='mopac_step',
                     level=1,
@@ -283,7 +283,7 @@ class Energy(seamm.Node):
                 )
             if 'Sn' in elements:
                 references.cite(
-                    raw=self.parent.bibliography['Dewar_1984'],
+                    raw=self.parent._bibliography['Dewar_1984'],
                     alias='Dewar_1984',
                     module='mopac_step',
                     level=1,
@@ -291,7 +291,7 @@ class Energy(seamm.Node):
                 )
             if 'I' in elements and P['hamiltonian'] == 'MNDO':
                 references.cite(
-                    raw=self.parent.bibliography['Dewar_1984b'],
+                    raw=self.parent._bibliography['Dewar_1984b'],
                     alias='Dewar_1984b',
                     module='mopac_step',
                     level=1,
@@ -299,7 +299,7 @@ class Energy(seamm.Node):
                 )
             if 'Hg' in elements and P['hamiltonian'] == 'MNDO':
                 references.cite(
-                    raw=self.parent.bibliography['Dewar_1985'],
+                    raw=self.parent._bibliography['Dewar_1985'],
                     alias='Dewar_1985',
                     module='mopac_step',
                     level=1,
@@ -307,7 +307,7 @@ class Energy(seamm.Node):
                 )
             if 'Pb' in elements:
                 references.cite(
-                    raw=self.parent.bibliography['Dewar_1985b'],
+                    raw=self.parent._bibliography['Dewar_1985b'],
                     alias='Dewar_1985b',
                     module='mopac_step',
                     level=1,
@@ -319,7 +319,7 @@ class Energy(seamm.Node):
             ):
                 if element in elements:
                     references.cite(
-                        raw=self.parent.bibliography['Stewart_2004'],
+                        raw=self.parent._bibliography['Stewart_2004'],
                         alias='Stewart_2004',
                         module='mopac_step',
                         level=1,
@@ -332,14 +332,14 @@ class Energy(seamm.Node):
                 ):
                     if element in elements:
                         references.cite(
-                            raw=self.parent.bibliography['Thiel_1992'],
+                            raw=self.parent._bibliography['Thiel_1992'],
                             alias='Thiel_1992',
                             module='mopac_step',
                             level=1,
                             note=('MNDO-D formalism for d-orbitals.')
                         )
                         references.cite(
-                            raw=self.parent.bibliography['Thiel_1996'],
+                            raw=self.parent._bibliography['Thiel_1996'],
                             alias='Thiel_1996',
                             module='mopac_step',
                             level=1,
@@ -352,7 +352,7 @@ class Energy(seamm.Node):
         elif P['hamiltonian'] == 'PM3':
             elements = system.atoms.symbols()
             references.cite(
-                raw=self.parent.bibliography['Stewart_1989'],
+                raw=self.parent._bibliography['Stewart_1989'],
                 alias='Stewart_1989',
                 module='mopac_step',
                 level=1,
@@ -364,7 +364,7 @@ class Energy(seamm.Node):
             ):
                 if element in elements:
                     references.cite(
-                        raw=self.parent.bibliography['Stewart_1991'],
+                        raw=self.parent._bibliography['Stewart_1991'],
                         alias='Stewart_1991',
                         module='mopac_step',
                         level=1,
@@ -373,7 +373,7 @@ class Energy(seamm.Node):
                     break
             if 'Li' in elements:
                 references.cite(
-                    raw=self.parent.bibliography['Anders_1993'],
+                    raw=self.parent._bibliography['Anders_1993'],
                     alias='Anders_1993',
                     module='mopac_step',
                     level=1,
@@ -382,7 +382,7 @@ class Energy(seamm.Node):
             for element in ('B', 'Na', 'K', 'Ca', 'Rb', 'Sr', 'Cs', 'Ba'):
                 if element in elements:
                     references.cite(
-                        raw=self.parent.bibliography['Stewart_2004'],
+                        raw=self.parent._bibliography['Stewart_2004'],
                         alias='Stewart_2004',
                         module='mopac_step',
                         level=1,
@@ -391,7 +391,7 @@ class Energy(seamm.Node):
                     break
         elif 'PM6' in P['hamiltonian']:
             references.cite(
-                raw=self.parent.bibliography['Stewart_2007'],
+                raw=self.parent._bibliography['Stewart_2007'],
                 alias='Stewart_2007',
                 module='mopac_step',
                 level=1,
@@ -399,7 +399,7 @@ class Energy(seamm.Node):
             )
             if P['hamiltonian'] == 'PM6-D3':
                 references.cite(
-                    raw=self.parent.bibliography['Grimme_2010'],
+                    raw=self.parent._bibliography['Grimme_2010'],
                     alias='Grimme_2010',
                     module='mopac_step',
                     level=1,
@@ -407,7 +407,7 @@ class Energy(seamm.Node):
                 )
             if P['hamiltonian'] == 'PM6-DH+':
                 references.cite(
-                    raw=self.parent.bibliography['Korth_2010'],
+                    raw=self.parent._bibliography['Korth_2010'],
                     alias='Korth_2010',
                     module='mopac_step',
                     level=1,
@@ -415,14 +415,14 @@ class Energy(seamm.Node):
                 )
             if 'PM6-DH2' in P['hamiltonian']:
                 references.cite(
-                    raw=self.parent.bibliography['Korth_2009'],
+                    raw=self.parent._bibliography['Korth_2009'],
                     alias='Korth_2009',
                     module='mopac_step',
                     level=1,
                     note='Hydrogen-bonding and dispersion correction.'
                 )
                 references.cite(
-                    raw=self.parent.bibliography['Rezac_2009'],
+                    raw=self.parent._bibliography['Rezac_2009'],
                     alias='Rezac_2009',
                     module='mopac_step',
                     level=1,
@@ -430,7 +430,7 @@ class Energy(seamm.Node):
                 )
             if P['hamiltonian'] == 'PM6-DH2x':
                 references.cite(
-                    raw=self.parent.bibliography['Rezac_2011'],
+                    raw=self.parent._bibliography['Rezac_2011'],
                     alias='Rezac_2011',
                     module='mopac_step',
                     level=1,
@@ -438,14 +438,14 @@ class Energy(seamm.Node):
                 )
             if 'PM6-D3H4' in P['hamiltonian']:
                 references.cite(
-                    raw=self.parent.bibliography['Rezac_2011'],
+                    raw=self.parent._bibliography['Rezac_2011'],
                     alias='Rezac_2011',
                     module='mopac_step',
                     level=1,
                     note='Hydrogen-bonding and dispersion correction.'
                 )
                 references.cite(
-                    raw=self.parent.bibliography['Vorlova_2015'],
+                    raw=self.parent._bibliography['Vorlova_2015'],
                     alias='Vorlova_2015',
                     module='mopac_step',
                     level=1,
@@ -453,7 +453,7 @@ class Energy(seamm.Node):
                 )
             if P['hamiltonian'] == 'PM6-D3H4x':
                 references.cite(
-                    raw=self.parent.bibliography['Brahmkshatriya_2013'],
+                    raw=self.parent._bibliography['Brahmkshatriya_2013'],
                     alias='Brahmkshatriya_2013',
                     module='mopac_step',
                     level=1,
@@ -461,7 +461,7 @@ class Energy(seamm.Node):
                 )
         elif 'PM7' in P['hamiltonian']:
             references.cite(
-                raw=self.parent.bibliography['Stewart_2012'],
+                raw=self.parent._bibliography['Stewart_2012'],
                 alias='Stewart_2012',
                 module='mopac_step',
                 level=1,
@@ -469,7 +469,7 @@ class Energy(seamm.Node):
             )
         elif P['hamiltonian'] == 'RM1':
             references.cite(
-                raw=self.parent.bibliography['Rocha_2006'],
+                raw=self.parent._bibliography['Rocha_2006'],
                 alias='Rocha_2006',
                 module='mopac_step',
                 level=1,
