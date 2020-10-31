@@ -2,7 +2,6 @@
 
 """Setup and run MOPAC"""
 
-import configargparse
 import cpuinfo
 import logging
 import seamm
@@ -40,60 +39,6 @@ class MOPAC(seamm.Node):
 
         logger.debug('Creating MOPAC {}'.format(self))
 
-        # Argument/config parsing
-        self.parser = configargparse.ArgParser(
-            auto_env_var_prefix='',
-            default_config_files=[
-                '/etc/seamm/mopac.ini',
-                '/etc/seamm/seamm.ini',
-                '~/.seamm/mopac.ini',
-                '~/.seamm/seamm.ini',
-            ]
-        )
-
-        self.parser.add_argument(
-            '--seamm-configfile',
-            is_config_file=True,
-            default=None,
-            help='a configuration file to override others'
-        )
-
-        # Options for this plugin
-        self.parser.add_argument(
-            "--mopac-log-level",
-            default=configargparse.SUPPRESS,
-            choices=[
-                'CRITICAL', 'ERROR', 'WARNING', 'INFO', 'DEBUG', 'NOTSET'
-            ],
-            type=upcase,
-            help="the logging level for the Mopac step"
-        )
-
-        # Options for Mopac
-        self.parser.add_argument(
-            '--mopac-exe',
-            default='mopac',
-            help='the path to the MOPAC executable'
-        )
-
-        self.parser.add_argument(
-            '--mopac-num-threads',
-            default='default',
-            help='How many threads to use in MOPAC'
-        )
-
-        self.parser.add_argument(
-            '--mopac-mkl-num-threads',
-            default='default',
-            help='How many threads to use with MKL in MOPAC'
-        )
-
-        self.options, self.unknown = self.parser.parse_known_args()
-
-        # Set the logging level for this module if requested
-        if 'mopac_log_level' in self.options:
-            logger.setLevel(self.options.mopac_log_level)
-
         # Create the subflowchart and proceed
         self.subflowchart = seamm.Flowchart(
             name='MOPAC',
@@ -106,7 +51,7 @@ class MOPAC(seamm.Node):
             flowchart=flowchart,
             title='MOPAC',
             extension=extension,
-            module=__name__
+            logger=logger
         )
 
     @property
@@ -120,6 +65,46 @@ class MOPAC(seamm.Node):
         """The git version of this module.
         """
         return mopac_step.__git_revision__
+
+    def create_parser(self):
+        """Setup the command-line / config file parser
+        """
+        parser_name = self.step_type
+        parser = seamm.getParser()
+
+        # Remember if the parser exists ... this type of step may have been
+        # found before
+        parser_exists = parser.exists(parser_name)
+
+        # Create the standard options, e.g. log-level
+        result = super().create_parser(name=parser_name)
+
+        if parser_exists:
+            return result
+
+        # Options for Mopac
+        parser.add_argument(
+            parser_name,
+            '--mopac-exe',
+            default='mopac',
+            help='the path to the MOPAC executable'
+        )
+
+        parser.add_argument(
+            parser_name,
+            '--mopac-num-threads',
+            default='default',
+            help='How many threads to use in MOPAC'
+        )
+
+        parser.add_argument(
+            parser_name,
+            '--mopac-mkl-num-threads',
+            default='default',
+            help='How many threads to use with MKL in MOPAC'
+        )
+
+        return result
 
     def set_id(self, node_id):
         """Set the id for node to a given tuple"""
@@ -158,7 +143,7 @@ class MOPAC(seamm.Node):
         system = self.get_variable('_system')
         n_atoms = system.n_atoms()
         if n_atoms == 0:
-            logger.error('MOPAC run(): there is no structure!')
+            self.logger.error('MOPAC run(): there is no structure!')
             raise RuntimeError('MOPAC run(): there is no structure!')
 
         # Print our header to the main output
@@ -168,9 +153,7 @@ class MOPAC(seamm.Node):
         # Access the options and find the executable
         o = self.options
 
-        mopac_exe = seamm_util.check_executable(
-            o.mopac_exe, key='--mopac-exe', parser=self.parser
-        )
+        mopac_exe = seamm_util.check_executable(o['mopac_exe'])
 
         # How many processors does this node have?
         info = cpuinfo.get_cpu_info()
@@ -180,36 +163,36 @@ class MOPAC(seamm.Node):
             n_cores = int(n_cores / 2)
         if n_cores < 1:
             n_cores = 1
-        logger.info('The number of cores is {}'.format(n_cores))
+        self.logger.info('The number of cores is {}'.format(n_cores))
 
         # Currently, on the Mac, it is not clear that any parallelism helps
         # much.
 
-        if o.mopac_mkl_num_threads == 'default':
+        if o['mopac_mkl_num_threads'] == 'default':
             # Wild guess!
             # mopac_mkl_num_threads = int(pow(n_atoms / 16, 0.3333))
             mopac_mkl_num_threads = 1
         else:
-            mopac_mkl_num_threads = int(o.mopac_mkl_num_threads)
+            mopac_mkl_num_threads = int(o['mopac_mkl_num_threads'])
         if mopac_mkl_num_threads > n_cores:
             mopac_mkl_num_threads = n_cores
         elif mopac_mkl_num_threads < 1:
             mopac_mkl_num_threads = 1
-        logger.info('MKL will use {} threads.'.format(mopac_mkl_num_threads))
+        self.logger.info(f'MKL will use {mopac_mkl_num_threads} threads.')
 
-        if o.mopac_num_threads == 'default':
+        if o['mopac_num_threads'] == 'default':
             # Wild guess!
             # mopac_num_threads = int(pow(n_atoms / 32, 0.5))
             mopac_num_threads = 1
             if mopac_num_threads > n_cores:
                 mopac_num_threads = n_cores
         else:
-            mopac_num_threads = int(o.mopac_num_threads)
+            mopac_num_threads = int(o['mopac_num_threads'])
         if mopac_num_threads > n_cores:
             mopac_num_threads = n_cores
         if mopac_num_threads < 1:
             mopac_num_threads = 1
-        logger.info('MOPAC will use {} threads.'.format(mopac_num_threads))
+        self.logger.info(f'MOPAC will use {mopac_num_threads} threads.')
 
         env = {
             'MKL_NUM_THREADS': str(mopac_mkl_num_threads),
@@ -298,7 +281,7 @@ class MOPAC(seamm.Node):
             node = node.next()
 
         files = {'mopac.dat': '\n'.join(input_data)}
-        logger.debug('mopac.dat:\n' + files['mopac.dat'])
+        self.logger.debug('mopac.dat:\n' + files['mopac.dat'])
         os.makedirs(self.directory, exist_ok=True)
         for filename in files:
             with open(os.path.join(self.directory, filename), mode='w') as fd:
@@ -313,12 +296,12 @@ class MOPAC(seamm.Node):
         )
 
         if not result:
-            logger.error('There was an error running MOPAC')
+            self.logger.error('There was an error running MOPAC')
             return None
 
-        logger.debug('\n' + pprint.pformat(result))
+        self.logger.debug('\n' + pprint.pformat(result))
 
-        logger.debug(
+        self.logger.debug(
             '\n\nOutput from MOPAC\n\n' + result['mopac.out']['data'] + '\n\n'
         )
 
@@ -386,9 +369,9 @@ class MOPAC(seamm.Node):
 
         for start, end in aux:
             data = self.parse_aux(lines_aux[start:end])
-            logger.debug('\nAUX file section {}'.format(section))
-            logger.debug('------------------')
-            logger.debug(pprint.pformat(data, width=170, compact=True))
+            self.logger.debug('\nAUX file section {}'.format(section))
+            self.logger.debug('------------------')
+            self.logger.debug(pprint.pformat(data, width=170, compact=True))
 
             # Add main citation for MOPAC
             if section == 1 and 'MOPAC_VERSION' in data:
