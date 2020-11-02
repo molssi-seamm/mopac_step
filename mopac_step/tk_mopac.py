@@ -2,7 +2,6 @@
 
 """The graphical part of a MOPAC step in SEAMM"""
 
-import configargparse
 import logging
 import seamm
 
@@ -32,43 +31,12 @@ class TkMOPAC(seamm.TkNode):
         """
         self.namespace = namespace
 
-        # Argument/config parsing
-        self.parser = configargparse.ArgParser(
-            auto_env_var_prefix='',
-            default_config_files=[
-                '/etc/seamm/mopac.ini',
-                '/etc/seamm/seamm.ini',
-                '~/.seamm/mopac.ini',
-                '~/.seamm/seamm.ini',
-            ]
-        )
-
-        self.parser.add_argument(
-            '--seamm-configfile',
-            is_config_file=True,
-            default=None,
-            help='a configuration file to override others'
-        )
-
-        # Options for this plugin
-        self.parser.add_argument(
-            "--tk-mopac-log-level",
-            default=configargparse.SUPPRESS,
-            choices=[
-                'CRITICAL', 'ERROR', 'WARNING', 'INFO', 'DEBUG', 'NOTSET'
-            ],
-            type=lambda string: string.upper(),
-            help="the logging level for the Tk_Mopac step"
-        )
-
-        self.options, self.unknown = self.parser.parse_known_args()
-
         # Set the logging level for this module if requested
-        if 'tk_mopac_log_level' in self.options:
-            logger.setLevel(self.options.tk_mopac_log_level)
-            logger.critical(
-                'Set log level to {}'.format(self.options.tk_mopac_log_level)
-            )
+        # if 'tk_mopac_log_level' in self.options:
+        #     logger.setLevel(self.options.tk_mopac_log_level)
+        #     logger.critical(
+        #         'Set log level to {}'.format(self.options.tk_mopac_log_level)
+        #     )
 
         # Call the constructor for the energy
         super().__init__(
