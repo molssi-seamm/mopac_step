@@ -19,14 +19,6 @@ job = printing.getPrinter()
 printer = printing.getPrinter('mopac')
 
 
-def upcase(string):
-    """Return an uppercase version of the string.
-
-    Used for the type argument in argparse/
-    """
-    return string.upper()
-
-
 class MOPAC(seamm.Node):
 
     def __init__(
