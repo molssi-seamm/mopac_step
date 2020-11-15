@@ -2,17 +2,21 @@
 
 """Setup and run MOPAC"""
 
+import calendar
 import cpuinfo
+import datetime
 import logging
+import os
+import os.path
+import pprint
+import re
+import string
+
 import seamm
 import seamm_util
 import seamm_util.printing as printing
 from seamm_util.printing import FormattedText as __
 import mopac_step
-import os
-import os.path
-import pprint
-import re
 
 logger = logging.getLogger(__name__)
 job = printing.getPrinter()
@@ -252,7 +256,7 @@ class MOPAC(seamm.Node):
             else:
                 tmp_structure = []
                 elements = system.atoms.symbols()
-                coordinates = system.atoms.coordinates()
+                coordinates = system.atoms.coordinates(fractionals=False)
                 if 'freeze' in system.atoms:
                     freeze = system.atoms['freeze']
                 else:
@@ -265,6 +269,18 @@ class MOPAC(seamm.Node):
                                    y, 0 if 'y' in frz else 1,
                                    z, 0 if 'z' in frz else 1)
                     tmp_structure.append(line)
+
+                if system.periodicity == 3:
+                    # The three translation vectors
+                    element = 'Tv'
+                    uvw = [[1, 0, 0], [0, 1, 0], [0, 0, 1]]
+                    XYZ = system.cell.cell().to_cartesians(uvw)
+                    for xyz in XYZ:
+                        x, y, z = xyz
+                        line = (
+                            '{:2} {: 12.8f} {:d} {: 12.8f} {:d} {: 12.8f} {:d}'
+                        ).format(element, x, 0, y, 0, z, 0)
+                        tmp_structure.append(line)
 
                 input_data.append(
                     '\n'.join(lines) + '\n' + '\n'.join(tmp_structure) + '\n'
@@ -359,6 +375,7 @@ class MOPAC(seamm.Node):
         node = self.subflowchart.get_node('1').next()
         section = 0
 
+        have_version = False
         for start, end in aux:
             data = self.parse_aux(lines_aux[start:end])
             self.logger.debug('\nAUX file section {}'.format(section))
@@ -366,9 +383,20 @@ class MOPAC(seamm.Node):
             self.logger.debug(pprint.pformat(data, width=170, compact=True))
 
             # Add main citation for MOPAC
-            if section == 1 and 'MOPAC_VERSION' in data:
+            if not have_version and 'MOPAC_VERSION' in data:
+                have_version = True
+                # like MOPAC2016.20.191M
+                release, version = data['MOPAC_VERSION'].split('.', maxsplit=1)
+                t = datetime.datetime.strptime(version[0:-1], '%y.%j')
+                year = t.year
+                month = t.month
+                template = string.Template(self._bibliography['Stewart_2016'])
+                month = calendar.month_abbr[int(month)].lower()
+                citation = template.substitute(
+                    month=month, version=version, year=year, release=release
+                )
                 self.references.cite(
-                    raw=self._bibliography['Stewart_2016'],
+                    raw=citation,
                     alias='mopac',
                     module='mopac_step',
                     level=1,
@@ -386,20 +414,33 @@ class MOPAC(seamm.Node):
             section += 1
 
         # Update the final structure
-        xyz = self.parse_arc(os.path.join(self.directory, 'mopac.arc'))
+        xyz, cell_vectors = self.parse_arc(
+            os.path.join(self.directory, 'mopac.arc')
+        )
         if xyz is not None:
             system = self.get_variable('_system')
-            xs = []
-            ys = []
-            zs = []
+
+            # Set cell first since working in Cartesians
+            if system.periodicity == 3:
+                u = cell_vectors[0]
+                v = cell_vectors[1]
+                w = cell_vectors[2]
+                # Currently only handle orthorhombic boxes....
+                if (
+                    abs(u[1]) > 0.001 or abs(u[2]) > 0.001 or
+                    abs(v[0]) > 0.001 or abs(v[2]) > 0.001 or
+                    abs(w[0]) > 0.001 or abs(w[1]) > 0.001
+                ):
+                    raise RuntimeError(
+                        'MOPAC cannot handle non-orthorhombic cells yet'
+                    )
+                system.cell.set_cell(u[0], v[1], w[2], 90.0, 90.0, 90.0)
+
+            new_xyz = []
             for tmp in xyz:
                 x, y, z = tmp
-                xs.append(float(x))
-                ys.append(float(y))
-                zs.append(float(z))
-            system.atoms['x'][0:] = xs
-            system.atoms['y'][0:] = ys
-            system.atoms['z'][0:] = zs
+                new_xyz.append([float(x), float(y), float(z)])
+            system.atoms.set_coordinates(new_xyz, fractionals=False)
 
             printer.normal(
                 self.indent +
@@ -420,6 +461,7 @@ class MOPAC(seamm.Node):
         coordinates : [n_atoms*[3]]
         """
         xyz = None
+        cell_vectors = []
         with open(filename, 'r') as fd:
             for line in fd:
                 if 'FINAL GEOMETRY OBTAINED' in line:
@@ -439,8 +481,13 @@ class MOPAC(seamm.Node):
                             break
                         if line[0] != '*':
                             symbol, x, fx, y, fy, z, fz = line.split()
-                            xyz.append([float(x), float(y), float(z)])
-        return xyz
+                            if symbol == 'Tv':
+                                cell_vectors.append(
+                                    [float(x), float(y), float(z)]
+                                )  # yapf: disable
+                            else:
+                                xyz.append([float(x), float(y), float(z)])
+        return xyz, cell_vectors
 
     def parse_aux(self, lines):
         """Digest a section of the aux file"""
@@ -549,7 +596,7 @@ class MOPAC(seamm.Node):
                 if properties[name]['type'] == 'integer':
                     value = int(rest)
                 elif properties[name]['type'] == 'float':
-                    value = float(self._sanitize_value(rest))
+                    value = float(self._sanitize_value(rest.strip()))
                 else:
                     value = rest.strip('"')
 

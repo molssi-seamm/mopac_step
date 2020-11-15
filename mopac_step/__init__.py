@@ -1266,6 +1266,16 @@ properties = {
         "dimensionality": "scalar",
         "type": "date_time"
     },
+    "DENSITY": {
+        "calculation": [
+            "energy",
+            "optimization",
+        ],
+        "description": "density",
+        "dimensionality": "scalar",
+        "type": "float",
+        "units": "g/mL"
+    },
     "DIPOLE": {
         "calculation": [
             "energy",
@@ -1540,6 +1550,16 @@ properties = {
         "dimensionality": ["n_dofs"],
         "type": "float",
         "units": "mdyne/Å"
+    },
+    "INITIAL_TRANS_VECTS": {
+        "calculation": [
+            "energy",
+            "optimization",
+        ],
+        "description": "initial translation vectors",
+        "dimensionality": [9],
+        "type": "float",
+        "units": "Å"
     },
     "IONIZATION_POTENTIAL": {
         "calculation": [
@@ -2040,6 +2060,26 @@ properties = {
         "description": "spin",
         "dimensionality": "scalar",
         "type": "float"
+    },
+    "TRANS_VECTS": {
+        "calculation": [
+            "energy",
+            "optimization",
+        ],
+        "description": "initial translation vectors",
+        "dimensionality": [9],
+        "type": "float",
+        "units": "Å"
+    },
+    "TRANS_VECTS_UPDATED": {
+        "calculation": [
+            "energy",
+            "optimization",
+        ],
+        "description": "initial translation vectors",
+        "dimensionality": [9],
+        "type": "float",
+        "units": "Å"
     },
     "VIB._EFF_MASS": {
         "calculation": [
