@@ -1,13 +1,48 @@
+This is an initial library of BibTex references for the lammps_step plug-in for SEAMM,
+generated automatically by the cookiecutter. You may wish to edit the first entry to correct some
+of the information.
+
+Add other references to the end of the file and add code in the plug-in to cite the references as
+appropriate. This is done with code like this:
+
+        self.references.cite(
+            raw=self._bibliography['doi:10.1002/jcc.21224'],
+            alias='packmol',
+            module='packmol_step',
+            level=1,
+            note='The principle PACKMOL citation.'
+        )
+
+which is typically in the run() method of the plug-in.
+
+The base node class in SEAMM automatically reads this list of references into a dictionary in
+self._bibliography with the key being the key of the BibTex entry -- usually the name on the
+first line of the entry after the 'article' or 'misc' (for software) keyword.
+
+See the documentation for the Reference Handler for the other arguments to cite().
+
+# End of initial comments #
+
+@Misc{mopac_step,
+	author = {Paul Saxe},
+	title = {MOPAC plug-in for SEAMM},
+	month = {$month},
+	year = {$year},
+	organization = {The Molecular Sciences Software Institute (MolSSI)},
+	url = {https://github.com/molssi-seamm/mopac_step},
+	address = {Virginia Tech, Blacksburg, VA, USA},
+	version = {$version}
+}
 @Misc{Stewart_2016,
 	key = {MOPAC_2016},
 	author = {Stewart, J. J. P.},
-	title = {MOPAC2016},
-	month = {aug},
-	year = 2019,
+	title = {$release},
+	month = {$month},
+	year = {$year},
 	organization = {Stewart Computational Chemistry},
 	url = {http://OpenMOPAC.net},
 	address = {Colorado Springs, CO, USA},
-	version = {version 19.255M},
+	version = {$version},
 }
 @article{Stewart_2012,
 	doi = {10.1007/s00894-012-1667-x},
