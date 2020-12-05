@@ -1,5 +1,3 @@
-configargparse
-pmw
 py-cpuinfo
-seamm>=0.9
-seamm-widgets>=0.9
+seamm
+seamm-widgets
