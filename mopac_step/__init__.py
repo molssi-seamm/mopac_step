@@ -1822,6 +1822,18 @@ properties = {
         "type": "float",
         "units": "10^-40*g*cm^2"
     },
+    "RESTRAINING_PRESSURE": {
+        "calculation": [
+            "energy",
+            "optimization",
+        ],
+        "description": "the pressure in the three lattice directions",
+        "dimensionality": [
+            3
+        ],
+        "type": "float",
+        "units": "GPa"
+    },
     "ROTAT_CONSTS": {
         "calculation": [
             "thermodynamics",

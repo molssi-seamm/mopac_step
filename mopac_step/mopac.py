@@ -279,7 +279,7 @@ class MOPAC(seamm.Node):
                         x, y, z = xyz
                         line = (
                             '{:2} {: 12.8f} {:d} {: 12.8f} {:d} {: 12.8f} {:d}'
-                        ).format(element, x, 0, y, 0, z, 0)
+                        ).format(element, x, 1, y, 1, z, 1)
                         tmp_structure.append(line)
 
                 input_data.append(
