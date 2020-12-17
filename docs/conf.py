@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-# mopac_step documentation build configuration file, created by
-# sphinx-quickstart on Tue Jul  9 22:26:36 2013.
+# mopac_step documentation build configuration file,
+# created by the SEAMM step cookiecutter.
 #
 # This file is execfile()d with the current directory set to its
 # containing dir.
@@ -41,7 +41,10 @@ import mopac_step  # noqa: E402
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
 extensions = [
-    'sphinx.ext.napoleon', 'sphinx.ext.autodoc', 'sphinx.ext.viewcode'
+    'sphinx.ext.autodoc',
+    'sphinx.ext.githubpages',
+    'sphinx.ext.napoleon',
+    'sphinx.ext.viewcode'
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -57,8 +60,8 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'MOPAC step'
-copyright = u"2018, Paul Saxe"
+project = u'MOPAC Step'
+copyright = u"2020, Molecular Sciences Software Institute (MolSSI)"
 
 # The version info for the project you're documenting, acts as replacement
 # for |version| and |release|, also used in various other places throughout
@@ -113,7 +116,7 @@ pygments_style = 'sphinx'
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
-html_theme = 'default'
+html_theme = 'sphinx_rtd_theme'
 
 # Theme options are theme-specific and customize the look and feel of a
 # theme further.  For a list of options available for each theme, see the
@@ -146,6 +149,12 @@ html_theme = 'default'
 # "default.css".
 html_static_path = ['_static']
 
+# These paths are either relative to html_static_path
+# or fully qualified paths (eg. https://...)
+html_css_files = [
+    'css/custom.css',
+]
+
 # If not '', a 'Last updated on:' timestamp is inserted at every page
 # bottom, using the given strftime format.
 # html_last_updated_fmt = '%b %d, %Y'
@@ -175,11 +184,11 @@ html_static_path = ['_static']
 
 # If true, "Created using Sphinx" is shown in the HTML footer.
 # Default is True.
-# html_show_sphinx = True
+html_show_sphinx = False
 
 # If true, "(C) Copyright ..." is shown in the HTML footer.
 # Default is True.
-# html_show_copyright = True
+html_show_copyright = False
 
 # If true, an OpenSearch description file will be output, and all pages
 # will contain a <link> tag referring to it.  The value of this option
@@ -211,7 +220,7 @@ latex_elements = {
 # [howto/manual]).
 latex_documents = [
     ('index', 'mopac_step.tex',
-     u'MOPAC step Documentation',
+     u'MOPAC Step Documentation',
      u'Paul Saxe', 'manual'),
 ]
 
@@ -242,7 +251,7 @@ latex_documents = [
 # (source start file, name, description, authors, manual section).
 man_pages = [
     ('index', 'mopac_step',
-     u'MOPAC step Documentation',
+     u'MOPAC Step Documentation',
      [u'Paul Saxe'], 1)
 ]
 
@@ -257,7 +266,7 @@ man_pages = [
 #  dir menu entry, description, category)
 texinfo_documents = [
     ('index', 'mopac_step',
-     u'MOPAC step Documentation',
+     u'MOPAC Step Documentation',
      u'Paul Saxe',
      'mopac_step',
      'One line description of project.',
