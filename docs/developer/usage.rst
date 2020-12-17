@@ -2,6 +2,6 @@
 Usage
 =====
 
-To use MOPAC step in a project::
+To use the MOPAC plug-in in a project::
 
     import mopac_step
