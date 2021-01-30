@@ -226,7 +226,8 @@ class Optimization(mopac_step.Energy):
 
         # Update the structure
         if 'ATOM_X_OPT' in data:
-            system = self.get_variable('_system')
+            system_db = self.get_variable('_system_db')
+            configuration = system_db.system.configuration
             xs = []
             ys = []
             zs = []
@@ -235,9 +236,9 @@ class Optimization(mopac_step.Energy):
                 xs.append(x)
                 ys.append(next(it))
                 zs.append(next(it))
-            system.atoms['x'][0:] = xs
-            system.atoms['y'][0:] = ys
-            system.atoms['z'][0:] = zs
+            configuration.atoms['x'][0:] = xs
+            configuration.atoms['y'][0:] = ys
+            configuration.atoms['z'][0:] = zs
 
         # The results
         if 'NUMBER_SCF_CYCLES' in data:
