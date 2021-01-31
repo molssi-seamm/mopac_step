@@ -1,0 +1,844 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>mopac_step package &mdash; MOPAC Step 2020.12.5+2.g014cabd documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/custom.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Contributing" href="contributing.html" />
+    <link rel="prev" title="mopac_step" href="modules.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> MOPAC Step
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2020.12.5+2.g014cabd
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../user/index.html">User Documentation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Developer Documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage.html">Usage</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="modules.html">mopac_step</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">mopac_step package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html">Contributing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../authors.html">Credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../history.html">History</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://molssi-seamm.github.io">Main SEAMM documentation</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">MOPAC Step</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="index.html">Developer Documentation</a> &raquo;</li>
+        
+          <li><a href="modules.html">mopac_step</a> &raquo;</li>
+        
+      <li>mopac_step package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/developer/mopac_step.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="mopac-step-package">
+<h1>mopac_step package<a class="headerlink" href="#mopac-step-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-mopac_step.energy">
+<span id="mopac-step-energy-module"></span><h2>mopac_step.energy module<a class="headerlink" href="#module-mopac_step.energy" title="Permalink to this headline">¶</a></h2>
+<p>Setup and run MOPAC</p>
+<dl class="py class">
+<dt id="mopac_step.energy.Energy">
+<em class="property">class </em><code class="sig-prename descclassname">mopac_step.energy.</code><code class="sig-name descname">Energy</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">flowchart</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">title</span><span class="o">=</span><span class="default_value">'Energy'</span></em>, <em class="sig-param"><span class="n">extension</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mopac_step/energy.html#Energy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mopac_step.energy.Energy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">seamm.node.Node</span></code></p>
+<dl class="py method">
+<dt id="mopac_step.energy.Energy.analyze">
+<code class="sig-name descname">analyze</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">indent</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">data</span><span class="o">=</span><span class="default_value">{}</span></em>, <em class="sig-param"><span class="n">out</span><span class="o">=</span><span class="default_value">[]</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mopac_step/energy.html#Energy.analyze"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mopac_step.energy.Energy.analyze" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse the output and generating the text output and store the
+data in variables for other stages to access</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mopac_step.energy.Energy.description_text">
+<code class="sig-name descname">description_text</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">P</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mopac_step/energy.html#Energy.description_text"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mopac_step.energy.Energy.description_text" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prepare information about what this node will do</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mopac_step.energy.Energy.get_input">
+<code class="sig-name descname">get_input</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mopac_step/energy.html#Energy.get_input"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mopac_step.energy.Energy.get_input" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the input for an energy calculation for MOPAC</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mopac_step.energy.Energy.git_revision">
+<em class="property">property </em><code class="sig-name descname">git_revision</code><a class="headerlink" href="#mopac_step.energy.Energy.git_revision" title="Permalink to this definition">¶</a></dt>
+<dd><p>The git version of this module.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mopac_step.energy.Energy.header">
+<em class="property">property </em><code class="sig-name descname">header</code><a class="headerlink" href="#mopac_step.energy.Energy.header" title="Permalink to this definition">¶</a></dt>
+<dd><p>A printable header for this section of output</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mopac_step.energy.Energy.version">
+<em class="property">property </em><code class="sig-name descname">version</code><a class="headerlink" href="#mopac_step.energy.Energy.version" title="Permalink to this definition">¶</a></dt>
+<dd><p>The semantic version of this module.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-mopac_step.energy_parameters">
+<span id="mopac-step-energy-parameters-module"></span><h2>mopac_step.energy_parameters module<a class="headerlink" href="#module-mopac_step.energy_parameters" title="Permalink to this headline">¶</a></h2>
+<p>Control parameters for a MOPAC single-point energy calculation</p>
+<dl class="py class">
+<dt id="mopac_step.energy_parameters.EnergyParameters">
+<em class="property">class </em><code class="sig-prename descclassname">mopac_step.energy_parameters.</code><code class="sig-name descname">EnergyParameters</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">defaults</span><span class="o">=</span><span class="default_value">{}</span></em>, <em class="sig-param"><span class="n">data</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mopac_step/energy_parameters.html#EnergyParameters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mopac_step.energy_parameters.EnergyParameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">seamm.parameters.Parameters</span></code></p>
+<p>The control parameters for creating a structure from SMILES</p>
+<dl class="py attribute">
+<dt id="mopac_step.energy_parameters.EnergyParameters.parameters">
+<code class="sig-name descname">parameters</code><em class="property"> = {'absolute': {'default': '1.0E-07', 'default_units': 'kcal/mol', 'description': 'criterion', 'enumeration': (), 'format_string': '', 'help_text': 'The SCF convergence criterion, based on the change in energy between iterations.', 'kind': 'float'}, 'calculate gradients': {'default': 'yes', 'default_units': '', 'description': 'Calculate gradients:', 'enumeration': ('yes', 'no'), 'format_string': 's', 'help_text': 'Whether to calculate the gradients.', 'kind': 'enumeration'}, 'convergence': {'default': 'normal', 'default_units': '', 'description': 'Convergence criterion:', 'enumeration': ('normal', 'precise', 'relative', 'absolute'), 'format_string': 's', 'help_text': &quot;The convergence criterion for the energy. * 'normal' is the default level, 1.0E-04  kcal/mol for SCF. For force contants, transition  state searches, etc. the default is 1.0E-07.* 'precise' tightens up the criterion by a factor of 100.* 'relative' multiplies the SCF convergence criterion by the amount given. Values &gt;1 loosen the tolerance, while values &lt;1 tighten it.* 'absolute' sets the criterion directly.&quot;, 'kind': 'enumeration'}, 'create tables': {'default': 'yes', 'default_units': '', 'description': 'Create tables as needed:', 'enumeration': ('yes', 'no'), 'format_string': '', 'help_text': 'Whether to create tables as needed for results being saved into tables.', 'kind': 'boolean'}, 'extra keywords': {'default': [], 'default_units': '', 'description': 'Extra keywords', 'enumeration': (), 'format_string': '', 'help_text': 'Extra keywords to append to those from the GUI. This allows you to add to and override the GUI.', 'kind': 'list'}, 'hamiltonian': {'default': 'PM7', 'default_units': '', 'description': 'Hamiltonian:', 'enumeration': ('AM1', 'MNDO', 'MNDOD', 'PM3', 'PM6', 'PM6-D3', 'PM6-DH+', 'PM6-DH2', 'PM6-DH2X', 'PM6-D3H4', 'PM6-D3H4X', 'PM7', 'PM7-TS', 'RM1'), 'format_string': 's', 'help_text': 'The Hamiltonian (parameterization) to use.', 'kind': 'enumeration'}, 'relative': {'default': '0.1', 'default_units': '', 'description': 'factor', 'enumeration': (), 'format_string': '', 'help_text': 'The factor to multiply the default SCF convergence criterion. Values &gt;1 make the criterion looser; &lt; 1, tighter.', 'kind': 'float'}, 'results': {'default': {}, 'default_units': '', 'description': 'results', 'enumeration': (), 'format_string': '', 'help_text': 'The results to save to variables or in tables. ', 'kind': 'dictionary'}, 'structure': {'default': 'default', 'default_units': '', 'description': 'Structure:', 'enumeration': ('default', 'initial', 'current'), 'format_string': 's', 'help_text': 'The structure to use. By default, for the first calculation the incoming structure is used, and subsequently that from the previous MOPAC steps.', 'kind': 'enumeration'}}</em><a class="headerlink" href="#mopac_step.energy_parameters.EnergyParameters.parameters" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-mopac_step.energy_step">
+<span id="mopac-step-energy-step-module"></span><h2>mopac_step.energy_step module<a class="headerlink" href="#module-mopac_step.energy_step" title="Permalink to this headline">¶</a></h2>
+<p>Main module.</p>
+<dl class="py class">
+<dt id="mopac_step.energy_step.EnergyStep">
+<em class="property">class </em><code class="sig-prename descclassname">mopac_step.energy_step.</code><code class="sig-name descname">EnergyStep</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">flowchart</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">gui</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mopac_step/energy_step.html#EnergyStep"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mopac_step.energy_step.EnergyStep" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt id="mopac_step.energy_step.EnergyStep.create_node">
+<code class="sig-name descname">create_node</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">flowchart</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mopac_step/energy_step.html#EnergyStep.create_node"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mopac_step.energy_step.EnergyStep.create_node" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the new node object</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mopac_step.energy_step.EnergyStep.create_tk_node">
+<code class="sig-name descname">create_tk_node</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">canvas</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mopac_step/energy_step.html#EnergyStep.create_tk_node"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mopac_step.energy_step.EnergyStep.create_tk_node" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the graphical Tk node object</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mopac_step.energy_step.EnergyStep.description">
+<code class="sig-name descname">description</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mopac_step/energy_step.html#EnergyStep.description"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mopac_step.energy_step.EnergyStep.description" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a description of what this extension does</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="mopac_step.energy_step.EnergyStep.my_description">
+<code class="sig-name descname">my_description</code><em class="property"> = {'description': 'A single-point energy calculation', 'group': 'Calculations', 'name': 'Energy'}</em><a class="headerlink" href="#mopac_step.energy_step.EnergyStep.my_description" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-mopac_step.ir">
+<span id="mopac-step-ir-module"></span><h2>mopac_step.ir module<a class="headerlink" href="#module-mopac_step.ir" title="Permalink to this headline">¶</a></h2>
+<p>Run a vibrational frequency calculation in MOPAC</p>
+<dl class="py class">
+<dt id="mopac_step.ir.IR">
+<em class="property">class </em><code class="sig-prename descclassname">mopac_step.ir.</code><code class="sig-name descname">IR</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">flowchart</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">title</span><span class="o">=</span><span class="default_value">'IR Spectrum'</span></em>, <em class="sig-param"><span class="n">extension</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mopac_step/ir.html#IR"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mopac_step.ir.IR" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#mopac_step.energy.Energy" title="mopac_step.energy.Energy"><code class="xref py py-class docutils literal notranslate"><span class="pre">mopac_step.energy.Energy</span></code></a></p>
+<dl class="py method">
+<dt id="mopac_step.ir.IR.analyze">
+<code class="sig-name descname">analyze</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">indent</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">data</span><span class="o">=</span><span class="default_value">{}</span></em>, <em class="sig-param"><span class="n">out</span><span class="o">=</span><span class="default_value">[]</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mopac_step/ir.html#IR.analyze"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mopac_step.ir.IR.analyze" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse the output and generating the text output and store the
+data in variables for other stages to access</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mopac_step.ir.IR.description_text">
+<code class="sig-name descname">description_text</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">P</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mopac_step/ir.html#IR.description_text"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mopac_step.ir.IR.description_text" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prepare information about what this node will do</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mopac_step.ir.IR.get_input">
+<code class="sig-name descname">get_input</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mopac_step/ir.html#IR.get_input"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mopac_step.ir.IR.get_input" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the input for an optimization MOPAC</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-mopac_step.ir_parameters">
+<span id="mopac-step-ir-parameters-module"></span><h2>mopac_step.ir_parameters module<a class="headerlink" href="#module-mopac_step.ir_parameters" title="Permalink to this headline">¶</a></h2>
+<p>Control parameters for a MOPAC vibrational (IR/Raman) calculation</p>
+<dl class="py class">
+<dt id="mopac_step.ir_parameters.IRParameters">
+<em class="property">class </em><code class="sig-prename descclassname">mopac_step.ir_parameters.</code><code class="sig-name descname">IRParameters</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">defaults</span><span class="o">=</span><span class="default_value">{}</span></em>, <em class="sig-param"><span class="n">data</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mopac_step/ir_parameters.html#IRParameters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mopac_step.ir_parameters.IRParameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#mopac_step.energy_parameters.EnergyParameters" title="mopac_step.energy_parameters.EnergyParameters"><code class="xref py py-class docutils literal notranslate"><span class="pre">mopac_step.energy_parameters.EnergyParameters</span></code></a></p>
+<p>The control parameters for creating a structure from SMILES</p>
+<dl class="py attribute">
+<dt id="mopac_step.ir_parameters.IRParameters.parameters">
+<code class="sig-name descname">parameters</code><em class="property"> = {'let': {'default': 'no', 'default_units': '', 'description': 'Use structure even if not a minimum:', 'enumeration': ('yes', 'no'), 'format_string': '', 'group': '', 'help_text': &quot;Don't stop if the initial structure is not a minimum or other stationary point.&quot;, 'kind': 'boolean'}, 'trans': {'default': '0', 'default_units': '', 'description': 'Number of internal rotations to ignore:', 'enumeration': (), 'format_string': 'd', 'group': '', 'help_text': 'The number of internal rotations to ignore. A corresponding number of the lowest modes will be ignored, which is a first approximation.', 'kind': 'integer'}}</em><a class="headerlink" href="#mopac_step.ir_parameters.IRParameters.parameters" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-mopac_step.ir_step">
+<span id="mopac-step-ir-step-module"></span><h2>mopac_step.ir_step module<a class="headerlink" href="#module-mopac_step.ir_step" title="Permalink to this headline">¶</a></h2>
+<p>Main module.</p>
+<dl class="py class">
+<dt id="mopac_step.ir_step.IRStep">
+<em class="property">class </em><code class="sig-prename descclassname">mopac_step.ir_step.</code><code class="sig-name descname">IRStep</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">flowchart</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">gui</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mopac_step/ir_step.html#IRStep"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mopac_step.ir_step.IRStep" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt id="mopac_step.ir_step.IRStep.create_node">
+<code class="sig-name descname">create_node</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">flowchart</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mopac_step/ir_step.html#IRStep.create_node"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mopac_step.ir_step.IRStep.create_node" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the new node object</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mopac_step.ir_step.IRStep.create_tk_node">
+<code class="sig-name descname">create_tk_node</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">canvas</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mopac_step/ir_step.html#IRStep.create_tk_node"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mopac_step.ir_step.IRStep.create_tk_node" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the graphical Tk node object</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mopac_step.ir_step.IRStep.description">
+<code class="sig-name descname">description</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mopac_step/ir_step.html#IRStep.description"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mopac_step.ir_step.IRStep.description" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a description of what this extension does</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="mopac_step.ir_step.IRStep.my_description">
+<code class="sig-name descname">my_description</code><em class="property"> = {'description': 'Infrared (vibrational) spectrum', 'group': 'Calculations', 'name': 'IR Spectrum'}</em><a class="headerlink" href="#mopac_step.ir_step.IRStep.my_description" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-mopac_step.mopac">
+<span id="mopac-step-mopac-module"></span><h2>mopac_step.mopac module<a class="headerlink" href="#module-mopac_step.mopac" title="Permalink to this headline">¶</a></h2>
+<p>Setup and run MOPAC</p>
+<dl class="py class">
+<dt id="mopac_step.mopac.MOPAC">
+<em class="property">class </em><code class="sig-prename descclassname">mopac_step.mopac.</code><code class="sig-name descname">MOPAC</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">flowchart</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">namespace</span><span class="o">=</span><span class="default_value">'org.molssi.seamm.mopac'</span></em>, <em class="sig-param"><span class="n">extension</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mopac_step/mopac.html#MOPAC"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mopac_step.mopac.MOPAC" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">seamm.node.Node</span></code></p>
+<dl class="py method">
+<dt id="mopac_step.mopac.MOPAC.analyze">
+<code class="sig-name descname">analyze</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">indent</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">lines</span><span class="o">=</span><span class="default_value">[]</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mopac_step/mopac.html#MOPAC.analyze"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mopac_step.mopac.MOPAC.analyze" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read the results from MOPAC calculations and analyze them,
+putting key results into variables for subsequent use by
+other stages</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mopac_step.mopac.MOPAC.create_parser">
+<code class="sig-name descname">create_parser</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mopac_step/mopac.html#MOPAC.create_parser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mopac_step.mopac.MOPAC.create_parser" title="Permalink to this definition">¶</a></dt>
+<dd><p>Setup the command-line / config file parser</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mopac_step.mopac.MOPAC.description_text">
+<code class="sig-name descname">description_text</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">P</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mopac_step/mopac.html#MOPAC.description_text"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mopac_step.mopac.MOPAC.description_text" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a short description of this step.</p>
+<p>Return a nicely formatted string describing what this step will
+do.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Keyword Arguments</dt>
+<dd class="field-odd"><p><strong>P</strong> – a dictionary of parameter values, which may be variables
+or final values. If None, then the parameters values will
+be used as is.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mopac_step.mopac.MOPAC.git_revision">
+<em class="property">property </em><code class="sig-name descname">git_revision</code><a class="headerlink" href="#mopac_step.mopac.MOPAC.git_revision" title="Permalink to this definition">¶</a></dt>
+<dd><p>The git version of this module.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mopac_step.mopac.MOPAC.parse_arc">
+<code class="sig-name descname">parse_arc</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span><span class="o">=</span><span class="default_value">'mopac.arc'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mopac_step/mopac.html#MOPAC.parse_arc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mopac_step.mopac.MOPAC.parse_arc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Digest the ARC file and get the coordinates.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>filename</strong> (<em>str</em>) – The name of the ARC file</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>coordinates</strong></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>[n_atoms*[3]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mopac_step.mopac.MOPAC.parse_aux">
+<code class="sig-name descname">parse_aux</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">lines</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mopac_step/mopac.html#MOPAC.parse_aux"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mopac_step.mopac.MOPAC.parse_aux" title="Permalink to this definition">¶</a></dt>
+<dd><p>Digest a section of the aux file</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mopac_step.mopac.MOPAC.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mopac_step/mopac.html#MOPAC.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mopac_step.mopac.MOPAC.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run MOPAC</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mopac_step.mopac.MOPAC.set_id">
+<code class="sig-name descname">set_id</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">node_id</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mopac_step/mopac.html#MOPAC.set_id"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mopac_step.mopac.MOPAC.set_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the id for node to a given tuple</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mopac_step.mopac.MOPAC.version">
+<em class="property">property </em><code class="sig-name descname">version</code><a class="headerlink" href="#mopac_step.mopac.MOPAC.version" title="Permalink to this definition">¶</a></dt>
+<dd><p>The semantic version of this module.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-mopac_step.mopac_step">
+<span id="mopac-step-mopac-step-module"></span><h2>mopac_step.mopac_step module<a class="headerlink" href="#module-mopac_step.mopac_step" title="Permalink to this headline">¶</a></h2>
+<p>Main module.</p>
+<dl class="py class">
+<dt id="mopac_step.mopac_step.MOPACStep">
+<em class="property">class </em><code class="sig-prename descclassname">mopac_step.mopac_step.</code><code class="sig-name descname">MOPACStep</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">flowchart</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">gui</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mopac_step/mopac_step.html#MOPACStep"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mopac_step.mopac_step.MOPACStep" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt id="mopac_step.mopac_step.MOPACStep.create_node">
+<code class="sig-name descname">create_node</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">flowchart</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mopac_step/mopac_step.html#MOPACStep.create_node"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mopac_step.mopac_step.MOPACStep.create_node" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the new node object</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mopac_step.mopac_step.MOPACStep.create_tk_node">
+<code class="sig-name descname">create_tk_node</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">canvas</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mopac_step/mopac_step.html#MOPACStep.create_tk_node"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mopac_step.mopac_step.MOPACStep.create_tk_node" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the graphical Tk node object</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mopac_step.mopac_step.MOPACStep.description">
+<code class="sig-name descname">description</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mopac_step/mopac_step.html#MOPACStep.description"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mopac_step.mopac_step.MOPACStep.description" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a description of what this extension does</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="mopac_step.mopac_step.MOPACStep.my_description">
+<code class="sig-name descname">my_description</code><em class="property"> = {'description': 'Setup and run MOPAC', 'group': 'Simulations', 'name': 'MolSSI MOPAC'}</em><a class="headerlink" href="#mopac_step.mopac_step.MOPACStep.my_description" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-mopac_step.optimization">
+<span id="mopac-step-optimization-module"></span><h2>mopac_step.optimization module<a class="headerlink" href="#module-mopac_step.optimization" title="Permalink to this headline">¶</a></h2>
+<p>Setup and run MOPAC</p>
+<dl class="py class">
+<dt id="mopac_step.optimization.Optimization">
+<em class="property">class </em><code class="sig-prename descclassname">mopac_step.optimization.</code><code class="sig-name descname">Optimization</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">flowchart</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">title</span><span class="o">=</span><span class="default_value">'Optimization'</span></em>, <em class="sig-param"><span class="n">extension</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mopac_step/optimization.html#Optimization"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mopac_step.optimization.Optimization" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#mopac_step.energy.Energy" title="mopac_step.energy.Energy"><code class="xref py py-class docutils literal notranslate"><span class="pre">mopac_step.energy.Energy</span></code></a></p>
+<dl class="py method">
+<dt id="mopac_step.optimization.Optimization.analyze">
+<code class="sig-name descname">analyze</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">indent</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">data</span><span class="o">=</span><span class="default_value">{}</span></em>, <em class="sig-param"><span class="n">out</span><span class="o">=</span><span class="default_value">[]</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mopac_step/optimization.html#Optimization.analyze"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mopac_step.optimization.Optimization.analyze" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse the output and generating the text output and store the
+data in variables for other stages to access</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mopac_step.optimization.Optimization.description_text">
+<code class="sig-name descname">description_text</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">P</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mopac_step/optimization.html#Optimization.description_text"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mopac_step.optimization.Optimization.description_text" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prepare information about what this node will do</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mopac_step.optimization.Optimization.get_input">
+<code class="sig-name descname">get_input</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mopac_step/optimization.html#Optimization.get_input"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mopac_step.optimization.Optimization.get_input" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the input for an optimization MOPAC</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-mopac_step.optimization_parameters">
+<span id="mopac-step-optimization-parameters-module"></span><h2>mopac_step.optimization_parameters module<a class="headerlink" href="#module-mopac_step.optimization_parameters" title="Permalink to this headline">¶</a></h2>
+<p>Control parameters for a MOPAC optimization calculation</p>
+<dl class="py class">
+<dt id="mopac_step.optimization_parameters.OptimizationParameters">
+<em class="property">class </em><code class="sig-prename descclassname">mopac_step.optimization_parameters.</code><code class="sig-name descname">OptimizationParameters</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">defaults</span><span class="o">=</span><span class="default_value">{}</span></em>, <em class="sig-param"><span class="n">data</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mopac_step/optimization_parameters.html#OptimizationParameters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mopac_step.optimization_parameters.OptimizationParameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#mopac_step.energy_parameters.EnergyParameters" title="mopac_step.energy_parameters.EnergyParameters"><code class="xref py py-class docutils literal notranslate"><span class="pre">mopac_step.energy_parameters.EnergyParameters</span></code></a></p>
+<p>The control parameters for optimization in MOPAC</p>
+<dl class="py attribute">
+<dt id="mopac_step.optimization_parameters.OptimizationParameters.parameters">
+<code class="sig-name descname">parameters</code><em class="property"> = {'cycles': {'default': 'unlimited', 'default_units': '', 'description': 'Maximum steps:', 'enumeration': ('unlimited',), 'format_string': '', 'help_text': &quot;The maximum number of steps to take in the optimization. 'unlimited' means there is no definit limit; however, the time-limit of the job will stop the job.&quot;, 'kind': 'integer'}, 'dmax': {'default': '0.2', 'default_units': '', 'description': 'Trust radius:', 'enumeration': (), 'format_string': '.1f', 'help_text': 'The trust radius in the EF method. The algorithm updates this based on progress. The default is normally fine, but in some difficult cases reducing to 0.1 or 0.05 may be useful.', 'kind': 'float'}, 'gnorm': {'default': '1.0', 'default_units': 'kcal/mol/Å', 'description': 'Convergence criterion:', 'enumeration': (), 'format_string': '.1f', 'help_text': &quot;The convergence criterion for the optimization. This is controlled in part by the overall convergence criterion:* 'normal' is the default level, 1.0  kcal/mol/Å.* 'precise' tightens up the criterion by a factor of 100.* 'absolute' uses the value set here.&quot;, 'kind': 'float'}, 'method': {'default': 'default', 'default_units': '', 'description': 'Optimization algorithm:', 'enumeration': ('default', 'EF -- eigenvector following', 'BFGS -- Broyden-Fletcher-Goldfarb-Shanno algorithm', 'L-BFGS -- smaller memory BFGS for larger systems', 'TS -- transition state with EF method', 'SIGMA -- transition state with McIver-Komornicki method', &quot;NLLSQ -- nonlinear least squares of gradient, Bartel's method&quot;), 'format_string': 's', 'help_text': 'The optimization algorithm to use.', 'kind': 'enumeration'}, 'recalc': {'default': 'never', 'default_units': '', 'description': 'Recalculate Hessian:', 'enumeration': ('never',), 'format_string': '', 'help_text': 'How often to recalculate the Hessian (in steps) when using the EF method. Smaller values help convergence but are expensive. 10 with a trust radius of 0.1 is useful for difficult cases, while 1 and a trust radius of 0.05 will always find a stationary point if one exists.', 'kind': 'integer'}}</em><a class="headerlink" href="#mopac_step.optimization_parameters.OptimizationParameters.parameters" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-mopac_step.optimization_step">
+<span id="mopac-step-optimization-step-module"></span><h2>mopac_step.optimization_step module<a class="headerlink" href="#module-mopac_step.optimization_step" title="Permalink to this headline">¶</a></h2>
+<p>Main module.</p>
+<dl class="py class">
+<dt id="mopac_step.optimization_step.OptimizationStep">
+<em class="property">class </em><code class="sig-prename descclassname">mopac_step.optimization_step.</code><code class="sig-name descname">OptimizationStep</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">flowchart</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">gui</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mopac_step/optimization_step.html#OptimizationStep"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mopac_step.optimization_step.OptimizationStep" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt id="mopac_step.optimization_step.OptimizationStep.create_node">
+<code class="sig-name descname">create_node</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">flowchart</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mopac_step/optimization_step.html#OptimizationStep.create_node"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mopac_step.optimization_step.OptimizationStep.create_node" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the new node object</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mopac_step.optimization_step.OptimizationStep.create_tk_node">
+<code class="sig-name descname">create_tk_node</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">canvas</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mopac_step/optimization_step.html#OptimizationStep.create_tk_node"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mopac_step.optimization_step.OptimizationStep.create_tk_node" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the graphical Tk node object</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mopac_step.optimization_step.OptimizationStep.description">
+<code class="sig-name descname">description</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mopac_step/optimization_step.html#OptimizationStep.description"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mopac_step.optimization_step.OptimizationStep.description" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a description of what this extension does</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="mopac_step.optimization_step.OptimizationStep.my_description">
+<code class="sig-name descname">my_description</code><em class="property"> = {'description': 'Optimization of the structure', 'group': 'Calculations', 'name': 'Optimization'}</em><a class="headerlink" href="#mopac_step.optimization_step.OptimizationStep.my_description" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-mopac_step.thermodynamics">
+<span id="mopac-step-thermodynamics-module"></span><h2>mopac_step.thermodynamics module<a class="headerlink" href="#module-mopac_step.thermodynamics" title="Permalink to this headline">¶</a></h2>
+<p>Run a thermodynamics calculation in MOPAC</p>
+<dl class="py class">
+<dt id="mopac_step.thermodynamics.Thermodynamics">
+<em class="property">class </em><code class="sig-prename descclassname">mopac_step.thermodynamics.</code><code class="sig-name descname">Thermodynamics</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">flowchart</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">title</span><span class="o">=</span><span class="default_value">'Thermodynamics'</span></em>, <em class="sig-param"><span class="n">extension</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mopac_step/thermodynamics.html#Thermodynamics"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mopac_step.thermodynamics.Thermodynamics" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#mopac_step.energy.Energy" title="mopac_step.energy.Energy"><code class="xref py py-class docutils literal notranslate"><span class="pre">mopac_step.energy.Energy</span></code></a></p>
+<dl class="py method">
+<dt id="mopac_step.thermodynamics.Thermodynamics.analyze">
+<code class="sig-name descname">analyze</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">indent</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">data</span><span class="o">=</span><span class="default_value">{}</span></em>, <em class="sig-param"><span class="n">out</span><span class="o">=</span><span class="default_value">[]</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mopac_step/thermodynamics.html#Thermodynamics.analyze"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mopac_step.thermodynamics.Thermodynamics.analyze" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse the output and generating the text output and store the
+data in variables for other stages to access</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mopac_step.thermodynamics.Thermodynamics.description_text">
+<code class="sig-name descname">description_text</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">P</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mopac_step/thermodynamics.html#Thermodynamics.description_text"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mopac_step.thermodynamics.Thermodynamics.description_text" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prepare information about what this node will do</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mopac_step.thermodynamics.Thermodynamics.get_input">
+<code class="sig-name descname">get_input</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mopac_step/thermodynamics.html#Thermodynamics.get_input"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mopac_step.thermodynamics.Thermodynamics.get_input" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the input for thermodynamics in MOPAC</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-mopac_step.thermodynamics_parameters">
+<span id="mopac-step-thermodynamics-parameters-module"></span><h2>mopac_step.thermodynamics_parameters module<a class="headerlink" href="#module-mopac_step.thermodynamics_parameters" title="Permalink to this headline">¶</a></h2>
+<p>Control parameters for a MOPAC thermodynamics calculation</p>
+<dl class="py class">
+<dt id="mopac_step.thermodynamics_parameters.ThermodynamicsParameters">
+<em class="property">class </em><code class="sig-prename descclassname">mopac_step.thermodynamics_parameters.</code><code class="sig-name descname">ThermodynamicsParameters</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">defaults</span><span class="o">=</span><span class="default_value">{}</span></em>, <em class="sig-param"><span class="n">data</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mopac_step/thermodynamics_parameters.html#ThermodynamicsParameters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mopac_step.thermodynamics_parameters.ThermodynamicsParameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#mopac_step.energy_parameters.EnergyParameters" title="mopac_step.energy_parameters.EnergyParameters"><code class="xref py py-class docutils literal notranslate"><span class="pre">mopac_step.energy_parameters.EnergyParameters</span></code></a></p>
+<p>The control parameters for creating a structure from SMILES</p>
+<dl class="py attribute">
+<dt id="mopac_step.thermodynamics_parameters.ThermodynamicsParameters.parameters">
+<code class="sig-name descname">parameters</code><em class="property"> = {'Tmax': {'default': '400', 'default_units': 'K', 'description': 'Maximum temperature:', 'enumeration': (), 'format_string': '.1f', 'help_text': 'The maximum temperature for the thermodynamic functions.', 'kind': 'float'}, 'Tmin': {'default': '200', 'default_units': 'K', 'description': 'Minimum temperature:', 'enumeration': (), 'format_string': '.1f', 'help_text': 'The minimum temperature for the thermodynamic functions.', 'kind': 'float'}, 'Tstep': {'default': '10', 'default_units': 'K', 'description': 'Temperature interval:', 'enumeration': (), 'format_string': '.1f', 'help_text': 'The interval between temperatures for the thermodynamic functions.', 'kind': 'float'}, 'trans': {'default': '0', 'default_units': '', 'description': 'Number of internal rotations to ignore:', 'enumeration': (), 'format_string': 'd', 'help_text': 'The number of internal rotations to ignore. A corresponding number of the lowest modes will be ignored, which is a first approximation.', 'kind': 'integer'}}</em><a class="headerlink" href="#mopac_step.thermodynamics_parameters.ThermodynamicsParameters.parameters" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-mopac_step.thermodynamics_step">
+<span id="mopac-step-thermodynamics-step-module"></span><h2>mopac_step.thermodynamics_step module<a class="headerlink" href="#module-mopac_step.thermodynamics_step" title="Permalink to this headline">¶</a></h2>
+<p>Main module.</p>
+<dl class="py class">
+<dt id="mopac_step.thermodynamics_step.ThermodynamicsStep">
+<em class="property">class </em><code class="sig-prename descclassname">mopac_step.thermodynamics_step.</code><code class="sig-name descname">ThermodynamicsStep</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">flowchart</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">gui</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mopac_step/thermodynamics_step.html#ThermodynamicsStep"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mopac_step.thermodynamics_step.ThermodynamicsStep" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt id="mopac_step.thermodynamics_step.ThermodynamicsStep.create_node">
+<code class="sig-name descname">create_node</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">flowchart</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mopac_step/thermodynamics_step.html#ThermodynamicsStep.create_node"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mopac_step.thermodynamics_step.ThermodynamicsStep.create_node" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the new node object</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mopac_step.thermodynamics_step.ThermodynamicsStep.create_tk_node">
+<code class="sig-name descname">create_tk_node</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">canvas</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mopac_step/thermodynamics_step.html#ThermodynamicsStep.create_tk_node"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mopac_step.thermodynamics_step.ThermodynamicsStep.create_tk_node" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the graphical Tk node object</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mopac_step.thermodynamics_step.ThermodynamicsStep.description">
+<code class="sig-name descname">description</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mopac_step/thermodynamics_step.html#ThermodynamicsStep.description"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mopac_step.thermodynamics_step.ThermodynamicsStep.description" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a description of what this extension does</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="mopac_step.thermodynamics_step.ThermodynamicsStep.my_description">
+<code class="sig-name descname">my_description</code><em class="property"> = {'description': 'Harmonic approximation to the thermodynamic functions', 'group': 'Calculations', 'name': 'Thermodynamic functions'}</em><a class="headerlink" href="#mopac_step.thermodynamics_step.ThermodynamicsStep.my_description" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-mopac_step.tk_energy">
+<span id="mopac-step-tk-energy-module"></span><h2>mopac_step.tk_energy module<a class="headerlink" href="#module-mopac_step.tk_energy" title="Permalink to this headline">¶</a></h2>
+<p>The graphical part of a MOPAC Energy node</p>
+<dl class="py class">
+<dt id="mopac_step.tk_energy.TkEnergy">
+<em class="property">class </em><code class="sig-prename descclassname">mopac_step.tk_energy.</code><code class="sig-name descname">TkEnergy</code><span class="sig-paren">(</span><em class="sig-param">tk_flowchart=None</em>, <em class="sig-param">node=None</em>, <em class="sig-param">canvas=None</em>, <em class="sig-param">x=120</em>, <em class="sig-param">y=20</em>, <em class="sig-param">w=200</em>, <em class="sig-param">h=50</em>, <em class="sig-param">my_logger=&lt;Logger mopac_step.tk_energy (WARNING)&gt;</em>, <em class="sig-param">keyword_metadata=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mopac_step/tk_energy.html#TkEnergy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mopac_step.tk_energy.TkEnergy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">seamm.tk_node.TkNode</span></code></p>
+<dl class="py method">
+<dt id="mopac_step.tk_energy.TkEnergy.create_dialog">
+<code class="sig-name descname">create_dialog</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">title</span><span class="o">=</span><span class="default_value">'Edit MOPAC Energy Step'</span></em>, <em class="sig-param"><span class="n">calculation</span><span class="o">=</span><span class="default_value">'energy'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mopac_step/tk_energy.html#TkEnergy.create_dialog"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mopac_step.tk_energy.TkEnergy.create_dialog" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create the dialog!</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mopac_step.tk_energy.TkEnergy.reset_dialog">
+<code class="sig-name descname">reset_dialog</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">widget</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mopac_step/tk_energy.html#TkEnergy.reset_dialog"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mopac_step.tk_energy.TkEnergy.reset_dialog" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reset the layout of the dialog as needed for the parameters.</p>
+<p>In this base class this does nothing. Override as needed in the
+subclasses derived from this class.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mopac_step.tk_energy.TkEnergy.right_click">
+<code class="sig-name descname">right_click</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">event</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mopac_step/tk_energy.html#TkEnergy.right_click"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mopac_step.tk_energy.TkEnergy.right_click" title="Permalink to this definition">¶</a></dt>
+<dd><p>Probably need to add our dialog…</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-mopac_step.tk_ir">
+<span id="mopac-step-tk-ir-module"></span><h2>mopac_step.tk_ir module<a class="headerlink" href="#module-mopac_step.tk_ir" title="Permalink to this headline">¶</a></h2>
+<p>The graphical part of a MOPAC vibrational node</p>
+<dl class="py class">
+<dt id="mopac_step.tk_ir.TkIR">
+<em class="property">class </em><code class="sig-prename descclassname">mopac_step.tk_ir.</code><code class="sig-name descname">TkIR</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tk_flowchart</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">node</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">canvas</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">x</span><span class="o">=</span><span class="default_value">120</span></em>, <em class="sig-param"><span class="n">y</span><span class="o">=</span><span class="default_value">20</span></em>, <em class="sig-param"><span class="n">w</span><span class="o">=</span><span class="default_value">200</span></em>, <em class="sig-param"><span class="n">h</span><span class="o">=</span><span class="default_value">50</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mopac_step/tk_ir.html#TkIR"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mopac_step.tk_ir.TkIR" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#mopac_step.tk_energy.TkEnergy" title="mopac_step.tk_energy.TkEnergy"><code class="xref py py-class docutils literal notranslate"><span class="pre">mopac_step.tk_energy.TkEnergy</span></code></a></p>
+<dl class="py method">
+<dt id="mopac_step.tk_ir.TkIR.create_dialog">
+<code class="sig-name descname">create_dialog</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">title</span><span class="o">=</span><span class="default_value">'MOPAC Infrared (Vibrational) Spectrum'</span></em>, <em class="sig-param"><span class="n">calculation</span><span class="o">=</span><span class="default_value">'vibrations'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mopac_step/tk_ir.html#TkIR.create_dialog"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mopac_step.tk_ir.TkIR.create_dialog" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create the dialog!</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mopac_step.tk_ir.TkIR.reset_dialog">
+<code class="sig-name descname">reset_dialog</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">widget</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mopac_step/tk_ir.html#TkIR.reset_dialog"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mopac_step.tk_ir.TkIR.reset_dialog" title="Permalink to this definition">¶</a></dt>
+<dd><p>Layout the widgets in the main frame</p>
+<p>We’ll let ‘TkEnergy’ layout the initial set of widgets,
+then add the extra widgets for controlling optimization</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-mopac_step.tk_mopac">
+<span id="mopac-step-tk-mopac-module"></span><h2>mopac_step.tk_mopac module<a class="headerlink" href="#module-mopac_step.tk_mopac" title="Permalink to this headline">¶</a></h2>
+<p>The graphical part of a MOPAC step in SEAMM</p>
+<dl class="py class">
+<dt id="mopac_step.tk_mopac.TkMOPAC">
+<em class="property">class </em><code class="sig-prename descclassname">mopac_step.tk_mopac.</code><code class="sig-name descname">TkMOPAC</code><span class="sig-paren">(</span><em class="sig-param">tk_flowchart=None</em>, <em class="sig-param">node=None</em>, <em class="sig-param">canvas=None</em>, <em class="sig-param">namespace='org.molssi.seamm.mopac.tk'</em>, <em class="sig-param">x=120</em>, <em class="sig-param">y=20</em>, <em class="sig-param">w=200</em>, <em class="sig-param">h=50</em>, <em class="sig-param">my_logger=&lt;Logger mopac_step.tk_mopac (WARNING)&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mopac_step/tk_mopac.html#TkMOPAC"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mopac_step.tk_mopac.TkMOPAC" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">seamm.tk_node.TkNode</span></code></p>
+<p>The node_class is the class of the ‘real’ node that this
+class is the Tk graphics partner for</p>
+<dl class="py method">
+<dt id="mopac_step.tk_mopac.TkMOPAC.create_dialog">
+<code class="sig-name descname">create_dialog</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mopac_step/tk_mopac.html#TkMOPAC.create_dialog"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mopac_step.tk_mopac.TkMOPAC.create_dialog" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create the dialog!</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mopac_step.tk_mopac.TkMOPAC.from_flowchart">
+<code class="sig-name descname">from_flowchart</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tk_flowchart</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">flowchart</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mopac_step/tk_mopac.html#TkMOPAC.from_flowchart"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mopac_step.tk_mopac.TkMOPAC.from_flowchart" title="Permalink to this definition">¶</a></dt>
+<dd><p>Recreate the graphics from the non-graphical flowchart.
+Only used in nodes that contain flowchart</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mopac_step.tk_mopac.TkMOPAC.right_click">
+<code class="sig-name descname">right_click</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">event</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mopac_step/tk_mopac.html#TkMOPAC.right_click"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mopac_step.tk_mopac.TkMOPAC.right_click" title="Permalink to this definition">¶</a></dt>
+<dd><p>Probably need to add our dialog…</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mopac_step.tk_mopac.TkMOPAC.update_flowchart">
+<code class="sig-name descname">update_flowchart</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tk_flowchart</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">flowchart</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mopac_step/tk_mopac.html#TkMOPAC.update_flowchart"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mopac_step.tk_mopac.TkMOPAC.update_flowchart" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the nongraphical flowchart. Only used in nodes that contain
+flowcharts</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-mopac_step.tk_optimization">
+<span id="mopac-step-tk-optimization-module"></span><h2>mopac_step.tk_optimization module<a class="headerlink" href="#module-mopac_step.tk_optimization" title="Permalink to this headline">¶</a></h2>
+<p>The graphical part of a MOPAC Energy node</p>
+<dl class="py class">
+<dt id="mopac_step.tk_optimization.TkOptimization">
+<em class="property">class </em><code class="sig-prename descclassname">mopac_step.tk_optimization.</code><code class="sig-name descname">TkOptimization</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tk_flowchart</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">node</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">canvas</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">x</span><span class="o">=</span><span class="default_value">120</span></em>, <em class="sig-param"><span class="n">y</span><span class="o">=</span><span class="default_value">20</span></em>, <em class="sig-param"><span class="n">w</span><span class="o">=</span><span class="default_value">200</span></em>, <em class="sig-param"><span class="n">h</span><span class="o">=</span><span class="default_value">50</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mopac_step/tk_optimization.html#TkOptimization"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mopac_step.tk_optimization.TkOptimization" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#mopac_step.tk_energy.TkEnergy" title="mopac_step.tk_energy.TkEnergy"><code class="xref py py-class docutils literal notranslate"><span class="pre">mopac_step.tk_energy.TkEnergy</span></code></a></p>
+<dl class="py method">
+<dt id="mopac_step.tk_optimization.TkOptimization.create_dialog">
+<code class="sig-name descname">create_dialog</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">title</span><span class="o">=</span><span class="default_value">'MOPAC Optimization'</span></em>, <em class="sig-param"><span class="n">calculation</span><span class="o">=</span><span class="default_value">'optimization'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mopac_step/tk_optimization.html#TkOptimization.create_dialog"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mopac_step.tk_optimization.TkOptimization.create_dialog" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create the dialog!</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mopac_step.tk_optimization.TkOptimization.reset_dialog">
+<code class="sig-name descname">reset_dialog</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">widget</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mopac_step/tk_optimization.html#TkOptimization.reset_dialog"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mopac_step.tk_optimization.TkOptimization.reset_dialog" title="Permalink to this definition">¶</a></dt>
+<dd><p>Layout the widgets in the main frame</p>
+<p>We’ll let ‘TkEnergy’ layout the initial set of widgets,
+then add the extra widgets for controlling optimization</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mopac_step.tk_optimization.TkOptimization.right_click">
+<code class="sig-name descname">right_click</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">event</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mopac_step/tk_optimization.html#TkOptimization.right_click"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mopac_step.tk_optimization.TkOptimization.right_click" title="Permalink to this definition">¶</a></dt>
+<dd><p>Probably need to add our dialog…</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-mopac_step.tk_thermodynamics">
+<span id="mopac-step-tk-thermodynamics-module"></span><h2>mopac_step.tk_thermodynamics module<a class="headerlink" href="#module-mopac_step.tk_thermodynamics" title="Permalink to this headline">¶</a></h2>
+<p>The graphical part of a MOPAC Energy node</p>
+<dl class="py class">
+<dt id="mopac_step.tk_thermodynamics.TkThermodynamics">
+<em class="property">class </em><code class="sig-prename descclassname">mopac_step.tk_thermodynamics.</code><code class="sig-name descname">TkThermodynamics</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tk_flowchart</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">node</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">canvas</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">x</span><span class="o">=</span><span class="default_value">120</span></em>, <em class="sig-param"><span class="n">y</span><span class="o">=</span><span class="default_value">20</span></em>, <em class="sig-param"><span class="n">w</span><span class="o">=</span><span class="default_value">200</span></em>, <em class="sig-param"><span class="n">h</span><span class="o">=</span><span class="default_value">50</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mopac_step/tk_thermodynamics.html#TkThermodynamics"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mopac_step.tk_thermodynamics.TkThermodynamics" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#mopac_step.tk_energy.TkEnergy" title="mopac_step.tk_energy.TkEnergy"><code class="xref py py-class docutils literal notranslate"><span class="pre">mopac_step.tk_energy.TkEnergy</span></code></a></p>
+<dl class="py method">
+<dt id="mopac_step.tk_thermodynamics.TkThermodynamics.create_dialog">
+<code class="sig-name descname">create_dialog</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">title</span><span class="o">=</span><span class="default_value">'MOPAC Thermodynamic Functions'</span></em>, <em class="sig-param"><span class="n">calculation</span><span class="o">=</span><span class="default_value">'thermodynamics'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mopac_step/tk_thermodynamics.html#TkThermodynamics.create_dialog"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mopac_step.tk_thermodynamics.TkThermodynamics.create_dialog" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create the dialog!</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mopac_step.tk_thermodynamics.TkThermodynamics.reset_dialog">
+<code class="sig-name descname">reset_dialog</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">widget</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mopac_step/tk_thermodynamics.html#TkThermodynamics.reset_dialog"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mopac_step.tk_thermodynamics.TkThermodynamics.reset_dialog" title="Permalink to this definition">¶</a></dt>
+<dd><p>Layout the widgets in the main frame</p>
+<p>We’ll let ‘TkEnergy’ layout the initial set of widgets,
+then add the extra widgets for controlling optimization</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-mopac_step">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-mopac_step" title="Permalink to this headline">¶</a></h2>
+<p>Top-level package for MOPAC step.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="contributing.html" class="btn btn-neutral float-right" title="Contributing" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="modules.html" class="btn btn-neutral float-left" title="mopac_step" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+
+    </p>
+  </div>
+
+<p>
+<div class="row">
+  <div class="column_left">
+    <a href="https://molssi.org/" target="_blank" title="Go to MolSSI in a new tab">
+      <img src="/_images/MolSSI.jpg" alt="The MolSSI" style="border:0;">
+    </a>
+  </div>
+  <div class="column">
+    &copy; Copyright 2020, the Molecular Sciences Software Institute,
+    which receives funding from the National Science Foundation under award ACI-1547580
+  </div>
+  <div class="column_right">
+    <a href="https://nsf.gov/" target="_blank" title="Go to the NSF in a new tab">
+      <img src="/_images/NSF_4-Color_bitmap_Logo.png" alt="The NSF" style="border:0;">
+    </a>
+  </div>
+</div>
+
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
