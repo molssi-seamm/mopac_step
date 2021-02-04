@@ -224,7 +224,9 @@ class MOPAC(seamm.Node):
         #                     'FIELD=({},{},{})'.format(v[0], v[1], v[2])
         #                 )
         #             elif k == 'open':
-        #                 extra_keywords.append('OPEN({},{})'.format(v[0], v[1]))
+        #                 extra_keywords.append(
+        #                     'OPEN({},{})'.format(v[0], v[1])
+        #                  )
         #             else:
         #                 extra_keywords.append(v)
 
