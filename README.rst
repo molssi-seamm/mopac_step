@@ -2,30 +2,33 @@
 MOPAC step
 ==========
 
+.. image:: https://img.shields.io/github/issues-pr-raw/molssi-seamm/mopac_step
+   :target: https://github.com/molssi-seamm/mopac_step/pulls
+   :alt: GitHub pull requests
 
-.. image:: https://img.shields.io/travis/molssi-seamm/mopac_step.svg
-           :target: https://travis-ci.org/molssi-seamm/mopac_step
-	   :alt: Build Status
+.. image:: https://github.com/molssi-seamm/mopac_step/workflows/CI/badge.svg
+   :target: https://github.com/molssi-seamm/mopac_step/actions
+   :alt: Build Status
 
 .. image:: https://codecov.io/gh/molssi-seamm/mopac_step/branch/master/graph/badge.svg
-	   :target: https://codecov.io/gh/molssi-seamm/mopac_step
-	   :alt: Code Coverage
+   :target: https://codecov.io/gh/molssi-seamm/mopac_step
+   :alt: Code Coverage
 
 .. image:: https://img.shields.io/lgtm/grade/python/g/molssi-seamm/mopac_step.svg?logo=lgtm&logoWidth=18
-	   :target: https://lgtm.com/projects/g/molssi-seamm/mopac_step/context:python
-	   :alt: Code Quality
+   :target: https://lgtm.com/projects/g/molssi-seamm/mopac_step/context:python
+   :alt: Code Quality
 
-.. image:: https://readthedocs.org/projects/mopac-step/badge/?version=latest
-           :target: https://mopac-step.readthedocs.io/en/latest/?badge=latest
-	   :alt: Documentation Status
+.. image:: https://github.com/molssi-seamm/mopac_step/workflows/Documentation/badge.svg
+   :target: https://molssi-seamm.github.io/mopac_step/index.html
+   :alt: Documentation Status
 
 .. image:: https://pyup.io/repos/github/molssi-seamm/mopac_step/shield.svg
-	   :target: https://pyup.io/repos/github/molssi-seamm/mopac_step/
-	   :alt: Updates for Dependencies
+   :target: https://pyup.io/repos/github/molssi-seamm/mopac_step/
+   :alt: Updates for Dependencies
 
 .. image:: https://img.shields.io/pypi/v/mopac_step.svg
-           :target: https://pypi.python.org/pypi/mopac_step
-	   :alt: PyPi VERSION
+   :target: https://pypi.python.org/pypi/mopac_step
+   :alt: PyPi VERSION
 
 A step for a SEAMM flowchart for handling the semiempirical quantum code MOPAC
 
