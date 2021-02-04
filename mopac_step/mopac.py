@@ -212,21 +212,21 @@ class MOPAC(seamm.Node):
         if len(La_list) > 0:
             extra_keywords.append("SPARKLES")
 
-        if False and 'extras' in configuration:
-            extras = configuration['extras']
+        # if False and 'extras' in configuration:
+        #     extras = configuration['extras']
 
-            for k, v in extras.items():
-                if v is not None:
-                    if k == 'net_charge':
-                        extra_keywords.append('CHARGE={}'.format(v))
-                    elif k == 'field':
-                        extra_keywords.append(
-                            'FIELD=({},{},{})'.format(v[0], v[1], v[2])
-                        )
-                    elif k == 'open':
-                        extra_keywords.append('OPEN({},{})'.format(v[0], v[1]))
-                    else:
-                        extra_keywords.append(v)
+        #     for k, v in extras.items():
+        #         if v is not None:
+        #             if k == 'net_charge':
+        #                 extra_keywords.append('CHARGE={}'.format(v))
+        #             elif k == 'field':
+        #                 extra_keywords.append(
+        #                     'FIELD=({},{},{})'.format(v[0], v[1], v[2])
+        #                 )
+        #             elif k == 'open':
+        #                 extra_keywords.append('OPEN({},{})'.format(v[0], v[1]))
+        #             else:
+        #                 extra_keywords.append(v)
 
         if mopac_num_threads > 1:
             extra_keywords.append('THREADS={}'.format(mopac_num_threads))
