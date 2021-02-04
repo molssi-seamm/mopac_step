@@ -72,7 +72,8 @@ class Energy(seamm.Node):
 
     def get_input(self):
         """Get the input for an energy calculation for MOPAC"""
-        system = self.get_variable('_system')
+        system_db = self.get_variable('_system_db')
+        configuration = system_db.system.configuration
         references = self.parent.references
 
         P = self.parameters.current_values_to_dict(
@@ -96,7 +97,7 @@ class Energy(seamm.Node):
         keywords.append(P['hamiltonian'])
 
         if P['hamiltonian'] == 'AM1':
-            elements = system.atoms.symbols()
+            elements = configuration.atoms.symbols
             references.cite(
                 raw=self.parent._bibliography['Dewar_1985c'],
                 alias='Dewar_1985c',
@@ -192,7 +193,7 @@ class Energy(seamm.Node):
                     )
                     break
         elif P['hamiltonian'] == 'MNDO' or P['hamiltonian'] == 'MNDOD':
-            elements = system.atoms.symbols()
+            elements = configuration.atoms.symbols
             references.cite(
                 raw=self.parent._bibliography['Dewar_1977'],
                 alias='Dewar_1977',
@@ -350,7 +351,7 @@ class Energy(seamm.Node):
                         )
                         break
         elif P['hamiltonian'] == 'PM3':
-            elements = system.atoms.symbols()
+            elements = configuration.atoms.symbols
             references.cite(
                 raw=self.parent._bibliography['Stewart_1989'],
                 alias='Stewart_1989',

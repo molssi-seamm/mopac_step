@@ -136,8 +136,9 @@ class MOPAC(seamm.Node):
 
     def run(self):
         """Run MOPAC"""
-        system = self.get_variable('_system')
-        n_atoms = system.n_atoms()
+        system_db = self.get_variable('_system_db')
+        configuration = system_db.system.configuration
+        n_atoms = configuration.n_atoms
         if n_atoms == 0:
             self.logger.error('MOPAC run(): there is no structure!')
             raise RuntimeError('MOPAC run(): there is no structure!')
@@ -206,26 +207,28 @@ class MOPAC(seamm.Node):
             "Tm", "Yb"
         ]
 
-        La_list = set(La) & set(system.atoms.symbols())
+        La_list = set(La) & set(configuration.atoms.symbols)
 
         if len(La_list) > 0:
             extra_keywords.append("SPARKLES")
 
-        if 'extras' in system:
-            extras = system['extras']
+        # if False and 'extras' in configuration:
+        #     extras = configuration['extras']
 
-            for k, v in extras.items():
-                if v is not None:
-                    if k == 'net_charge':
-                        extra_keywords.append('CHARGE={}'.format(v))
-                    elif k == 'field':
-                        extra_keywords.append(
-                            'FIELD=({},{},{})'.format(v[0], v[1], v[2])
-                        )
-                    elif k == 'open':
-                        extra_keywords.append('OPEN({},{})'.format(v[0], v[1]))
-                    else:
-                        extra_keywords.append(v)
+        #     for k, v in extras.items():
+        #         if v is not None:
+        #             if k == 'net_charge':
+        #                 extra_keywords.append('CHARGE={}'.format(v))
+        #             elif k == 'field':
+        #                 extra_keywords.append(
+        #                     'FIELD=({},{},{})'.format(v[0], v[1], v[2])
+        #                 )
+        #             elif k == 'open':
+        #                 extra_keywords.append(
+        #                     'OPEN({},{})'.format(v[0], v[1])
+        #                  )
+        #             else:
+        #                 extra_keywords.append(v)
 
         if mopac_num_threads > 1:
             extra_keywords.append('THREADS={}'.format(mopac_num_threads))
@@ -255,10 +258,11 @@ class MOPAC(seamm.Node):
                 input_data.append('\n'.join(lines))
             else:
                 tmp_structure = []
-                elements = system.atoms.symbols()
-                coordinates = system.atoms.coordinates(fractionals=False)
-                if 'freeze' in system.atoms:
-                    freeze = system.atoms['freeze']
+                atoms = configuration.atoms
+                elements = atoms.symbols
+                coordinates = atoms.get_coordinates(fractionals=False)
+                if 'freeze' in atoms:
+                    freeze = atoms['freeze']
                 else:
                     freeze = [''] * len(elements)
                 for element, xyz, frz in zip(elements, coordinates, freeze):
@@ -270,11 +274,11 @@ class MOPAC(seamm.Node):
                                    z, 0 if 'z' in frz else 1)
                     tmp_structure.append(line)
 
-                if system.periodicity == 3:
+                if configuration.periodicity == 3:
                     # The three translation vectors
                     element = 'Tv'
                     uvw = [[1, 0, 0], [0, 1, 0], [0, 0, 1]]
-                    XYZ = system.cell.cell().to_cartesians(uvw)
+                    XYZ = configuration.cell.to_cartesians(uvw)
                     for xyz in XYZ:
                         x, y, z = xyz
                         line = (
@@ -418,10 +422,11 @@ class MOPAC(seamm.Node):
             os.path.join(self.directory, 'mopac.arc')
         )
         if xyz is not None:
-            system = self.get_variable('_system')
+            system_db = self.get_variable('_system_db')
+            configuration = system_db.system.configuration
 
             # Set cell first since working in Cartesians
-            if system.periodicity == 3:
+            if configuration.periodicity == 3:
                 u = cell_vectors[0]
                 v = cell_vectors[1]
                 w = cell_vectors[2]
@@ -434,13 +439,15 @@ class MOPAC(seamm.Node):
                     raise RuntimeError(
                         'MOPAC cannot handle non-orthorhombic cells yet'
                     )
-                system.cell.set_cell(u[0], v[1], w[2], 90.0, 90.0, 90.0)
+                configuration.cell.parameters = (
+                    u[0], v[1], w[2], 90.0, 90.0, 90.0
+                )
 
             new_xyz = []
             for tmp in xyz:
                 x, y, z = tmp
                 new_xyz.append([float(x), float(y), float(z)])
-            system.atoms.set_coordinates(new_xyz, fractionals=False)
+            configuration.atoms.set_coordinates(new_xyz, fractionals=False)
 
             printer.normal(
                 self.indent +
