@@ -1,16 +1,15 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-"""
-mopac_step
-A step in SEAMM to setup, run and analyze MOPAC semiempirical calculations
+"""mopac_step
+A SEAMM plug-in to setup, run and analyze semiempirical calculations with MOPAC
 """
 
 import sys
 from setuptools import setup, find_packages
 import versioneer
 
-short_description = __doc__.split("\n")
+short_description = __doc__.splitlines()[1]
 
 # from https://github.com/pytest-dev/pytest-runner#conditional-requirement
 needs_pytest = {'pytest', 'test', 'ptr'}.intersection(sys.argv)
@@ -30,21 +29,14 @@ setup(
     name='mopac_step',
     author="Paul Saxe",
     author_email='psaxe@molssi.org',
-    description=short_description[1],
+    description=short_description,
     long_description=readme + '\n\n' + history,
+    long_description_content_type='text/x-rst',
     version=versioneer.get_version(),
     cmdclass=versioneer.get_cmdclass(),
     license='BSD-3-Clause',
     url='https://github.com/molssi-seam/mopac_step',
-
-    # Which Python importable modules should be included when your package is
-    # installed, handled automatically by setuptools. Use 'exclude' to prevent
-    # some specific subpackage(s) from being added, if needed
     packages=find_packages(include=['mopac_step']),
-
-    # Optional include package data to ship with your package. Customize
-    # MANIFEST.in if the general case does not suit your needs. Comment out
-    # this line to prevent the files from being packaged with your software
     include_package_data=True,
 
     # Allows `setup.py test` to work correctly with pytest
@@ -64,12 +56,13 @@ setup(
 
     # Manual control if final package is compressible or not, set False to
     # prevent the .egg from being made
-    zip_safe=False,
+    zip_safe=True,
 
-    keywords='mopac_step',
+    keywords=['SEAMM', 'plug-in', 'flowchart', 'forcefield', 'MOPAC',
+              'semiempirical', 'orbitals'],
     classifiers=[
-        'Development Status :: 2 - Pre-Alpha',
-        'Intended Audience :: Developers',
+        'Development Status :: 5 - Production/Stable',
+        'Intended Audience :: Science/Research',
         'License :: OSI Approved :: BSD License',
         'Natural Language :: English',
         'Programming Language :: Python :: 3 :: Only',
