@@ -1,6 +1,6 @@
-==========
-MOPAC step
-==========
+===================
+SEAMM MOPAC plug-in
+===================
 
 .. image:: https://img.shields.io/github/issues-pr-raw/molssi-seamm/mopac_step
    :target: https://github.com/molssi-seamm/mopac_step/pulls
@@ -30,20 +30,32 @@ MOPAC step
    :target: https://pypi.python.org/pypi/mopac_step
    :alt: PyPi VERSION
 
-A step for a SEAMM flowchart for handling the semiempirical quantum code MOPAC
+A SEAMM plug-in to setup, run and analyze semiempirical calculations
+with MOPAC.
 
+This plug-in provides a graphical user interface (GUI) for setting up
+and running simulations using the semiempirical quantum chemistry code
+MOPAC_.
 
 * Free software: BSD license
-* Documentation: https://mopac-step.readthedocs.io.
+* Documentation: https://molssi-seamm.github.io/mopac_step/index.html
+* Code: https://github.com/molssi-seamm/mopac_step
 
+.. _MOPAC: http://openmopac.net
 
 Features
 --------
 
-* TODO
+* Single-point energies
+* Structural optimization
+* IR and Raman vibrational frequencies
+* Temperature dependent thermodynamic functions
+* Results can be stored in flowchart variables or tables_.
 
-Credits
----------
+.. _tables: https://molssi-seamm.github.io/table_step/index.html
+
+Acknowledgements
+----------------
 
 This package was created with Cookiecutter_ and the `molssi-seamm/cookiecutter-seamm-plugin`_ project template.
 

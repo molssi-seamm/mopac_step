@@ -60,8 +60,8 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'MOPAC Step'
-copyright = u"2020, Molecular Sciences Software Institute (MolSSI)"
+project = u'SEAMM MOPAC Plug-in'
+copyright = u"2019-2021, Molecular Sciences Software Institute (MolSSI)"
 
 # The version info for the project you're documenting, acts as replacement
 # for |version| and |release|, also used in various other places throughout
