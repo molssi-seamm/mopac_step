@@ -66,7 +66,7 @@ class MOPAC(seamm.Node):
         """Setup the command-line / config file parser
         """
         parser_name = self.step_type
-        parser = seamm.getParser()
+        parser = seamm_util.getParser()
 
         # Remember if the parser exists ... this type of step may have been
         # found before
@@ -82,7 +82,7 @@ class MOPAC(seamm.Node):
         parser.add_argument(
             parser_name,
             '--mopac-exe',
-            default='mopac',
+            default='MOPAC2016',
             help='the path to the MOPAC executable'
         )
 
