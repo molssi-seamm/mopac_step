@@ -39,7 +39,7 @@ jobs:
     - name: Run linters
       shell: bash -l {0}
       run: |
-        yapf --diff --recursive mopac_step tests
+        black --check --diff mopac_step tests
         flake8 mopac_step tests
 
   test:
