@@ -67,9 +67,7 @@ class TkMOPAC(seamm.TkNode):
         self.dialog.geometry('{}x{}+{}+{}'.format(w, h, x, y))
 
         self.tk_subflowchart = seamm.TkFlowchart(
-            master=frame,
-            namespace=self.namespace,
-            flowchart=self.node.subflowchart
+            master=frame, namespace=self.namespace, flowchart=self.node.subflowchart
         )
         self.tk_subflowchart.draw()
 
@@ -87,8 +85,7 @@ class TkMOPAC(seamm.TkNode):
         flowcharts"""
 
         super().update_flowchart(
-            flowchart=self.node.subflowchart,
-            tk_flowchart=self.tk_subflowchart
+            flowchart=self.node.subflowchart, tk_flowchart=self.tk_subflowchart
         )
 
     def from_flowchart(self, tk_flowchart=None, flowchart=None):
@@ -96,6 +93,5 @@ class TkMOPAC(seamm.TkNode):
         Only used in nodes that contain flowchart"""
 
         super().from_flowchart(
-            flowchart=self.node.subflowchart,
-            tk_flowchart=self.tk_subflowchart
+            flowchart=self.node.subflowchart, tk_flowchart=self.tk_subflowchart
         )

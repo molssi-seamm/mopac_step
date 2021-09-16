@@ -10,33 +10,18 @@ import tkinter as tk
 class TkThermodynamics(mopac_step.TkEnergy):
 
     def __init__(
-        self,
-        tk_flowchart=None,
-        node=None,
-        canvas=None,
-        x=120,
-        y=20,
-        w=200,
-        h=50
+        self, tk_flowchart=None, node=None, canvas=None, x=120, y=20, w=200, h=50
     ):
         '''Initialize a node
 
         Keyword arguments:
         '''
         super().__init__(
-            tk_flowchart=tk_flowchart,
-            node=node,
-            canvas=canvas,
-            x=x,
-            y=y,
-            w=w,
-            h=h
+            tk_flowchart=tk_flowchart, node=node, canvas=canvas, x=x, y=y, w=w, h=h
         )
 
     def create_dialog(
-        self,
-        title='MOPAC Thermodynamic Functions',
-        calculation='thermodynamics'
+        self, title='MOPAC Thermodynamic Functions', calculation='thermodynamics'
     ):
         """Create the dialog!"""
         self.logger.debug('Creating the dialog')

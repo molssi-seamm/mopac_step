@@ -32,11 +32,7 @@ class Energy(seamm.Node):
     @property
     def header(self):
         """A printable header for this section of output"""
-        return (
-            'Step {}: {}'.format(
-                '.'.join(str(e) for e in self._id), self.title
-            )
-        )
+        return ('Step {}: {}'.format('.'.join(str(e) for e in self._id), self.title))
 
     @property
     def version(self):
@@ -87,9 +83,7 @@ class Energy(seamm.Node):
 
         # Save the description for later printing
         self.description = []
-        self.description.append(
-            __(self.description_text(PP), **PP, indent=self.indent)
-        )
+        self.description.append(__(self.description_text(PP), **PP, indent=self.indent))
 
         # Start gathering the keywords
         keywords = copy.deepcopy(P['extra keywords'])
@@ -180,8 +174,8 @@ class Energy(seamm.Node):
                     note='AM1 parameters for Hg.'
                 )
             for element in (
-                'Li', 'Be', 'Na', 'Mg', 'K', 'Ca', 'Ga', 'As', 'Se', 'Rb',
-                'Sr', 'In', 'Sn', 'Sb', 'Te', 'Cs', 'Ba', 'Pb', 'Bi'
+                'Li', 'Be', 'Na', 'Mg', 'K', 'Ca', 'Ga', 'As', 'Se', 'Rb', 'Sr', 'In',
+                'Sn', 'Sb', 'Te', 'Cs', 'Ba', 'Pb', 'Bi'
             ):
                 if element in elements:
                     references.cite(
@@ -315,8 +309,8 @@ class Energy(seamm.Node):
                     note='MNDO parameters for Pb.'
                 )
             for element in (
-                'Na', 'Mg', 'K', 'Ca', 'Ga', 'As', 'Se', 'Rb', 'Sr', 'In',
-                'Sb', 'Te', 'Cs', 'Ba', 'Tl', 'Bi'
+                'Na', 'Mg', 'K', 'Ca', 'Ga', 'As', 'Se', 'Rb', 'Sr', 'In', 'Sb', 'Te',
+                'Cs', 'Ba', 'Tl', 'Bi'
             ):
                 if element in elements:
                     references.cite(
@@ -360,8 +354,8 @@ class Energy(seamm.Node):
                 note='The citation for the MOPAC parameterization.'
             )
             for element in (
-                'Be', 'Mg', 'Zn', 'Ga', 'Ge', 'As', 'Se', 'Cd', 'In', 'Sn',
-                'Sb', 'Te', 'Hg', 'Tl', 'Pb', 'Bi'
+                'Be', 'Mg', 'Zn', 'Ga', 'Ge', 'As', 'Se', 'Cd', 'In', 'Sn', 'Sb', 'Te',
+                'Hg', 'Tl', 'Pb', 'Bi'
             ):
                 if element in elements:
                     references.cite(
@@ -512,15 +506,10 @@ class Energy(seamm.Node):
         for keyword in P['extra keywords']:
             if '=' in keyword:
                 keyword, value = keyword.split('=')
-                if (
-                    keyword not in metadata or
-                    'format' not in metadata[keyword]
-                ):
+                if (keyword not in metadata or 'format' not in metadata[keyword]):
                     keywords.append(keyword + '=' + value)
                 else:
-                    keywords.append(
-                        metadata[keyword]['format'].format(keyword, value)
-                    )
+                    keywords.append(metadata[keyword]['format'].format(keyword, value))
 
         return keywords
 

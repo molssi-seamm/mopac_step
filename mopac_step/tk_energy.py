@@ -65,14 +65,10 @@ class TkEnergy(seamm.TkNode):
 
         self.popup_menu.tk_popup(event.x_root, event.y_root, 0)
 
-    def create_dialog(
-        self, title='Edit MOPAC Energy Step', calculation='energy'
-    ):
+    def create_dialog(self, title='Edit MOPAC Energy Step', calculation='energy'):
         """Create the dialog!"""
         self.logger.debug('Creating the dialog')
-        frame = super().create_dialog(
-            title=title, widget='notebook', results_tab=True
-        )
+        frame = super().create_dialog(title=title, widget='notebook', results_tab=True)
 
         # Create all the widgets
         P = self.node.parameters
@@ -81,15 +77,15 @@ class TkEnergy(seamm.TkNode):
                 self[key] = P[key].widget(frame)
 
         # bindings...
-        self['convergence'].combobox.bind(
-            "<<ComboboxSelected>>", self.reset_dialog
-        )
+        self['convergence'].combobox.bind("<<ComboboxSelected>>", self.reset_dialog)
         self['convergence'].combobox.bind("<Return>", self.reset_dialog)
         self['convergence'].combobox.bind("<FocusOut>", self.reset_dialog)
 
         self.setup_results(mopac_step.properties, calculation=calculation)
 
         self.logger.debug('Finished creating the dialog')
+
+        return frame
 
     def reset_dialog(self, widget=None):
         convergence = self['convergence'].get()

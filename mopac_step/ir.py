@@ -70,9 +70,7 @@ class IR(mopac_step.Energy):
 
         # Save the description for later printing
         self.description = []
-        self.description.append(
-            __(self.description_text(PP), **PP, indent=self.indent)
-        )
+        self.description.append(__(self.description_text(PP), **PP, indent=self.indent))
 
         # Remove the 1SCF keyword from the energy setup
         keywords = []

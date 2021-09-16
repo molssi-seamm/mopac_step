@@ -69,9 +69,7 @@ class Thermodynamics(mopac_step.Energy):
 
         # Save the description for later printing
         self.description = []
-        self.description.append(
-            __(self.description_text(PP), **PP, indent=self.indent)
-        )
+        self.description.append(__(self.description_text(PP), **PP, indent=self.indent))
 
         # Convert values with units to the right units, and remove
         # the unit string.
