@@ -56,7 +56,7 @@ class OptimizationParameters(mopac_step.EnergyParameters):
             "description": "Maximum steps:",
             "help_text": ("The maximum number of steps to take "
                           "in the optimization. 'unlimited' means "
-                          "there is no definit limit; however, the "
+                          "there is no definite limit; however, the "
                           "time-limit of the job will stop the job.")
         },
         "recalc": {
@@ -90,6 +90,37 @@ class OptimizationParameters(mopac_step.EnergyParameters):
                           "difficult cases reducing to 0.1 or 0.05 "
                           "may be useful.")
         },
+        # Put in the configuration handling options needed
+        "structure handling": {
+            "default": "Overwrite the current configuration",
+            "kind": "enum",
+            "default_units": "",
+            "enumeration": (
+                "Overwrite the current configuration",
+                "Create a new configuration",
+            ),
+            "format_string": "s",
+            "description": "Configuration handling:",
+            "help_text": (
+                "Whether to overwrite the current configuration, or create a new "
+                "configuration or system and configuration for the new structure"
+            ),
+        },
+        "configuration name": {
+            "default": "optimized with <Hamiltonian>",
+            "kind": "string",
+            "default_units": "",
+            "enumeration": (
+                "optimized with <Hamiltonian>",
+                "keep current name",
+                "use SMILES string",
+                "use Canonical SMILES string",
+                "use configuration number"
+            ),
+            "format_string": "s",
+            "description": "Configuration name:",
+            "help_text": "The name for the new configuration",
+        },
     }
 
     def __init__(self, defaults={}, data=None):
@@ -97,6 +128,9 @@ class OptimizationParameters(mopac_step.EnergyParameters):
         parameters given in the class"""
 
         super().__init__(
-            defaults={**OptimizationParameters.parameters, **defaults},
+            defaults={
+                **OptimizationParameters.parameters,
+                **defaults
+            },
             data=data
         )
