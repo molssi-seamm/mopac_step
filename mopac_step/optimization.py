@@ -77,6 +77,35 @@ class Optimization(mopac_step.Energy):
         elif P['convergence'] == 'absolute':
             text += ' {absolute} kcal/mol.'
 
+        handling = P["structure handling"]
+        text += " The optimized structures will "
+        if handling == "Overwrite the current configuration":
+            text += "overwrite the current configuration."
+        elif handling == "Create a new configuration":
+            text += "be put in a new configuration."
+        else:
+            raise ValueError(
+                f"Do not understand how to handle the structure: '{handling}'"
+            )
+
+        confname = P["configuration name"]
+        if confname == "use SMILES string":
+            text += " The name of the configuration will be the SMILES string given."
+        elif confname == "use Canonical SMILES string":
+            text += (
+                " The name of the configuration will be the canonical SMILES of the"
+                " structure."
+            )
+        elif confname == "keep current name":
+            text += " The name of the configuration will not be changed."
+        elif confname == "optimized with <Hamiltonian>":
+            text += " The name of the configuration will be 'optimized with "
+            text += "{hamiltonian}'."
+        elif confname == "use configuration number":
+            text += " The name of the configuration will be its number (1, 2, ..)."
+        else:
+            text += f" The name of the configuration will be {confname}."
+
         return self.header + '\n' + __(text, **P, indent=4 * ' ').__str__()
 
     def get_input(self):
