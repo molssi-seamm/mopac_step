@@ -26,10 +26,7 @@ printer = printing.getPrinter('mopac')
 class MOPAC(seamm.Node):
 
     def __init__(
-        self,
-        flowchart=None,
-        namespace='org.molssi.seamm.mopac',
-        extension=None
+        self, flowchart=None, namespace='org.molssi.seamm.mopac', extension=None
     ):
         """Initialize the node"""
 
@@ -38,16 +35,14 @@ class MOPAC(seamm.Node):
         # Create the subflowchart and proceed
         self.subflowchart = seamm.Flowchart(
             name='MOPAC',
+            parent=self,
             namespace=namespace,
             directory=flowchart.root_directory
         )
         self._data = {}
 
         super().__init__(
-            flowchart=flowchart,
-            title='MOPAC',
-            extension=extension,
-            logger=logger
+            flowchart=flowchart, title='MOPAC', extension=extension, logger=logger
         )
 
     @property
@@ -122,13 +117,12 @@ class MOPAC(seamm.Node):
                 or final values. If None, then the parameters values will
                 be used as is.
         """
-
         # Work through children. Get the first real node
         node = self.subflowchart.get_node('1').next()
 
         text = self.header + '\n\n'
         while node is not None:
-            text += __(node.description_text(), indent=3 * ' ').__str__()
+            text += __(node.description_text(), indent=4 * ' ').__str__()
             text += '\n'
             node = node.next()
 
@@ -136,8 +130,7 @@ class MOPAC(seamm.Node):
 
     def run(self):
         """Run MOPAC"""
-        system_db = self.get_variable('_system_db')
-        configuration = system_db.system.configuration
+        system, configuration = self.get_system_configuration(None)
         n_atoms = configuration.n_atoms
         if n_atoms == 0:
             self.logger.error('MOPAC run(): there is no structure!')
@@ -203,8 +196,7 @@ class MOPAC(seamm.Node):
         # if you're looking for good structure (do use SPARKLES) or
         # energy (do not use SPARKLES)
         La = [
-            "Ce", "Pr", "Nd", "Pm", "Sm", "Eu", "Gd", "Tb", "Dy", "Ho", "Er",
-            "Tm", "Yb"
+            "Ce", "Pr", "Nd", "Pm", "Sm", "Eu", "Gd", "Tb", "Dy", "Ho", "Er", "Tm", "Yb"
         ]
 
         La_list = set(La) & set(configuration.atoms.symbols)
@@ -283,7 +275,8 @@ class MOPAC(seamm.Node):
                         x, y, z = xyz
                         line = (
                             '{:2} {: 12.8f} {:d} {: 12.8f} {:d} {: 12.8f} {:d}'
-                        ).format(element, x, 1, y, 1, z, 1)
+                            .format(element, x, 1, y, 1, z, 1)
+                        )  # yapf: disable
                         tmp_structure.append(line)
 
                 input_data.append(
@@ -417,44 +410,6 @@ class MOPAC(seamm.Node):
             node = node.next()
             section += 1
 
-        # Update the final structure
-        xyz, cell_vectors = self.parse_arc(
-            os.path.join(self.directory, 'mopac.arc')
-        )
-        if xyz is not None:
-            system_db = self.get_variable('_system_db')
-            configuration = system_db.system.configuration
-
-            # Set cell first since working in Cartesians
-            if configuration.periodicity == 3:
-                u = cell_vectors[0]
-                v = cell_vectors[1]
-                w = cell_vectors[2]
-                # Currently only handle orthorhombic boxes....
-                if (
-                    abs(u[1]) > 0.001 or abs(u[2]) > 0.001 or
-                    abs(v[0]) > 0.001 or abs(v[2]) > 0.001 or
-                    abs(w[0]) > 0.001 or abs(w[1]) > 0.001
-                ):
-                    raise RuntimeError(
-                        'MOPAC cannot handle non-orthorhombic cells yet'
-                    )
-                configuration.cell.parameters = (
-                    u[0], v[1], w[2], 90.0, 90.0, 90.0
-                )
-
-            new_xyz = []
-            for tmp in xyz:
-                x, y, z = tmp
-                new_xyz.append([float(x), float(y), float(z)])
-            configuration.atoms.set_coordinates(new_xyz, fractionals=False)
-
-            printer.normal(
-                self.indent +
-                '    Updated the system with the structure from MOPAC.'
-            )
-            printer.normal('')
-
     def parse_arc(self, filename='mopac.arc'):
         """Digest the ARC file and get the coordinates.
 
@@ -475,10 +430,7 @@ class MOPAC(seamm.Node):
                     xyz = []
                     ii = 0
                     for line in fd:
-                        if (
-                            ' &' not in line and ' +' not in line and
-                            line[0] != '*'
-                        ):
+                        if (' &' not in line and ' +' not in line and line[0] != '*'):
                             ii += 1
                             if ii == 3:
                                 break
@@ -514,9 +466,7 @@ class MOPAC(seamm.Node):
             if line[0] == "#":
                 continue
             if '=' not in line:
-                raise RuntimeError(
-                    "Problem parsing MOPAC aux file: '" + line + "'"
-                )
+                raise RuntimeError("Problem parsing MOPAC aux file: '" + line + "'")
             key, rest = line.split('=', maxsplit=1)
             if key[-1] == ']':
                 name, size = key[0:-1].split('[')
@@ -525,9 +475,7 @@ class MOPAC(seamm.Node):
                     name, units = name.split(':')
 
                 if name not in properties:
-                    raise RuntimeError(
-                        "Property '{}' not recognized.".format(name)
-                    )
+                    raise RuntimeError("Property '{}' not recognized.".format(name))
                 if 'units' in properties[name]:
                     data[name + ',units'] = properties[name]['units']
 
@@ -595,9 +543,7 @@ class MOPAC(seamm.Node):
                     name = key
 
                 if name not in properties:
-                    raise RuntimeError(
-                        "Property '{}' not recognized.".format(name)
-                    )
+                    raise RuntimeError("Property '{}' not recognized.".format(name))
                 if 'units' in properties[name]:
                     data[name + ',units'] = properties[name]['units']
                 if properties[name]['type'] == 'integer':
