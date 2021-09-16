@@ -18,12 +18,12 @@ class TkMOPAC(seamm.TkNode):
         tk_flowchart=None,
         node=None,
         canvas=None,
-        namespace='org.molssi.seamm.mopac.tk',
+        namespace="org.molssi.seamm.mopac.tk",
         x=120,
         y=20,
         w=200,
         h=50,
-        my_logger=logger
+        my_logger=logger,
     ):
         """Initialize the graphical Tk node for MOPAC
 
@@ -47,14 +47,14 @@ class TkMOPAC(seamm.TkNode):
             y=y,
             w=w,
             h=h,
-            my_logger=my_logger
+            my_logger=my_logger,
         )
 
         self.create_dialog()
 
     def create_dialog(self):
         """Create the dialog!"""
-        frame = super().create_dialog('Edit MOPAC Step')
+        frame = super().create_dialog("Edit MOPAC Step")
 
         # make it large!
         sw = self.dialog.winfo_screenwidth()
@@ -64,18 +64,15 @@ class TkMOPAC(seamm.TkNode):
         x = int(0.05 * sw / 2)
         y = int(0.1 * sh / 2)
 
-        self.dialog.geometry('{}x{}+{}+{}'.format(w, h, x, y))
+        self.dialog.geometry("{}x{}+{}+{}".format(w, h, x, y))
 
         self.tk_subflowchart = seamm.TkFlowchart(
-            master=frame,
-            namespace=self.namespace,
-            flowchart=self.node.subflowchart
+            master=frame, namespace=self.namespace, flowchart=self.node.subflowchart
         )
         self.tk_subflowchart.draw()
 
     def right_click(self, event):
-        """Probably need to add our dialog...
-        """
+        """Probably need to add our dialog..."""
 
         super().right_click(event)
         self.popup_menu.add_command(label="Edit..", command=self.edit)
@@ -87,8 +84,7 @@ class TkMOPAC(seamm.TkNode):
         flowcharts"""
 
         super().update_flowchart(
-            flowchart=self.node.subflowchart,
-            tk_flowchart=self.tk_subflowchart
+            flowchart=self.node.subflowchart, tk_flowchart=self.tk_subflowchart
         )
 
     def from_flowchart(self, tk_flowchart=None, flowchart=None):
@@ -96,6 +92,5 @@ class TkMOPAC(seamm.TkNode):
         Only used in nodes that contain flowchart"""
 
         super().from_flowchart(
-            flowchart=self.node.subflowchart,
-            tk_flowchart=self.tk_subflowchart
+            flowchart=self.node.subflowchart, tk_flowchart=self.tk_subflowchart
         )

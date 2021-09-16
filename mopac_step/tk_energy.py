@@ -12,7 +12,6 @@ logger = logging.getLogger(__name__)
 
 
 class TkEnergy(seamm.TkNode):
-
     def __init__(
         self,
         tk_flowchart=None,
@@ -23,7 +22,7 @@ class TkEnergy(seamm.TkNode):
         w=200,
         h=50,
         my_logger=logger,
-        keyword_metadata=None
+        keyword_metadata=None,
     ):
         """Initialize the graphical Tk MOPAC energy step
 
@@ -53,77 +52,72 @@ class TkEnergy(seamm.TkNode):
             w=w,
             h=h,
             my_logger=my_logger,
-            keyword_metadata=keyword_metadata
+            keyword_metadata=keyword_metadata,
         )
 
     def right_click(self, event):
-        """Probably need to add our dialog...
-        """
+        """Probably need to add our dialog..."""
 
         super().right_click(event)
         self.popup_menu.add_command(label="Edit..", command=self.edit)
 
         self.popup_menu.tk_popup(event.x_root, event.y_root, 0)
 
-    def create_dialog(
-        self, title='Edit MOPAC Energy Step', calculation='energy'
-    ):
+    def create_dialog(self, title="Edit MOPAC Energy Step", calculation="energy"):
         """Create the dialog!"""
-        self.logger.debug('Creating the dialog')
-        frame = super().create_dialog(
-            title=title, widget='notebook', results_tab=True
-        )
+        self.logger.debug("Creating the dialog")
+        frame = super().create_dialog(title=title, widget="notebook", results_tab=True)
 
         # Create all the widgets
         P = self.node.parameters
         for key in P:
-            if key not in ('results', 'extra keywords', 'create tables'):
+            if key not in ("results", "extra keywords", "create tables"):
                 self[key] = P[key].widget(frame)
 
         # bindings...
-        self['convergence'].combobox.bind(
-            "<<ComboboxSelected>>", self.reset_dialog
-        )
-        self['convergence'].combobox.bind("<Return>", self.reset_dialog)
-        self['convergence'].combobox.bind("<FocusOut>", self.reset_dialog)
+        self["convergence"].combobox.bind("<<ComboboxSelected>>", self.reset_dialog)
+        self["convergence"].combobox.bind("<Return>", self.reset_dialog)
+        self["convergence"].combobox.bind("<FocusOut>", self.reset_dialog)
 
         self.setup_results(mopac_step.properties, calculation=calculation)
 
-        self.logger.debug('Finished creating the dialog')
+        self.logger.debug("Finished creating the dialog")
+
+        return frame
 
     def reset_dialog(self, widget=None):
-        convergence = self['convergence'].get()
+        convergence = self["convergence"].get()
 
-        frame = self['frame']
+        frame = self["frame"]
         for slave in frame.grid_slaves():
             slave.grid_forget()
 
         widgets = []
         row = 0
-        self['structure'].grid(row=row, column=0, columnspan=2, sticky=tk.EW)
-        widgets.append(self['structure'])
+        self["structure"].grid(row=row, column=0, columnspan=2, sticky=tk.EW)
+        widgets.append(self["structure"])
         row += 1
-        self['hamiltonian'].grid(row=row, column=0, columnspan=2, sticky=tk.EW)
-        widgets.append(self['hamiltonian'])
+        self["hamiltonian"].grid(row=row, column=0, columnspan=2, sticky=tk.EW)
+        widgets.append(self["hamiltonian"])
         row += 1
-        self['convergence'].grid(row=row, column=0, columnspan=2, sticky=tk.EW)
-        widgets.append(self['convergence'])
+        self["convergence"].grid(row=row, column=0, columnspan=2, sticky=tk.EW)
+        widgets.append(self["convergence"])
         row += 1
         sw.align_labels(widgets)
 
-        if convergence == 'relative':
-            self['relative'].grid(row=row, column=1, sticky=tk.W)
+        if convergence == "relative":
+            self["relative"].grid(row=row, column=1, sticky=tk.W)
             row += 1
-        elif convergence == 'absolute':
-            self['absolute'].grid(row=row, column=1, sticky=tk.W)
+        elif convergence == "absolute":
+            self["absolute"].grid(row=row, column=1, sticky=tk.W)
             row += 1
-        elif convergence not in ('normal', 'precise'):
+        elif convergence not in ("normal", "precise"):
             # variable ... so put in all possibilities
-            self['relative'].grid(row=row, column=1, sticky=tk.W)
+            self["relative"].grid(row=row, column=1, sticky=tk.W)
             row += 1
-            self['absolute'].grid(row=row, column=1, sticky=tk.W)
+            self["absolute"].grid(row=row, column=1, sticky=tk.W)
             row += 1
-            sw.align_labels((self['relative'], self['absolute']))
+            sw.align_labels((self["relative"], self["absolute"]))
 
         frame.columnconfigure(0, minsize=30)
 

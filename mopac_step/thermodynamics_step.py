@@ -7,9 +7,9 @@ import mopac_step
 
 class ThermodynamicsStep(object):
     my_description = {
-        'description': 'Harmonic approximation to the thermodynamic functions',
-        'group': 'Calculations',
-        'name': 'Thermodynamic functions'
+        "description": "Harmonic approximation to the thermodynamic functions",
+        "group": "Calculations",
+        "name": "Thermodynamic functions",
     }
 
     def __init__(self, flowchart=None, gui=None):
@@ -20,8 +20,7 @@ class ThermodynamicsStep(object):
         pass
 
     def description(self):
-        """Return a description of what this extension does
-        """
+        """Return a description of what this extension does"""
         return ThermodynamicsStep.my_description
 
     def create_node(self, flowchart=None, **kwargs):
