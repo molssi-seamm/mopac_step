@@ -205,9 +205,7 @@ class Optimization(mopac_step.Energy):
                 note='NLLSQ gradient-norm minimizer for transition states.'
             )
         else:
-            text = (
-                "Don't recognize optimization method '{}'".format(P['method'])
-            )
+            text = ("Don't recognize optimization method '{}'".format(P['method']))
             logger.critical(text)
             raise RuntimeError(text)
 
@@ -224,21 +222,48 @@ class Optimization(mopac_step.Energy):
         data in variables for other stages to access
         """
 
+        # Get the parameters used
+        P = self.parameters.current_values_to_dict(
+            context=seamm.flowchart_variables._data
+        )
+
         # Update the structure
         if 'ATOM_X_OPT' in data:
-            system_db = self.get_variable('_system_db')
-            configuration = system_db.system.configuration
-            xs = []
-            ys = []
-            zs = []
+            system, starting_configuration = self.get_system_configuration(None)
+            periodicity = starting_configuration.periodicity
+            if (
+                "structure handling" in P and
+                P["structure handling"] == "Create a new configuration"
+            ):
+                configuration = system.create_configuration(
+                    periodicity=periodicity,
+                    atomset=starting_configuration.atomset,
+                    bondset=starting_configuration.bondset,
+                    cell_id=starting_configuration.cell_id,
+                )
+            else:
+                configuration = starting_configuration
+
+            if periodicity != 0:
+                raise NotImplementedError("Optimization cannot yet handle periodicity")
+            xyz = []
             it = iter(data['ATOM_X_OPT'])
             for x in it:
-                xs.append(x)
-                ys.append(next(it))
-                zs.append(next(it))
-            configuration.atoms['x'][0:] = xs
-            configuration.atoms['y'][0:] = ys
-            configuration.atoms['z'][0:] = zs
+                xyz.append([float(x), float(next(it)), float(next(it))])
+            configuration.atoms.set_coordinates(xyz, fractionals=False)
+
+            # And the name of the configuration.
+            if "configuration name" in P:
+                if P["configuration name"] == "optimized with <Hamiltonian>":
+                    configuration.name = f"optimized with {P['hamiltonian']}"
+                elif P["configuration name"] == "keep current name":
+                    pass
+                elif P["configuration name"] == "use SMILES string":
+                    configuration.name = configuration.smiles
+                elif P["configuration name"] == "use Canonical SMILES string":
+                    configuration.name = configuration.canonical_smiles
+                elif P["configuration name"] == "use configuration number":
+                    configuration.name = str(configuration.n_configurations)
 
         # The results
         if 'NUMBER_SCF_CYCLES' in data:
@@ -296,8 +321,7 @@ class Optimization(mopac_step.Energy):
                     note='Eigenvector-following minimizer.'
                 )
             elif (
-                'Geometry optimization using BFGS' in tmp or
-                'SATISFIED IN BFGS' in tmp
+                'Geometry optimization using BFGS' in tmp or 'SATISFIED IN BFGS' in tmp
             ):
                 references.cite(
                     raw=bibliography['Broyden_1970'],
