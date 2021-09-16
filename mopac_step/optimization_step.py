@@ -7,9 +7,9 @@ import mopac_step
 
 class OptimizationStep(object):
     my_description = {
-        'description': 'Optimization of the structure',
-        'group': 'Calculations',
-        'name': 'Optimization'
+        "description": "Optimization of the structure",
+        "group": "Calculations",
+        "name": "Optimization",
     }
 
     def __init__(self, flowchart=None, gui=None):
@@ -20,8 +20,7 @@ class OptimizationStep(object):
         pass
 
     def description(self):
-        """Return a description of what this extension does
-        """
+        """Return a description of what this extension does"""
         return OptimizationStep.my_description
 
     def create_node(self, flowchart=None, **kwargs):

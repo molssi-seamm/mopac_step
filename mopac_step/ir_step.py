@@ -7,9 +7,9 @@ import mopac_step
 
 class IRStep(object):
     my_description = {
-        'description': 'Infrared (vibrational) spectrum',
-        'group': 'Calculations',
-        'name': 'IR Spectrum'
+        "description": "Infrared (vibrational) spectrum",
+        "group": "Calculations",
+        "name": "IR Spectrum",
     }
 
     def __init__(self, flowchart=None, gui=None):
@@ -20,8 +20,7 @@ class IRStep(object):
         pass
 
     def description(self):
-        """Return a description of what this extension does
-        """
+        """Return a description of what this extension does"""
         return IRStep.my_description
 
     def create_node(self, flowchart=None, **kwargs):

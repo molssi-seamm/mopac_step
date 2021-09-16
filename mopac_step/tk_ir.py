@@ -9,24 +9,23 @@ import tkinter.ttk as ttk
 
 
 class TkIR(mopac_step.TkEnergy):
-
     def __init__(
         self, tk_flowchart=None, node=None, canvas=None, x=120, y=20, w=200, h=50
     ):
-        '''Initialize a node
+        """Initialize a node
 
         Keyword arguments:
-        '''
+        """
         super().__init__(
             tk_flowchart=tk_flowchart, node=node, canvas=canvas, x=x, y=y, w=w, h=h
         )
 
     def create_dialog(
-        self, title='MOPAC Infrared (Vibrational) Spectrum', calculation='vibrations'
+        self, title="MOPAC Infrared (Vibrational) Spectrum", calculation="vibrations"
     ):
         """Create the dialog!"""
-        self.logger.debug('Creating the dialog')
-        frame = super().create_dialog(title=title, calculation='vibrations')
+        self.logger.debug("Creating the dialog")
+        frame = super().create_dialog(title=title, calculation="vibrations")
 
         P = self.node.parameters
 
@@ -44,7 +43,7 @@ class TkIR(mopac_step.TkEnergy):
             row += 1
         sw.align_labels(widgets)
 
-        self.logger.debug('Finished creating the dialog')
+        self.logger.debug("Finished creating the dialog")
 
     def reset_dialog(self, widget=None):
         """Layout the widgets in the main frame
@@ -55,7 +54,7 @@ class TkIR(mopac_step.TkEnergy):
         row = super().reset_dialog()
 
         widgets = []
-        for key in ('trans', 'let'):
+        for key in ("trans", "let"):
             self[key].grid(row=row, column=0, columnspan=2, sticky=tk.EW)
             widgets.append(self[key])
             row += 1

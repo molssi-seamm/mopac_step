@@ -9,33 +9,31 @@ import tkinter.ttk as ttk
 
 
 class TkOptimization(mopac_step.TkEnergy):
-
     def __init__(
         self, tk_flowchart=None, node=None, canvas=None, x=120, y=20, w=200, h=50
     ):
-        '''Initialize a node
+        """Initialize a node
 
         Keyword arguments:
-        '''
+        """
         super().__init__(
             tk_flowchart=tk_flowchart, node=node, canvas=canvas, x=x, y=y, w=w, h=h
         )
         self.mopac_parameters = self.node.parent.parameters
 
     def right_click(self, event):
-        """Probably need to add our dialog...
-        """
+        """Probably need to add our dialog..."""
 
         super().right_click(event)
         self.popup_menu.add_command(label="Edit..", command=self.edit)
 
         self.popup_menu.tk_popup(event.x_root, event.y_root, 0)
 
-    def create_dialog(self, title='MOPAC Optimization', calculation='optimization'):
+    def create_dialog(self, title="MOPAC Optimization", calculation="optimization"):
         """Create the dialog!"""
-        self.logger.debug('Creating the dialog')
+        self.logger.debug("Creating the dialog")
 
-        frame = super().create_dialog(title=title, calculation='optimization')
+        frame = super().create_dialog(title=title, calculation="optimization")
 
         P = self.node.parameters
 
@@ -53,7 +51,7 @@ class TkOptimization(mopac_step.TkEnergy):
             row += 1
         sw.align_labels(widgets)
 
-        self.logger.debug('Finished creating the dialog')
+        self.logger.debug("Finished creating the dialog")
 
         return frame
 
@@ -65,27 +63,27 @@ class TkOptimization(mopac_step.TkEnergy):
         """
         row = super().reset_dialog()
 
-        convergence = self['convergence'].get()
-        method = self['method'].get()
+        convergence = self["convergence"].get()
+        method = self["method"].get()
 
         widgets = []
         widgets_2 = []
-        self['method'].grid(row=row, column=0, columnspan=2, sticky=tk.EW)
-        widgets.append(self['method'])
+        self["method"].grid(row=row, column=0, columnspan=2, sticky=tk.EW)
+        widgets.append(self["method"])
         row += 1
-        self['cycles'].grid(row=row, column=1, sticky=tk.EW)
-        widgets_2.append(self['cycles'])
+        self["cycles"].grid(row=row, column=1, sticky=tk.EW)
+        widgets_2.append(self["cycles"])
         row += 1
-        if convergence not in ('normal', 'precise', 'relative'):
-            self['gnorm'].grid(row=row, column=1, sticky=tk.EW)
-            widgets_2.append(self['gnorm'])
+        if convergence not in ("normal", "precise", "relative"):
+            self["gnorm"].grid(row=row, column=1, sticky=tk.EW)
+            widgets_2.append(self["gnorm"])
             row += 1
-        if method[0:2] == 'EF' or method[0] == '$':
-            self['recalc'].grid(row=row, column=1, sticky=tk.EW)
-            widgets_2.append(self['recalc'])
+        if method[0:2] == "EF" or method[0] == "$":
+            self["recalc"].grid(row=row, column=1, sticky=tk.EW)
+            widgets_2.append(self["recalc"])
             row += 1
-            self['dmax'].grid(row=row, column=1, sticky=tk.EW)
-            widgets_2.append(self['dmax'])
+            self["dmax"].grid(row=row, column=1, sticky=tk.EW)
+            widgets_2.append(self["dmax"])
             row += 1
 
         sw.align_labels(widgets)

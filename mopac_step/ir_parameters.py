@@ -24,7 +24,7 @@ class IRParameters(mopac_step.EnergyParameters):
             "help_text": (
                 "Don't stop if the initial structure is not "
                 "a minimum or other stationary point."
-            )
+            ),
         },
         "trans": {
             "default": ("0"),
@@ -38,7 +38,7 @@ class IRParameters(mopac_step.EnergyParameters):
                 "The number of internal rotations to ignore. "
                 "A corresponding number of the lowest modes "
                 "will be ignored, which is a first approximation."
-            )
+            ),
         },
         # Put in the configuration handling options needed
         "structure handling": {
@@ -65,7 +65,7 @@ class IRParameters(mopac_step.EnergyParameters):
                 "keep current name",
                 "use SMILES string",
                 "use Canonical SMILES string",
-                "use configuration number"
+                "use configuration number",
             ),
             "format_string": "s",
             "description": "Configuration name:",
@@ -77,10 +77,4 @@ class IRParameters(mopac_step.EnergyParameters):
         """Initialize the instance, by default from the default
         parameters given in the class"""
 
-        super().__init__(
-            defaults={
-                **IRParameters.parameters,
-                **defaults
-            },
-            data=data
-        )
+        super().__init__(defaults={**IRParameters.parameters, **defaults}, data=data)
