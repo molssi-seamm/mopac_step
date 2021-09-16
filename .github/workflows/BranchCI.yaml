@@ -39,7 +39,7 @@ jobs:
       shell: bash -l {0}
       run: |
         black --check --diff mopac_step tests
-        yapf --diff --recursive mopac_step tests
+        flake8 mopac_step tests
     - name: Run tests
       shell: bash -l {0}
       run: |
