@@ -80,9 +80,9 @@ class Optimization(mopac_step.Energy):
         handling = P["structure handling"]
         text += " The optimized structures will "
         if handling == "Overwrite the current configuration":
-            text += "overwrite the current configuration."
+            text += "overwrite the current configuration "
         elif handling == "Create a new configuration":
-            text += "be put in a new configuration."
+            text += "be put in a new configuration "
         else:
             raise ValueError(
                 f"Do not understand how to handle the structure: '{handling}'"
@@ -90,21 +90,17 @@ class Optimization(mopac_step.Energy):
 
         confname = P["configuration name"]
         if confname == "use SMILES string":
-            text += " The name of the configuration will be the SMILES string given."
+            text += "using SMILES as its name."
         elif confname == "use Canonical SMILES string":
-            text += (
-                " The name of the configuration will be the canonical SMILES of the"
-                " structure."
-            )
+            text += "using canonical SMILES as its name."
         elif confname == "keep current name":
-            text += " The name of the configuration will not be changed."
+            text += "keeping the current name."
         elif confname == "optimized with <Hamiltonian>":
-            text += " The name of the configuration will be 'optimized with "
-            text += "{hamiltonian}'."
+            text += "with 'optimized with {hamiltonian}' as its name."
         elif confname == "use configuration number":
-            text += " The name of the configuration will be its number (1, 2, ..)."
+            text += "using the index of the configuration (1, 2, ...) as its name."
         else:
-            text += f" The name of the configuration will be {confname}."
+            text += "with '{confname}' as its name."
 
         return self.header + '\n' + __(text, **P, indent=4 * ' ').__str__()
 

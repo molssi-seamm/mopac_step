@@ -53,6 +53,32 @@ class IR(mopac_step.Energy):
                 'approximately account for {trans} internal rotations.'
             )
 
+        # Structure handling
+        handling = P["structure handling"]
+        text += " The structure in the standard orientation will "
+        if handling == "Overwrite the current configuration":
+            text += "overwrite the current configuration "
+        elif handling == "Create a new configuration":
+            text += "be put in a new configuration "
+        else:
+            raise ValueError(
+                f"Do not understand how to handle the structure: '{handling}'"
+            )
+
+        confname = P["configuration name"]
+        if confname == "use SMILES string":
+            text += "using SMILES as its name."
+        elif confname == "use Canonical SMILES string":
+            text += "using canonical SMILES as its name."
+        elif confname == "keep current name":
+            text += "keeping the current name."
+        elif confname == "vibrations with <Hamiltonian>":
+            text += "with 'vibrations with {hamiltonian}' as its name."
+        elif confname == "use configuration number":
+            text += "using the index of the configuration (1, 2, ...) as its name."
+        else:
+            text += "with '{confname}' as its name."
+
         return self.header + '\n' + __(text, **P, indent=4 * ' ').__str__()
 
     def get_input(self):
@@ -90,6 +116,46 @@ class IR(mopac_step.Energy):
         """Parse the output and generating the text output and store the
         data in variables for other stages to access
         """
+        # Update the structure
+        P = self.parameters.current_values_to_dict(
+            context=seamm.flowchart_variables._data
+        )
+        if "ORIENTATION_ATOM_X" in data:
+            system, starting_configuration = self.get_system_configuration(None)
+            periodicity = starting_configuration.periodicity
+            if (
+                "structure handling" in P and
+                P["structure handling"] == "Create a new configuration"
+            ):
+                configuration = system.create_configuration(
+                    periodicity=periodicity,
+                    atomset=starting_configuration.atomset,
+                    bondset=starting_configuration.bondset,
+                    cell_id=starting_configuration.cell_id,
+                )
+            else:
+                configuration = starting_configuration
+
+            if periodicity != 0:
+                raise NotImplementedError("IR cannot yet handle periodicity")
+            xyz = []
+            it = iter(data['ORIENTATION_ATOM_X'])
+            for x in it:
+                xyz.append([float(x), float(next(it)), float(next(it))])
+            configuration.atoms.set_coordinates(xyz, fractionals=False)
+
+            # And the name of the configuration.
+            if "configuration name" in P:
+                if P["configuration name"] == "vibrations with <Hamiltonian>":
+                    configuration.name = f"vibrations with {P['hamiltonian']}"
+                elif P["configuration name"] == "keep current name":
+                    pass
+                elif P["configuration name"] == "use SMILES string":
+                    configuration.name = configuration.smiles
+                elif P["configuration name"] == "use Canonical SMILES string":
+                    configuration.name = configuration.canonical_smiles
+                elif P["configuration name"] == "use configuration number":
+                    configuration.name = str(configuration.n_configurations)
 
         # The results
         printer.normal(

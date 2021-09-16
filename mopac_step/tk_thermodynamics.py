@@ -5,6 +5,7 @@
 import mopac_step
 import seamm_widgets as sw
 import tkinter as tk
+import tkinter.ttk as ttk
 
 
 class TkThermodynamics(mopac_step.TkEnergy):
@@ -25,7 +26,24 @@ class TkThermodynamics(mopac_step.TkEnergy):
     ):
         """Create the dialog!"""
         self.logger.debug('Creating the dialog')
-        super().create_dialog(title=title, calculation='thermodynamics')
+        frame = super().create_dialog(title=title, calculation='thermodynamics')
+
+        P = self.node.parameters
+
+        # Create the structure-handling widgets
+        sframe = self["structure frame"] = ttk.LabelFrame(
+            frame, text="Configuration Handling", labelanchor=tk.N
+        )
+        row = 0
+        widgets = []
+        for key in ("structure handling", "configuration name"):
+            self[key].destroy()
+            self[key] = P[key].widget(sframe)
+            self[key].grid(row=row, column=0, sticky=tk.EW)
+            widgets.append(self[key])
+            row += 1
+        sw.align_labels(widgets)
+
         self.logger.debug('Finished creating the dialog')
 
     def reset_dialog(self, widget=None):
@@ -41,7 +59,10 @@ class TkThermodynamics(mopac_step.TkEnergy):
             self[key].grid(row=row, column=0, columnspan=2, sticky=tk.EW)
             widgets.append(self[key])
             row += 1
-
         sw.align_labels(widgets)
+
+        # And how to handle the configuration
+        self["structure frame"].grid(row=row, column=0, columnspan=2, sticky=tk.EW)
+        row += 1
 
         return row
