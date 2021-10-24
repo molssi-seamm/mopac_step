@@ -187,6 +187,39 @@ class MOPAC(seamm.Node):
 
         extra_keywords = ["AUX"]
 
+        # If the system is charged or has a spin multiplicity, add those keywords.
+        if configuration.charge != 0:
+            extra_keywords.append(f"CHARGE={configuration.charge}")
+        multiplicity = configuration.spin_multiplicity
+        if multiplicity <= 10:
+            extra_keywords.append(
+                (
+                    "SINGLET",
+                    "DOUBLET",
+                    "TRIPLET",
+                    "QUARTET",
+                    "QUINTET",
+                    "SEXTET",
+                    "SEPTET",
+                    "OCTET",
+                    "NONET",
+                )[multiplicity - 1]
+            )
+        else:
+            extra_keywords.append(f"MS={(multiplicity - 1) / 2}")
+
+        n_active_electrons = configuration.n_active_electrons
+        n_active_orbitals = configuration.n_active_orbitals
+
+        if n_active_orbitals > 0:
+            extra_keywords.append(f"OPEN({n_active_electrons},{n_active_orbitals})")
+            state = configuration.state
+            if state != "1":
+                extra_keywords.append(f"ROOT={state}")
+        else:
+            if multiplicity > 1:
+                extra_keywords.append("UHF")
+
         # All Lanthanides (except La and Lu) must use the SPARKLES keyword.
         # La and Lu use the SPARKLES keyword optionally, depending
         # if you're looking for good structure (do use SPARKLES) or
@@ -212,24 +245,6 @@ class MOPAC(seamm.Node):
         if len(La_list) > 0:
             extra_keywords.append("SPARKLES")
 
-        # if False and 'extras' in configuration:
-        #     extras = configuration['extras']
-
-        #     for k, v in extras.items():
-        #         if v is not None:
-        #             if k == 'net_charge':
-        #                 extra_keywords.append('CHARGE={}'.format(v))
-        #             elif k == 'field':
-        #                 extra_keywords.append(
-        #                     'FIELD=({},{},{})'.format(v[0], v[1], v[2])
-        #                 )
-        #             elif k == 'open':
-        #                 extra_keywords.append(
-        #                     'OPEN({},{})'.format(v[0], v[1])
-        #                  )
-        #             else:
-        #                 extra_keywords.append(v)
-
         if mopac_num_threads > 1:
             extra_keywords.append("THREADS={}".format(mopac_num_threads))
 
@@ -247,12 +262,8 @@ class MOPAC(seamm.Node):
             keywords = node.get_input()
             lines = []
             lines.append(" ".join(keywords + extra_keywords))
-            lines.append("Run from MolSSI-SEAMM flowchart")
-            lines.append(
-                "{} using {} hamiltonian".format(
-                    node.title, node.parameters["hamiltonian"]
-                )
-            )
+            lines.append(system.name)
+            lines.append(configuration.name)
 
             if "OLDGEO" in keywords:
                 input_data.append("\n".join(lines))
@@ -471,6 +482,8 @@ class MOPAC(seamm.Node):
         lineno = -1
         nlines = len(lines)
 
+        spin_polarized = False
+
         while True:
             lineno += 1
             if lineno >= nlines:
@@ -491,6 +504,17 @@ class MOPAC(seamm.Node):
                     raise RuntimeError("Property '{}' not recognized.".format(name))
                 if "units" in properties[name]:
                     data[name + ",units"] = properties[name]["units"]
+
+                if name == "NUM_ALPHA_ELECTRONS":
+                    spin_polarized = True
+
+                # Bug workaround
+                # Sometimes MOPAC does not write out the MO occupancies
+                if name == "MOLECULAR_ORBITAL_OCCUPANCIES":
+                    tmp_line = lines[lineno + 1].strip()
+                    if tmp_line[0].isalpha():
+                        continue
+                # end of workaround
 
                 # Check for floating point numbers run together
                 if properties[name]["type"] == "float":
@@ -519,7 +543,7 @@ class MOPAC(seamm.Node):
 
                 # AUX file contains alpha and beta orbitals, that's why we are
                 # doubling it
-                if name == "MICROSTATE_CONFIGURATIONS":
+                if name == "MICROSTATE_CONFIGURATIONS" and spin_polarized:
                     size = size * 2
 
                 while len(tmp) < size:
