@@ -70,6 +70,9 @@ setup(
         'Programming Language :: Python :: 3.9',
     ],
     entry_points={
+        'console_scripts': [
+            'mopac-step-installer=mopac_step.__main__:run',
+        ],
         'org.molssi.seamm': [
             'MOPAC = mopac_step:MOPACStep',
         ],

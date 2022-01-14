@@ -3,14 +3,16 @@
 """Setup and run MOPAC"""
 
 import calendar
-import cpuinfo
 import datetime
 import logging
 import os
 import os.path
+from pathlib import Path
 import pprint
 import re
 import string
+
+import psutil
 
 import seamm
 import seamm_util
@@ -73,20 +75,27 @@ class MOPAC(seamm.Node):
         parser.add_argument(
             parser_name,
             "--mopac-exe",
-            default="MOPAC2016",
+            default="MOPAC2016.exe",
+            help="the name of the MOPAC executable",
+        )
+
+        parser.add_argument(
+            parser_name,
+            "--mopac-path",
+            default="",
             help="the path to the MOPAC executable",
         )
 
         parser.add_argument(
             parser_name,
-            "--mopac-num-threads",
+            "--ncores",
             default="default",
             help="How many threads to use in MOPAC",
         )
 
         parser.add_argument(
             parser_name,
-            "--mopac-mkl-num-threads",
+            "--mkl-num-threads",
             default="default",
             help="How many threads to use with MKL in MOPAC",
         )
@@ -137,43 +146,46 @@ class MOPAC(seamm.Node):
         printer.important("")
 
         # Access the options and find the executable
-        o = self.options
+        options = self.options
+        seamm_options = self.global_options
 
-        mopac_exe = seamm_util.check_executable(o["mopac_exe"])
+        if options["mopac_path"] == "":
+            mopac_exe = seamm_util.check_executable(options["mopac_exe"])
+        else:
+            mopac_exe = (
+                Path(options["mopac_path"]).expanduser().resolve()
+                / options["mopac_exe"]
+            )
 
         # How many processors does this node have?
-        info = cpuinfo.get_cpu_info()
-        n_cores = info["count"]
-        # Account for Intel hyperthreading
-        if info["arch"][0:3] == "X86":
-            n_cores = int(n_cores / 2)
-        if n_cores < 1:
-            n_cores = 1
+        n_cores = psutil.cpu_count(logical=False)
         self.logger.info("The number of cores is {}".format(n_cores))
 
+        if seamm_options["ncores"] != "available":
+            n_cores = min(n_cores, int(seamm_options["ncores"]))
         # Currently, on the Mac, it is not clear that any parallelism helps
         # much.
 
-        if o["mopac_mkl_num_threads"] == "default":
+        if options["ncores"] == "default":
             # Wild guess!
             # mopac_mkl_num_threads = int(pow(n_atoms / 16, 0.3333))
-            mopac_mkl_num_threads = 1
+            mkl_num_threads = 1
         else:
-            mopac_mkl_num_threads = int(o["mopac_mkl_num_threads"])
-        if mopac_mkl_num_threads > n_cores:
-            mopac_mkl_num_threads = n_cores
-        elif mopac_mkl_num_threads < 1:
-            mopac_mkl_num_threads = 1
-        self.logger.info(f"MKL will use {mopac_mkl_num_threads} threads.")
+            mkl_num_threads = int(options["mkl_num_threads"])
+        if mkl_num_threads > n_cores:
+            mkl_num_threads = n_cores
+        elif mkl_num_threads < 1:
+            mkl_num_threads = 1
+        self.logger.info(f"MKL will use {mkl_num_threads} threads.")
 
-        if o["mopac_num_threads"] == "default":
+        if options["ncores"] == "default":
             # Wild guess!
             # mopac_num_threads = int(pow(n_atoms / 32, 0.5))
             mopac_num_threads = 1
             if mopac_num_threads > n_cores:
                 mopac_num_threads = n_cores
         else:
-            mopac_num_threads = int(o["mopac_num_threads"])
+            mopac_num_threads = int(options["ncores"])
         if mopac_num_threads > n_cores:
             mopac_num_threads = n_cores
         if mopac_num_threads < 1:
@@ -181,7 +193,7 @@ class MOPAC(seamm.Node):
         self.logger.info(f"MOPAC will use {mopac_num_threads} threads.")
 
         env = {
-            "MKL_NUM_THREADS": str(mopac_mkl_num_threads),
+            "MKL_NUM_THREADS": str(mkl_num_threads),
             "OMP_NUM_THREADS": str(mopac_num_threads),
         }
 
@@ -318,7 +330,7 @@ class MOPAC(seamm.Node):
         local = seamm.ExecLocal()
         return_files = ["mopac.arc", "mopac.out", "mopac.aux"]
         result = local.run(
-            cmd=[mopac_exe, "mopac.dat"],
+            cmd=[str(mopac_exe), "mopac.dat"],
             files=files,
             return_files=return_files,
             env=env,

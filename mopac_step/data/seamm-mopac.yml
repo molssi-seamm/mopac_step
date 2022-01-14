@@ -1,0 +1,5 @@
+name: seamm-mopac
+channels:
+  - conda-forge
+dependencies:
+  - python
