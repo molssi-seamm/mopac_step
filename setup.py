@@ -21,7 +21,7 @@ with open('README.rst') as readme_file:
 with open('HISTORY.rst') as history_file:
     history = history_file.read()
 
-with open('requirements_install.txt') as fd:
+with open('requirements.txt') as fd:
     requirements = fd.read()
 
 setup(
@@ -70,6 +70,9 @@ setup(
         'Programming Language :: Python :: 3.9',
     ],
     entry_points={
+        'console_scripts': [
+            'mopac-step-installer=mopac_step.__main__:run',
+        ],
         'org.molssi.seamm': [
             'MOPAC = mopac_step:MOPACStep',
         ],
