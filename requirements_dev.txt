@@ -6,5 +6,4 @@ flake8
 pytest
 pytest-runner
 sphinx
-tox
 twine
