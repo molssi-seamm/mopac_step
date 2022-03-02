@@ -132,6 +132,10 @@ class Thermodynamics(mopac_step.Energy):
                     bondset=starting_configuration.bondset,
                     cell_id=starting_configuration.cell_id,
                 )
+                configuration.charge = starting_configuration.charge
+                configuration.spin_multiplicity = (
+                    starting_configuration.spin_multiplicity
+                )
             else:
                 configuration = starting_configuration
 
