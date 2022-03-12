@@ -1,9 +1,11 @@
-name: Dev
+name: Dev-Release
 
 on:
-  push:
+  create:
     branches:
       - "dev"
+    tags:
+      - "*"
 
 jobs:
   test:
