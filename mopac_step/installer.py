@@ -145,5 +145,10 @@ class Installer(seamm_installer.InstallerBase):
         zip_archive = zipfile.ZipFile(zip_file)
         zip_archive.extract("MOPAC2016.exe", path)
 
+        if system == "Linux":
+            zip_archive.extract("libiomp5.so", path)
+            lib_path = path / "libiomp5.so"
+            lib_path.chmod(0o755)
+
         mopac_exe = path / "MOPAC2016.exe"
         mopac_exe.chmod(0o755)
