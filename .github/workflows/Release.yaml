@@ -12,9 +12,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
-      with:
-        # This gets all branches (1 = only current branch)
-        fetch-depth: 0
     - name: Additional info about the build
       shell: bash
       run: |
