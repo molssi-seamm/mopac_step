@@ -3,11 +3,14 @@
 """Setup and run MOPAC"""
 
 import logging
+from pathlib import Path
+import traceback
+
+import mopac_step
 import seamm
 import seamm_util.printing as printing
 from seamm_util import units_class
 from seamm_util.printing import FormattedText as __
-import mopac_step
 
 logger = logging.getLogger(__name__)
 job = printing.getPrinter()
@@ -236,7 +239,7 @@ class Optimization(mopac_step.Energy):
 
         return keywords
 
-    def analyze(self, indent="", data={}, out=[]):
+    def analyze(self, indent="", data={}, out=[], table=None):
         """Parse the output and generating the text output and store the
         data in variables for other stages to access
         """
@@ -288,38 +291,41 @@ class Optimization(mopac_step.Energy):
                 elif P["configuration name"] == "use configuration number":
                     configuration.name = str(configuration.n_configurations)
 
+        # Write the structure out for viewing.
+        directory = Path(self.directory)
+        directory.mkdir(parents=True, exist_ok=True)
+
+        #  MMCIF file has bonds
+        try:
+            path = directory / "optimized.mmcif"
+            path.write_text(configuration.to_mmcif_text())
+        except Exception:
+            message = "Error creating the mmcif file\n\n" + traceback.format_exc()
+            logger.warning(message)
+        # CIF file has cell
+        if configuration.periodicity == 3:
+            try:
+                path = directory / "optimized.cif"
+                path.write_text(configuration.to_cif_text())
+            except Exception:
+                message = "Error creating the cif file\n\n" + traceback.format_exc()
+                logger.warning(message)
+
         # The results
         if "NUMBER_SCF_CYCLES" in data:
             text = (
-                "The geometry optimization converged in "
-                "{NUMBER_SCF_CYCLES} iterations to a heat of "
-                "formation of {HEAT_OF_FORMATION} kcal/mol and "
-                "gradient norm of {GRADIENT_NORM} kcal/mol/Å."
+                "The geometry optimization converged in {NUMBER_SCF_CYCLES} iterations."
             )
         else:
             data["NUMBER_SCF_CYCLES"] = len(data["HEAT_OF_FORM_UPDATED"])
             data["HEAT_OF_FORMATION"] = data["HEAT_OF_FORM_UPDATED"][-1]
             data["GRADIENT_NORM"] = data["GRADIENT_UPDATED"][-1]
             text = (
-                "The geometry optimization did not converge!\n"
-                "It ran for {NUMBER_SCF_CYCLES} "
-                "iterations to a final heat of formation of "
-                "{HEAT_OF_FORMATION} kcal/mol and gradient norm "
-                "of {GRADIENT_NORM} kcal/mol/Å."
+                "The geometry optimization did not converge in {NUMBER_SCF_CYCLES} "
+                "steps. The following results are for the final structure.\n"
             )
 
-        if "POINT_GROUP" in data:
-            text += " The system has {POINT_GROUP} symmetry."
-
         printer.normal(__(text, **data, indent=self.indent + 4 * " "))
-
-        # Put any requested results into variables or tables
-        self.store_results(
-            data=data,
-            properties=mopac_step.properties,
-            results=self.parameters["results"].value,
-            create_tables=self.parameters["create tables"].get(),
-        )
 
         # If the optimizer used was the default, put in the correct citations
 
@@ -383,3 +389,5 @@ class Optimization(mopac_step.Energy):
                 )
             else:
                 logger.warning("Could not find which minimizer was used!")
+
+        super().analyze(indent=indent, data=data, out=out, table=table)

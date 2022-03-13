@@ -100,6 +100,13 @@ class MOPAC(seamm.Node):
             help="How many threads to use with MKL in MOPAC",
         )
 
+        parser.add_argument(
+            parser_name,
+            "--max-atoms-to-print",
+            default=25,
+            help="Maximum number of atoms to print charges, etc.",
+        )
+
         return result
 
     def set_id(self, node_id):
