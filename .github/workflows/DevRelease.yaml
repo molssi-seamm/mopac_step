@@ -58,8 +58,7 @@ jobs:
         ls -l dist/
     - name: Publish distribution 📦 to Test PyPI
       # Only publish tagged versions with 'dev' or 'rc' in the tag.
-      if: github.ref_type == 'tag'
-      if: contains(github.ref, 'dev') == true || contains(github.ref, 'rc') == true
+      if: github.ref_type == 'tag' && contains(github.ref, 'dev') == true || contains(github.ref, 'rc') == true
       uses: pypa/gh-action-pypi-publish@release/v1
       with:
         password: ${{ secrets.pypi_password }}
