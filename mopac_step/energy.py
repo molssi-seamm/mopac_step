@@ -55,16 +55,43 @@ class Energy(seamm.Node):
         if not P:
             P = self.parameters.values_to_dict()
 
-        text = "Single-point energy using {hamiltonian}, converged to "
+        text = "Calculated with {hamiltonian}, converged to "
         # Convergence
         if P["convergence"] == "normal":
             text += "the 'normal' level of 1.0e-04 kcal/mol."
         elif P["convergence"] == "precise":
             text += "the 'precise' level of 1.0e-06 kcal/mol."
         elif P["convergence"] == "relative":
-            text += "a factor of {relative} times the " "normal criterion."
+            text += "a factor of {relative} times the normal criterion."
         elif P["convergence"] == "absolute":
-            text += "converged to {absolute}"
+            text += "converged to {absolute}."
+
+        if self.parameters["uhf"].is_expr:
+            text += (
+                " Whether to use spin-unrestricted SCF (UHF) for closed-shell molecules"
+                "will be determined by '{uhf}'."
+            )
+        elif self.parameters["uhf"].get():
+            text += " The SCF will be spin-unrestricted (UHF) for all molecules."
+        else:
+            text += (
+                " The SCF will be restricted for closed-shell molecules (RHF) and "
+                "spin-unrestricted (UHF) for all others."
+            )
+
+        if self.parameters["COSMO"].is_expr:
+            text += (
+                "\n\n '{COSMO}' will determine whether to use the COSMO solvation "
+                "model. If it is used the parameters will be "
+            )
+        elif self.parameters["COSMO"].get():
+            text += "\n\nThe COSMO solvation model will be used with "
+
+        if self.parameters["COSMO"].is_expr or self.parameters["COSMO"].get():
+            text += (
+                "dielectric constant = {eps}, solvent radius = {rsolve}, "
+                "{nspa} grid points per atom, and a cutoff of {disex}."
+            )
 
         return self.header + "\n" + __(text, **P, indent=4 * " ").__str__()
 
@@ -77,6 +104,7 @@ class Energy(seamm.Node):
         P = self.parameters.current_values_to_dict(
             context=seamm.flowchart_variables._data
         )
+
         # Have to fix formatting for printing...
         PP = dict(P)
         for key in PP:
@@ -554,6 +582,16 @@ class Energy(seamm.Node):
                 "Don't recognize convergence '{}'".format(P["convergence"])
             )
 
+        if P["uhf"]:
+            keywords.append("UHF")
+
+        if P["COSMO"]:
+            keywords.append(f"EPS={P['eps']}")
+            rsolve = P["rsolve"].to("Å").magnitude
+            keywords.append(f"RSOLVE={rsolve}")
+            keywords.append(f"NSPA={P['nspa']}")
+            keywords.append(f"DISEX={P['disex']}")
+
         if P["calculate gradients"]:
             keywords.append("GRADIENTS")
 
@@ -602,6 +640,18 @@ class Energy(seamm.Node):
             table["Property"].append("")
             table["Value"].append(f"{tmp:.2f}")
             table["Units"].append("kJ/mol")
+
+        if "SPIN_COMPONENT" in data:
+            tmp = data["SPIN_COMPONENT"]
+            table["Property"].append("Sz")
+            table["Value"].append(f"{tmp:.2f}")
+            table["Units"].append("")
+
+        if "TOTAL_SPIN" in data:
+            tmp = data["TOTAL_SPIN"]
+            table["Property"].append("S^2")
+            table["Value"].append(f"{tmp:.2f}")
+            table["Units"].append("")
 
         if "IONIZATION_POTENTIAL" in data:
             tmp = data["IONIZATION_POTENTIAL"]

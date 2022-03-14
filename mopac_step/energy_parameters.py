@@ -79,9 +79,91 @@ class EnergyParameters(seamm.Parameters):
                 "* 'absolute' sets the criterion directly."
             ),
         },
+        "uhf": {
+            "default": "no",
+            "kind": "boolean",
+            "default_units": "",
+            "enumeration": (
+                "yes",
+                "no",
+            ),
+            "format_string": "s",
+            "description": "UHF for singlets:",
+            "help_text": "Whether to use UHF for singlet states.",
+        },
+        "COSMO": {
+            "default": "no",
+            "kind": "boolean",
+            "default_units": "",
+            "enumeration": (
+                "yes",
+                "no",
+            ),
+            "format_string": "s",
+            "description": "Solvent using COSMO:",
+            "help_text": "Whether to use COSMO solvation model.",
+        },
+        "eps": {
+            "default": "78.4",
+            "kind": "float",
+            "default_units": "",
+            "enumeration": tuple(),
+            "format_string": "",
+            "description": "Dielectric constant:",
+            "help_text": "The solvent's dielectric constant.",
+        },
+        "rsolve": {
+            "default": "1.3",
+            "kind": "float",
+            "default_units": "Å",
+            "enumeration": tuple(),
+            "format_string": "",
+            "description": "Solvent radius:",
+            "help_text": "The solvent's approximate radius.",
+        },
+        "nspa": {
+            "default": 42,
+            "kind": "integer",
+            "default_units": "",
+            "enumeration": (
+                "12",
+                "32",
+                "42",
+                "92",
+                "122",
+                "162",
+                "252",
+                "272",
+                "362",
+                "482",
+                "492",
+                "752",
+                "812",
+                "1082",
+                "1442",
+                "1472",
+            ),
+            "format_string": "",
+            "description": "Surface grid size:",
+            "help_text": (
+                "The number of points in the solvent-accessible surface grid per atom."
+            ),
+        },
+        "disex": {
+            "default": "2.0",
+            "kind": "float",
+            "default_units": "",
+            "enumeration": tuple(),
+            "format_string": "",
+            "description": "Cutoff:",
+            "help_text": (
+                "The cutoff for exact calculation of segment-segment interactions in "
+                "COSMO."
+            ),
+        },
         "calculate gradients": {
             "default": "yes",
-            "kind": "enumeration",
+            "kind": "boolean",
             "default_units": "",
             "enumeration": (
                 "yes",

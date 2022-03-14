@@ -94,37 +94,6 @@ class OptimizationParameters(mopac_step.EnergyParameters):
                 "may be useful."
             ),
         },
-        # Put in the configuration handling options needed
-        "structure handling": {
-            "default": "Overwrite the current configuration",
-            "kind": "enum",
-            "default_units": "",
-            "enumeration": (
-                "Overwrite the current configuration",
-                "Create a new configuration",
-            ),
-            "format_string": "s",
-            "description": "Configuration handling:",
-            "help_text": (
-                "Whether to overwrite the current configuration, or create a new "
-                "configuration or system and configuration for the new structure"
-            ),
-        },
-        "configuration name": {
-            "default": "optimized with <Hamiltonian>",
-            "kind": "string",
-            "default_units": "",
-            "enumeration": (
-                "optimized with <Hamiltonian>",
-                "keep current name",
-                "use SMILES string",
-                "use Canonical SMILES string",
-                "use configuration number",
-            ),
-            "format_string": "s",
-            "description": "Configuration name:",
-            "help_text": "The name for the new configuration",
-        },
     }
 
     def __init__(self, defaults={}, data=None):
@@ -132,5 +101,10 @@ class OptimizationParameters(mopac_step.EnergyParameters):
         parameters given in the class"""
 
         super().__init__(
-            defaults={**OptimizationParameters.parameters, **defaults}, data=data
+            defaults={
+                **OptimizationParameters.parameters,
+                **mopac_step.structure_handling_parameters,
+                **defaults,
+            },
+            data=data,
         )
