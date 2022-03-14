@@ -402,14 +402,12 @@ class MOPAC(seamm.Node):
         out = []
         start = 0
         lineno = 0
-        n_star_lines = 0
         for line in lines:
-            if line[1:51] == 50 * "*":
-                n_star_lines += 1
-                if n_star_lines == 7:
-                    out.append(lines[start:lineno])
-                    start = lineno
-                    n_star_lines = 0
+            if "** Cite this program as:" in line:
+                if lineno == 2:
+                    continue
+                out.append(lines[start : lineno - 1])
+                start = lineno - 2
             lineno += 1
         out.append(lines[start:])
 
@@ -448,7 +446,13 @@ class MOPAC(seamm.Node):
             for value in node.description:
                 printer.important(value)
 
-            node.analyze(data=data, out=out[section])
+            if section >= len(out):
+                logger.error(
+                    "Could not find the MOPAC output for subjob {section + 1}/"
+                )
+                node.analyze(data=data, out="")
+            else:
+                node.analyze(data=data, out=out[section])
 
             printer.normal("")
 
