@@ -2,12 +2,19 @@
 
 """Run a vibrational frequency calculation in MOPAC"""
 
+import csv
 import logging
+from pathlib import Path
+import textwrap
+import traceback
+
+from tabulate import tabulate
+
+import mopac_step
 import seamm
 import seamm_util.printing as printing
 from seamm_util import units_class
 from seamm_util.printing import FormattedText as __
-import mopac_step
 
 logger = logging.getLogger(__name__)
 job = printing.getPrinter()
@@ -23,6 +30,21 @@ class IR(mopac_step.Energy):
         super().__init__(flowchart=flowchart, title=title, extension=extension)
 
         self.parameters = mopac_step.IRParameters()
+
+        # Customize the options for naming the configuration
+        p = self.parameters["configuration name"]
+        enumeration = (
+            "use SMILES string",
+            "use Canonical SMILES string",
+            "keep current name",
+            "vibrations with <Hamiltonian>",
+            "use configuration number",
+        )
+        p.default = "vibrations with <Hamiltonian>"
+        if p.value in p._data["enumeration"] and p.value not in enumeration:
+            p.value = p.default
+        p._data["enumeration"] = enumeration
+
         self.description = "Infrared (vibrational) spectroscopy calculation"
 
     def description_text(self, P=None):
@@ -30,6 +52,10 @@ class IR(mopac_step.Energy):
 
         if not P:
             P = self.parameters.values_to_dict()
+
+        # The energy part of the description
+        tmp = super().description_text(P)
+        energy_description = textwrap.dedent("\n".join(tmp.splitlines()[1:]))
 
         text = (
             "Harmonic vibrational calculation using {hamiltonian}, "
@@ -45,23 +71,12 @@ class IR(mopac_step.Energy):
         elif P["convergence"] == "absolute":
             text += "converged to {absolute}."
 
-        if P["trans"] != 0:
-            text += (
-                "\n\nA total of {trans} lowest modes will be ignored to "
-                "approximately account for {trans} internal rotations."
-            )
+        # Put in the description of the energy calculation
+        text += "\n\nThe energy and forces will be c" + energy_description[1:]
+        text += "\n\n"
 
         # Structure handling
-        handling = P["structure handling"]
-        text += " The structure in the standard orientation will "
-        if handling == "Overwrite the current configuration":
-            text += "overwrite the current configuration "
-        elif handling == "Create a new configuration":
-            text += "be put in a new configuration "
-        else:
-            raise ValueError(
-                f"Do not understand how to handle the structure: '{handling}'"
-            )
+        text += "The structure in the standard orientation will {structure handling} "
 
         confname = P["configuration name"]
         if confname == "use SMILES string":
@@ -101,8 +116,6 @@ class IR(mopac_step.Energy):
         for keyword in super().get_input():
             if keyword == "1SCF":
                 keywords.append("FORCE")
-                if P["trans"] != 0:
-                    keywords.append("TRANS={}".format(P["trans"]))
                 if P["let"]:
                     keywords.append("LET")
             else:
@@ -110,7 +123,7 @@ class IR(mopac_step.Energy):
 
         return keywords
 
-    def analyze(self, indent="", data={}, out=[]):
+    def analyze(self, indent="", data={}, out=[], table=None):
         """Parse the output and generating the text output and store the
         data in variables for other stages to access
         """
@@ -123,7 +136,7 @@ class IR(mopac_step.Energy):
             periodicity = starting_configuration.periodicity
             if (
                 "structure handling" in P
-                and P["structure handling"] == "Create a new configuration"
+                and P["structure handling"] == "be put in a new configuration"
             ):
                 configuration = system.create_configuration(
                     periodicity=periodicity,
@@ -139,7 +152,9 @@ class IR(mopac_step.Energy):
                 configuration = starting_configuration
 
             if periodicity != 0:
-                raise NotImplementedError("IR cannot yet handle periodicity")
+                raise NotImplementedError(
+                    "Thermodynamics cannot yet handle periodicity"
+                )
             xyz = []
             it = iter(data["ORIENTATION_ATOM_X"])
             for x in it:
@@ -159,23 +174,74 @@ class IR(mopac_step.Energy):
                 elif P["configuration name"] == "use configuration number":
                     configuration.name = str(configuration.n_configurations)
 
-        # The results
-        printer.normal(
-            __(
-                (
-                    "The geometry converged in {NUMBER_SCF_CYCLES} "
-                    "iterations to a heat of formation of {HEAT_OF_FORMATION} "
-                    "kcal/mol."
-                ),
-                **data,
-                indent=self.indent + 4 * " ",
-            )
-        )
+        # Write the structure out for viewing.
+        directory = Path(self.directory)
+        directory.mkdir(parents=True, exist_ok=True)
 
-        # Put any requested results into variables or tables
-        self.store_results(
-            data=data,
-            properties=mopac_step.properties,
-            results=self.parameters["results"].value,
-            create_tables=self.parameters["create tables"].get(),
+        #  MMCIF file has bonds
+        try:
+            path = directory / "optimized.mmcif"
+            path.write_text(configuration.to_mmcif_text())
+        except Exception:
+            message = "Error creating the mmcif file\n\n" + traceback.format_exc()
+            logger.warning(message)
+        # CIF file has cell
+        if configuration.periodicity == 3:
+            try:
+                path = directory / "optimized.cif"
+                path.write_text(configuration.to_cif_text())
+            except Exception:
+                message = "Error creating the cif file\n\n" + traceback.format_exc()
+                logger.warning(message)
+
+        # Print the moments of inertia
+        p1, p2, p3 = data["PRI_MOM_OF_I"]
+        r1, r2, r3 = data["ROTAT_CONSTS"]
+        tbl = {
+            "Property": ("Principal moment of inertia", "Rotational constants"),
+            "1": (p1, r1),
+            "2": (p2, r2),
+            "3": (p3, r3),
+            "Units": ("1.0E-40 g.cm^2", "1/cm"),
+        }
+        text_lines = "                  Rotational Constants\n"
+        text_lines += tabulate(
+            tbl,
+            headers="keys",
+            tablefmt="psql",
+            colalign=("center", "decimal", "decimal", "decimal", "left"),
         )
+        text_lines += "\n"
+        text = textwrap.indent(text_lines, self.indent + 7 * " ")
+        printer.normal(text)
+
+        # And the vibrational modes to a csv file
+        # First, how many rotations are there?
+        n_rot = sum([0 if PMI < 0.001 else 1 for PMI in data["PRI_MOM_OF_I"]])
+        n_vib = len(data["VIB._FREQ"]) - 3 - n_rot
+        with open(directory / "vibrations.csv", "w", newline="") as fd:
+            writer = csv.writer(fd)
+            writer.writerow(
+                (
+                    "Mode",
+                    "Frequency (1/cm)",
+                    "Symmetry",
+                    "Transition Dipole (e-)",
+                    "Travel (Å)",
+                    "Reduced Mass (amu)",
+                    "Effective Mass (amu)",
+                )
+            )
+            for row in zip(
+                range(1, n_vib + 1),
+                data["VIB._FREQ"][0:n_vib],
+                data["NORMAL_MODE_SYMMETRY_LABELS"][0:n_vib],
+                data["VIB._T_DIP"][0:n_vib],
+                data["VIB._TRAVEL"][0:n_vib],
+                data["VIB._RED_MASS"][0:n_vib],
+                data["VIB._EFF_MASS"][0:n_vib],
+            ):
+                writer.writerow(row)
+
+        # Let the energy module do its thing
+        super().analyze(indent=indent, data=data, out=out, table=table)
