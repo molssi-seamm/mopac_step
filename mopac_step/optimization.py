@@ -81,7 +81,8 @@ class Optimization(mopac_step.Energy):
         elif confname == "use configuration number":
             text += "using the index of the configuration (1, 2, ...) as its name."
         else:
-            text += "with '{confname}' as its name."
+            confname = confname.replace("<Hamiltonian>", P["hamiltonian"])
+            text += f"with '{confname}' as its name."
 
         return self.header + "\n" + __(text, **P, indent=4 * " ").__str__()
 
@@ -263,16 +264,18 @@ class Optimization(mopac_step.Energy):
 
             # And the name of the configuration.
             if "configuration name" in P:
-                if P["configuration name"] == "optimized with <Hamiltonian>":
-                    configuration.name = f"optimized with {P['hamiltonian']}"
-                elif P["configuration name"] == "keep current name":
-                    pass
-                elif P["configuration name"] == "use SMILES string":
+                if P["configuration name"] == "use SMILES string":
                     configuration.name = configuration.smiles
                 elif P["configuration name"] == "use Canonical SMILES string":
                     configuration.name = configuration.canonical_smiles
-                elif P["configuration name"] == "use configuration number":
-                    configuration.name = str(configuration.n_configurations)
+                elif P["configuration name"] == "keep current name":
+                    pass
+                elif P["configuration name"] == "optimized with <Hamiltonian>":
+                    configuration.name = f"optimized with {P['hamiltonian']}"
+                else:
+                    confname = P["configuration name"]
+                    confname = confname.replace("<Hamiltonian>", P["hamiltonian"])
+                    configuration.name = confname
 
         # Write the structure out for viewing.
         directory = Path(self.directory)
