@@ -3,10 +3,12 @@
 """The graphical part of a MOPAC Energy node"""
 
 import logging
+import tkinter as tk
+import tkinter.ttk as ttk
+
+import mopac_step
 import seamm
 import seamm_widgets as sw
-import mopac_step
-import tkinter as tk
 
 logger = logging.getLogger(__name__)
 
@@ -29,15 +31,6 @@ class TkEnergy(seamm.TkNode):
         Keyword arguments:
         """
         self.results_widgets = []
-
-        # Set the logging level for this module if requested
-        # if 'mopac_tk_energy_log_level' in self.options:
-        #     my_logger.setLevel(self.options.mopac_tk_energy_log_level)
-        #     my_logger.critical(
-        #         'Set log level to {}'.format(
-        #             self.options.mopac_tk_energy_log_level
-        #         )
-        #     )
 
         # Call the constructor for the energy
         if keyword_metadata is None:
@@ -68,16 +61,28 @@ class TkEnergy(seamm.TkNode):
         self.logger.debug("Creating the dialog")
         frame = super().create_dialog(title=title, widget="notebook", results_tab=True)
 
+        # Frame to isolate widgets
+        e_frame = self["energy frame"] = ttk.LabelFrame(
+            frame,
+            borderwidth=4,
+            relief="sunken",
+            text="Hamiltonian Parameters",
+            labelanchor="n",
+            padding=10,
+        )
+
         # Create all the widgets
         P = self.node.parameters
-        for key in P:
+        for key in mopac_step.EnergyParameters.parameters:
             if key not in ("results", "extra keywords", "create tables"):
-                self[key] = P[key].widget(frame)
+                self[key] = P[key].widget(e_frame)
 
-        # bindings...
-        self["convergence"].combobox.bind("<<ComboboxSelected>>", self.reset_dialog)
-        self["convergence"].combobox.bind("<Return>", self.reset_dialog)
-        self["convergence"].combobox.bind("<FocusOut>", self.reset_dialog)
+        # Set the callbacks for changes
+        for widget in ("convergence", "COSMO"):
+            w = self[widget]
+            w.combobox.bind("<<ComboboxSelected>>", self.reset_energy_frame)
+            w.combobox.bind("<Return>", self.reset_energy_frame)
+            w.combobox.bind("<FocusOut>", self.reset_energy_frame)
 
         self.setup_results(mopac_step.properties, calculation=calculation)
 
@@ -86,24 +91,34 @@ class TkEnergy(seamm.TkNode):
         return frame
 
     def reset_dialog(self, widget=None):
-        convergence = self["convergence"].get()
-
         frame = self["frame"]
         for slave in frame.grid_slaves():
             slave.grid_forget()
 
+        # Put in the energy frame
+        row = 0
+        self["energy frame"].grid(row=row, column=0, sticky=tk.EW)
+        row += 1
+
+        # and the widgets in it
+        self.reset_energy_frame()
+
+        return row
+
+    def reset_energy_frame(self, widget=None):
+        frame = self["energy frame"]
+        for slave in frame.grid_slaves():
+            slave.grid_forget()
+
+        convergence = self["convergence"].get()
+        cosmo = self["COSMO"].get()
+
         widgets = []
         row = 0
-        self["structure"].grid(row=row, column=0, columnspan=2, sticky=tk.EW)
-        widgets.append(self["structure"])
-        row += 1
-        self["hamiltonian"].grid(row=row, column=0, columnspan=2, sticky=tk.EW)
-        widgets.append(self["hamiltonian"])
-        row += 1
-        self["convergence"].grid(row=row, column=0, columnspan=2, sticky=tk.EW)
-        widgets.append(self["convergence"])
-        row += 1
-        sw.align_labels(widgets)
+        for key in ("hamiltonian", "uhf", "convergence"):
+            self[key].grid(row=row, column=0, columnspan=2, sticky=tk.EW)
+            widgets.append(self[key])
+            row += 1
 
         if convergence == "relative":
             self["relative"].grid(row=row, column=1, sticky=tk.W)
@@ -117,8 +132,21 @@ class TkEnergy(seamm.TkNode):
             row += 1
             self["absolute"].grid(row=row, column=1, sticky=tk.W)
             row += 1
-            sw.align_labels((self["relative"], self["absolute"]))
+            sw.align_labels((self["relative"], self["absolute"]), sticky=tk.E)
 
-        frame.columnconfigure(0, minsize=30)
+        self["COSMO"].grid(row=row, column=0, columnspan=2, sticky=tk.EW)
+        widgets.append(self["COSMO"])
+        row += 1
+        if cosmo == "yes":
+            widgets1 = []
+
+            for key in ("eps", "rsolve", "nspa", "disex"):
+                self[key].grid(row=row, column=1, sticky=tk.W)
+                widgets1.append(self[key])
+                row += 1
+            sw.align_labels(widgets1, sticky=tk.E)
+
+        sw.align_labels(widgets, sticky=tk.E)
+        frame.columnconfigure(0, minsize=100)
 
         return row

@@ -12,6 +12,7 @@ dependencies:
   - psutil
   - requests
   - seamm
+  - tabulate
 
   # Testing
   - black

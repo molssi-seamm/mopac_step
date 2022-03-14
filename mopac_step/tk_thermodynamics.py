@@ -29,6 +29,19 @@ class TkThermodynamics(mopac_step.TkEnergy):
 
         P = self.node.parameters
 
+        # Create the thermodynamics widgets
+        tframe = self["thermodynamics frame"] = ttk.LabelFrame(
+            frame, text="Thermodynamics", labelanchor=tk.N
+        )
+        row = 0
+        widgets = []
+        for key in mopac_step.ThermodynamicsParameters.parameters:
+            self[key] = P[key].widget(tframe)
+            self[key].grid(row=row, column=0, sticky=tk.EW)
+            widgets.append(self[key])
+            row += 1
+        sw.align_labels(widgets, sticky=tk.E)
+
         # Create the structure-handling widgets
         sframe = self["structure frame"] = ttk.LabelFrame(
             frame, text="Configuration Handling", labelanchor=tk.N
@@ -36,12 +49,11 @@ class TkThermodynamics(mopac_step.TkEnergy):
         row = 0
         widgets = []
         for key in ("structure handling", "configuration name"):
-            self[key].destroy()
             self[key] = P[key].widget(sframe)
             self[key].grid(row=row, column=0, sticky=tk.EW)
             widgets.append(self[key])
             row += 1
-        sw.align_labels(widgets)
+        sw.align_labels(widgets, sticky=tk.E)
 
         self.logger.debug("Finished creating the dialog")
 
@@ -53,15 +65,12 @@ class TkThermodynamics(mopac_step.TkEnergy):
         """
         row = super().reset_dialog()
 
-        widgets = []
-        for key in ("Tmin", "Tmax", "Tstep", "trans"):
-            self[key].grid(row=row, column=0, columnspan=2, sticky=tk.EW)
-            widgets.append(self[key])
-            row += 1
-        sw.align_labels(widgets)
+        # And our frame
+        self["thermodynamics frame"].grid(row=row, column=0, sticky=tk.EW, pady=10)
+        row += 1
 
         # And how to handle the configuration
-        self["structure frame"].grid(row=row, column=0, columnspan=2, sticky=tk.EW)
+        self["structure frame"].grid(row=row, column=0, sticky=tk.EW, pady=10)
         row += 1
 
         return row

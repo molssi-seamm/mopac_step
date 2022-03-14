@@ -3,11 +3,15 @@
 """Setup and run MOPAC"""
 
 import logging
+from pathlib import Path
+import textwrap
+import traceback
+
+import mopac_step
 import seamm
 import seamm_util.printing as printing
 from seamm_util import units_class
 from seamm_util.printing import FormattedText as __
-import mopac_step
 
 logger = logging.getLogger(__name__)
 job = printing.getPrinter()
@@ -32,23 +36,22 @@ class Optimization(mopac_step.Energy):
         if not P:
             P = self.parameters.values_to_dict()
 
+        # The energy part of the description
+        tmp = super().description_text(P)
+        energy_description = textwrap.dedent("\n".join(tmp.splitlines()[1:]))
+
         # Hamiltonian followed by convergence
-        text = "Geometry optimization using {hamiltonian}"
+        text = "Geometry optimization with the "
         if P["method"] == "default":
-            text += (
-                " and default optimizer (EF for small systems," " L-BFGS for larger)."
-            )
+            text += "default optimizer (EF for small systems," " L-BFGS for larger)."
         elif P["method"][0:1] == "EF":
-            text += " and the eigenvector following (EF) method."
+            text += "eigenvector following (EF) method."
         elif P["method"][0:3] == "BFGS":
-            text += " and the BFGS method."
+            text += "BFGS method."
         elif P["method"][0:5] == "L-BFGS":
-            text += " and the L-BFGS small memory version of the BFGS method."
+            text += "L-BFGS small memory version of the BFGS method."
         else:
-            text += (
-                ". The optimization method will be determined at runtime "
-                "by '{method}'."
-            )
+            text += "optimization method determined at runtime by '{method}'."
 
         if P["gnorm"] == "default":
             text += " The geometrical convergence is the default of " "1.0 kcal/mol/Å."
@@ -60,27 +63,11 @@ class Optimization(mopac_step.Energy):
         else:
             text += " The geometrical convergence is {gnorm} kcal/mol/Å."
 
-        # SCF convergence
-        text += " The SCF will be converged to "
-        if P["convergence"] == "normal":
-            text += "the normal level of 1.0e-04 kcal/mol."
-        elif P["convergence"] == "precise":
-            text += "the 'precise' level of 1.0e-06 kcal/mol."
-        elif P["convergence"] == "relative":
-            text += "a factor of {relative} times the normal criteria."
-        elif P["convergence"] == "absolute":
-            text += " {absolute} kcal/mol."
+        # Put in the description of the energy calculation
+        text += "\n\nThe energy and forces will be c" + energy_description[1:]
+        text += "\n\n"
 
-        handling = P["structure handling"]
-        text += " The optimized structures will "
-        if handling == "Overwrite the current configuration":
-            text += "overwrite the current configuration "
-        elif handling == "Create a new configuration":
-            text += "be put in a new configuration "
-        else:
-            raise ValueError(
-                f"Do not understand how to handle the structure: '{handling}'"
-            )
+        text += "The optimized structures will {structure handling} "
 
         confname = P["configuration name"]
         if confname == "use SMILES string":
@@ -114,17 +101,16 @@ class Optimization(mopac_step.Energy):
             if isinstance(PP[key], units_class):
                 PP[key] = "{:~P}".format(PP[key])
 
-        # Save the description for later printing
-        self.description = []
-        self.description.append(
-            __(self.description_text(PP), **PP, indent=self.indent).__str__()
-        )
-
         # Remove the 1SCF keyword from the energy setup
         keywords = []
         for keyword in super().get_input():
             if keyword != "1SCF":
                 keywords.append(keyword)
+
+        # Save the description for later printing
+        self.description.append(
+            __(self.description_text(PP), **PP, indent=self.indent).__str__()
+        )
 
         # and the optimization-specific parts
         method = P["method"]
@@ -230,13 +216,13 @@ class Optimization(mopac_step.Energy):
 
         if P["cycles"] != "unlimited":
             keywords.append("CYCLES={}".format(P["cycles"]))
-        if P["convergence"] == "absolute":
+        if P["convergence"] not in ("normal", "precise"):
             if P["gnorm"] != self.parameters["gnorm"].default:
                 keywords.append("GNORM={}".format(P["gnorm"]))
 
         return keywords
 
-    def analyze(self, indent="", data={}, out=[]):
+    def analyze(self, indent="", data={}, out=[], table=None):
         """Parse the output and generating the text output and store the
         data in variables for other stages to access
         """
@@ -252,7 +238,7 @@ class Optimization(mopac_step.Energy):
             periodicity = starting_configuration.periodicity
             if (
                 "structure handling" in P
-                and P["structure handling"] == "Create a new configuration"
+                and P["structure handling"] == "be put in a new configuration"
             ):
                 configuration = system.create_configuration(
                     periodicity=periodicity,
@@ -288,38 +274,41 @@ class Optimization(mopac_step.Energy):
                 elif P["configuration name"] == "use configuration number":
                     configuration.name = str(configuration.n_configurations)
 
+        # Write the structure out for viewing.
+        directory = Path(self.directory)
+        directory.mkdir(parents=True, exist_ok=True)
+
+        #  MMCIF file has bonds
+        try:
+            path = directory / "optimized.mmcif"
+            path.write_text(configuration.to_mmcif_text())
+        except Exception:
+            message = "Error creating the mmcif file\n\n" + traceback.format_exc()
+            logger.warning(message)
+        # CIF file has cell
+        if configuration.periodicity == 3:
+            try:
+                path = directory / "optimized.cif"
+                path.write_text(configuration.to_cif_text())
+            except Exception:
+                message = "Error creating the cif file\n\n" + traceback.format_exc()
+                logger.warning(message)
+
         # The results
         if "NUMBER_SCF_CYCLES" in data:
             text = (
-                "The geometry optimization converged in "
-                "{NUMBER_SCF_CYCLES} iterations to a heat of "
-                "formation of {HEAT_OF_FORMATION} kcal/mol and "
-                "gradient norm of {GRADIENT_NORM} kcal/mol/Å."
+                "The geometry optimization converged in {NUMBER_SCF_CYCLES} iterations."
             )
         else:
             data["NUMBER_SCF_CYCLES"] = len(data["HEAT_OF_FORM_UPDATED"])
             data["HEAT_OF_FORMATION"] = data["HEAT_OF_FORM_UPDATED"][-1]
             data["GRADIENT_NORM"] = data["GRADIENT_UPDATED"][-1]
             text = (
-                "The geometry optimization did not converge!\n"
-                "It ran for {NUMBER_SCF_CYCLES} "
-                "iterations to a final heat of formation of "
-                "{HEAT_OF_FORMATION} kcal/mol and gradient norm "
-                "of {GRADIENT_NORM} kcal/mol/Å."
+                "The geometry optimization did not converge in {NUMBER_SCF_CYCLES} "
+                "steps. The following results are for the final structure.\n"
             )
 
-        if "POINT_GROUP" in data:
-            text += " The system has {POINT_GROUP} symmetry."
-
         printer.normal(__(text, **data, indent=self.indent + 4 * " "))
-
-        # Put any requested results into variables or tables
-        self.store_results(
-            data=data,
-            properties=mopac_step.properties,
-            results=self.parameters["results"].value,
-            create_tables=self.parameters["create tables"].get(),
-        )
 
         # If the optimizer used was the default, put in the correct citations
 
@@ -383,3 +372,5 @@ class Optimization(mopac_step.Energy):
                 )
             else:
                 logger.warning("Could not find which minimizer was used!")
+
+        super().analyze(indent=indent, data=data, out=out, table=table)

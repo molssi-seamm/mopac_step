@@ -2,14 +2,20 @@
 
 """Setup and run MOPAC"""
 
+import copy
+import csv
 import logging
+from pathlib import Path
+import textwrap
+
+from tabulate import tabulate
+
+import mopac_step
 import seamm
 import seamm.data
-from seamm_util import units_class
+from seamm_util import Q_, units_class
 import seamm_util.printing as printing
 from seamm_util.printing import FormattedText as __
-import mopac_step
-import copy
 
 logger = logging.getLogger(__name__)
 job = printing.getPrinter()
@@ -49,16 +55,43 @@ class Energy(seamm.Node):
         if not P:
             P = self.parameters.values_to_dict()
 
-        text = "Single-point energy using {hamiltonian}, converged to "
+        text = "Calculated with {hamiltonian}, converged to "
         # Convergence
         if P["convergence"] == "normal":
             text += "the 'normal' level of 1.0e-04 kcal/mol."
         elif P["convergence"] == "precise":
             text += "the 'precise' level of 1.0e-06 kcal/mol."
         elif P["convergence"] == "relative":
-            text += "a factor of {relative} times the " "normal criterion."
+            text += "a factor of {relative} times the normal criterion."
         elif P["convergence"] == "absolute":
-            text += "converged to {absolute}"
+            text += "converged to {absolute}."
+
+        if self.parameters["uhf"].is_expr:
+            text += (
+                " Whether to use spin-unrestricted SCF (UHF) for closed-shell molecules"
+                "will be determined by '{uhf}'."
+            )
+        elif self.parameters["uhf"].get():
+            text += " The SCF will be spin-unrestricted (UHF) for all molecules."
+        else:
+            text += (
+                " The SCF will be restricted for closed-shell molecules (RHF) and "
+                "spin-unrestricted (UHF) for all others."
+            )
+
+        if self.parameters["COSMO"].is_expr:
+            text += (
+                "\n\n '{COSMO}' will determine whether to use the COSMO solvation "
+                "model. If it is used the parameters will be "
+            )
+        elif self.parameters["COSMO"].get():
+            text += "\n\nThe COSMO solvation model will be used with "
+
+        if self.parameters["COSMO"].is_expr or self.parameters["COSMO"].get():
+            text += (
+                "dielectric constant = {eps}, solvent radius = {rsolve}, "
+                "{nspa} grid points per atom, and a cutoff of {disex}."
+            )
 
         return self.header + "\n" + __(text, **P, indent=4 * " ").__str__()
 
@@ -71,6 +104,7 @@ class Energy(seamm.Node):
         P = self.parameters.current_values_to_dict(
             context=seamm.flowchart_variables._data
         )
+
         # Have to fix formatting for printing...
         PP = dict(P)
         for key in PP:
@@ -548,6 +582,16 @@ class Energy(seamm.Node):
                 "Don't recognize convergence '{}'".format(P["convergence"])
             )
 
+        if P["uhf"]:
+            keywords.append("UHF")
+
+        if P["COSMO"]:
+            keywords.append(f"EPS={P['eps']}")
+            rsolve = P["rsolve"].to("Å").magnitude
+            keywords.append(f"RSOLVE={rsolve}")
+            keywords.append(f"NSPA={P['nspa']}")
+            keywords.append(f"DISEX={P['disex']}")
+
         if P["calculate gradients"]:
             keywords.append("GRADIENTS")
 
@@ -563,24 +607,182 @@ class Energy(seamm.Node):
 
         return keywords
 
-    def analyze(self, indent="", data={}, out=[]):
+    def analyze(self, indent="", data={}, out=[], table=None):
         """Parse the output and generating the text output and store the
         data in variables for other stages to access
         """
-        P = self.parameters.current_values_to_dict(
-            context=seamm.flowchart_variables._data
+        options = self.parent.options
+
+        if table is None:
+            table = {
+                "Property": [],
+                "Value": [],
+                "Units": [],
+            }
+        text = ""
+
+        if "GRADIENT_NORM" in data:
+            tmp = data["GRADIENT_NORM"]
+            table["Property"].append("Gradient Norm")
+            table["Value"].append(f"{tmp:.2f}")
+            table["Units"].append("kcal/mol/Å")
+
+        if "POINT_GROUP" in data:
+            text += "The molecule has {POINT_GROUP} symmetry."
+
+        if "HEAT_OF_FORMATION" in data:
+            tmp = data["HEAT_OF_FORMATION"]
+            table["Property"].append("Enthalpy of Formation")
+            table["Value"].append(f"{tmp:.2f}")
+            table["Units"].append("kcal/mol")
+
+            tmp = Q_(tmp, "kcal/mol").to("kJ/mol").magnitude
+            table["Property"].append("")
+            table["Value"].append(f"{tmp:.2f}")
+            table["Units"].append("kJ/mol")
+
+        if "SPIN_COMPONENT" in data:
+            tmp = data["SPIN_COMPONENT"]
+            table["Property"].append("Sz")
+            table["Value"].append(f"{tmp:.2f}")
+            table["Units"].append("")
+
+        if "TOTAL_SPIN" in data:
+            tmp = data["TOTAL_SPIN"]
+            table["Property"].append("S^2")
+            table["Value"].append(f"{tmp:.2f}")
+            table["Units"].append("")
+
+        if "IONIZATION_POTENTIAL" in data:
+            tmp = data["IONIZATION_POTENTIAL"]
+            table["Property"].append("Ionization Energy")
+            table["Value"].append(f"{tmp:.2f}")
+            table["Units"].append("eV")
+
+        if "DIPOLE" in data:
+            tmp = data["DIPOLE"]
+            table["Property"].append("Dipole Moment")
+            table["Value"].append(f"{tmp:.2f}")
+            table["Units"].append("Debye")
+
+        if "EIGENVALUES" in data and "MOLECULAR_ORBITAL_OCCUPANCIES" in data:
+            for occ, E in zip(
+                data["MOLECULAR_ORBITAL_OCCUPANCIES"], data["EIGENVALUES"]
+            ):
+                if occ > 0.1:
+                    Ehomo = E
+                else:
+                    Elumo = E
+                    break
+            table["Property"].append("HOMO Energy")
+            table["Value"].append(f"{Ehomo:.2f}")
+            table["Units"].append("eV")
+            table["Property"].append("LUMO Energy")
+            table["Value"].append(f"{Elumo:.2f}")
+            table["Units"].append("eV")
+            table["Property"].append("Gap")
+            table["Value"].append(f"{Elumo - Ehomo:.2f}")
+            table["Units"].append("eV")
+
+        if "AREA" in data:
+            tmp = data["AREA"]
+            table["Property"].append("COSMO Area")
+            table["Value"].append(f"{tmp:.2f}")
+            table["Units"].append("Å^2")
+
+        if "VOLUME" in data:
+            tmp = data["VOLUME"]
+            table["Property"].append("COSMO Volume")
+            table["Value"].append(f"{tmp:.2f}")
+            table["Units"].append("Å^3")
+
+        text_lines = []
+        text_lines.append("                     Results")
+        text_lines.append(
+            tabulate(
+                table,
+                headers="keys",
+                tablefmt="psql",
+                colalign=("center", "decimal", "left"),
+            )
         )
+        text_lines.append("\n\n")
 
-        text = "The heat of formation is {HEAT_OF_FORMATION} kcal/mol"
+        # Get charges and spins, etc.
+        directory = Path(self.directory)
+        directory.mkdir(parents=True, exist_ok=True)
 
-        if P["calculate gradients"]:
-            text += " with a gradient norm of {GRADIENT_NORM} kcal/mol/Å."
-        else:
-            text += ". The gradients weren't calculated."
+        system, configuration = self.get_system_configuration(None)
+        symbols = configuration.atoms.symbols
+        atoms = configuration.atoms
+        if "ATOM_CHARGES" in data:
+            # Add to atoms (in coordinate table)
+            if "charge" not in atoms:
+                atoms.add_attribute(
+                    "charge", coltype="float", configuration_dependent=True
+                )
+            atoms["charge"][0:] = data["ATOM_CHARGES"]
 
-        text += " The system has {POINT_GROUP} symmetry."
+            # Print the charges and dump to a csv file
+            chg_tbl = {
+                "Atom": [*range(1, len(symbols) + 1)],
+                "Element": symbols,
+                "Charge": [],
+            }
+            with open(directory / "atom_properties.csv", "w", newline="") as fd:
+                writer = csv.writer(fd)
+                if "ATOM_SPINS" in data:
+                    header = "        Atomic charges and spins"
+                    chg_tbl["Spin"] = []
+                    writer.writerow(["Atom", "Element", "Charge", "Spin"])
+                    for atom, symbol, q, s in zip(
+                        range(1, len(symbols) + 1),
+                        symbols,
+                        data["ATOM_CHARGES"],
+                        data["ATOM_SPINS"],
+                    ):
+                        q = f"{q:.3f}"
+                        s = f"{s:.3f}"
 
-        printer.normal(__(text, **data, indent=self.indent + 4 * " "))
+                        writer.writerow([atom, symbol, q, s])
+
+                        chg_tbl["Charge"].append(q)
+                        chg_tbl["Spin"].append(s)
+                else:
+                    header = "        Atomic charges"
+                    writer.writerow(["Atom", "Element", "Charge"])
+                    for atom, symbol, q in zip(
+                        range(1, len(symbols) + 1),
+                        symbols,
+                        data["ATOM_CHARGES"],
+                    ):
+                        q = f"{q:.2f}"
+                        writer.writerow([atom, symbol, q])
+
+                        chg_tbl["Charge"].append(q)
+            if len(symbols) <= int(options["max_atoms_to_print"]):
+                text_lines.append(header)
+                text_lines.append(
+                    tabulate(
+                        chg_tbl,
+                        headers="keys",
+                        tablefmt="psql",
+                        colalign=("center", "center"),
+                    )
+                )
+        if "ATOM_SPINS" in data:
+            # Add to atoms (in coordinate table)
+            if "spin" not in atoms:
+                atoms.add_attribute(
+                    "spin", coltype="float", configuration_dependent=True
+                )
+            atoms["spin"][0:] = data["ATOM_SPINS"][0]
+
+        text = str(__(text, **data, indent=self.indent + 4 * " "))
+        text += "\n\n"
+        text += textwrap.indent("\n".join(text_lines), self.indent + 7 * " ")
+
+        printer.normal(text)
 
         # Put any requested results into variables or tables
         self.store_results(

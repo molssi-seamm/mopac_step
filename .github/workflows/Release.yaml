@@ -12,9 +12,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
-      with:
-        # This gets all branches (1 = only current branch)
-        fetch-depth: 0
     - name: Additional info about the build
       shell: bash
       run: |
@@ -107,12 +104,6 @@ jobs:
       run: |
         python -m build --sdist --wheel --outdir dist/
         ls -l dist/
-    - name: Publish distribution 📦 to Test PyPI
-      uses: pypa/gh-action-pypi-publish@master
-      with:
-        password: ${{ secrets.test_pypi_password }}
-        repository_url: https://test.pypi.org/legacy/
-        skip_existing: true
     - name: Publish distribution 📦 to PyPI
       if: contains(github.ref, 'dev') == false && contains(github.ref, 'rc') == false
       uses: pypa/gh-action-pypi-publish@master

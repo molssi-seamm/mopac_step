@@ -100,6 +100,13 @@ class MOPAC(seamm.Node):
             help="How many threads to use with MKL in MOPAC",
         )
 
+        parser.add_argument(
+            parser_name,
+            "--max-atoms-to-print",
+            default=25,
+            help="Maximum number of atoms to print charges, etc.",
+        )
+
         return result
 
     def set_id(self, node_id):
@@ -156,6 +163,7 @@ class MOPAC(seamm.Node):
                 Path(options["mopac_path"]).expanduser().resolve()
                 / options["mopac_exe"]
             )
+        mopac_path = Path(mopac_exe).parent.expanduser().resolve()
 
         # How many processors does this node have?
         n_cores = psutil.cpu_count(logical=False)
@@ -193,6 +201,7 @@ class MOPAC(seamm.Node):
         self.logger.info(f"MOPAC will use {mopac_num_threads} threads.")
 
         env = {
+            "LD_LIBRARY_PATH": str(mopac_path),
             "MKL_NUM_THREADS": str(mkl_num_threads),
             "OMP_NUM_THREADS": str(mopac_num_threads),
         }
