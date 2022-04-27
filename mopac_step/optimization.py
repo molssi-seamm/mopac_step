@@ -233,9 +233,11 @@ class Optimization(mopac_step.Energy):
             context=seamm.flowchart_variables._data
         )
 
+        system, starting_configuration = self.get_system_configuration(None)
+
         # Update the structure
-        if "ATOM_X_OPT" in data:
-            system, starting_configuration = self.get_system_configuration(None)
+        if "ATOM_X_OPT" in data or "ATOM_X_UPDATED" in data:
+
             periodicity = starting_configuration.periodicity
             if (
                 "structure handling" in P
@@ -257,7 +259,10 @@ class Optimization(mopac_step.Energy):
             if periodicity != 0:
                 raise NotImplementedError("Optimization cannot yet handle periodicity")
             xyz = []
-            it = iter(data["ATOM_X_OPT"])
+            if "ATOM_X_OPT" in data:
+                it = iter(data["ATOM_X_OPT"])
+            else:
+                it = iter(data["ATOM_X_UPDATED"][-1])
             for x in it:
                 xyz.append([float(x), float(next(it)), float(next(it))])
             configuration.atoms.set_coordinates(xyz, fractionals=False)

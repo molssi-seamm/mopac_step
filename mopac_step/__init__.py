@@ -1299,6 +1299,13 @@ properties = {
         "type": "float",
         "units": "eV",
     },
+    "LMO_ENERGY_LEVELS": {
+        "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
+        "description": "Localized MO energies",
+        "dimensionality": ["n_aos"],
+        "type": "float",
+        "units": "eV",
+    },
     "EIGENVECTORS": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
         "description": "orbital coefficients",
@@ -1314,6 +1321,12 @@ properties = {
     "BETA_EIGENVECTORS": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
         "description": "orbital coefficients",
+        "dimensionality": ["n_aos"],
+        "type": "float",
+    },
+    "LMO_VECTORS": {
+        "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
+        "description": "localized molecular orbital coefficients",
         "dimensionality": ["n_aos"],
         "type": "float",
     },
@@ -1551,6 +1564,12 @@ properties = {
     "OVERLAP_MATRIX": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
         "description": "the AO overlap matrix",
+        "dimensionality": ["triangular", "n_aos", "n_aos"],
+        "type": "float",
+    },
+    "DENSITY_MATRIX": {
+        "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
+        "description": "the density matrix",
         "dimensionality": ["triangular", "n_aos", "n_aos"],
         "type": "float",
     },
