@@ -41,6 +41,7 @@ class MOPAC(seamm.Node):
             directory=flowchart.root_directory,
         )
         self._data = {}
+        self._lattice_opt = True
 
         super().__init__(
             flowchart=flowchart, title="MOPAC", extension=extension, logger=logger
@@ -174,22 +175,29 @@ class MOPAC(seamm.Node):
         # Currently, on the Mac, it is not clear that any parallelism helps
         # much.
 
-        if options["ncores"] == "default":
-            # Wild guess!
-            # mopac_mkl_num_threads = int(pow(n_atoms / 16, 0.3333))
-            mkl_num_threads = 1
-        else:
-            mkl_num_threads = int(options["mkl_num_threads"])
-        if mkl_num_threads > n_cores:
-            mkl_num_threads = n_cores
-        elif mkl_num_threads < 1:
-            mkl_num_threads = 1
-        self.logger.info(f"MKL will use {mkl_num_threads} threads.")
+        # if options["ncores"] == "default":
+        #     # Wild guess!
+        #     # mopac_mkl_num_threads = int(pow(n_atoms / 16, 0.3333))
+        #     mkl_num_threads = 1
+        # else:
+        #     if options["mkl_num_threads"] == "default":
+        #         mkl_num_threads = n_cores
+        #     else:
+        #         mkl_num_threads = int(options["mkl_num_threads"])
+        # if mkl_num_threads > n_cores:
+        #     mkl_num_threads = n_cores
+        # elif mkl_num_threads < 1:
+        #     mkl_num_threads = 1
+        # self.logger.info(f"MKL will use {mkl_num_threads} threads.")
 
+        n_hydrogens = configuration.atoms.get_n_atoms("atno", "==", 1)
+        n_basis = (n_atoms - n_hydrogens) * 4 + n_hydrogens
         if options["ncores"] == "default":
+            # Since it is the matrix diagonalization, work out rough
+            # size of matrix
+
             # Wild guess!
-            # mopac_num_threads = int(pow(n_atoms / 32, 0.5))
-            mopac_num_threads = 1
+            mopac_num_threads = int(pow(n_basis / 1000, 3))
             if mopac_num_threads > n_cores:
                 mopac_num_threads = n_cores
         else:
@@ -198,19 +206,23 @@ class MOPAC(seamm.Node):
             mopac_num_threads = n_cores
         if mopac_num_threads < 1:
             mopac_num_threads = 1
-        self.logger.info(f"MOPAC will use {mopac_num_threads} threads.")
+        self.logger.info(
+            f"MOPAC will use {mopac_num_threads} threads for about {n_basis} basis "
+            "functions."
+        )
 
         env = {
             "LD_LIBRARY_PATH": str(mopac_path),
-            "MKL_NUM_THREADS": str(mkl_num_threads),
             "OMP_NUM_THREADS": str(mopac_num_threads),
         }
+        # "MKL_NUM_THREADS": str(mkl_num_threads),
 
-        extra_keywords = ["AUX"]
+        # extra_keywords = ["AUX(MOS=10,XP,XS)", "NOXYZ"]
+        extra_keywords = ["AUX(MOS=10,XP,XS)"]
 
-        # If the system is charged or has a spin multiplicity, add those keywords.
-        if configuration.charge != 0:
-            extra_keywords.append(f"CHARGE={configuration.charge}")
+        # Always add the charge since that will cause MOZYME, if used, to check.
+        extra_keywords.append(f"CHARGE={configuration.charge}")
+        # And the spin multiplicity
         multiplicity = configuration.spin_multiplicity
         if multiplicity <= 10:
             extra_keywords.append(
@@ -266,8 +278,8 @@ class MOPAC(seamm.Node):
         if len(La_list) > 0:
             extra_keywords.append("SPARKLES")
 
-        if mopac_num_threads > 1:
-            extra_keywords.append("THREADS={}".format(mopac_num_threads))
+        # if mopac_num_threads > 1:
+        #     extra_keywords.append("THREADS={}".format(mopac_num_threads))
 
         # Work through the subflowchart to find out what to do.
         self.subflowchart.root_directory = self.flowchart.root_directory
@@ -278,55 +290,60 @@ class MOPAC(seamm.Node):
         node = self.subflowchart.get_node("1").next()
 
         input_data = []
+        n_calculations = []
         while node:
             node.parent = self
-            keywords = node.get_input()
-            lines = []
-            lines.append(" ".join(keywords + extra_keywords))
-            lines.append(system.name)
-            lines.append(configuration.name)
+            inputs = node.get_input()
+            n_calculations.append(len(inputs))
+            for keywords in inputs:
+                lines = []
+                lines.append(" ".join(keywords + extra_keywords))
+                lines.append(system.name)
+                lines.append(configuration.name)
 
-            if "OLDGEO" in keywords:
-                input_data.append("\n".join(lines))
-            else:
-                tmp_structure = []
-                atoms = configuration.atoms
-                elements = atoms.symbols
-                coordinates = atoms.get_coordinates(fractionals=False)
-                if "freeze" in atoms:
-                    freeze = atoms["freeze"]
+                if "OLDGEO" in keywords:
+                    input_data.append("\n".join(lines))
                 else:
-                    freeze = [""] * len(elements)
-                for element, xyz, frz in zip(elements, coordinates, freeze):
-                    x, y, z = xyz
-                    line = "{:2} {: 12.8f} {:d} {: 12.8f} {:d} {: 12.8f} {:d}".format(
-                        element,
-                        x,
-                        0 if "x" in frz else 1,
-                        y,
-                        0 if "y" in frz else 1,
-                        z,
-                        0 if "z" in frz else 1,
-                    )
-                    tmp_structure.append(line)
-
-                if configuration.periodicity == 3:
-                    # The three translation vectors
-                    element = "Tv"
-                    uvw = [[1, 0, 0], [0, 1, 0], [0, 0, 1]]
-                    XYZ = configuration.cell.to_cartesians(uvw)
-                    for xyz in XYZ:
+                    tmp_structure = []
+                    atoms = configuration.atoms
+                    elements = atoms.symbols
+                    coordinates = atoms.get_coordinates(fractionals=False)
+                    if "freeze" in atoms:
+                        freeze = atoms["freeze"]
+                    else:
+                        freeze = [""] * len(elements)
+                    for element, xyz, frz in zip(elements, coordinates, freeze):
                         x, y, z = xyz
                         line = (
                             "{:2} {: 12.8f} {:d} {: 12.8f} {:d} {: 12.8f} {:d}".format(
-                                element, x, 1, y, 1, z, 1
+                                element,
+                                x,
+                                0 if "x" in frz else 1,
+                                y,
+                                0 if "y" in frz else 1,
+                                z,
+                                0 if "z" in frz else 1,
                             )
-                        )  # yapf: disable
+                        )
                         tmp_structure.append(line)
 
-                input_data.append(
-                    "\n".join(lines) + "\n" + "\n".join(tmp_structure) + "\n"
-                )
+                    if configuration.periodicity == 3:
+                        # The three translation vectors
+                        element = "Tv"
+                        uvw = [[1, 0, 0], [0, 1, 0], [0, 0, 1]]
+                        XYZ = configuration.cell.to_cartesians(uvw)
+                        frz = 1 if self._lattice_opt else 0
+                        for xyz in XYZ:
+                            x, y, z = xyz
+                            line = (
+                                f"{element:2} {x: 12.8f} {frz} {y: 12.8f} {frz} "
+                                f"{z: 12.8f} {frz}"
+                            )
+                            tmp_structure.append(line)
+
+                    input_data.append(
+                        "\n".join(lines) + "\n" + "\n".join(tmp_structure) + "\n"
+                    )
 
             node = node.next()
 
@@ -363,7 +380,7 @@ class MOPAC(seamm.Node):
                     fd.write(result[filename]["exception"])
 
         # Analyze the results
-        self.analyze()
+        self.analyze(n_calculations=n_calculations)
 
         # Close the reference handler, which should force it to close the
         # connection.
@@ -371,7 +388,7 @@ class MOPAC(seamm.Node):
 
         return next_node
 
-    def analyze(self, indent="", lines=[]):
+    def analyze(self, indent="", lines=[], n_calculations=None):
         """Read the results from MOPAC calculations and analyze them,
         putting key results into variables for subsequent use by
         other stages
@@ -383,14 +400,28 @@ class MOPAC(seamm.Node):
             lines_aux = fd.read().splitlines()
 
         # Find the sections in the file corresponding to sub-tasks
-        aux = []
+        # MOPAC keeps cumulative times, so fix them
+        t_total = 0.0
+        aux_data = []
         start = 0
         lineno = 0
+        section = 0
         for line in lines_aux:
             if "END OF MOPAC FILE" in line:
-                aux.append((start, lineno))
+                self.logger.debug("\nAUX file section {}".format(section))
+                self.logger.debug("------------------")
+
+                tmp_data = self.parse_aux(lines_aux[start:lineno])
+                if "CPU_TIME" in tmp_data:
+                    tmp = tmp_data["CPU_TIME"]
+                    tmp_data["CPU_TIME"] = tmp - t_total
+                    t_total = tmp
+                aux_data.append(tmp_data)
+
+                self.logger.debug(pprint.pformat(tmp_data, width=170, compact=True))
             lineno += 1
             if "START OF MOPAC FILE" in line:
+                section += 1
                 start = lineno
 
         # Split the output file into sections for each step
@@ -404,27 +435,16 @@ class MOPAC(seamm.Node):
         lineno = 0
         for line in lines:
             if "** Cite this program as:" in line:
-                if lineno == 2:
+                if lineno == 1:
                     continue
                 out.append(lines[start : lineno - 1])
                 start = lineno - 2
             lineno += 1
         out.append(lines[start:])
 
-        # Loop through our subnodes. Get the first real node
-        node = self.subflowchart.get_node("1").next()
-        section = 0
-
-        have_version = False
-        for start, end in aux:
-            data = self.parse_aux(lines_aux[start:end])
-            self.logger.debug("\nAUX file section {}".format(section))
-            self.logger.debug("------------------")
-            self.logger.debug(pprint.pformat(data, width=170, compact=True))
-
+        for data in aux_data:
             # Add main citation for MOPAC
-            if not have_version and "MOPAC_VERSION" in data:
-                have_version = True
+            if "MOPAC_VERSION" in data:
                 # like MOPAC2016.20.191M
                 release, version = data["MOPAC_VERSION"].split(".", maxsplit=1)
                 t = datetime.datetime.strptime(version[0:-1], "%y.%j")
@@ -442,22 +462,35 @@ class MOPAC(seamm.Node):
                     level=1,
                     note="The principle MOPAC citation.",
                 )
+                break
+
+        # Loop through our subnodes. Get the first real node
+        node = self.subflowchart.get_node("1").next()
+        first = 0
+        n_node = 0
+        while node:
             # Print the header for the node
             for value in node.description:
                 printer.important(value)
 
-            if section >= len(out):
-                logger.error(
-                    "Could not find the MOPAC output for subjob {section + 1}/"
-                )
-                node.analyze(data=data, out="")
+            last = first + n_calculations[n_node]
+            if last > len(out):
+                logger.error("Could not find the MOPAC output for subjob {last + 1}/")
+                node.analyze(data_sections=aux_data[first:last], out_sections=[])
             else:
-                node.analyze(data=data, out=out[section])
+                node.analyze(
+                    data_sections=aux_data[first:last], out_sections=out[first:last]
+                )
+            first = last
 
             printer.normal("")
 
             node = node.next()
-            section += 1
+            n_node += 1
+
+        if n_node > 1 and "CPU_TIME" in aux_data[-1]:
+            text = f"MOPAC took a total of {t_total:.2f} s."
+            printer.normal(str(__(text, **data, indent=self.indent)))
 
     def parse_arc(self, filename="mopac.arc"):
         """Digest the ARC file and get the coordinates.
@@ -526,7 +559,11 @@ class MOPAC(seamm.Node):
                     name, units = name.split(":")
 
                 if name not in properties:
-                    raise RuntimeError("Property '{}' not recognized.".format(name))
+                    logger.warning("Property '{}' not recognized.".format(name))
+                    kind = "string"
+                else:
+                    kind = properties[name]["type"]
+
                 if "units" in properties[name]:
                     data[name + ",units"] = properties[name]["units"]
 
@@ -542,7 +579,7 @@ class MOPAC(seamm.Node):
                 # end of workaround
 
                 # Check for floating point numbers run together
-                if properties[name]["type"] == "float":
+                if kind == "float":
                     values = []
                     for value in rest.split():
                         tmp = value.split(".")
@@ -577,11 +614,11 @@ class MOPAC(seamm.Node):
                     if line[0] != "#":
                         tmp.extend(line.split())
 
-                if properties[name]["type"] == "integer":
+                if kind == "integer":
                     values = []
                     for value in tmp:
                         values.append(int(value))
-                elif properties[name]["type"] == "float":
+                elif kind == "float":
                     values = []
                     for value in tmp:
                         values.append(float(value.translate(trans)))
@@ -605,12 +642,15 @@ class MOPAC(seamm.Node):
                     name = key
 
                 if name not in properties:
-                    raise RuntimeError("Property '{}' not recognized.".format(name))
+                    logger.warning("Property '{}' not recognized.".format(name))
+                    kind = "string"
+                else:
+                    kind = properties[name]["type"]
                 if "units" in properties[name]:
                     data[name + ",units"] = properties[name]["units"]
-                if properties[name]["type"] == "integer":
+                if kind == "integer":
                     value = int(rest)
-                elif properties[name]["type"] == "float":
+                elif kind == "float":
                     value = float(self._sanitize_value(rest.strip()))
                 else:
                     value = rest.strip('"')
