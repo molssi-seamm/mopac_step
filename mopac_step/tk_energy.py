@@ -78,7 +78,7 @@ class TkEnergy(seamm.TkNode):
                 self[key] = P[key].widget(e_frame)
 
         # Set the callbacks for changes
-        for widget in ("convergence", "COSMO"):
+        for widget in ("convergence", "MOZYME", "COSMO"):
             w = self[widget]
             w.combobox.bind("<<ComboboxSelected>>", self.reset_energy_frame)
             w.combobox.bind("<Return>", self.reset_energy_frame)
@@ -112,6 +112,7 @@ class TkEnergy(seamm.TkNode):
 
         convergence = self["convergence"].get()
         cosmo = self["COSMO"].get()
+        mozyme = self["MOZYME"].get()
 
         widgets = []
         row = 0
@@ -133,6 +134,20 @@ class TkEnergy(seamm.TkNode):
             self["absolute"].grid(row=row, column=1, sticky=tk.W)
             row += 1
             sw.align_labels((self["relative"], self["absolute"]), sticky=tk.E)
+
+        self["MOZYME"].grid(row=row, column=0, columnspan=2, sticky=tk.EW)
+        widgets.append(self["MOZYME"])
+        row += 1
+        subwidgets = []
+        if mozyme != "always" and mozyme != "never":
+            self["nMOZYME"].grid(row=row, column=1, sticky=tk.W)
+            subwidgets.append(self["nMOZYME"])
+            row += 1
+        if mozyme != "never":
+            self["MOZYME follow-up"].grid(row=row, column=1, sticky=tk.W)
+            subwidgets.append(self["MOZYME"])
+            row += 1
+        sw.align_labels(subwidgets, sticky=tk.E)
 
         self["COSMO"].grid(row=row, column=0, columnspan=2, sticky=tk.EW)
         widgets.append(self["COSMO"])
