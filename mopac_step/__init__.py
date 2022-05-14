@@ -110,7 +110,7 @@ keyword_metadata = {
         "description": "In PDB files with alternative atoms, select atoms A",
         "takes values": 1,
         "default": "A",
-        "format": "{keyword}={value}",
+        "format": "{}={}",
     },
     "ANGSTROMS": {
         "description": "Input geometry is in Angstroms",
@@ -128,7 +128,7 @@ keyword_metadata = {
         "description": "reduce bar length by a maximum of n.nn%",
         "takes values": 1,
         "default": "0.01",
-        "format": "{keyword}={value}",
+        "format": "{}={}",
     },
     "BCC": {
         "description": "Only even unit cells used (used by BZ)",
@@ -137,7 +137,7 @@ keyword_metadata = {
         "description": "Do a maximum of n big steps",
         "takes values": 1,
         "default": "1",
-        "format": "{keyword}={value}",
+        "format": "{}={}",
     },
     "BIRADICAL": {
         "description": "System has two unpaired electrons",
@@ -158,7 +158,7 @@ keyword_metadata = {
         "description": "A multi-electron configuration interaction specified",
         "takes values": [1, 2],
         "default": "2",
-        "format": ["{keyword}={value}", "{keyword}=({value1},{value2}}"],
+        "format": "{}={}",
     },
     "CHAINS(text)": {
         "description": ("In a protein, explicitly define the letters of " "chains."),
@@ -170,7 +170,7 @@ keyword_metadata = {
         "description": "Charge on system = n (e.g. NH4 = +1)",
         "takes values": 1,
         "default": "+1",
-        "format": "{keyword}={value}",
+        "format": "{}={}",
     },
     "CHARGES": {
         "description": (
@@ -205,7 +205,7 @@ keyword_metadata = {
         "description": "Madelung distance cutoff is n .nn Angstroms",
         "takes values": 1,
         "default": "15.0",
-        "format": "{keyword}={value}",
+        "format": "{}={}",
     },
     "CUTOFF": {
         "description": (
@@ -213,31 +213,31 @@ keyword_metadata = {
         ),
         "takes values": 1,
         "default": "6.0",
-        "format": "{keyword}={value}",
+        "format": "{}={}",
     },
     "CUTOF1": {
         "description": "In MOZYME, the cutoff distance for polarization",
         "takes values": 1,
         "default": "10.0",
-        "format": "{keyword}={value}",
+        "format": "{}={}",
     },
     "CUTOF2": {
         "description": ("In MOZYME, the cutoff distance for two-center " "integral"),
         "takes values": 1,
         "default": "9.9",
-        "format": "{keyword}={value}",
+        "format": "{}={}",
     },
     "CUTOFS": {
         "description": "In MOZYME, the cutoff distance for overlap integrals",
         "takes values": 1,
         "default": "9.0",
-        "format": "{keyword}={value}",
+        "format": "{}={}",
     },
     "CYCLES": {
         "description": "Do a maximum of n steps of geometry optimization",
         "takes values": 1,
         "default": "50",
-        "format": "{keyword}={value}",
+        "format": "{}={}",
     },
     "CVB": {
         "description": (
@@ -252,13 +252,13 @@ keyword_metadata = {
         ),
         "takes values": 1,
         "default": "0.5",
-        "format": "{keyword}={value}",
+        "format": "{}={}",
     },
     "DATA": {
         "description": "Input data set is re-defined to text",
         "takes values": 1,
         "default": "/file.dat",
-        "format": "{keyword}={value}",
+        "format": "{}={}",
     },
     "DCART": {
         "description": "Print part of working in DCART",
@@ -270,7 +270,7 @@ keyword_metadata = {
         ),
         "takes values": 1,
         "default": "0.3",
-        "format": "{keyword}={value}",
+        "format": "{}={}",
     },
     "DDMIN": {
         "description": (
@@ -280,7 +280,7 @@ keyword_metadata = {
         ),
         "takes values": 1,
         "default": "0.00001",
-        "format": "{keyword}={value}",
+        "format": "{}={}",
     },
     "DEBUG": {
         "description": "Debug option turned on",
@@ -328,7 +328,7 @@ keyword_metadata = {
         ),
         "takes values": 1,
         "default": "2.0",
-        "format": "{keyword}={value}",
+        "format": "{}={}",
     },
     "DISP": {
         "description": (
@@ -340,7 +340,7 @@ keyword_metadata = {
         "description": "Maximum stepsize in eigenvector following",
         "takes values": 1,
         "default": "2.0",
-        "format": "{keyword}={value}",
+        "format": "{}={}",
     },
     "DOUBLET": {
         "description": "Doublet state required",
@@ -352,7 +352,7 @@ keyword_metadata = {
         ),
         "takes values": [0, 1],
         "default": "50",
-        "format": ["{keyword}", "{keyword}={value}"],
+        "format": "{}={}",
     },
     "DUMP": {
         "description": (
@@ -361,7 +361,7 @@ keyword_metadata = {
         ),
         "takes values": 1,
         "default": "2h",
-        "format": "{keyword}={value}",
+        "format": "{}={}",
     },
     "ECHO": {
         "description": "Data are echoed back before calculation starts",
@@ -382,7 +382,7 @@ keyword_metadata = {
         "description": "Dielectric constant in COSMO calculation",
         "takes values": 1,
         "default": "78.4",
-        "format": "{keyword}={value}",
+        "format": "{}={}",
     },
     "ESP": {
         "description": "Electrostatic potential calculation",
@@ -400,7 +400,7 @@ keyword_metadata = {
         "description": "Read parameters from a file",
         "takes values": 1,
         "default": '"file name"',
-        "format": "{keyword}={value}",
+        "format": "{}={}",
     },
     "FIELD=(n.nn,m.mm,l.ll)": {
         "description": (
@@ -408,14 +408,14 @@ keyword_metadata = {
             "Cartesian directions"
         ),
         "takes values": 3,
-        "default": "0,0,1",
-        "format": "{keyword}=({value1},{value2},{value3})",
+        "default": "(0,0,1)",
+        "format": "{}={}",
     },
     "FILL": {
         "description": ("In RHF open and closed shell, force M.O. n to be " "filled"),
         "takes values": 1,
         "default": "0",
-        "format": "{keyword}={value}",
+        "format": "{}={}",
     },
     "FLEPO": {
         "description": "Print details of geometry optimization",
@@ -444,13 +444,13 @@ keyword_metadata = {
         "description": "Read in geometry from the file <text>",
         "takes values": 1,
         "default": '"file name"',
-        "format": "{keyword}={value}",
+        "format": "{}={}",
     },
     "GEO_REF=<text>": {
         "description": "Read in a second geometry from the file <text>",
         "takes values": 1,
         "default": '"SELF"',
-        "format": "{keyword}={value}",
+        "format": "{}={}",
     },
     "GNORM": {
         "description": (
@@ -458,7 +458,7 @@ keyword_metadata = {
         ),
         "takes values": 1,
         "default": "10.0",
-        "format": "{keyword}={value}",
+        "format": "{}={}",
     },
     "GRADIENTS": {
         "description": "Print all gradients",
@@ -484,7 +484,7 @@ keyword_metadata = {
         "description": "Options for calculating Hessian matrices in EF",
         "takes values": 1,
         "default": "1",
-        "format": "{keyword}={value}",
+        "format": "{}={}",
         "allowed values": (0, 1, 2),
     },
     "H-PRIORITY": {
@@ -494,7 +494,7 @@ keyword_metadata = {
         ),
         "takes values": 1,
         "default": "0.1",
-        "format": "{keyword}={value}",
+        "format": "{}={}",
     },
     "HTML": {
         "description": "Write a web-page for displaying and editing a protein",
@@ -512,7 +512,7 @@ keyword_metadata = {
         "description": "Intrinsic reaction coordinate calculation",
         "takes values": [0, 1],
         "default": "",
-        "format": ["{keyword}", "{keyword}={value}"],
+        "format": "{}={}",
     },
     "ISOTOPE": {
         "description": "Force matrix written to disk (channel 9 )",
@@ -524,7 +524,7 @@ keyword_metadata = {
         "description": "Set limit of number of SCF iterations to n",
         "takes values": 1,
         "default": "2000",
-        "format": "{keyword}={value}",
+        "format": "{}={}",
     },
     "IUPD": {
         "description": (
@@ -533,14 +533,14 @@ keyword_metadata = {
         ),
         "takes values": 1,
         "default": "2",
-        "format": "{keyword}={value}",
+        "format": "{}={}",
         "allowed values": (0, 1, 2),
     },
     "KINETIC": {
         "description": "Excess kinetic energy added to DRC calculation",
         "takes values": 1,
         "default": 20,
-        "format": "{keyword}={value}",
+        "format": "{}={}",
     },
     "KING": {
         "description": "Use Camp-King converger for SCF",
@@ -581,20 +581,20 @@ keyword_metadata = {
     "MERS=(n1,n2,n3)": {
         "description": "Keyword generated by MAKPOL for use with program BZ",
         "takes values": [1, 2, 3],
-        "default": "n1[,n2[,n3]]",
-        "format": "{keyword}=({value})",
+        "default": "(n1[,n2[,n3]])",
+        "format": "{}={}",
     },
     "METAL": {
         "description": "Make specified atoms 100% ionic",
         "takes values": "0+",
         "default": "(Au(+3),Fe)",
-        "format": "{keyword}=({value})",
+        "format": "{}={}",
     },
     "MICROS": {
         "description": "Use specific microstates in the C.I.",
         "takes values": 1,
-        "default": "0000",
-        "format": "{keyword}\n{value}",
+        "default": "1",
+        "format": "{}={}",
     },
     "MINI": {
         "description": (
@@ -615,7 +615,7 @@ keyword_metadata = {
         "description": "In EF, follow Hessian mode no. n",
         "takes values": 1,
         "default": 1,
-        "format": "{keyword}={value}",
+        "format": "{}={}",
     },
     "MOL_QMMM": {
         "description": ("Incorporate environmental effects in the QM/MM " "approach"),
@@ -638,7 +638,7 @@ keyword_metadata = {
         "description": "In MECI, magnetic component of spin",
         "takes values": 1,
         "default": "1.5",
-        "format": "{keyword}={value}",
+        "format": "{}={}",
         "allowed value test": "2*value",
     },
     "MULLIK": {
@@ -650,7 +650,7 @@ keyword_metadata = {
         ),
         "takes values": 1,
         "default": 2,
-        "format": "{keyword}={value}",
+        "format": "{}={}",
     },
     "NLLSQ": {
         "description": "Minimize gradients using NLLSQ",
@@ -716,7 +716,7 @@ keyword_metadata = {
         ),
         "takes values": 1,
         "default": 42,
-        "format": "{keyword}={value}",
+        "format": "{}={}",
     },
     "NSURF": {
         "description": "Number of surfaces in an ESP calculation",
@@ -742,13 +742,13 @@ keyword_metadata = {
         "description": "In TS, minimum allowed overlap of eigenvectors",
         "takes values": 1,
         "default": 0.8,
-        "format": "{keyword}={value}",
+        "format": "{}={}",
     },
     "OPEN": {
         "description": "Open-shell UHF or RHF calculation requested",
         "takes values": 2,
-        "default": "2,2",
-        "format": "{keyword}({value})",
+        "default": "(2,2)",
+        "format": "{}{}",
     },
     "OPT": {
         "description": (
@@ -778,7 +778,7 @@ keyword_metadata = {
         ),
         "takes values": 1,
         "default": "10.0GPa",
-        "format": "{keyword}={value}",
+        "format": "{}={}",
     },
     "PDB": {
         "description": (
@@ -787,8 +787,8 @@ keyword_metadata = {
             "D:1 or LP:0"
         ),
         "takes values": 1,
-        "default": "D:1,LP:0",
-        "format": "{keyword}({value})",
+        "default": "(D:1,LP:0)",
+        "format": "{}{}",
     },
     "PDBOUT	": {
         "description": "Output geometry in pdb format",
@@ -856,19 +856,19 @@ keyword_metadata = {
         "description": "Number of points in reaction path",
         "takes values": 1,
         "default": "40",
-        "format": "{keyword}={value}",
+        "format": "{}={}",
     },
     "POINT1": {
         "description": ("Number of points in first direction in grid " "calculation"),
         "takes values": 1,
         "default": "11",
-        "format": "{keyword}={value}",
+        "format": "{}={}",
     },
     "POINT2": {
         "description": ("Number of points in second direction in grid " "calculation"),
         "takes values": 1,
         "default": "11",
-        "format": "{keyword}={value}",
+        "format": "{}={}",
     },
     "POLAR": {
         "description": ("Calculate first, second and third order " "polarizabilities"),
@@ -891,7 +891,7 @@ keyword_metadata = {
         ),
         "takes values": 1,
         "default": 1,
-        "format": "{keyword}={value}",
+        "format": "{}={}",
         "allowed values": (0, 1, 2, 3, 4, 5),
     },
     "PRTCHAR": {
@@ -931,7 +931,7 @@ keyword_metadata = {
         "description": "In EF, recalculate Hessian every n steps",
         "takes values": 1,
         "default": 10,
-        "format": "{keyword}={value}",
+        "format": "{}={}",
     },
     "RE-LOCAL": {
         "description": (
@@ -940,7 +940,7 @@ keyword_metadata = {
         ),
         "takes values": [0, 1],
         "default": 1,
-        "format": "{keyword}={value}",
+        "format": "{}={}",
     },
     "RELSCF": {
         "description": "Default SCF criterion multiplied by n",
@@ -971,13 +971,13 @@ keyword_metadata = {
         "description": "In TS, maximum allowed ratio for energy change",
         "takes values": 1,
         "default": 4.0,
-        "format": "{keyword}={value}",
+        "format": "{}={}",
     },
     "RMIN": {
         "description": "In TS, minimum allowed ratio for energy change",
         "takes values": 1,
         "default": 0.0,
-        "format": "{keyword}={value}",
+        "format": "{}={}",
     },
     "ROOT": {
         "description": (
@@ -987,7 +987,7 @@ keyword_metadata = {
         ),
         "takes values": 1,
         "default": "1",
-        "format": "{keyword}={value}",
+        "format": "{}={}",
     },
     "RSCAL": {
         "description": "In EF, scale p-RFO to trust radius",
@@ -1346,6 +1346,13 @@ properties = {
     "ENERGY_NUCLEAR": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
         "description": "nuclear repulsion energy",
+        "dimensionality": "scalar",
+        "type": "float",
+        "units": "eV",
+    },
+    "DIEL_ENER": {
+        "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
+        "description": "the dielectric energy from COSMO",
         "dimensionality": "scalar",
         "type": "float",
         "units": "eV",
