@@ -103,6 +103,52 @@ class EnergyParameters(seamm.Parameters):
             "description": "Solvent using COSMO:",
             "help_text": "Whether to use COSMO solvation model.",
         },
+        "MOZYME": {
+            "default": "for larger systems",
+            "kind": "enumeration",
+            "default_units": "",
+            "enumeration": (
+                "for larger systems",
+                "always",
+                "never",
+            ),
+            "format_string": "s",
+            "description": "Use localized molecular orbitals (MOZYME):",
+            "help_text": (
+                "Whether and when to use localized molecular orbitals (LMO) by using "
+                "MOZYME."
+            ),
+        },
+        "nMOZYME": {
+            "default": 300,
+            "kind": "integer",
+            "default_units": "",
+            "enumeration": tuple(),
+            "format_string": "",
+            "description": "with this many atoms or more:",
+            "help_text": ("The number of atoms to switch to using MOZYME."),
+        },
+        "MOZYME follow-up": {
+            "default": (
+                "recalculate the energy at the end using new, orthogonal localized "
+                "orbitals"
+            ),
+            "kind": "enumeration",
+            "default_units": "",
+            "enumeration": (
+                "recalculate the energy at the end using new, orthogonal localized "
+                "orbitals",
+                "recalculate the energy at the end using exact, non-localized orbitals",
+                "none",
+            ),
+            "format_string": "s",
+            "description": "Follow-up calculation:",
+            "help_text": (
+                "Whether to follow the localize molecular orbital calculation "
+                "with another calculation to clean up the orbitals, or check "
+                "by doing a full calculation without localizing the orbitals."
+            ),
+        },
         "eps": {
             "default": "78.4",
             "kind": "float",

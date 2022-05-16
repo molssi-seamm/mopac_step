@@ -79,9 +79,55 @@ class Energy(seamm.Node):
                 "spin-unrestricted (UHF) for all others."
             )
 
+        # MOZYME localized molecular orbitals.
+        if P["MOZYME"] == "always":
+            text += (
+                "\n\nThe SCF will be solved using localized molecular orbitals "
+                "(MOZYME), which is faster than the traditional method for larger "
+                "systems."
+            )
+            used_mozyme = True
+        elif P["MOZYME"] == "for larger systems":
+            text += (
+                "\n\nThe SCF will be solved using localized molecular orbitals "
+                "(MOZYME) for systems with {nMOZYME} atoms or more. This method is "
+                "faster than the traditional method for larger systems."
+            )
+            used_mozyme = True
+        else:
+            used_mozyme = False
+
+        if used_mozyme:
+            follow_up = P["MOZYME follow-up"]
+            if "exact" in follow_up:
+                text += (
+                    " The energy given by MOZYME slowly accumulates error due to the "
+                    "increasing non-orthogonality of the localized orbitals after "
+                    "many iterations. A single point energy using the traditional "
+                    "method will be run to get the correct energy."
+                )
+            elif "new" in follow_up:
+                text += (
+                    " The energy given by MOZYME slowly accumulates error due to the "
+                    "increasing non-orthogonality of the localized orbitals after "
+                    "many iterations. A single point energy using fresh localized "
+                    "orbitals will be run to get the correct energy."
+                )
+            elif follow_up == "none":
+                text += (
+                    " The energy given by MOZYME slowly accumulates error due to the "
+                    "increasing non-orthogonality of the localized orbitals after "
+                    "many iterations. No follow-up calculation will be done, so be "
+                    "careful with the final energies produced."
+                )
+                used_mozyme = False
+            else:
+                logger.error(f"Don't recognize the MOZYME follow-up: '{follow_up}'")
+
+        # Handle COSMO
         if self.parameters["COSMO"].is_expr:
             text += (
-                "\n\n '{COSMO}' will determine whether to use the COSMO solvation "
+                "\n\n'{COSMO}' will determine whether to use the COSMO solvation "
                 "model. If it is used the parameters will be "
             )
         elif self.parameters["COSMO"].get():
@@ -97,8 +143,7 @@ class Energy(seamm.Node):
 
     def get_input(self):
         """Get the input for an energy calculation for MOPAC"""
-        system_db = self.get_variable("_system_db")
-        configuration = system_db.system.configuration
+        system, configuration = self.get_system_configuration(None)
         references = self.parent.references
 
         P = self.parameters.current_values_to_dict(
@@ -585,6 +630,14 @@ class Energy(seamm.Node):
         if P["uhf"]:
             keywords.append("UHF")
 
+        if P["MOZYME"] == "always":
+            keywords.append("MOZYME")
+        elif (
+            P["MOZYME"] == "for larger systems"
+            and configuration.n_atoms >= P["nMOZYME"]
+        ):
+            keywords.append("MOZYME")
+
         if P["COSMO"]:
             keywords.append(f"EPS={P['eps']}")
             rsolve = P["rsolve"].to("Å").magnitude
@@ -605,13 +658,63 @@ class Energy(seamm.Node):
                 else:
                     keywords.append(metadata[keyword]["format"].format(keyword, value))
 
-        return keywords
+        result = []
+        result.append([*keywords])
 
-    def analyze(self, indent="", data={}, out=[], table=None):
+        # Handle MOZYME follow-up calculations
+        if "MOZYME" in keywords:
+            follow_up = P["MOZYME follow-up"]
+            if "exact" in follow_up:
+                keywords.remove("MOZYME")
+                if "1SCF" not in keywords:
+                    keywords.append("1SCF")
+                keywords.append("OLDGEO")
+                result.append([*keywords])
+            elif "new" in follow_up:
+                if "1SCF" not in keywords:
+                    keywords.append("1SCF")
+                keywords.append("OLDGEO")
+                result.append([*keywords])
+            elif follow_up == "none":
+                pass
+            else:
+                logger.error(f"Don't recognize the MOZYME follow-up: '{follow_up}'")
+
+        return result
+
+    def analyze(self, indent="", data_sections=[], out_sections=[], table=None):
         """Parse the output and generating the text output and store the
         data in variables for other stages to access
         """
         options = self.parent.options
+
+        # Get the parameters used
+        P = self.parameters.current_values_to_dict(
+            context=seamm.flowchart_variables._data
+        )
+
+        system, starting_configuration = self.get_system_configuration(None)
+
+        if P["MOZYME"] == "always":
+            used_mozyme = True
+        elif (
+            P["MOZYME"] == "for larger systems"
+            and starting_configuration.n_atoms >= P["nMOZYME"]
+        ):
+            used_mozyme = True
+        else:
+            used_mozyme = False
+
+        if used_mozyme:
+            follow_up = P["MOZYME follow-up"]
+            if "exact" in follow_up:
+                pass
+            elif "new" in follow_up:
+                pass
+            elif follow_up == "none":
+                used_mozyme = False
+            else:
+                logger.error(f"Don't recognize the MOZYME follow-up: '{follow_up}'")
 
         if table is None:
             table = {
@@ -621,14 +724,22 @@ class Energy(seamm.Node):
             }
         text = ""
 
+        if used_mozyme:
+            data = {**data_sections[0]}
+            data.update(data_sections[1])
+        else:
+            data = data_sections[0]
+
         if "GRADIENT_NORM" in data:
             tmp = data["GRADIENT_NORM"]
             table["Property"].append("Gradient Norm")
             table["Value"].append(f"{tmp:.2f}")
             table["Units"].append("kcal/mol/Å")
 
-        if "POINT_GROUP" in data:
+        if "POINT_GROUP" in data and data["POINT_GROUP"] != "":
             text += "The molecule has {POINT_GROUP} symmetry."
+        else:
+            text += "The symmetry of the molecule was not determined."
 
         if "HEAT_OF_FORMATION" in data:
             tmp = data["HEAT_OF_FORMATION"]
@@ -640,6 +751,33 @@ class Energy(seamm.Node):
             table["Property"].append("")
             table["Value"].append(f"{tmp:.2f}")
             table["Units"].append("kJ/mol")
+
+            if used_mozyme and "HEAT_OF_FORMATION" in data_sections[0]:
+                tmp2 = data_sections[0]["HEAT_OF_FORMATION"]
+                tmp2 = Q_(tmp2, "kcal/mol").to("kJ/mol").magnitude
+                table["Property"].append("MOZYME Enthalpy of Formation")
+                table["Value"].append(f"{tmp2:.2f}")
+                table["Units"].append("kJ/mol")
+
+                tmp2 -= tmp
+                table["Property"].append("Othonormality error in EoF")
+                table["Value"].append(f"{tmp2:.2f}")
+                table["Units"].append("kJ/mol")
+
+                if abs(tmp2) > 10.0:
+                    text += (
+                        "\n\nWarning: The non-orthogonality of the localized orbitals "
+                        f"led to an error in the enthalpy of formation of {tmp2:.2f} "
+                        "kJ/mol. This is expected if there were many iterations of "
+                        "geometry optimization. Otherwise check the results carefully."
+                    )
+                    if "exact" in follow_up:
+                        text += (
+                            " You followed up with an exact calculation. A large "
+                            "difference in the energy could indicate a problem "
+                            "with the localcized molecular orbitals. Check the MOPAC "
+                            "output carefully!"
+                        )
 
         if "SPIN_COMPONENT" in data:
             tmp = data["SPIN_COMPONENT"]
@@ -783,6 +921,21 @@ class Energy(seamm.Node):
         text += textwrap.indent("\n".join(text_lines), self.indent + 7 * " ")
 
         printer.normal(text)
+
+        if used_mozyme and "CPU_TIME" in data_sections[0]:
+            t0 = data_sections[0]["CPU_TIME"]
+            if "CPU_TIME" in data:
+                t1 = data["CPU_TIME"]
+                text = (
+                    f"This MOZYME calculation took {t0:.2f} s and the follow-up "
+                    f"took {t1:.2f} s."
+                )
+            else:
+                text = f"The MOZYME calculation took {t0:.2f} s."
+        elif "CPU_TIME" in data:
+            t0 = data_sections[0]["CPU_TIME"]
+            text = f"This calculation took {t0:.2f} s."
+        printer.normal(str(__(text, **data, indent=self.indent + 4 * " ")))
 
         # Put any requested results into variables or tables
         self.store_results(

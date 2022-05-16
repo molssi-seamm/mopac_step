@@ -53,6 +53,17 @@ class Optimization(mopac_step.Energy):
         else:
             text += "optimization method determined at runtime by '{method}'."
 
+        if P["LatticeOpt"]:
+            pressure = P["pressure"]
+            if isinstance(pressure, units_class):
+                pressure = f"{pressure:~P}"
+            text += (
+                " The cell for periodic systems will also be optimized, with an "
+                f"applied pressure of {pressure}."
+            )
+        else:
+            text += " The cell for periodic systems will not be optimized."
+
         if P["gnorm"] == "default":
             text += " The geometrical convergence is the default of " "1.0 kcal/mol/Å."
         elif P["gnorm"][0] == "$":
@@ -102,16 +113,23 @@ class Optimization(mopac_step.Energy):
             if isinstance(PP[key], units_class):
                 PP[key] = "{:~P}".format(PP[key])
 
-        # Remove the 1SCF keyword from the energy setup
-        keywords = []
-        for keyword in super().get_input():
-            if keyword != "1SCF":
-                keywords.append(keyword)
+        # Let parent know about cell optimization
+        self.parent._lattice_opt = P["LatticeOpt"]
 
-        # Save the description for later printing
-        self.description.append(
-            __(self.description_text(PP), **PP, indent=self.indent).__str__()
-        )
+        # Get the inputs from the energy class. This also sets the description properly.
+        inputs = super().get_input()
+
+        # Remove the 1SCF keyword from the energy setup
+        # 'keywords' is a reference, so will change in situ.
+        keywords = inputs[0]
+        if "1SCF" in keywords:
+            keywords.remove("1SCF")
+
+        # Pressure
+        if P["LatticeOpt"]:
+            pressure = P["pressure"]
+            pressure = pressure.to("GPa").magnitude
+            keywords.append(f"P={pressure}GPa")
 
         # and the optimization-specific parts
         method = P["method"]
@@ -221,9 +239,9 @@ class Optimization(mopac_step.Energy):
             if P["gnorm"] != self.parameters["gnorm"].default:
                 keywords.append("GNORM={}".format(P["gnorm"]))
 
-        return keywords
+        return inputs
 
-    def analyze(self, indent="", data={}, out=[], table=None):
+    def analyze(self, indent="", data_sections=[], out_sections=[], table=None):
         """Parse the output and generating the text output and store the
         data in variables for other stages to access
         """
@@ -233,9 +251,141 @@ class Optimization(mopac_step.Energy):
             context=seamm.flowchart_variables._data
         )
 
+        system, starting_configuration = self.get_system_configuration(None)
+
+        # Get the data.
+        data = data_sections[0]
+
+        # If the optimizer used was the default, put in the correct citations
+
+        references = self.parent.references
+        bibliography = self.parent._bibliography
+
+        P = self.parameters.current_values_to_dict(
+            context=seamm.flowchart_variables._data
+        )
+
+        if P["method"] == "default":
+            tmp = "\n".join(out_sections[0])
+            if (
+                "GEOMETRY OPTIMISED USING EIGENVECTOR FOLLOWING (EF)" in tmp
+                or "Geometry optimization using EF" in tmp
+            ):
+                opt_method = "EF -- eigenvector following"
+                references.cite(
+                    raw=bibliography["Baker_1986"],
+                    alias="Baker_1986",
+                    module="mopac_step",
+                    level=1,
+                    note="Eigenvector-following minimizer.",
+                )
+            elif (
+                "Geometry optimization using BFGS" in tmp or "SATISFIED IN BFGS" in tmp
+            ):
+                opt_method = "BFGS -- Broyden-Fletcher-Goldfarb-Shanno algorithm"
+                references.cite(
+                    raw=bibliography["Broyden_1970"],
+                    alias="Broyden_1970",
+                    module="mopac_step",
+                    level=1,
+                    note="Broyden-Fletcher-Goldfarb-Shanno (BFGS) minimizer.",
+                )
+                references.cite(
+                    raw=bibliography["Fletcher_1970"],
+                    alias="Fletcher_1970",
+                    module="mopac_step",
+                    level=1,
+                    note="Broyden-Fletcher-Goldfarb-Shanno (BFGS) minimizer.",
+                )
+                references.cite(
+                    raw=bibliography["Goldfarb_1970"],
+                    alias="Goldfarb_1970",
+                    module="mopac_step",
+                    level=1,
+                    note="Broyden-Fletcher-Goldfarb-Shanno (BFGS) minimizer.",
+                )
+                references.cite(
+                    raw=bibliography["Shanno_1970"],
+                    alias="Shanno_1970",
+                    module="mopac_step",
+                    level=1,
+                    note="Broyden-Fletcher-Goldfarb-Shanno (BFGS) minimizer.",
+                )
+                references.cite(
+                    raw=bibliography["Thiel_1988"],
+                    alias="Thiel_1988",
+                    module="mopac_step",
+                    level=1,
+                    note="Broyden-Fletcher-Goldfarb-Shanno (BFGS) minimizer.",
+                )
+            elif (
+                "Geometry optimization using L-BFGS" in tmp
+                or "SATISFIED IN L-BFGS" in tmp
+            ):
+                opt_method = (
+                    "L-BFGS -- Limited memory Broyden-Fletcher-Goldfarb-Shanno "
+                    "algorithm"
+                )
+                references.cite(
+                    raw=bibliography["Broyden_1970"],
+                    alias="Broyden_1970",
+                    module="mopac_step",
+                    level=1,
+                    note="Broyden-Fletcher-Goldfarb-Shanno (BFGS) minimizer.",
+                )
+                references.cite(
+                    raw=bibliography["Fletcher_1970"],
+                    alias="Fletcher_1970",
+                    module="mopac_step",
+                    level=1,
+                    note="Broyden-Fletcher-Goldfarb-Shanno (BFGS) minimizer.",
+                )
+                references.cite(
+                    raw=bibliography["Goldfarb_1970"],
+                    alias="Goldfarb_1970",
+                    module="mopac_step",
+                    level=1,
+                    note="Broyden-Fletcher-Goldfarb-Shanno (BFGS) minimizer.",
+                )
+                references.cite(
+                    raw=bibliography["Shanno_1970"],
+                    alias="Shanno_1970",
+                    module="mopac_step",
+                    level=1,
+                    note="Broyden-Fletcher-Goldfarb-Shanno (BFGS) minimizer.",
+                )
+                references.cite(
+                    raw=bibliography["Thiel_1988"],
+                    alias="Thiel_1988",
+                    module="mopac_step",
+                    level=1,
+                    note="Broyden-Fletcher-Goldfarb-Shanno (BFGS) minimizer.",
+                )
+            else:
+                logger.warning("Could not find which minimizer was used!")
+                opt_method = "default -- but could not find which was used"
+        else:
+            opt_method = P["method"]
+
+        # The results
+        if "NUMBER_SCF_CYCLES" in data_sections[0]:
+            text = (
+                f"The geometry optimization using {opt_method} -- converged in "
+                "{NUMBER_SCF_CYCLES} iterations."
+            )
+        else:
+            data["NUMBER_SCF_CYCLES"] = len(data["HEAT_OF_FORM_UPDATED"])
+            data["HEAT_OF_FORMATION"] = data["HEAT_OF_FORM_UPDATED"][-1]
+            data["GRADIENT_NORM"] = data["GRADIENT_UPDATED"][-1]
+            text = (
+                f"The geometry optimization using {opt_method} -- did not converge in "
+                "{NUMBER_SCF_CYCLES} steps. The following results are for the final "
+                "structure.\n"
+            )
+
         # Update the structure
-        if "ATOM_X_OPT" in data:
-            system, starting_configuration = self.get_system_configuration(None)
+        if "ATOM_X_OPT" in data or "ATOM_X_UPDATED" in data:
+
             periodicity = starting_configuration.periodicity
             if (
                 "structure handling" in P
@@ -254,10 +404,32 @@ class Optimization(mopac_step.Energy):
             else:
                 configuration = starting_configuration
 
-            if periodicity != 0:
-                raise NotImplementedError("Optimization cannot yet handle periodicity")
+            if periodicity != 0 and P["LatticeOpt"]:
+                if "TRANS_VECTS" in data:
+                    vectors = data["TRANS_VECTS"]
+                    lattice = [
+                        [vectors[0], vectors[1], vectors[2]],
+                        [vectors[3], vectors[4], vectors[5]],
+                        [vectors[6], vectors[7], vectors[8]],
+                    ]
+                    configuration.cell.from_vectors(lattice)
+                elif "TRANS_VECTS_UPDATED" in data:
+                    vectors = data["TRANS_VECTS_UPDATED"][-1]
+                    lattice = [
+                        [vectors[0], vectors[1], vectors[2]],
+                        [vectors[3], vectors[4], vectors[5]],
+                        [vectors[6], vectors[7], vectors[8]],
+                    ]
+                    configuration.cell.from_vectors(lattice)
+                else:
+                    logger.warning(
+                        "Expected updated lattice vectors, but did not find!"
+                    )
             xyz = []
-            it = iter(data["ATOM_X_OPT"])
+            if "ATOM_X_OPT" in data:
+                it = iter(data["ATOM_X_OPT"])
+            else:
+                it = iter(data["ATOM_X_UPDATED"][-1])
             for x in it:
                 xyz.append([float(x), float(next(it)), float(next(it))])
             configuration.atoms.set_coordinates(xyz, fractionals=False)
@@ -297,83 +469,11 @@ class Optimization(mopac_step.Energy):
                 message = "Error creating the cif file\n\n" + traceback.format_exc()
                 logger.warning(message)
 
-        # The results
-        if "NUMBER_SCF_CYCLES" in data:
-            text = (
-                "The geometry optimization converged in {NUMBER_SCF_CYCLES} iterations."
-            )
-        else:
-            data["NUMBER_SCF_CYCLES"] = len(data["HEAT_OF_FORM_UPDATED"])
-            data["HEAT_OF_FORMATION"] = data["HEAT_OF_FORM_UPDATED"][-1]
-            data["GRADIENT_NORM"] = data["GRADIENT_UPDATED"][-1]
-            text = (
-                "The geometry optimization did not converge in {NUMBER_SCF_CYCLES} "
-                "steps. The following results are for the final structure.\n"
-            )
-
         printer.normal(__(text, **data, indent=self.indent + 4 * " "))
 
-        # If the optimizer used was the default, put in the correct citations
-
-        references = self.parent.references
-        bibliography = self.parent._bibliography
-
-        P = self.parameters.current_values_to_dict(
-            context=seamm.flowchart_variables._data
+        super().analyze(
+            indent=indent,
+            data_sections=data_sections,
+            out_sections=out_sections,
+            table=table,
         )
-
-        if P["method"] == "default":
-            tmp = "\n".join(out)
-            if (
-                "GEOMETRY OPTIMISED USING EIGENVECTOR FOLLOWING (EF)" in tmp
-                or "Geometry optimization using EF" in tmp
-            ):
-                references.cite(
-                    raw=bibliography["Baker_1986"],
-                    alias="Baker_1986",
-                    module="mopac_step",
-                    level=1,
-                    note="Eigenvector-following minimizer.",
-                )
-            elif (
-                "Geometry optimization using BFGS" in tmp or "SATISFIED IN BFGS" in tmp
-            ):
-                references.cite(
-                    raw=bibliography["Broyden_1970"],
-                    alias="Broyden_1970",
-                    module="mopac_step",
-                    level=1,
-                    note="Broyden-Fletcher-Goldfarb-Shanno (BFGS) minimizer.",
-                )
-                references.cite(
-                    raw=bibliography["Fletcher_1970"],
-                    alias="Fletcher_1970",
-                    module="mopac_step",
-                    level=1,
-                    note="Broyden-Fletcher-Goldfarb-Shanno (BFGS) minimizer.",
-                )
-                references.cite(
-                    raw=bibliography["Goldfarb_1970"],
-                    alias="Goldfarb_1970",
-                    module="mopac_step",
-                    level=1,
-                    note="Broyden-Fletcher-Goldfarb-Shanno (BFGS) minimizer.",
-                )
-                references.cite(
-                    raw=bibliography["Shanno_1970"],
-                    alias="Shanno_1970",
-                    module="mopac_step",
-                    level=1,
-                    note="Broyden-Fletcher-Goldfarb-Shanno (BFGS) minimizer.",
-                )
-                references.cite(
-                    raw=bibliography["Thiel_1988"],
-                    alias="Thiel_1988",
-                    module="mopac_step",
-                    level=1,
-                    note="Broyden-Fletcher-Goldfarb-Shanno (BFGS) minimizer.",
-                )
-            else:
-                logger.warning("Could not find which minimizer was used!")
-
-        super().analyze(indent=indent, data=data, out=out, table=table)

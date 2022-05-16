@@ -50,7 +50,7 @@ class TkOptimization(mopac_step.TkEnergy):
             row += 1
 
         # Set the callbacks for changes
-        for widget in ("method", "convergence"):
+        for widget in ("method", "convergence", "LatticeOpt"):
             w = self[widget]
             w.combobox.bind(
                 "<<ComboboxSelected>>", self.reset_optimization_frame, add="+"
@@ -85,10 +85,19 @@ class TkOptimization(mopac_step.TkEnergy):
 
         convergence = self["convergence"].get()
         method = self["method"].get()
+        lattice_opt = self["LatticeOpt"].get()
 
         widgets = []
         widgets_2 = []
         row = 0
+
+        self["LatticeOpt"].grid(row=row, column=0, columnspan=2, sticky=tk.EW)
+        widgets.append(self["LatticeOpt"])
+        row += 1
+
+        if lattice_opt == "Yes":
+            self["pressure"].grid(row=row, column=1, sticky=tk.EW)
+            row += 1
 
         self["method"].grid(row=row, column=0, columnspan=2, sticky=tk.EW)
         widgets.append(self["method"])
