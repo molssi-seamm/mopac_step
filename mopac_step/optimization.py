@@ -113,6 +113,8 @@ class Optimization(mopac_step.Energy):
             if isinstance(PP[key], units_class):
                 PP[key] = "{:~P}".format(PP[key])
 
+        system, configuration = self.get_system_configuration(None)
+
         # Let parent know about cell optimization
         self.parent._lattice_opt = P["LatticeOpt"]
 
@@ -126,7 +128,7 @@ class Optimization(mopac_step.Energy):
             keywords.remove("1SCF")
 
         # Pressure
-        if P["LatticeOpt"]:
+        if configuration.periodicity == 3 and P["LatticeOpt"]:
             pressure = P["pressure"]
             pressure = pressure.to("GPa").magnitude
             keywords.append(f"P={pressure}GPa")
