@@ -1,0 +1,12 @@
+Property,Type,Units,Description,URL
+constant pressure heat capacity#MOPAC#{model},float, J/mol/K,"The constant-pressure heat capacity, Cp.",https://en.wikipedia.org/wiki/Heat_capacity
+dipole moment#MOPAC#{model},float,Debye,"The electric dipole moment, which is the magnitude of the dipole vector.",https://en.wikipedia.org/wiki/Electric_dipole_moment
+enthalpy of formation#MOPAC#{model},float,kJ/mol,"The enthalpy of formation, DHf.",https://en.wikipedia.org/wiki/Standard_enthalpy_of_formation
+entropy#MOPAC#{model},float,J/mol/K,"The standard entropy.",https://en.wikipedia.org/wiki/Entropy
+ionization energy#MOPAC#{model},float,eV,"The ionization energy or potential.",https://en.wikipedia.org/wiki/Ionization_energy
+surface area#MOPAC,float,Å^2,"The molecular surface area.",
+volume#MOPAC,float,Å^3,"The molecular volume.",
+density#MOPAC/{model},float,g/mL,
+electronic energy#MOPAC/{model},float,eV,"The electronic energy.",
+zero point energy#MOPAC/{model},float,eV,"The zero-point vibrational energy.",
+dielectric energy#MOPAC/{model},float,eV,"The dielectric energy from COSMO",
