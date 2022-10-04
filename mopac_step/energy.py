@@ -807,6 +807,7 @@ class Energy(seamm.Node):
             for occ, E in zip(
                 data["MOLECULAR_ORBITAL_OCCUPANCIES"], data["EIGENVALUES"]
             ):
+                Elumo = None
                 if occ > 0.1:
                     Ehomo = E
                 else:
@@ -815,12 +816,13 @@ class Energy(seamm.Node):
             table["Property"].append("HOMO Energy")
             table["Value"].append(f"{Ehomo:.2f}")
             table["Units"].append("eV")
-            table["Property"].append("LUMO Energy")
-            table["Value"].append(f"{Elumo:.2f}")
-            table["Units"].append("eV")
-            table["Property"].append("Gap")
-            table["Value"].append(f"{Elumo - Ehomo:.2f}")
-            table["Units"].append("eV")
+            if Elumo is not None:
+                table["Property"].append("LUMO Energy")
+                table["Value"].append(f"{Elumo:.2f}")
+                table["Units"].append("eV")
+                table["Property"].append("Gap")
+                table["Value"].append(f"{Elumo - Ehomo:.2f}")
+                table["Units"].append("eV")
 
         if "AREA" in data:
             tmp = data["AREA"]
