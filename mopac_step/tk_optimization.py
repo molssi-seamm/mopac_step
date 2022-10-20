@@ -29,11 +29,11 @@ class TkOptimization(mopac_step.TkEnergy):
 
         self.popup_menu.tk_popup(event.x_root, event.y_root, 0)
 
-    def create_dialog(self, title="MOPAC Optimization", calculation="optimization"):
+    def create_dialog(self, title="MOPAC Optimization"):
         """Create the dialog!"""
         self.logger.debug("Creating the dialog")
 
-        frame = super().create_dialog(title=title, calculation="optimization")
+        frame = super().create_dialog(title=title)
 
         P = self.node.parameters
 

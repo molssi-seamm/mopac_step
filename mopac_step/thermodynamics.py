@@ -29,6 +29,9 @@ class Thermodynamics(mopac_step.Energy):
 
         super().__init__(flowchart=flowchart, title=title, extension=extension)
 
+        self._calculation = "thermodynamics"
+        self._model = None
+        self._metadata = mopac_step.metadata
         self.parameters = mopac_step.ThermodynamicsParameters()
 
         # Customize the options for naming the configuration

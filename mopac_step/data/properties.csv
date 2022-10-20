@@ -1,0 +1,16 @@
+Property,Type,Units,Description,URL
+HOMO energy#MOPAC#{model},float,eV,"The {model} energy of the highest occupied molecular orbital (HOMO)",https://en.wikipedia.org/wiki/HOMO_and_LUMO
+LUMO energy#MOPAC#{model},float,eV,"The {model} energy of the lowest unoccupied molecular orbital (LUMO)",https://en.wikipedia.org/wiki/HOMO_and_LUMO
+S^2#MOPAC#{model},float,,"The {model} expectation value of the total spin <S^2>.",
+band gap#MOPAC#{model},float,eV,"The {model} band gap.",https://en.wikipedia.org/wiki/Band_gap
+constant pressure heat capacity#MOPAC#{model},float,J/mol/K,"The {model} constant-volume heat capacity, Cv.",https://en.wikipedia.org/wiki/Heat_capacity
+dielectric energy#MOPAC#{model},float,eV,"The {model} dielectric energy from COSMO",
+dipole moment#MOPAC#{model},float,D,"The {model} electric dipole moment, which is the magnitude of the dipole vector.",https://en.wikipedia.org/wiki/Electric_dipole_moment
+electronic energy#MOPAC#{model},float,eV,"The {model} electronic energy.",
+enthalpy of formation#MOPAC#{model},float,kJ/mol,"The {model} enthalpy of formation, DHf.",https://en.wikipedia.org/wiki/Standard_enthalpy_of_formation
+entropy#MOPAC#{model},float,J/mol/K,"The {model} standard entropy.",https://en.wikipedia.org/wiki/Entropy
+ionization energy#MOPAC#{model},float,eV,"The {model} ionization energy.",https://en.wikipedia.org/wiki/Ionization_energy
+surface area#MOPAC,float,Å^2,"The molecular surface area.",
+total energy#MOPAC#{model},float,eV,"The {model} total energy (electronic + nuclear).",
+volume#MOPAC,float,Å^3,"The molecular volume.",
+zero point energy#MOPAC#{model},float,kJ/mol,"The {model} zero-point vibrational energy.",

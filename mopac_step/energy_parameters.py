@@ -263,7 +263,7 @@ class EnergyParameters(seamm.Parameters):
             "enumeration": tuple(),
             "format_string": "",
             "description": "results",
-            "help_text": ("The results to save to variables or in " "tables. "),
+            "help_text": "The results to save to variables or in tables.",
         },
         "create tables": {
             "default": "yes",

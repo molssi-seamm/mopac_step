@@ -14,7 +14,7 @@ class MOPACStep(object):
 
     def __init__(self, flowchart=None, gui=None):
         """Initialize this helper class, which is used by
-        the application via sevedore to get information about
+        the application via stevedore to get information about
         and create node objects for the flowchart
         """
         pass

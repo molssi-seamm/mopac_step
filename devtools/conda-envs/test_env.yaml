@@ -9,6 +9,7 @@ dependencies:
   - pip
 
   # SEAMM
+  - molsystem
   - psutil
   - requests
   - seamm

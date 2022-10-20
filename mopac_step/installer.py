@@ -9,11 +9,7 @@ package `mopac-step`.
 import logging
 from pathlib import Path
 import pkg_resources
-import platform
 import subprocess
-import zipfile
-
-import requests
 
 import seamm_installer
 
@@ -101,54 +97,8 @@ class Installer(seamm_installer.InstallerBase):
             for line in lines:
                 line = line.strip()
                 tmp = line.split()
-                if len(tmp) == 1:
-                    version = tmp[0]
+                if len(tmp) >= 2:
+                    version = tmp[2]
                     break
 
-        # MOPAC tends to leave timing.dat floating around. :-(
-        timing = Path("timer.dat")
-        if timing.exists():
-            try:
-                timing.unlink()
-            except Exception:
-                pass
-
         return version
-
-    def install(self):
-        """Currently the installation of MOPAC is a bit specialized! Have to download
-        and unzip the executables.
-        """
-        super().install()
-
-        # The bin directory may not exist!
-        path = self.conda.path(self.environment) / "bin"
-        path.mkdir(mode=0o755, exist_ok=True)
-
-        # Now fetch the MOPAC executables.
-        system = platform.system()
-        if system == "Darwin":
-            url = "http://openmopac.net/MOPAC2016_for_Macintosh.zip"
-        elif system == "Linux":
-            url = "http://openmopac.net/MOPAC2016_for_Linux_64_bit.zip"
-        elif system == "Windows":
-            url = "http://openmopac.net/MOPAC2016_standalone_for_WINDOWS_64_bit.zip"
-        else:
-            raise RuntimeError(f"Don't have executables for {system=}")
-
-        zip_file = path / "mopac.zip"
-        r = requests.get(url, stream=True)
-        with open(zip_file, "wb") as fd:
-            for chunk in r.iter_content(chunk_size=1024):
-                fd.write(chunk)
-
-        zip_archive = zipfile.ZipFile(zip_file)
-        zip_archive.extract("MOPAC2016.exe", path)
-
-        if system == "Linux":
-            zip_archive.extract("libiomp5.so", path)
-            lib_path = path / "libiomp5.so"
-            lib_path.chmod(0o755)
-
-        mopac_exe = path / "MOPAC2016.exe"
-        mopac_exe.chmod(0o755)

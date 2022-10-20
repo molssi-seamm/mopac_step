@@ -26,8 +26,10 @@ class Optimization(mopac_step.Energy):
 
         super().__init__(flowchart=flowchart, title=title, extension=extension)
 
+        self._calculation = "optimization"
+        self._model = None
+        self._metadata = mopac_step.metadata
         self.parameters = mopac_step.OptimizationParameters()
-
         self.description = "A structural optimization"
 
     def description_text(self, P=None):
