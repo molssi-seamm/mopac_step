@@ -20,12 +20,10 @@ class TkThermodynamics(mopac_step.TkEnergy):
             tk_flowchart=tk_flowchart, node=node, canvas=canvas, x=x, y=y, w=w, h=h
         )
 
-    def create_dialog(
-        self, title="MOPAC Thermodynamic Functions", calculation="thermodynamics"
-    ):
+    def create_dialog(self, title="MOPAC Thermodynamic Functions"):
         """Create the dialog!"""
         self.logger.debug("Creating the dialog")
-        frame = super().create_dialog(title=title, calculation="thermodynamics")
+        frame = super().create_dialog(title=title)
 
         P = self.node.parameters
 

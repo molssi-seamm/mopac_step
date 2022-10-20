@@ -24,17 +24,12 @@ class TkEnergy(seamm.TkNode):
         w=200,
         h=50,
         my_logger=logger,
-        keyword_metadata=None,
     ):
         """Initialize the graphical Tk MOPAC energy step
 
         Keyword arguments:
         """
         self.results_widgets = []
-
-        # Call the constructor for the energy
-        if keyword_metadata is None:
-            keyword_metadata = mopac_step.keyword_metadata
 
         super().__init__(
             tk_flowchart=tk_flowchart,
@@ -45,7 +40,6 @@ class TkEnergy(seamm.TkNode):
             w=w,
             h=h,
             my_logger=my_logger,
-            keyword_metadata=keyword_metadata,
         )
 
     def right_click(self, event):
@@ -56,7 +50,7 @@ class TkEnergy(seamm.TkNode):
 
         self.popup_menu.tk_popup(event.x_root, event.y_root, 0)
 
-    def create_dialog(self, title="Edit MOPAC Energy Step", calculation="energy"):
+    def create_dialog(self, title="Edit MOPAC Energy Step"):
         """Create the dialog!"""
         self.logger.debug("Creating the dialog")
         frame = super().create_dialog(title=title, widget="notebook", results_tab=True)
@@ -84,7 +78,7 @@ class TkEnergy(seamm.TkNode):
             w.combobox.bind("<Return>", self.reset_energy_frame)
             w.combobox.bind("<FocusOut>", self.reset_energy_frame)
 
-        self.setup_results(mopac_step.properties, calculation=calculation)
+        self.setup_results()
 
         self.logger.debug("Finished creating the dialog")
 

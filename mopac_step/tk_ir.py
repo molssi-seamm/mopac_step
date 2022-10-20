@@ -20,12 +20,10 @@ class TkIR(mopac_step.TkEnergy):
             tk_flowchart=tk_flowchart, node=node, canvas=canvas, x=x, y=y, w=w, h=h
         )
 
-    def create_dialog(
-        self, title="MOPAC Infrared (Vibrational) Spectrum", calculation="vibrations"
-    ):
+    def create_dialog(self, title="MOPAC Infrared (Vibrational) Spectrum"):
         """Create the dialog!"""
         self.logger.debug("Creating the dialog")
-        frame = super().create_dialog(title=title, calculation="vibrations")
+        frame = super().create_dialog(title=title)
 
         P = self.node.parameters
 

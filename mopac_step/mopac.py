@@ -8,12 +8,14 @@ import logging
 import os
 import os.path
 from pathlib import Path
+import pkg_resources
 import pprint
 import re
 import string
 
 import psutil
 
+import molsystem
 import seamm
 import seamm_util
 import seamm_util.printing as printing
@@ -23,6 +25,11 @@ import mopac_step
 logger = logging.getLogger(__name__)
 job = printing.getPrinter()
 printer = printing.getPrinter("mopac")
+
+# Add MOPAC's properties to the standard properties
+path = Path(pkg_resources.resource_filename(__name__, "data/"))
+csv_file = path / "properties.csv"
+molsystem.add_properties_from_file(csv_file)
 
 
 class MOPAC(seamm.Node):
@@ -76,7 +83,7 @@ class MOPAC(seamm.Node):
         parser.add_argument(
             parser_name,
             "--mopac-exe",
-            default="MOPAC2016.exe",
+            default="mopac",
             help="the name of the MOPAC executable",
         )
 
@@ -434,11 +441,11 @@ class MOPAC(seamm.Node):
         start = 0
         lineno = 0
         for line in lines:
-            if "** Cite this program as:" in line:
-                if lineno == 1:
+            if "** Cite this program as:" in line or "Digital Object Ident" in line:
+                if lineno == 5:
                     continue
-                out.append(lines[start : lineno - 1])
-                start = lineno - 2
+                out.append(lines[start : lineno - 5])
+                start = lineno - 6
             lineno += 1
         out.append(lines[start:])
 
@@ -447,21 +454,30 @@ class MOPAC(seamm.Node):
             if "MOPAC_VERSION" in data:
                 # like MOPAC2016.20.191M
                 release, version = data["MOPAC_VERSION"].split(".", maxsplit=1)
-                t = datetime.datetime.strptime(version[0:-1], "%y.%j")
-                year = t.year
-                month = t.month
-                template = string.Template(self._bibliography["Stewart_2016"])
-                month = calendar.month_abbr[int(month)].lower()
-                citation = template.substitute(
-                    month=month, version=version, year=year, release=release
-                )
-                self.references.cite(
-                    raw=citation,
-                    alias="mopac",
-                    module="mopac_step",
-                    level=1,
-                    note="The principle MOPAC citation.",
-                )
+                try:
+                    t = datetime.datetime.strptime(version[0:-1], "%y.%j")
+                    year = t.year
+                    month = t.month
+                    template = string.Template(self._bibliography["Stewart_2016"])
+                    month = calendar.month_abbr[int(month)].lower()
+                    citation = template.substitute(
+                        month=month, version=version, year=year, release=release
+                    )
+                    self.references.cite(
+                        raw=citation,
+                        alias="mopac",
+                        module="mopac_step",
+                        level=1,
+                        note="The principle MOPAC citation.",
+                    )
+                except Exception:
+                    self.references.cite(
+                        raw=self._bibliography["stewart_james_j_p_2022_6811510"],
+                        alias="mopac",
+                        module="mopac_step",
+                        level=1,
+                        note="The principle MOPAC citation.",
+                    )
                 break
 
         # Loop through our subnodes. Get the first real node
@@ -533,7 +549,7 @@ class MOPAC(seamm.Node):
     def parse_aux(self, lines):
         """Digest a section of the aux file"""
 
-        properties = mopac_step.properties
+        properties = mopac_step.metadata["results"]
         trans = str.maketrans("Dd", "Ee")
 
         data = {}
@@ -563,9 +579,8 @@ class MOPAC(seamm.Node):
                     kind = "string"
                 else:
                     kind = properties[name]["type"]
-
-                if "units" in properties[name]:
-                    data[name + ",units"] = properties[name]["units"]
+                    if "units" in properties[name]:
+                        data[name + ",units"] = properties[name]["units"]
 
                 if name == "NUM_ALPHA_ELECTRONS":
                     spin_polarized = True
@@ -630,7 +645,10 @@ class MOPAC(seamm.Node):
                         data[name] = []
                     data[name].append(values)
                 else:
-                    if properties[name]["dimensionality"] == "scalar":
+                    if (
+                        name in properties
+                        and properties[name]["dimensionality"] == "scalar"
+                    ):
                         if not (units == "ARBITRARY_UNITS" and name in data):
                             data[name] = values[0]
                     else:

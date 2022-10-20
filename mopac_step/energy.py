@@ -30,8 +30,10 @@ class Energy(seamm.Node):
 
         super().__init__(flowchart=flowchart, title=title, extension=extension)
 
+        self._calculation = "energy"
+        self._model = None
+        self._metadata = mopac_step.metadata
         self.parameters = mopac_step.EnergyParameters()
-
         self.description = "A single point energy calculation"
 
     @property
@@ -149,6 +151,9 @@ class Energy(seamm.Node):
         P = self.parameters.current_values_to_dict(
             context=seamm.flowchart_variables._data
         )
+
+        # The model chemistry, for labeling properties.
+        self.model = P["hamiltonian"]
 
         # Have to fix formatting for printing...
         PP = dict(P)
@@ -649,7 +654,7 @@ class Energy(seamm.Node):
             keywords.append("GRADIENTS")
 
         # Add any extra keywords so that they appear at the end
-        metadata = mopac_step.keyword_metadata
+        metadata = self.metadata["keywords"]
         for keyword in P["extra keywords"]:
             if "=" in keyword:
                 keyword, value = keyword.split("=")
@@ -748,6 +753,7 @@ class Energy(seamm.Node):
             table["Units"].append("kcal/mol")
 
             tmp = Q_(tmp, "kcal/mol").to("kJ/mol").magnitude
+            data["Enthalpy of Formation"] = tmp
             table["Property"].append("")
             table["Value"].append(f"{tmp:.2f}")
             table["Units"].append("kJ/mol")
@@ -813,13 +819,16 @@ class Energy(seamm.Node):
                 else:
                     Elumo = E
                     break
+            data["HOMO Energy"] = Ehomo
             table["Property"].append("HOMO Energy")
             table["Value"].append(f"{Ehomo:.2f}")
             table["Units"].append("eV")
             if Elumo is not None:
+                data["LUMO Energy"] = Elumo
                 table["Property"].append("LUMO Energy")
                 table["Value"].append(f"{Elumo:.2f}")
                 table["Units"].append("eV")
+                data["HOMO-LUMO Gap"] = Elumo - Ehomo
                 table["Property"].append("Gap")
                 table["Value"].append(f"{Elumo - Ehomo:.2f}")
                 table["Units"].append("eV")
@@ -941,8 +950,7 @@ class Energy(seamm.Node):
 
         # Put any requested results into variables or tables
         self.store_results(
+            configuration=configuration,
             data=data,
-            properties=mopac_step.properties,
-            results=self.parameters["results"].value,
             create_tables=self.parameters["create tables"].get(),
         )
