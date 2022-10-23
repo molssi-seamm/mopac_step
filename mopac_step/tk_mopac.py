@@ -78,19 +78,3 @@ class TkMOPAC(seamm.TkNode):
         self.popup_menu.add_command(label="Edit..", command=self.edit)
 
         self.popup_menu.tk_popup(event.x_root, event.y_root, 0)
-
-    def update_flowchart(self, tk_flowchart=None, flowchart=None):
-        """Update the nongraphical flowchart. Only used in nodes that contain
-        flowcharts"""
-
-        super().update_flowchart(
-            flowchart=self.node.subflowchart, tk_flowchart=self.tk_subflowchart
-        )
-
-    def from_flowchart(self, tk_flowchart=None, flowchart=None):
-        """Recreate the graphics from the non-graphical flowchart.
-        Only used in nodes that contain flowchart"""
-
-        super().from_flowchart(
-            flowchart=self.node.subflowchart, tk_flowchart=self.tk_subflowchart
-        )
