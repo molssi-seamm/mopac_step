@@ -438,12 +438,27 @@ class Forceconstants(mopac_step.Energy):
         directory.mkdir(parents=True, exist_ok=True)
         if is_periodic and P["what"] == "cell part only":
             n = 6
-        elif P["what"] == "atom part only":
+        elif not is_periodic or P["what"] == "atom part only":
             n = last
         else:
             n = last + 6
 
-        with open(directory / "hessian.dat", "w") as fd:
+        with open(directory / ".." / "hessian.dat", "w") as fd:
+            # Write the header
+            fd.write("!molssi hessian 1.0\n")
+            if is_periodic and P["what"] == "cell part only":
+                fd.write("@cell_dof 6\n")
+                fd.write(f"@cell_units {P['cell_units']}\n")
+            elif not is_periodic or P["what"] == "atom part only":
+                fd.write(f"@atom_dof {last}\n")
+                fd.write(f"@atom_units {P['atom_units']}\n")
+            else:
+                fd.write(f"@atom_dof {last}\n")
+                fd.write(f"@atom_units {P['atom_units']}\n")
+                fd.write("@cell_dof 6\n")
+                fd.write(f"@cell_units {P['cell_units']}\n")
+            fd.write(f"@total_dof {n}\n")
+
             ij = 0
             for i in range(n):
                 for j in range(i + 1):
