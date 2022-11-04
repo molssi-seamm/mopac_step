@@ -84,12 +84,14 @@ setup(
             'Optimization = mopac_step:OptimizationStep',
             'IR Spectrum = mopac_step:IRStep',
             'Thermodynamics = mopac_step:ThermodynamicsStep',
+            'Forceconstants = mopac_step:ForceconstantsStep',
         ],
         'org.molssi.seamm.mopac.tk': [
             'Energy = mopac_step:EnergyStep',
             'Optimization = mopac_step:OptimizationStep',
             'IR Spectrum = mopac_step:IRStep',
             'Thermodynamics = mopac_step:ThermodynamicsStep',
+            'Forceconstants = mopac_step:ForceconstantsStep',
         ],
     },
 )
