@@ -29,7 +29,7 @@ class TkIR(mopac_step.TkEnergy):
 
         # Create the vibrational widgets
         vframe = self["vibrational frame"] = ttk.LabelFrame(
-            frame, text="Vbrational Analysis", labelanchor=tk.N
+            frame, text="Vibrational Analysis", labelanchor=tk.N
         )
         row = 0
         widgets = []

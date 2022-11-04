@@ -296,65 +296,33 @@ class MOPAC(seamm.Node):
         # Get the first real node
         node = self.subflowchart.get_node("1").next()
 
-        input_data = []
+        text = ""
         n_calculations = []
         while node:
             node.parent = self
             inputs = node.get_input()
             n_calculations.append(len(inputs))
-            for keywords in inputs:
+            for keywords, structure, comment in inputs:
                 lines = []
                 lines.append(" ".join(keywords + extra_keywords))
                 lines.append(system.name)
-                lines.append(configuration.name)
-
-                if "OLDGEO" in keywords:
-                    input_data.append("\n".join(lines))
+                if comment is None:
+                    lines.append(configuration.name)
                 else:
-                    tmp_structure = []
-                    atoms = configuration.atoms
-                    elements = atoms.symbols
-                    coordinates = atoms.get_coordinates(fractionals=False)
-                    if "freeze" in atoms:
-                        freeze = atoms["freeze"]
-                    else:
-                        freeze = [""] * len(elements)
-                    for element, xyz, frz in zip(elements, coordinates, freeze):
-                        x, y, z = xyz
-                        line = (
-                            "{:2} {: 12.8f} {:d} {: 12.8f} {:d} {: 12.8f} {:d}".format(
-                                element,
-                                x,
-                                0 if "x" in frz else 1,
-                                y,
-                                0 if "y" in frz else 1,
-                                z,
-                                0 if "z" in frz else 1,
-                            )
-                        )
-                        tmp_structure.append(line)
+                    lines.append(comment)
 
-                    if configuration.periodicity == 3:
-                        # The three translation vectors
-                        element = "Tv"
-                        uvw = [[1, 0, 0], [0, 1, 0], [0, 0, 1]]
-                        XYZ = configuration.cell.to_cartesians(uvw)
-                        frz = 1 if self._lattice_opt else 0
-                        for xyz in XYZ:
-                            x, y, z = xyz
-                            line = (
-                                f"{element:2} {x: 12.8f} {frz} {y: 12.8f} {frz} "
-                                f"{z: 12.8f} {frz}"
-                            )
-                            tmp_structure.append(line)
-
-                    input_data.append(
-                        "\n".join(lines) + "\n" + "\n".join(tmp_structure) + "\n"
-                    )
-
+                text += "\n".join(lines)
+                text += "\n"
+                if structure is None:
+                    if "OLDGEO" not in keywords:
+                        text += self.mopac_structure()
+                        text += "\n"
+                else:
+                    text += structure
+                    text += "\n"
             node = node.next()
 
-        files = {"mopac.dat": "\n".join(input_data)}
+        files = {"mopac.dat": text}
         self.logger.debug("mopac.dat:\n" + files["mopac.dat"])
         os.makedirs(self.directory, exist_ok=True)
         for filename in files:
@@ -507,6 +475,47 @@ class MOPAC(seamm.Node):
         if n_node > 1 and "CPU_TIME" in aux_data[-1]:
             text = f"MOPAC took a total of {t_total:.2f} s."
             printer.normal(str(__(text, **data, indent=self.indent)))
+
+    def mopac_structure(self):
+        """Create the input for the structure."""
+        _, configuration = self.get_system_configuration(None)
+
+        structure = ""
+        atoms = configuration.atoms
+        elements = atoms.symbols
+        coordinates = atoms.get_coordinates(fractionals=False)
+        if "freeze" in atoms:
+            freeze = atoms["freeze"]
+        else:
+            freeze = [""] * len(elements)
+        for element, xyz, frz in zip(elements, coordinates, freeze):
+            x, y, z = xyz
+            line = "{:2} {: 12.8f} {:d} {: 12.8f} {:d} {: 12.8f} {:d}\n".format(
+                element,
+                x,
+                0 if "x" in frz else 1,
+                y,
+                0 if "y" in frz else 1,
+                z,
+                0 if "z" in frz else 1,
+            )
+            structure += line
+
+        if configuration.periodicity == 3:
+            # The three translation vectors
+            element = "Tv"
+            uvw = [[1, 0, 0], [0, 1, 0], [0, 0, 1]]
+            XYZ = configuration.cell.to_cartesians(uvw)
+            frz = 1 if self._lattice_opt else 0
+            for xyz in XYZ:
+                x, y, z = xyz
+                line = (
+                    f"{element:2} {x: 12.8f} {frz} {y: 12.8f} {frz} "
+                    f"{z: 12.8f} {frz}\n"
+                )
+                structure += line
+
+        return structure
 
     def parse_arc(self, filename="mopac.arc"):
         """Digest the ARC file and get the coordinates.
