@@ -1,7 +1,7 @@
 =======
 History
 =======
-2022.10.4 -- Added ForceConstant substep
+2022.11.4 -- Added ForceConstant substep
   Calculates and writes the Hessian (force constant) matrix to disk. Works for both
   molecular and periodic systems, and provides an option to control which parts of the
   Hessian matrix are written. Defaults to the full matrix. Also provides options to
