@@ -116,18 +116,17 @@ class IR(mopac_step.Energy):
         self.description.append(__(self.description_text(PP), **PP, indent=self.indent))
 
         # Remove the 1SCF keyword from the energy setup
-        keywords = []
-        for keyword in super().get_input():
-            if keyword == "1SCF":
-                keywords.append("FORCE")
-                if P["let"]:
-                    keywords.append("LET")
-            else:
-                keywords.append(keyword)
+        inputs = super().get_input()
+        keywords, _, _ = inputs[0]
+        if "1SCF" in keywords:
+            keywords.remove("1SCF")
+        keywords.append("FORCE")
+        if P["let"]:
+            keywords.append("LET")
 
-        return keywords
+        return inputs
 
-    def analyze(self, indent="", data={}, out=[], table=None):
+    def analyze(self, indent="", data_sections=[], out_sections=[], table=None):
         """Parse the output and generating the text output and store the
         data in variables for other stages to access
         """
@@ -135,6 +134,10 @@ class IR(mopac_step.Energy):
         P = self.parameters.current_values_to_dict(
             context=seamm.flowchart_variables._data
         )
+
+        # Get the data.
+        data = data_sections[0]
+
         if "ORIENTATION_ATOM_X" in data:
             system, starting_configuration = self.get_system_configuration(None)
             periodicity = starting_configuration.periodicity
@@ -250,4 +253,9 @@ class IR(mopac_step.Energy):
                 writer.writerow(row)
 
         # Let the energy module do its thing
-        super().analyze(indent=indent, data=data, out=out, table=table)
+        super().analyze(
+            indent=indent,
+            data_sections=data_sections,
+            out_sections=out_sections,
+            table=table,
+        )

@@ -664,7 +664,7 @@ class Energy(seamm.Node):
                     keywords.append(metadata[keyword]["format"].format(keyword, value))
 
         result = []
-        result.append([*keywords])
+        result.append([[*keywords], None, None])
 
         # Handle MOZYME follow-up calculations
         if "MOZYME" in keywords:
@@ -674,12 +674,12 @@ class Energy(seamm.Node):
                 if "1SCF" not in keywords:
                     keywords.append("1SCF")
                 keywords.append("OLDGEO")
-                result.append([*keywords])
+                result.append([[*keywords], None, "MOZYME follow-up using MOPAC"])
             elif "new" in follow_up:
                 if "1SCF" not in keywords:
                     keywords.append("1SCF")
                 keywords.append("OLDGEO")
-                result.append([*keywords])
+                result.append([[*keywords], None, "MOZYME follow-up, reinitializing"])
             elif follow_up == "none":
                 pass
             else:

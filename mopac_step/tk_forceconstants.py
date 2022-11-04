@@ -8,7 +8,7 @@ import tkinter as tk
 import tkinter.ttk as ttk
 
 
-class TkIR(mopac_step.TkEnergy):
+class TkForceconstants(mopac_step.TkEnergy):
     def __init__(
         self, tk_flowchart=None, node=None, canvas=None, x=120, y=20, w=200, h=50
     ):
@@ -20,7 +20,7 @@ class TkIR(mopac_step.TkEnergy):
             tk_flowchart=tk_flowchart, node=node, canvas=canvas, x=x, y=y, w=w, h=h
         )
 
-    def create_dialog(self, title="MOPAC Infrared (Vibrational) Spectrum"):
+    def create_dialog(self, title="MOPAC Force Constants"):
         """Create the dialog!"""
         self.logger.debug("Creating the dialog")
         frame = super().create_dialog(title=title)
@@ -28,30 +28,17 @@ class TkIR(mopac_step.TkEnergy):
         P = self.node.parameters
 
         # Create the vibrational widgets
-        vframe = self["vibrational frame"] = ttk.LabelFrame(
-            frame, text="Vibrational Analysis", labelanchor=tk.N
+        fcframe = self["forceconstant frame"] = ttk.LabelFrame(
+            frame, text="Force Constants", labelanchor=tk.N
         )
         row = 0
         widgets = []
-        for key in mopac_step.IRParameters.parameters:
-            self[key] = P[key].widget(vframe)
+        for key in mopac_step.ForceconstantsParameters.parameters:
+            self[key] = P[key].widget(fcframe)
             self[key].grid(row=row, column=0, sticky=tk.EW)
             widgets.append(self[key])
             row += 1
         sw.align_labels(widgets, sticky=tk.E)
-
-        # Create the structure-handling widgets
-        sframe = self["structure frame"] = ttk.LabelFrame(
-            frame, text="Configuration Handling", labelanchor=tk.N
-        )
-        row = 0
-        widgets = []
-        for key in ("structure handling", "configuration name"):
-            self[key] = P[key].widget(sframe)
-            self[key].grid(row=row, column=0, sticky=tk.EW)
-            widgets.append(self[key])
-            row += 1
-        sw.align_labels(widgets)
 
         self.logger.debug("Finished creating the dialog")
 
@@ -64,11 +51,7 @@ class TkIR(mopac_step.TkEnergy):
         row = super().reset_dialog()
 
         # And our frame
-        self["vibrational frame"].grid(row=row, column=0, sticky=tk.EW, pady=10)
-        row += 1
-
-        # And how to handle the configuration
-        self["structure frame"].grid(row=row, column=0, sticky=tk.EW, pady=10)
+        self["forceconstant frame"].grid(row=row, column=0, sticky=tk.EW, pady=10)
         row += 1
 
         return row

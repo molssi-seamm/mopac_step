@@ -125,17 +125,16 @@ class Thermodynamics(mopac_step.Energy):
             P[key] = P[key].to("K").magnitude
 
         # Remove the 1SCF keyword from the energy setup
-        keywords = []
-        for keyword in super().get_input():
-            if keyword == "1SCF":
-                keywords.append("THERMO=({Tmin},{Tmax},{Tstep})".format(**P))
-                keywords.append("TRANS={trans}".format(**P))
-            else:
-                keywords.append(keyword)
+        inputs = super().get_input()
+        keywords, _, _ = inputs[0]
+        if "1SCF" in keywords:
+            keywords.remove("1SCF")
+        keywords.append("THERMO=({Tmin},{Tmax},{Tstep})".format(**P))
+        keywords.append("TRANS={trans}".format(**P))
 
-        return keywords
+        return inputs
 
-    def analyze(self, indent="", data={}, out=[], table=None):
+    def analyze(self, indent="", data_sections=[], out_sections=[], table=None):
         """Parse the output and generating the text output and store the
         data in variables for other stages to access
         """
@@ -143,6 +142,10 @@ class Thermodynamics(mopac_step.Energy):
         P = self.parameters.current_values_to_dict(
             context=seamm.flowchart_variables._data
         )
+
+        # Get the data.
+        data = data_sections[0]
+
         if "ORIENTATION_ATOM_X" in data:
             system, starting_configuration = self.get_system_configuration(None)
             periodicity = starting_configuration.periodicity
@@ -305,4 +308,9 @@ class Thermodynamics(mopac_step.Energy):
             table["Units"].append("kJ/mol")
 
         # Let the energy module do its thing
-        super().analyze(indent=indent, data=data, out=out, table=table)
+        super().analyze(
+            indent=indent,
+            data_sections=data_sections,
+            out_sections=out_sections,
+            table=table,
+        )

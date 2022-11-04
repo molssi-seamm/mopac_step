@@ -1,6 +1,12 @@
 =======
 History
 =======
+2022.10.4 -- Added ForceConstant substep
+  Calculates and writes the Hessian (force constant) matrix to disk. Works for both
+  molecular and periodic systems, and provides an option to control which parts of the
+  Hessian matrix are written. Defaults to the full matrix. Also provides options to
+  control the units of the output, with default of N/m for the atom block of the
+  Hessian as well as the atom-cell off-diagonal block, and GPa for the cell block.
 
 2021.2.11 (11 February 2021)
 ----------------------------

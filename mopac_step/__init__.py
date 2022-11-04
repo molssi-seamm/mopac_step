@@ -12,6 +12,10 @@ from .energy_step import EnergyStep  # noqa: F401
 from .energy import Energy  # noqa: F401
 from .energy_parameters import EnergyParameters  # noqa: F401
 from .tk_energy import TkEnergy  # noqa: F401
+from .forceconstants_step import ForceconstantsStep  # noqa: F401
+from .forceconstants import Forceconstants  # noqa: F401
+from .forceconstants_parameters import ForceconstantsParameters  # noqa: F401
+from .tk_forceconstants import TkForceconstants  # noqa: F401
 from .optimization_step import OptimizationStep  # noqa: F401
 from .optimization import Optimization  # noqa: F401
 from .optimization_parameters import OptimizationParameters  # noqa: F401

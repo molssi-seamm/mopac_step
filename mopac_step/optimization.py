@@ -125,7 +125,7 @@ class Optimization(mopac_step.Energy):
 
         # Remove the 1SCF keyword from the energy setup
         # 'keywords' is a reference, so will change in situ.
-        keywords = inputs[0]
+        keywords, _, _ = inputs[0]
         if "1SCF" in keywords:
             keywords.remove("1SCF")
 
