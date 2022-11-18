@@ -225,7 +225,7 @@ class MOPAC(seamm.Node):
         # "MKL_NUM_THREADS": str(mkl_num_threads),
 
         # extra_keywords = ["AUX(MOS=10,XP,XS)", "NOXYZ"]
-        extra_keywords = ["AUX(MOS=10,XP,XS)"]
+        extra_keywords = ["AUX(MOS=10,XP,XS,PRECISION=3)"]
 
         # Always add the charge since that will cause MOZYME, if used, to check.
         extra_keywords.append(f"CHARGE={configuration.charge}")
