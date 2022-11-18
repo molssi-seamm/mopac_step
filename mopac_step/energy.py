@@ -809,16 +809,45 @@ class Energy(seamm.Node):
             table["Value"].append(f"{tmp:.2f}")
             table["Units"].append("Debye")
 
-        if "EIGENVALUES" in data and "MOLECULAR_ORBITAL_OCCUPANCIES" in data:
-            for occ, E in zip(
-                data["MOLECULAR_ORBITAL_OCCUPANCIES"], data["EIGENVALUES"]
+        if "EIGENVALUES" in data or "ALPHA_EIGENVALUES" in data:
+            Elumo = None
+            Ehomo = None
+            if "EIGENVALUES" in data and "MOLECULAR_ORBITAL_OCCUPANCIES" in data:
+                for occ, E in zip(
+                    data["MOLECULAR_ORBITAL_OCCUPANCIES"], data["EIGENVALUES"]
+                ):
+                    if occ > 0.1:
+                        Ehomo = E
+                    else:
+                        Elumo = E
+                        break
+            elif (
+                "ALPHA_EIGENVALUES" in data
+                and "ALPHA_MOLECULAR_ORBITAL_OCCUPANCIES" in data
+                and "BETA_EIGENVALUES" in data
+                and "BETA_MOLECULAR_ORBITAL_OCCUPANCIES" in data
             ):
-                Elumo = None
-                if occ > 0.1:
-                    Ehomo = E
-                else:
-                    Elumo = E
-                    break
+                for occ, E in zip(
+                    data["ALPHA_MOLECULAR_ORBITAL_OCCUPANCIES"],
+                    data["ALPHA_EIGENVALUES"],
+                ):
+                    if occ > 0.1:
+                        Ehomo = E
+                    else:
+                        Elumo = E
+                        break
+                for occ, E in zip(
+                    data["BETA_MOLECULAR_ORBITAL_OCCUPANCIES"],
+                    data["BETA_EIGENVALUES"],
+                ):
+                    if occ > 0.1:
+                        if E > Ehomo:
+                            Ehomo = E
+                    else:
+                        if Elumo is None or E < Elumo:
+                            Elumo = E
+                        break
+
             data["HOMO Energy"] = Ehomo
             table["Property"].append("HOMO Energy")
             table["Value"].append(f"{Ehomo:.2f}")
@@ -880,7 +909,19 @@ class Energy(seamm.Node):
             }
             with open(directory / "atom_properties.csv", "w", newline="") as fd:
                 writer = csv.writer(fd)
-                if "ATOM_SPINS" in data:
+                if "AO_SPINS" in data:
+                    # Sum to atom spins...
+                    spins = len(symbols) * [0.0]
+                    for spin, indx in zip(data["AO_SPINS"], data["AO_ATOMINDEX"]):
+                        spins[indx - 1] += spin
+
+                    # Add to atoms (in coordinate table)
+                    if "spin" not in atoms:
+                        atoms.add_attribute(
+                            "spin", coltype="float", configuration_dependent=True
+                        )
+                        atoms["spin"][0:] = spins
+
                     header = "        Atomic charges and spins"
                     chg_tbl["Spin"] = []
                     writer.writerow(["Atom", "Element", "Charge", "Spin"])
@@ -888,7 +929,7 @@ class Energy(seamm.Node):
                         range(1, len(symbols) + 1),
                         symbols,
                         data["ATOM_CHARGES"],
-                        data["ATOM_SPINS"],
+                        spins,
                     ):
                         q = f"{q:.3f}"
                         s = f"{s:.3f}"
@@ -919,13 +960,6 @@ class Energy(seamm.Node):
                         colalign=("center", "center"),
                     )
                 )
-        if "ATOM_SPINS" in data:
-            # Add to atoms (in coordinate table)
-            if "spin" not in atoms:
-                atoms.add_attribute(
-                    "spin", coltype="float", configuration_dependent=True
-                )
-            atoms["spin"][0:] = data["ATOM_SPINS"][0]
 
         text = str(__(text, **data, indent=self.indent + 4 * " "))
         text += "\n\n"
