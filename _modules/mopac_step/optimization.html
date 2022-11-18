@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>mopac_step.optimization &mdash; SEAMM MOPAC Plug-in 2022.11.18 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/custom.css" type="text/css" />
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
+<!-- End Google Tag Manager -->
+
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PQXXTJ2"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+ 
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> SEAMM MOPAC Plug-in
+          </a>
+              <div class="version">
+                2022.11.18
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../user/index.html">User Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../developer/index.html">Developer Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../history.html">History</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://molssi-seamm.github.io">Main SEAMM documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">SEAMM MOPAC Plug-in</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">mopac_step.optimization</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for mopac_step.optimization</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="sd">&quot;&quot;&quot;Setup and run MOPAC&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">import</span> <span class="nn">textwrap</span>
+<span class="kn">import</span> <span class="nn">traceback</span>
+
+<span class="kn">import</span> <span class="nn">mopac_step</span>
+<span class="kn">import</span> <span class="nn">seamm</span>
+<span class="kn">import</span> <span class="nn">seamm_util.printing</span> <span class="k">as</span> <span class="nn">printing</span>
+<span class="kn">from</span> <span class="nn">seamm_util</span> <span class="kn">import</span> <span class="n">units_class</span>
+<span class="kn">from</span> <span class="nn">seamm_util.printing</span> <span class="kn">import</span> <span class="n">FormattedText</span> <span class="k">as</span> <span class="n">__</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+<span class="n">job</span> <span class="o">=</span> <span class="n">printing</span><span class="o">.</span><span class="n">getPrinter</span><span class="p">()</span>
+<span class="n">printer</span> <span class="o">=</span> <span class="n">printing</span><span class="o">.</span><span class="n">getPrinter</span><span class="p">(</span><span class="s2">&quot;mopac&quot;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="Optimization"><a class="viewcode-back" href="../../developer/mopac_step.html#mopac_step.optimization.Optimization">[docs]</a><span class="k">class</span> <span class="nc">Optimization</span><span class="p">(</span><span class="n">mopac_step</span><span class="o">.</span><span class="n">Energy</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">flowchart</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Optimization&quot;</span><span class="p">,</span> <span class="n">extension</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Initialize the node&quot;&quot;&quot;</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Creating Optimization </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
+
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">flowchart</span><span class="o">=</span><span class="n">flowchart</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span> <span class="n">extension</span><span class="o">=</span><span class="n">extension</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_calculation</span> <span class="o">=</span> <span class="s2">&quot;optimization&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_model</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_metadata</span> <span class="o">=</span> <span class="n">mopac_step</span><span class="o">.</span><span class="n">metadata</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span> <span class="o">=</span> <span class="n">mopac_step</span><span class="o">.</span><span class="n">OptimizationParameters</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;A structural optimization&quot;</span>
+
+<div class="viewcode-block" id="Optimization.description_text"><a class="viewcode-back" href="../../developer/mopac_step.html#mopac_step.optimization.Optimization.description_text">[docs]</a>    <span class="k">def</span> <span class="nf">description_text</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">P</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Prepare information about what this node will do&quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">P</span><span class="p">:</span>
+            <span class="n">P</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">values_to_dict</span><span class="p">()</span>
+
+        <span class="c1"># The energy part of the description</span>
+        <span class="n">tmp</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">description_text</span><span class="p">(</span><span class="n">P</span><span class="p">)</span>
+        <span class="n">energy_description</span> <span class="o">=</span> <span class="n">textwrap</span><span class="o">.</span><span class="n">dedent</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmp</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()[</span><span class="mi">1</span><span class="p">:]))</span>
+
+        <span class="c1"># Hamiltonian followed by convergence</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="s2">&quot;Geometry optimization with the &quot;</span>
+        <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;method&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;default&quot;</span><span class="p">:</span>
+            <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot;default optimizer (EF for small systems,&quot;</span> <span class="s2">&quot; L-BFGS for larger).&quot;</span>
+        <span class="k">elif</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;method&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">:</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;EF&quot;</span><span class="p">:</span>
+            <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot;eigenvector following (EF) method.&quot;</span>
+        <span class="k">elif</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;method&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;BFGS&quot;</span><span class="p">:</span>
+            <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot;BFGS method.&quot;</span>
+        <span class="k">elif</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;method&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">:</span><span class="mi">5</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;L-BFGS&quot;</span><span class="p">:</span>
+            <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot;L-BFGS small memory version of the BFGS method.&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot;optimization method determined at runtime by &#39;</span><span class="si">{method}</span><span class="s2">&#39;.&quot;</span>
+
+        <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;LatticeOpt&quot;</span><span class="p">]:</span>
+            <span class="n">pressure</span> <span class="o">=</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;pressure&quot;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">pressure</span><span class="p">,</span> <span class="n">units_class</span><span class="p">):</span>
+                <span class="n">pressure</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">pressure</span><span class="si">:</span><span class="s2">~P</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="n">text</span> <span class="o">+=</span> <span class="p">(</span>
+                <span class="s2">&quot; The cell for periodic systems will also be optimized, with an &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;applied pressure of </span><span class="si">{</span><span class="n">pressure</span><span class="si">}</span><span class="s2">.&quot;</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot; The cell for periodic systems will not be optimized.&quot;</span>
+
+        <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;gnorm&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;default&quot;</span><span class="p">:</span>
+            <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot; The geometrical convergence is the default of &quot;</span> <span class="s2">&quot;1.0 kcal/mol/Å.&quot;</span>
+        <span class="k">elif</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;gnorm&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;$&quot;</span><span class="p">:</span>
+            <span class="n">text</span> <span class="o">+=</span> <span class="p">(</span>
+                <span class="s2">&quot; The geometrical convergence will be determined &quot;</span>
+                <span class="s2">&quot;at runtime by &#39;</span><span class="si">{gnorm}</span><span class="s2">&#39;.&quot;</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot; The geometrical convergence is </span><span class="si">{gnorm}</span><span class="s2"> kcal/mol/Å.&quot;</span>
+
+        <span class="c1"># Put in the description of the energy calculation</span>
+        <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">The energy and forces will be c&quot;</span> <span class="o">+</span> <span class="n">energy_description</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+        <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span>
+
+        <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot;The optimized structures will {structure handling} &quot;</span>
+
+        <span class="n">confname</span> <span class="o">=</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;configuration name&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">confname</span> <span class="o">==</span> <span class="s2">&quot;use SMILES string&quot;</span><span class="p">:</span>
+            <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot;using SMILES as its name.&quot;</span>
+        <span class="k">elif</span> <span class="n">confname</span> <span class="o">==</span> <span class="s2">&quot;use Canonical SMILES string&quot;</span><span class="p">:</span>
+            <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot;using canonical SMILES as its name.&quot;</span>
+        <span class="k">elif</span> <span class="n">confname</span> <span class="o">==</span> <span class="s2">&quot;keep current name&quot;</span><span class="p">:</span>
+            <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot;keeping the current name.&quot;</span>
+        <span class="k">elif</span> <span class="n">confname</span> <span class="o">==</span> <span class="s2">&quot;optimized with &lt;Hamiltonian&gt;&quot;</span><span class="p">:</span>
+            <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot;with &#39;optimized with </span><span class="si">{hamiltonian}</span><span class="s2">&#39; as its name.&quot;</span>
+        <span class="k">elif</span> <span class="n">confname</span> <span class="o">==</span> <span class="s2">&quot;use configuration number&quot;</span><span class="p">:</span>
+            <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot;using the index of the configuration (1, 2, ...) as its name.&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">confname</span> <span class="o">=</span> <span class="n">confname</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;&lt;Hamiltonian&gt;&quot;</span><span class="p">,</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;hamiltonian&quot;</span><span class="p">])</span>
+            <span class="n">text</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;with &#39;</span><span class="si">{</span><span class="n">confname</span><span class="si">}</span><span class="s2">&#39; as its name.&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">header</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">__</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="o">**</span><span class="n">P</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span> <span class="o">*</span> <span class="s2">&quot; &quot;</span><span class="p">)</span><span class="o">.</span><span class="fm">__str__</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Optimization.get_input"><a class="viewcode-back" href="../../developer/mopac_step.html#mopac_step.optimization.Optimization.get_input">[docs]</a>    <span class="k">def</span> <span class="nf">get_input</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get the input for an optimization MOPAC&quot;&quot;&quot;</span>
+
+        <span class="n">references</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">references</span>
+        <span class="n">bibliography</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">_bibliography</span>
+
+        <span class="n">P</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">current_values_to_dict</span><span class="p">(</span>
+            <span class="n">context</span><span class="o">=</span><span class="n">seamm</span><span class="o">.</span><span class="n">flowchart_variables</span><span class="o">.</span><span class="n">_data</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Have to fix formatting for printing...</span>
+        <span class="n">PP</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">P</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">PP</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">PP</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="n">units_class</span><span class="p">):</span>
+                <span class="n">PP</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;{:~P}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">PP</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
+
+        <span class="n">system</span><span class="p">,</span> <span class="n">configuration</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_system_configuration</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+
+        <span class="c1"># Let parent know about cell optimization</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">_lattice_opt</span> <span class="o">=</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;LatticeOpt&quot;</span><span class="p">]</span>
+
+        <span class="c1"># Get the inputs from the energy class. This also sets the description properly.</span>
+        <span class="n">inputs</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">get_input</span><span class="p">()</span>
+
+        <span class="c1"># Remove the 1SCF keyword from the energy setup</span>
+        <span class="c1"># &#39;keywords&#39; is a reference, so will change in situ.</span>
+        <span class="n">keywords</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="s2">&quot;1SCF&quot;</span> <span class="ow">in</span> <span class="n">keywords</span><span class="p">:</span>
+            <span class="n">keywords</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s2">&quot;1SCF&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Pressure</span>
+        <span class="k">if</span> <span class="n">configuration</span><span class="o">.</span><span class="n">periodicity</span> <span class="o">==</span> <span class="mi">3</span> <span class="ow">and</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;LatticeOpt&quot;</span><span class="p">]:</span>
+            <span class="n">pressure</span> <span class="o">=</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;pressure&quot;</span><span class="p">]</span>
+            <span class="n">pressure</span> <span class="o">=</span> <span class="n">pressure</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s2">&quot;GPa&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">magnitude</span>
+            <span class="n">keywords</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;P=</span><span class="si">{</span><span class="n">pressure</span><span class="si">}</span><span class="s2">GPa&quot;</span><span class="p">)</span>
+
+        <span class="c1"># and the optimization-specific parts</span>
+        <span class="n">method</span> <span class="o">=</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;method&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;default&quot;</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="k">elif</span> <span class="n">method</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;EF&quot;</span><span class="p">:</span>
+            <span class="n">keywords</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;EF&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;recalc&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;never&quot;</span><span class="p">:</span>
+                <span class="n">keywords</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">P</span><span class="p">[</span><span class="s2">&quot;recalc&quot;</span><span class="p">])</span>
+            <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">P</span><span class="p">[</span><span class="s2">&quot;dmax&quot;</span><span class="p">])</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;dmax&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">default</span><span class="p">:</span>
+                <span class="n">keywords</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;DMAX=</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">P</span><span class="p">[</span><span class="s2">&quot;dmax&quot;</span><span class="p">]))</span>
+            <span class="n">references</span><span class="o">.</span><span class="n">cite</span><span class="p">(</span>
+                <span class="n">raw</span><span class="o">=</span><span class="n">bibliography</span><span class="p">[</span><span class="s2">&quot;Baker_1986&quot;</span><span class="p">],</span>
+                <span class="n">alias</span><span class="o">=</span><span class="s2">&quot;Baker_1986&quot;</span><span class="p">,</span>
+                <span class="n">module</span><span class="o">=</span><span class="s2">&quot;mopac_step&quot;</span><span class="p">,</span>
+                <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                <span class="n">note</span><span class="o">=</span><span class="s2">&quot;Eigenvector-following minimizer.&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="k">elif</span> <span class="n">method</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">4</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;BFGS&quot;</span><span class="p">:</span>
+            <span class="n">keywords</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;BFGS&quot;</span><span class="p">)</span>
+            <span class="n">references</span><span class="o">.</span><span class="n">cite</span><span class="p">(</span>
+                <span class="n">raw</span><span class="o">=</span><span class="n">bibliography</span><span class="p">[</span><span class="s2">&quot;Broyden_1970&quot;</span><span class="p">],</span>
+                <span class="n">alias</span><span class="o">=</span><span class="s2">&quot;Broyden_1970&quot;</span><span class="p">,</span>
+                <span class="n">module</span><span class="o">=</span><span class="s2">&quot;mopac_step&quot;</span><span class="p">,</span>
+                <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                <span class="n">note</span><span class="o">=</span><span class="s2">&quot;Broyden-Fletcher-Goldfarb-Shanno (BFGS) minimizer.&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">references</span><span class="o">.</span><span class="n">cite</span><span class="p">(</span>
+                <span class="n">raw</span><span class="o">=</span><span class="n">bibliography</span><span class="p">[</span><span class="s2">&quot;Fletcher_1970&quot;</span><span class="p">],</span>
+                <span class="n">alias</span><span class="o">=</span><span class="s2">&quot;Fletcher_1970&quot;</span><span class="p">,</span>
+                <span class="n">module</span><span class="o">=</span><span class="s2">&quot;mopac_step&quot;</span><span class="p">,</span>
+                <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                <span class="n">note</span><span class="o">=</span><span class="s2">&quot;Broyden-Fletcher-Goldfarb-Shanno (BFGS) minimizer.&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">references</span><span class="o">.</span><span class="n">cite</span><span class="p">(</span>
+                <span class="n">raw</span><span class="o">=</span><span class="n">bibliography</span><span class="p">[</span><span class="s2">&quot;Goldfarb_1970&quot;</span><span class="p">],</span>
+                <span class="n">alias</span><span class="o">=</span><span class="s2">&quot;Goldfarb_1970&quot;</span><span class="p">,</span>
+                <span class="n">module</span><span class="o">=</span><span class="s2">&quot;mopac_step&quot;</span><span class="p">,</span>
+                <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                <span class="n">note</span><span class="o">=</span><span class="s2">&quot;Broyden-Fletcher-Goldfarb-Shanno (BFGS) minimizer.&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">references</span><span class="o">.</span><span class="n">cite</span><span class="p">(</span>
+                <span class="n">raw</span><span class="o">=</span><span class="n">bibliography</span><span class="p">[</span><span class="s2">&quot;Shanno_1970&quot;</span><span class="p">],</span>
+                <span class="n">alias</span><span class="o">=</span><span class="s2">&quot;Shanno_1970&quot;</span><span class="p">,</span>
+                <span class="n">module</span><span class="o">=</span><span class="s2">&quot;mopac_step&quot;</span><span class="p">,</span>
+                <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                <span class="n">note</span><span class="o">=</span><span class="s2">&quot;Broyden-Fletcher-Goldfarb-Shanno (BFGS) minimizer.&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">references</span><span class="o">.</span><span class="n">cite</span><span class="p">(</span>
+                <span class="n">raw</span><span class="o">=</span><span class="n">bibliography</span><span class="p">[</span><span class="s2">&quot;Thiel_1988&quot;</span><span class="p">],</span>
+                <span class="n">alias</span><span class="o">=</span><span class="s2">&quot;Thiel_1988&quot;</span><span class="p">,</span>
+                <span class="n">module</span><span class="o">=</span><span class="s2">&quot;mopac_step&quot;</span><span class="p">,</span>
+                <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                <span class="n">note</span><span class="o">=</span><span class="s2">&quot;Broyden-Fletcher-Goldfarb-Shanno (BFGS) minimizer.&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="k">elif</span> <span class="n">method</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">6</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;L-BFGS&quot;</span><span class="p">:</span>
+            <span class="n">keywords</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;LBFGS&quot;</span><span class="p">)</span>
+            <span class="n">references</span><span class="o">.</span><span class="n">cite</span><span class="p">(</span>
+                <span class="n">raw</span><span class="o">=</span><span class="n">bibliography</span><span class="p">[</span><span class="s2">&quot;Nocedal_1980&quot;</span><span class="p">],</span>
+                <span class="n">alias</span><span class="o">=</span><span class="s2">&quot;Nocedal_1980&quot;</span><span class="p">,</span>
+                <span class="n">module</span><span class="o">=</span><span class="s2">&quot;mopac_step&quot;</span><span class="p">,</span>
+                <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                <span class="n">note</span><span class="o">=</span><span class="s2">&quot;Limited-memory BFGS (L-BFGS) minimizer.&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="k">elif</span> <span class="n">method</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;TS&quot;</span><span class="p">:</span>
+            <span class="n">keywords</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;TS&quot;</span><span class="p">)</span>
+            <span class="n">references</span><span class="o">.</span><span class="n">cite</span><span class="p">(</span>
+                <span class="n">raw</span><span class="o">=</span><span class="n">bibliography</span><span class="p">[</span><span class="s2">&quot;Baker_1986&quot;</span><span class="p">],</span>
+                <span class="n">alias</span><span class="o">=</span><span class="s2">&quot;Baker_1986&quot;</span><span class="p">,</span>
+                <span class="n">module</span><span class="o">=</span><span class="s2">&quot;mopac_step&quot;</span><span class="p">,</span>
+                <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                <span class="n">note</span><span class="o">=</span><span class="s2">&quot;Eigenvector-following minimizer for transition states.&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="k">elif</span> <span class="n">method</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">5</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;SIGMA&quot;</span><span class="p">:</span>
+            <span class="n">keywords</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;SIGMA&quot;</span><span class="p">)</span>
+            <span class="n">references</span><span class="o">.</span><span class="n">cite</span><span class="p">(</span>
+                <span class="n">raw</span><span class="o">=</span><span class="n">bibliography</span><span class="p">[</span><span class="s2">&quot;McIver_1971&quot;</span><span class="p">],</span>
+                <span class="n">alias</span><span class="o">=</span><span class="s2">&quot;McIver_1971&quot;</span><span class="p">,</span>
+                <span class="n">module</span><span class="o">=</span><span class="s2">&quot;mopac_step&quot;</span><span class="p">,</span>
+                <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                <span class="n">note</span><span class="o">=</span><span class="s2">&quot;Gradient-norm minimizer for transition states.&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">references</span><span class="o">.</span><span class="n">cite</span><span class="p">(</span>
+                <span class="n">raw</span><span class="o">=</span><span class="n">bibliography</span><span class="p">[</span><span class="s2">&quot;McIver_1972&quot;</span><span class="p">],</span>
+                <span class="n">alias</span><span class="o">=</span><span class="s2">&quot;McIver_1972&quot;</span><span class="p">,</span>
+                <span class="n">module</span><span class="o">=</span><span class="s2">&quot;mopac_step&quot;</span><span class="p">,</span>
+                <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                <span class="n">note</span><span class="o">=</span><span class="s2">&quot;Gradient-norm minimizer for transition states.&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="k">elif</span> <span class="n">method</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">5</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;NLLSQ&quot;</span><span class="p">:</span>
+            <span class="n">keywords</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;NLLSQ&quot;</span><span class="p">)</span>
+            <span class="n">references</span><span class="o">.</span><span class="n">cite</span><span class="p">(</span>
+                <span class="n">raw</span><span class="o">=</span><span class="n">bibliography</span><span class="p">[</span><span class="s2">&quot;Bartels_1972&quot;</span><span class="p">],</span>
+                <span class="n">alias</span><span class="o">=</span><span class="s2">&quot;Bartels_1972&quot;</span><span class="p">,</span>
+                <span class="n">module</span><span class="o">=</span><span class="s2">&quot;mopac_step&quot;</span><span class="p">,</span>
+                <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                <span class="n">note</span><span class="o">=</span><span class="s2">&quot;NLLSQ gradient-norm minimizer for transition states.&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">text</span> <span class="o">=</span> <span class="s2">&quot;Don&#39;t recognize optimization method &#39;</span><span class="si">{}</span><span class="s2">&#39;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">P</span><span class="p">[</span><span class="s2">&quot;method&quot;</span><span class="p">])</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">critical</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;cycles&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;unlimited&quot;</span><span class="p">:</span>
+            <span class="n">keywords</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;CYCLES=</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">P</span><span class="p">[</span><span class="s2">&quot;cycles&quot;</span><span class="p">]))</span>
+        <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;convergence&quot;</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;normal&quot;</span><span class="p">,</span> <span class="s2">&quot;precise&quot;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;gnorm&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;gnorm&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">default</span><span class="p">:</span>
+                <span class="n">keywords</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;GNORM=</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">P</span><span class="p">[</span><span class="s2">&quot;gnorm&quot;</span><span class="p">]))</span>
+
+        <span class="k">return</span> <span class="n">inputs</span></div>
+
+<div class="viewcode-block" id="Optimization.analyze"><a class="viewcode-back" href="../../developer/mopac_step.html#mopac_step.optimization.Optimization.analyze">[docs]</a>    <span class="k">def</span> <span class="nf">analyze</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">data_sections</span><span class="o">=</span><span class="p">[],</span> <span class="n">out_sections</span><span class="o">=</span><span class="p">[],</span> <span class="n">table</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Parse the output and generating the text output and store the</span>
+<span class="sd">        data in variables for other stages to access</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># Get the parameters used</span>
+        <span class="n">P</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">current_values_to_dict</span><span class="p">(</span>
+            <span class="n">context</span><span class="o">=</span><span class="n">seamm</span><span class="o">.</span><span class="n">flowchart_variables</span><span class="o">.</span><span class="n">_data</span>
+        <span class="p">)</span>
+
+        <span class="n">system</span><span class="p">,</span> <span class="n">starting_configuration</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_system_configuration</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+
+        <span class="c1"># Get the data.</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">data_sections</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="c1"># If the optimizer used was the default, put in the correct citations</span>
+
+        <span class="n">references</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">references</span>
+        <span class="n">bibliography</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">_bibliography</span>
+
+        <span class="n">P</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">current_values_to_dict</span><span class="p">(</span>
+            <span class="n">context</span><span class="o">=</span><span class="n">seamm</span><span class="o">.</span><span class="n">flowchart_variables</span><span class="o">.</span><span class="n">_data</span>
+        <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;method&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;default&quot;</span><span class="p">:</span>
+            <span class="n">tmp</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">out_sections</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="k">if</span> <span class="p">(</span>
+                <span class="s2">&quot;GEOMETRY OPTIMISED USING EIGENVECTOR FOLLOWING (EF)&quot;</span> <span class="ow">in</span> <span class="n">tmp</span>
+                <span class="ow">or</span> <span class="s2">&quot;Geometry optimization using EF&quot;</span> <span class="ow">in</span> <span class="n">tmp</span>
+            <span class="p">):</span>
+                <span class="n">opt_method</span> <span class="o">=</span> <span class="s2">&quot;EF -- eigenvector following&quot;</span>
+                <span class="n">references</span><span class="o">.</span><span class="n">cite</span><span class="p">(</span>
+                    <span class="n">raw</span><span class="o">=</span><span class="n">bibliography</span><span class="p">[</span><span class="s2">&quot;Baker_1986&quot;</span><span class="p">],</span>
+                    <span class="n">alias</span><span class="o">=</span><span class="s2">&quot;Baker_1986&quot;</span><span class="p">,</span>
+                    <span class="n">module</span><span class="o">=</span><span class="s2">&quot;mopac_step&quot;</span><span class="p">,</span>
+                    <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                    <span class="n">note</span><span class="o">=</span><span class="s2">&quot;Eigenvector-following minimizer.&quot;</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="k">elif</span> <span class="p">(</span>
+                <span class="s2">&quot;Geometry optimization using BFGS&quot;</span> <span class="ow">in</span> <span class="n">tmp</span> <span class="ow">or</span> <span class="s2">&quot;SATISFIED IN BFGS&quot;</span> <span class="ow">in</span> <span class="n">tmp</span>
+            <span class="p">):</span>
+                <span class="n">opt_method</span> <span class="o">=</span> <span class="s2">&quot;BFGS -- Broyden-Fletcher-Goldfarb-Shanno algorithm&quot;</span>
+                <span class="n">references</span><span class="o">.</span><span class="n">cite</span><span class="p">(</span>
+                    <span class="n">raw</span><span class="o">=</span><span class="n">bibliography</span><span class="p">[</span><span class="s2">&quot;Broyden_1970&quot;</span><span class="p">],</span>
+                    <span class="n">alias</span><span class="o">=</span><span class="s2">&quot;Broyden_1970&quot;</span><span class="p">,</span>
+                    <span class="n">module</span><span class="o">=</span><span class="s2">&quot;mopac_step&quot;</span><span class="p">,</span>
+                    <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                    <span class="n">note</span><span class="o">=</span><span class="s2">&quot;Broyden-Fletcher-Goldfarb-Shanno (BFGS) minimizer.&quot;</span><span class="p">,</span>
+                <span class="p">)</span>
+                <span class="n">references</span><span class="o">.</span><span class="n">cite</span><span class="p">(</span>
+                    <span class="n">raw</span><span class="o">=</span><span class="n">bibliography</span><span class="p">[</span><span class="s2">&quot;Fletcher_1970&quot;</span><span class="p">],</span>
+                    <span class="n">alias</span><span class="o">=</span><span class="s2">&quot;Fletcher_1970&quot;</span><span class="p">,</span>
+                    <span class="n">module</span><span class="o">=</span><span class="s2">&quot;mopac_step&quot;</span><span class="p">,</span>
+                    <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                    <span class="n">note</span><span class="o">=</span><span class="s2">&quot;Broyden-Fletcher-Goldfarb-Shanno (BFGS) minimizer.&quot;</span><span class="p">,</span>
+                <span class="p">)</span>
+                <span class="n">references</span><span class="o">.</span><span class="n">cite</span><span class="p">(</span>
+                    <span class="n">raw</span><span class="o">=</span><span class="n">bibliography</span><span class="p">[</span><span class="s2">&quot;Goldfarb_1970&quot;</span><span class="p">],</span>
+                    <span class="n">alias</span><span class="o">=</span><span class="s2">&quot;Goldfarb_1970&quot;</span><span class="p">,</span>
+                    <span class="n">module</span><span class="o">=</span><span class="s2">&quot;mopac_step&quot;</span><span class="p">,</span>
+                    <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                    <span class="n">note</span><span class="o">=</span><span class="s2">&quot;Broyden-Fletcher-Goldfarb-Shanno (BFGS) minimizer.&quot;</span><span class="p">,</span>
+                <span class="p">)</span>
+                <span class="n">references</span><span class="o">.</span><span class="n">cite</span><span class="p">(</span>
+                    <span class="n">raw</span><span class="o">=</span><span class="n">bibliography</span><span class="p">[</span><span class="s2">&quot;Shanno_1970&quot;</span><span class="p">],</span>
+                    <span class="n">alias</span><span class="o">=</span><span class="s2">&quot;Shanno_1970&quot;</span><span class="p">,</span>
+                    <span class="n">module</span><span class="o">=</span><span class="s2">&quot;mopac_step&quot;</span><span class="p">,</span>
+                    <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                    <span class="n">note</span><span class="o">=</span><span class="s2">&quot;Broyden-Fletcher-Goldfarb-Shanno (BFGS) minimizer.&quot;</span><span class="p">,</span>
+                <span class="p">)</span>
+                <span class="n">references</span><span class="o">.</span><span class="n">cite</span><span class="p">(</span>
+                    <span class="n">raw</span><span class="o">=</span><span class="n">bibliography</span><span class="p">[</span><span class="s2">&quot;Thiel_1988&quot;</span><span class="p">],</span>
+                    <span class="n">alias</span><span class="o">=</span><span class="s2">&quot;Thiel_1988&quot;</span><span class="p">,</span>
+                    <span class="n">module</span><span class="o">=</span><span class="s2">&quot;mopac_step&quot;</span><span class="p">,</span>
+                    <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                    <span class="n">note</span><span class="o">=</span><span class="s2">&quot;Broyden-Fletcher-Goldfarb-Shanno (BFGS) minimizer.&quot;</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="k">elif</span> <span class="p">(</span>
+                <span class="s2">&quot;Geometry optimization using L-BFGS&quot;</span> <span class="ow">in</span> <span class="n">tmp</span>
+                <span class="ow">or</span> <span class="s2">&quot;SATISFIED IN L-BFGS&quot;</span> <span class="ow">in</span> <span class="n">tmp</span>
+            <span class="p">):</span>
+                <span class="n">opt_method</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="s2">&quot;L-BFGS -- Limited memory Broyden-Fletcher-Goldfarb-Shanno &quot;</span>
+                    <span class="s2">&quot;algorithm&quot;</span>
+                <span class="p">)</span>
+                <span class="n">references</span><span class="o">.</span><span class="n">cite</span><span class="p">(</span>
+                    <span class="n">raw</span><span class="o">=</span><span class="n">bibliography</span><span class="p">[</span><span class="s2">&quot;Broyden_1970&quot;</span><span class="p">],</span>
+                    <span class="n">alias</span><span class="o">=</span><span class="s2">&quot;Broyden_1970&quot;</span><span class="p">,</span>
+                    <span class="n">module</span><span class="o">=</span><span class="s2">&quot;mopac_step&quot;</span><span class="p">,</span>
+                    <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                    <span class="n">note</span><span class="o">=</span><span class="s2">&quot;Broyden-Fletcher-Goldfarb-Shanno (BFGS) minimizer.&quot;</span><span class="p">,</span>
+                <span class="p">)</span>
+                <span class="n">references</span><span class="o">.</span><span class="n">cite</span><span class="p">(</span>
+                    <span class="n">raw</span><span class="o">=</span><span class="n">bibliography</span><span class="p">[</span><span class="s2">&quot;Fletcher_1970&quot;</span><span class="p">],</span>
+                    <span class="n">alias</span><span class="o">=</span><span class="s2">&quot;Fletcher_1970&quot;</span><span class="p">,</span>
+                    <span class="n">module</span><span class="o">=</span><span class="s2">&quot;mopac_step&quot;</span><span class="p">,</span>
+                    <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                    <span class="n">note</span><span class="o">=</span><span class="s2">&quot;Broyden-Fletcher-Goldfarb-Shanno (BFGS) minimizer.&quot;</span><span class="p">,</span>
+                <span class="p">)</span>
+                <span class="n">references</span><span class="o">.</span><span class="n">cite</span><span class="p">(</span>
+                    <span class="n">raw</span><span class="o">=</span><span class="n">bibliography</span><span class="p">[</span><span class="s2">&quot;Goldfarb_1970&quot;</span><span class="p">],</span>
+                    <span class="n">alias</span><span class="o">=</span><span class="s2">&quot;Goldfarb_1970&quot;</span><span class="p">,</span>
+                    <span class="n">module</span><span class="o">=</span><span class="s2">&quot;mopac_step&quot;</span><span class="p">,</span>
+                    <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                    <span class="n">note</span><span class="o">=</span><span class="s2">&quot;Broyden-Fletcher-Goldfarb-Shanno (BFGS) minimizer.&quot;</span><span class="p">,</span>
+                <span class="p">)</span>
+                <span class="n">references</span><span class="o">.</span><span class="n">cite</span><span class="p">(</span>
+                    <span class="n">raw</span><span class="o">=</span><span class="n">bibliography</span><span class="p">[</span><span class="s2">&quot;Shanno_1970&quot;</span><span class="p">],</span>
+                    <span class="n">alias</span><span class="o">=</span><span class="s2">&quot;Shanno_1970&quot;</span><span class="p">,</span>
+                    <span class="n">module</span><span class="o">=</span><span class="s2">&quot;mopac_step&quot;</span><span class="p">,</span>
+                    <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                    <span class="n">note</span><span class="o">=</span><span class="s2">&quot;Broyden-Fletcher-Goldfarb-Shanno (BFGS) minimizer.&quot;</span><span class="p">,</span>
+                <span class="p">)</span>
+                <span class="n">references</span><span class="o">.</span><span class="n">cite</span><span class="p">(</span>
+                    <span class="n">raw</span><span class="o">=</span><span class="n">bibliography</span><span class="p">[</span><span class="s2">&quot;Thiel_1988&quot;</span><span class="p">],</span>
+                    <span class="n">alias</span><span class="o">=</span><span class="s2">&quot;Thiel_1988&quot;</span><span class="p">,</span>
+                    <span class="n">module</span><span class="o">=</span><span class="s2">&quot;mopac_step&quot;</span><span class="p">,</span>
+                    <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                    <span class="n">note</span><span class="o">=</span><span class="s2">&quot;Broyden-Fletcher-Goldfarb-Shanno (BFGS) minimizer.&quot;</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Could not find which minimizer was used!&quot;</span><span class="p">)</span>
+                <span class="n">opt_method</span> <span class="o">=</span> <span class="s2">&quot;default -- but could not find which was used&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">opt_method</span> <span class="o">=</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;method&quot;</span><span class="p">]</span>
+
+        <span class="c1"># The results</span>
+        <span class="k">if</span> <span class="s2">&quot;NUMBER_SCF_CYCLES&quot;</span> <span class="ow">in</span> <span class="n">data_sections</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+            <span class="n">text</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;The geometry optimization using </span><span class="si">{</span><span class="n">opt_method</span><span class="si">}</span><span class="s2"> -- converged in &quot;</span>
+                <span class="s2">&quot;</span><span class="si">{NUMBER_SCF_CYCLES}</span><span class="s2"> iterations.&quot;</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">data</span><span class="p">[</span><span class="s2">&quot;NUMBER_SCF_CYCLES&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;HEAT_OF_FORM_UPDATED&quot;</span><span class="p">])</span>
+            <span class="n">data</span><span class="p">[</span><span class="s2">&quot;HEAT_OF_FORMATION&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;HEAT_OF_FORM_UPDATED&quot;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">data</span><span class="p">[</span><span class="s2">&quot;GRADIENT_NORM&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;GRADIENT_UPDATED&quot;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">text</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;The geometry optimization using </span><span class="si">{</span><span class="n">opt_method</span><span class="si">}</span><span class="s2"> -- did not converge in &quot;</span>
+                <span class="s2">&quot;</span><span class="si">{NUMBER_SCF_CYCLES}</span><span class="s2"> steps. The following results are for the final &quot;</span>
+                <span class="s2">&quot;structure.</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+
+        <span class="c1"># Update the structure</span>
+        <span class="k">if</span> <span class="s2">&quot;ATOM_X_OPT&quot;</span> <span class="ow">in</span> <span class="n">data</span> <span class="ow">or</span> <span class="s2">&quot;ATOM_X_UPDATED&quot;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+
+            <span class="n">periodicity</span> <span class="o">=</span> <span class="n">starting_configuration</span><span class="o">.</span><span class="n">periodicity</span>
+            <span class="k">if</span> <span class="p">(</span>
+                <span class="s2">&quot;structure handling&quot;</span> <span class="ow">in</span> <span class="n">P</span>
+                <span class="ow">and</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;structure handling&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;be put in a new configuration&quot;</span>
+            <span class="p">):</span>
+                <span class="n">configuration</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">create_configuration</span><span class="p">(</span>
+                    <span class="n">periodicity</span><span class="o">=</span><span class="n">periodicity</span><span class="p">,</span>
+                    <span class="n">atomset</span><span class="o">=</span><span class="n">starting_configuration</span><span class="o">.</span><span class="n">atomset</span><span class="p">,</span>
+                    <span class="n">bondset</span><span class="o">=</span><span class="n">starting_configuration</span><span class="o">.</span><span class="n">bondset</span><span class="p">,</span>
+                    <span class="n">cell_id</span><span class="o">=</span><span class="n">starting_configuration</span><span class="o">.</span><span class="n">cell_id</span><span class="p">,</span>
+                <span class="p">)</span>
+                <span class="n">configuration</span><span class="o">.</span><span class="n">charge</span> <span class="o">=</span> <span class="n">starting_configuration</span><span class="o">.</span><span class="n">charge</span>
+                <span class="n">configuration</span><span class="o">.</span><span class="n">spin_multiplicity</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="n">starting_configuration</span><span class="o">.</span><span class="n">spin_multiplicity</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">configuration</span> <span class="o">=</span> <span class="n">starting_configuration</span>
+
+            <span class="k">if</span> <span class="n">periodicity</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;LatticeOpt&quot;</span><span class="p">]:</span>
+                <span class="k">if</span> <span class="s2">&quot;TRANS_VECTS&quot;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+                    <span class="n">vectors</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;TRANS_VECTS&quot;</span><span class="p">]</span>
+                    <span class="n">lattice</span> <span class="o">=</span> <span class="p">[</span>
+                        <span class="p">[</span><span class="n">vectors</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">vectors</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">vectors</span><span class="p">[</span><span class="mi">2</span><span class="p">]],</span>
+                        <span class="p">[</span><span class="n">vectors</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">vectors</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="n">vectors</span><span class="p">[</span><span class="mi">5</span><span class="p">]],</span>
+                        <span class="p">[</span><span class="n">vectors</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span> <span class="n">vectors</span><span class="p">[</span><span class="mi">7</span><span class="p">],</span> <span class="n">vectors</span><span class="p">[</span><span class="mi">8</span><span class="p">]],</span>
+                    <span class="p">]</span>
+                    <span class="n">configuration</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">from_vectors</span><span class="p">(</span><span class="n">lattice</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="s2">&quot;TRANS_VECTS_UPDATED&quot;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+                    <span class="n">vectors</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;TRANS_VECTS_UPDATED&quot;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                    <span class="n">lattice</span> <span class="o">=</span> <span class="p">[</span>
+                        <span class="p">[</span><span class="n">vectors</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">vectors</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">vectors</span><span class="p">[</span><span class="mi">2</span><span class="p">]],</span>
+                        <span class="p">[</span><span class="n">vectors</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">vectors</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="n">vectors</span><span class="p">[</span><span class="mi">5</span><span class="p">]],</span>
+                        <span class="p">[</span><span class="n">vectors</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span> <span class="n">vectors</span><span class="p">[</span><span class="mi">7</span><span class="p">],</span> <span class="n">vectors</span><span class="p">[</span><span class="mi">8</span><span class="p">]],</span>
+                    <span class="p">]</span>
+                    <span class="n">configuration</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">from_vectors</span><span class="p">(</span><span class="n">lattice</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                        <span class="s2">&quot;Expected updated lattice vectors, but did not find!&quot;</span>
+                    <span class="p">)</span>
+            <span class="n">xyz</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">if</span> <span class="s2">&quot;ATOM_X_OPT&quot;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+                <span class="n">it</span> <span class="o">=</span> <span class="nb">iter</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;ATOM_X_OPT&quot;</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">it</span> <span class="o">=</span> <span class="nb">iter</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;ATOM_X_UPDATED&quot;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+            <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">it</span><span class="p">:</span>
+                <span class="n">xyz</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="nb">float</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="nb">float</span><span class="p">(</span><span class="nb">next</span><span class="p">(</span><span class="n">it</span><span class="p">)),</span> <span class="nb">float</span><span class="p">(</span><span class="nb">next</span><span class="p">(</span><span class="n">it</span><span class="p">))])</span>
+            <span class="n">configuration</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">set_coordinates</span><span class="p">(</span><span class="n">xyz</span><span class="p">,</span> <span class="n">fractionals</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+            <span class="c1"># And the name of the configuration.</span>
+            <span class="k">if</span> <span class="s2">&quot;configuration name&quot;</span> <span class="ow">in</span> <span class="n">P</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;configuration name&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;use SMILES string&quot;</span><span class="p">:</span>
+                    <span class="n">configuration</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">configuration</span><span class="o">.</span><span class="n">smiles</span>
+                <span class="k">elif</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;configuration name&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;use Canonical SMILES string&quot;</span><span class="p">:</span>
+                    <span class="n">configuration</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">configuration</span><span class="o">.</span><span class="n">canonical_smiles</span>
+                <span class="k">elif</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;configuration name&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;keep current name&quot;</span><span class="p">:</span>
+                    <span class="k">pass</span>
+                <span class="k">elif</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;configuration name&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;optimized with &lt;Hamiltonian&gt;&quot;</span><span class="p">:</span>
+                    <span class="n">configuration</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;optimized with </span><span class="si">{</span><span class="n">P</span><span class="p">[</span><span class="s1">&#39;hamiltonian&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">confname</span> <span class="o">=</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;configuration name&quot;</span><span class="p">]</span>
+                    <span class="n">confname</span> <span class="o">=</span> <span class="n">confname</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;&lt;Hamiltonian&gt;&quot;</span><span class="p">,</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;hamiltonian&quot;</span><span class="p">])</span>
+                    <span class="n">configuration</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">confname</span>
+
+        <span class="c1"># Write the structure out for viewing.</span>
+        <span class="n">directory</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">directory</span><span class="p">)</span>
+        <span class="n">directory</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="c1">#  MMCIF file has bonds</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">path</span> <span class="o">=</span> <span class="n">directory</span> <span class="o">/</span> <span class="s2">&quot;optimized.mmcif&quot;</span>
+            <span class="n">path</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="n">configuration</span><span class="o">.</span><span class="n">to_mmcif_text</span><span class="p">())</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;Error creating the mmcif file</span><span class="se">\n\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">traceback</span><span class="o">.</span><span class="n">format_exc</span><span class="p">()</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+        <span class="c1"># CIF file has cell</span>
+        <span class="k">if</span> <span class="n">configuration</span><span class="o">.</span><span class="n">periodicity</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">path</span> <span class="o">=</span> <span class="n">directory</span> <span class="o">/</span> <span class="s2">&quot;optimized.cif&quot;</span>
+                <span class="n">path</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="n">configuration</span><span class="o">.</span><span class="n">to_cif_text</span><span class="p">())</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;Error creating the cif file</span><span class="se">\n\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">traceback</span><span class="o">.</span><span class="n">format_exc</span><span class="p">()</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+
+        <span class="n">printer</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">__</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="o">**</span><span class="n">data</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">indent</span> <span class="o">+</span> <span class="mi">4</span> <span class="o">*</span> <span class="s2">&quot; &quot;</span><span class="p">))</span>
+
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">analyze</span><span class="p">(</span>
+            <span class="n">indent</span><span class="o">=</span><span class="n">indent</span><span class="p">,</span>
+            <span class="n">data_sections</span><span class="o">=</span><span class="n">data_sections</span><span class="p">,</span>
+            <span class="n">out_sections</span><span class="o">=</span><span class="n">out_sections</span><span class="p">,</span>
+            <span class="n">table</span><span class="o">=</span><span class="n">table</span><span class="p">,</span>
+        <span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  
+
+<p>
+<div class="row">
+  <div class="column_left">
+    <a href="https://molssi.org/" target="_blank" title="Go to MolSSI in a new tab">
+      <img src="/_images/MolSSI.jpg" alt="The MolSSI" style="border:0;">
+    </a>
+  </div>
+  <div class="column">
+    &copy; Copyright 2020-2021, the Molecular Sciences Software Institute,
+    which receives funding from the National Science Foundation under awards OAC-1547580
+    and CHE-2136142.
+  </div>
+  <div class="column_right">
+    <a href="https://nsf.gov/" target="_blank" title="Go to the NSF in a new tab">
+      <img src="/_images/NSF_4-Color_bitmap_Logo.png" alt="The NSF" style="border:0;">
+    </a>
+  </div>
+</div>
+
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
