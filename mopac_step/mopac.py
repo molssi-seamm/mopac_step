@@ -67,7 +67,7 @@ class MOPAC(seamm.Node):
     def create_parser(self):
         """Setup the command-line / config file parser"""
         parser_name = self.step_type
-        parser = seamm_util.getParser()
+        parser = self.flowchart.parser
 
         # Remember if the parser exists ... this type of step may have been
         # found before
@@ -157,8 +157,8 @@ class MOPAC(seamm.Node):
             raise RuntimeError("MOPAC run(): there is no structure!")
 
         # Print our header to the main output
-        printer.important(self.header)
-        printer.important("")
+        printer.normal(self.header)
+        printer.normal("")
 
         # Access the options and find the executable
         options = self.options
@@ -455,7 +455,7 @@ class MOPAC(seamm.Node):
         while node:
             # Print the header for the node
             for value in node.description:
-                printer.important(value)
+                printer.normal(value)
 
             last = first + n_calculations[n_node]
             if last > len(out):
