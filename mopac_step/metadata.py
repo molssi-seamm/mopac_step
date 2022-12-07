@@ -1359,7 +1359,7 @@ metadata["results"] = {
         "units": "cal/K/mol",
     },
     "GRADIENTS": {
-        "calculation": ["optimization", "thermodynamics", "vibrations"],
+        "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
         "description": "gradients on the atoms",
         "dimensionality": [3, "n_atoms"],
         "type": "float",
