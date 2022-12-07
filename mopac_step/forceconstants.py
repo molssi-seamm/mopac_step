@@ -253,7 +253,7 @@ class Forceconstants(mopac_step.Energy):
             hessian = data["HESSIAN_MATRIX"]
 
             ij = 0
-            factor = Q_(1.0, "kcal/mol/Å^2").m_as(P["atom_units"])
+            factor = Q_(1.0, "mdyne/Å").m_as(P["atom_units"])
             for i in range(last):
                 for j in range(i + 1):
                     result.append(factor * hessian[ij] * sqrt(mass[i] * mass[j]))
@@ -462,7 +462,7 @@ class Forceconstants(mopac_step.Energy):
             ij = 0
             for i in range(n):
                 for j in range(i + 1):
-                    fd.write(f"{result[ij]:8.3f} ")
+                    fd.write(f"{result[ij]:12.6f} ")
                     ij += 1
                 fd.write("\n")
 
