@@ -10,7 +10,7 @@ Hamiltonians, approximations, and basis set/parameterizations.
 
 metadata["computational models"] = {
     "Hartree-Fock": {
-        "methods": {
+        "models": {
             "PM7": {
                 "parameterizations": {
                     "PM7": {
