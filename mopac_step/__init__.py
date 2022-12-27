@@ -5,6 +5,13 @@
 # Bring up the classes so that they appear to be directly in
 # the package.
 
+from .mopac_base import MOPACBase  # noqa: F401
+
+from .lewis_structure_step import LewisStructureStep  # noqa: F401
+from .lewis_structure import LewisStructure  # noqa: F401
+from .lewis_structure_parameters import LewisStructureParameters  # noqa: F401
+from .tk_lewis_structure import TkLewisStructure  # noqa: F401
+
 from .mopac_step import MOPACStep  # noqa: F401
 from .mopac import MOPAC  # noqa: F401
 from .tk_mopac import TkMOPAC  # noqa: F401

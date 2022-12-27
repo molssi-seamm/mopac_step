@@ -75,9 +75,11 @@ setup(
         ],
         'org.molssi.seamm': [
             'MOPAC = mopac_step:MOPACStep',
+            'Lewis Structure = mopac_step:LewisStructureStep',
         ],
         'org.molssi.seamm.tk': [
             'MOPAC = mopac_step:MOPACStep',
+            'Lewis Structure = mopac_step:LewisStructureStep',
         ],
         'org.molssi.seamm.mopac': [
             'Energy = mopac_step:EnergyStep',
