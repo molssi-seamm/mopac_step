@@ -4,6 +4,122 @@
 
 metadata = {}
 
+"""Description of the computational models for MOPAC.
+Hamiltonians, approximations, and basis set/parameterizations.
+"""
+
+metadata["computational models"] = {
+    "Hartree-Fock": {
+        "models": {
+            "PM7": {
+                "parameterizations": {
+                    "PM7": {
+                        "elements": "1-60,62-83",
+                        "periodic": True,
+                        "reactions": True,
+                        "optimization": True,
+                        "code": "mopac",
+                    },
+                    "PM7-TS": {
+                        "elements": "1-60,62-83",
+                        "periodic": True,
+                        "reactions": True,
+                        "optimization": False,
+                        "code": "mopac",
+                    },
+                }
+            },
+            "PM6": {
+                "parameterizations": {
+                    "PM6": {
+                        "elements": "1-60,62-83",
+                        "periodic": True,
+                        "reactions": True,
+                        "optimization": True,
+                        "code": "mopac",
+                    },
+                    "PM6-D3": {
+                        "description": (
+                            "The PM6 Hamiltonian with Grimme's corrections for "
+                            "dispersion"
+                        ),
+                        "elements": "1-60,62-83",
+                        "periodic": True,
+                        "reactions": True,
+                        "optimization": True,
+                        "code": "mopac",
+                    },
+                    "PM6-DH+": {
+                        "description": (
+                            "The PM6 Hamiltonian with corrections for dispersion "
+                            "and hydrogen-bonding"
+                        ),
+                        "elements": "1-60,62-83",
+                        "periodic": True,
+                        "reactions": True,
+                        "optimization": True,
+                        "code": "mopac",
+                    },
+                    "PM6-DH2": {
+                        "description": (
+                            "The PM6 Hamiltonian with corrections for dispersion "
+                            "and hydrogen-bonding"
+                        ),
+                        "elements": "1-60,62-83",
+                        "periodic": True,
+                        "reactions": True,
+                        "optimization": True,
+                        "code": "mopac",
+                    },
+                    "PM6-DH2X": {
+                        "description": (
+                            "The PM6 Hamiltonian with corrections for dispersion "
+                            "and hydrogen- and halogen-bonding"
+                        ),
+                        "elements": "1-60,62-83",
+                        "periodic": True,
+                        "reactions": True,
+                        "optimization": True,
+                        "code": "mopac",
+                    },
+                    "PM6-D3H4": {
+                        "description": (
+                            "The PM6 Hamiltonian with Řezáč and Hobza's D3H4 "
+                            "correction. There are three parts to the D3H4 function:\n"
+                            "\t1. A correction to the dispersion.  This uses Grimme's "
+                            "D3 method, unmodified, with PM6 specific constants.\n"
+                            "\t2. The 'H4' hydrogen-bond function developed by Řezáč "
+                            "and Hobza.\n"
+                            "\t3. A correction for the known fault in PM6 that "
+                            "hydrogen - hydrogen steric repulsive interactions are too "
+                            "small. For details, see: European Journal of Medicinal "
+                            "Chemistry 2015, 89, 189-197."
+                        ),
+                        "elements": "1-60,62-83",
+                        "periodic": False,
+                        "reactions": True,
+                        "optimization": True,
+                        "code": "mopac",
+                    },
+                    "PM6-D3H4X": {
+                        "description": (
+                            "The PM6 Hamiltonian with Brahmkshatriya, et al.'s "
+                            "D3H4X correction. This adds corrections to the "
+                            "halogen-oxygen and halogen-nitrogen interactions to the "
+                            "D3H4 model."
+                        ),
+                        "elements": "1-60,62-83",
+                        "periodic": False,
+                        "reactions": True,
+                        "optimization": True,
+                        "code": "mopac",
+                    },
+                }
+            },
+        }
+    }
+}
+
 """Description of the MOPAC keywords.
 
 Fields
@@ -17,7 +133,6 @@ default : str (optional)
 format : str (optional)
     How the keyword is formatted in the MOPAC input.
 """
-
 metadata["keywords"] = {
     "0SCF": {
         "description": "Read in data, then stop",
@@ -1123,6 +1238,11 @@ units : str
     An optional unit string for the value as returned by the code.
 """
 metadata["results"] = {
+    "ERROR_MESSAGE": {
+        "description": "An error message",
+        "dimensionality": "scalar",
+        "type": "string",
+    },
     "AO_ATOMINDEX": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
         "description": "atom for AO",
@@ -1359,7 +1479,7 @@ metadata["results"] = {
         "units": "cal/K/mol",
     },
     "GRADIENTS": {
-        "calculation": ["optimization", "thermodynamics", "vibrations"],
+        "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
         "description": "gradients on the atoms",
         "dimensionality": [3, "n_atoms"],
         "type": "float",
@@ -1835,5 +1955,36 @@ metadata["results"] = {
         "property": "zero point energy#MOPAC#{model}",
         "type": "float",
         "units": "kcal/mol",
+    },
+    # Lewis results
+    "point group": {
+        "calculation": ["Lewis structure"],
+        "description": "point group",
+        "dimensionality": "scalar",
+        "type": "string",
+    },
+    "charge": {
+        "calculation": ["Lewis structure"],
+        "description": "net charge",
+        "dimensionality": "scalar",
+        "type": "float",
+    },
+    "neighbors": {
+        "calculation": ["Lewis structure"],
+        "description": "bonded atoms",
+        "dimensionality": "[n_atoms]",
+        "type": "int",
+    },
+    "bonds": {
+        "calculation": ["Lewis structure"],
+        "description": "bonds",
+        "dimensionality": "[n_bonds]",
+        "type": "int",
+    },
+    "lone pairs": {
+        "calculation": ["Lewis structure"],
+        "description": "number of lone pairs",
+        "dimensionality": "[n_atoms]",
+        "type": "int",
     },
 }
