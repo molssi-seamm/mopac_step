@@ -1,6 +1,11 @@
 =======
 History
 =======
+2023.2.13 -- Added Lewis Structure step
+  Provide access to the 'LEWIS' keyword in MOPAC for generating the Lewis dot
+  structure. This step also allows assigning the bonds of the system using either the
+  connectivity or the Lewis structure.
+  
 2022.11.18 -- Printing spins on atoms
   Fixed an oversight that preventing printing spins on the atoms, and storing them on
   the structure. Also increased the precision of the AUX file so have coordinates to
