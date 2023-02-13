@@ -18,6 +18,7 @@ import mopac_step
 import seamm
 import seamm_util
 import seamm_util.printing as printing
+from seamm_util.printing import FormattedText as __
 
 # from seamm_util.printing import FormattedText as __
 
@@ -58,11 +59,18 @@ class LewisStructure(mopac_step.MOPACBase):
                 or final values. If None, then the parameters values will
                 be used as is.
         """
-        text = self.header + "\n\n"
-        text += "Generate the Lewis structure."
-        text += "\n"
+        if not P:
+            P = self.parameters.values_to_dict()
 
-        return text
+        if P["use bonds"]:
+            text = (
+                "Generate and print the Lewis structure and replace any existing bonds "
+                "with those from the Lewis structure."
+            )
+        else:
+            text = "Generate and print the Lewis structure."
+
+        return self.header + "\n" + __(text, **P, indent=4 * " ").__str__()
 
     def run(self):
         """Run MOPAC"""
@@ -95,32 +103,61 @@ class LewisStructure(mopac_step.MOPACBase):
 
         extra_keywords = ["AUX(MOS=10,XP,XS,PRECISION=3)"]
 
+        # All Lanthanides (except La and Lu) must use the SPARKLES keyword.
+        # La and Lu use the SPARKLES keyword optionally, depending
+        # if you're looking for good structure (do use SPARKLES) or
+        # energy (do not use SPARKLES)
+        La = [
+            "Ce",
+            "Pr",
+            "Nd",
+            "Pm",
+            "Sm",
+            "Eu",
+            "Gd",
+            "Tb",
+            "Dy",
+            "Ho",
+            "Er",
+            "Tm",
+            "Yb",
+        ]
+
+        La_list = set(La) & set(configuration.atoms.symbols)
+
+        if len(La_list) > 0:
+            extra_keywords.append("SPARKLES")
+
         # Always add the charge since that will cause MOZYME, if used, to check.
         extra_keywords.append(f"CHARGE={configuration.charge}")
-        # And the spin multiplicity
-        multiplicity = configuration.spin_multiplicity
-        if multiplicity <= 10:
-            extra_keywords.append(
-                (
-                    "SINGLET",
-                    "DOUBLET",
-                    "TRIPLET",
-                    "QUARTET",
-                    "QUINTET",
-                    "SEXTET",
-                    "SEPTET",
-                    "OCTET",
-                    "NONET",
-                )[multiplicity - 1]
-            )
-        else:
-            extra_keywords.append(f"MS={(multiplicity - 1) / 2}")
+        # Sparkles affect the number of electrons .. each has 3? .. so ignore
+        # multiplicity
+        if False:
+            # if "SPARKLES" not in extra_keywords:
+            # And the spin multiplicity
+            multiplicity = configuration.spin_multiplicity
+            if multiplicity <= 10:
+                extra_keywords.append(
+                    (
+                        "SINGLET",
+                        "DOUBLET",
+                        "TRIPLET",
+                        "QUARTET",
+                        "QUINTET",
+                        "SEXTET",
+                        "SEPTET",
+                        "OCTET",
+                        "NONET",
+                    )[multiplicity - 1]
+                )
+            else:
+                extra_keywords.append(f"MS={(multiplicity - 1) / 2}")
 
         next_node = super().run(printer)
 
         text = ""
         lines = []
-        lines.append(" ".join(["LEWIS"] + extra_keywords))
+        lines.append(" ".join(["LEWIS", "LET"] + extra_keywords))
         lines.append(system.name)
         lines.append(configuration.name)
 
@@ -222,6 +259,13 @@ class LewisStructure(mopac_step.MOPACBase):
         with open(os.path.join(self.directory, filename), mode="r") as fd:
             lines = iter(fd.read().splitlines())
 
+        # Get the parameters used
+        P = self.parameters.current_values_to_dict(
+            context=seamm.flowchart_variables._data
+        )
+        no_error = P["ignore errors"]
+        fallback = P["on errors use connectivity"]
+
         charge = None
         n_atoms = configuration.n_atoms
         point_group = None
@@ -236,10 +280,16 @@ class LewisStructure(mopac_step.MOPACBase):
             if "COMPUTED CHARGE ON SYSTEM" in line:
                 charge = int(line.split()[4].rstrip(","))
                 if "THIS IS THE SAME AS THE CHARGE DEFINED" not in line:
-                    raise RuntimeError(
-                        f"The charge on the system {configuration.charge} is not the "
-                        f"same as Lewis structure indicates: {charge}"
-                    )
+                    if no_error or fallback:
+                        self.logger.warning(
+                            f"The charge on the system {configuration.charge} is not "
+                            f"the same as Lewis structure indicates: {charge}"
+                        )
+                    else:
+                        raise RuntimeError(
+                            f"The charge on the system {configuration.charge} is not "
+                            f"the same as Lewis structure indicates: {charge}"
+                        )
             if "TOPOGRAPHY OF SYSTEM" in line:
                 next(lines)
                 next(lines)
@@ -250,6 +300,11 @@ class LewisStructure(mopac_step.MOPACBase):
                     tmp = line.split()
                     if len(tmp) > 2:
                         i = int(tmp[0]) - 1
+                        if i < 0 or i >= n_atoms:
+                            raise RuntimeError(
+                                f"Problem with atom index in topography {n_atoms=}: "
+                                f"{line}"
+                            )
                         neighbors[i] = [int(j) - 1 for j in tmp[2:]]
 
             if line == "Lewis Structure":
@@ -264,6 +319,8 @@ class LewisStructure(mopac_step.MOPACBase):
                         if len(tmp) == 3:
                             i = int(tmp[1]) - 1
                             j = int(tmp[2]) - 1
+                            if j < i:
+                                i, j = j, i
                             key = f"{i}-{j}"
                             if key in tmp_bonds:
                                 tmp_bonds[key] += 1
@@ -277,6 +334,12 @@ class LewisStructure(mopac_step.MOPACBase):
                     bonds["i"].append(int(i))
                     bonds["j"].append(int(j))
                     bonds["bondorder"].append(order)
+
+                # The neighbors according to Lewis structure
+                lneighbors = [[] for i in range(n_atoms)]
+                for i, j in zip(bonds["i"], bonds["j"]):
+                    lneighbors[i].append(j)
+                    lneighbors[j].append(i)
 
         if charge is not None:
             data["charge"] = charge
@@ -292,10 +355,24 @@ class LewisStructure(mopac_step.MOPACBase):
         self.logger.debug("Lone pairs")
         self.logger.debug(json.dumps(lone_pairs, indent=4))
 
-        # Get the parameters used
-        P = self.parameters.current_values_to_dict(
-            context=seamm.flowchart_variables._data
-        )
+        # Check the Lewis structure for consistency with neighbors.
+        same = True
+        for i in range(n_atoms):
+            if sorted(neighbors[i]) != sorted(lneighbors[i]):
+                same = False
+                break
+
+        if not same:
+            if no_error:
+                self.logger.warning(
+                    "The Lewis structure yields different connectivity than the simple "
+                    "connectivity."
+                )
+            elif not fallback:
+                raise RuntimeError(
+                    "The Lewis structure yields different connectivity than the simple "
+                    "connectivity shows."
+                )
 
         # Generate the printed output if requested
         text = ""
@@ -361,12 +438,31 @@ class LewisStructure(mopac_step.MOPACBase):
         # If requested, overwrite the bonding information in the system
         if P["use bonds"]:
             ids = configuration.atoms.ids
-            iatoms = [ids[i] for i in bonds["i"]]
-            jatoms = [ids[j] for j in bonds["j"]]
-            configuration.bonds.delete()
-            configuration.bonds.append(i=iatoms, j=jatoms, bondorder=bonds["bondorder"])
-            text += "\nReplaced the bonds in the configuration with those from the "
-            text += "Lewis structure.\n"
+            if not same and fallback:
+                iatoms = []
+                jatoms = []
+                bondorders = []
+                for i in range(n_atoms):
+                    for j in lneighbors[i]:
+                        if j > i:
+                            iatoms.append(ids[i])
+                            jatoms.append(ids[j])
+                            bondorders.append(1)
+                configuration.bonds.delete()
+                configuration.bonds.append(
+                    i=iatoms, j=jatoms, bondorder=bonds["bondorder"]
+                )
+                text += "\nReplaced the bonds in the configuration with those from the "
+                text += "simple connectivity structure.\n"
+            else:
+                iatoms = [ids[i] for i in bonds["i"]]
+                jatoms = [ids[j] for j in bonds["j"]]
+                configuration.bonds.delete()
+                configuration.bonds.append(
+                    i=iatoms, j=jatoms, bondorder=bonds["bondorder"]
+                )
+                text += "\nReplaced the bonds in the configuration with those from the "
+                text += "Lewis structure.\n"
 
         # Put any requested results into variables or tables
         self.store_results(

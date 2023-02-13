@@ -268,6 +268,7 @@ class MOPAC(mopac_step.MOPACBase):
             files=files,
             return_files=return_files,
             env=env,
+            in_situ=True,
         )
 
         if not result:
@@ -299,7 +300,7 @@ class MOPAC(mopac_step.MOPACBase):
     def set_id(self, node_id):
         """Set the id for node to a given tuple"""
         # and set our subnodes
-        self.subflowchart.set_ids(self._id)
+        self.subflowchart.set_ids(node_id)
 
         return super().set_id(node_id)
 
