@@ -389,7 +389,6 @@ class Optimization(mopac_step.Energy):
 
         # Update the structure
         if "ATOM_X_OPT" in data or "ATOM_X_UPDATED" in data:
-
             periodicity = starting_configuration.periodicity
             if (
                 "structure handling" in P
