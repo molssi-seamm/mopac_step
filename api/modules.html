@@ -1,0 +1,821 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>mopac_step &#8212; SEAMM MOPAC Plug-in 2023.2.13 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+<link href="../_static/styles/bootstrap.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+
+  
+  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=796348d33e8b1d947c94">
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=796348d33e8b1d947c94">
+
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
+<!-- End Google Tag Manager -->
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'api/modules';</script>
+
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="mopac_step package" href="mopac_step.html" />
+    <link rel="prev" title="API Documentation" href="index.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="docsearch:language" content="en">
+  </head>
+  
+  
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="180" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  
+  <input type="checkbox" class="sidebar-toggle" name="__primary" id="__primary">
+  <label class="overlay overlay-primary" for="__primary"></label>
+
+  
+  <input type="checkbox" class="sidebar-toggle" name="__secondary" id="__secondary">
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+      
+<form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+    </div>
+  </div>
+
+  
+  <nav class="bd-header navbar navbar-expand-lg bd-navbar" id="navbar-main"><div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+      <span class="fa-solid fa-bars"></span>
+  </label>
+  <div id="navbar-start">
+    
+    
+  
+
+
+<a class="navbar-brand logo" href="../index.html">
+
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <img src="../_static/SEAMM logo.png" class="logo__image only-light" alt="Logo image">
+    <img src="../_static/SEAMM Inverted 288x181.png" class="logo__image only-dark" alt="Logo image">
+  
+  
+    <p class="title logo__title">MOPAC Step</p>
+  
+</a>
+    
+  </div>
+
+  
+  <div class="col-lg-9 navbar-header-items">
+    <div id="navbar-center" class="mr-auto">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../getting_started/index.html">
+                        Getting Started
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../user_guide/index.html">
+                        User Guide
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../developer_guide/index.html">
+                        Developer Documentation
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="index.html">
+                        API Documentation
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../authors.html">
+                        Development Team
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../history.html">
+                        History
+                      </a>
+                    </li>
+                
+
+                <li class="nav-item">
+                  <a class="nav-link nav-external" href="https://molssi-seamm.github.io">
+                    SEAMM Documentation
+                  </a>
+                </li>
+                
+
+                <li class="nav-item">
+                  <a class="nav-link nav-external" href="https://molssi.org">
+                    MolSSI
+                  </a>
+                </li>
+                
+                </div>
+            </div>
+            
+    </ul>
+</nav>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      
+        <div class="navbar-end-item navbar-persistent--container">
+          
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
+        </div>
+      
+      
+      <div class="navbar-end-item">
+        <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+</button>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/molssi-seamm/mopac_step" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fa-brands fa-square-github"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://twitter.com/MolSSI_NSF" title="Twitter" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fa-brands fa-square-twitter"></i></span>
+            <label class="sr-only">Twitter</label></a>
+        </li>
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+
+
+  
+  
+    <div class="navbar-persistent--mobile">
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
+    </div>
+  
+
+  
+  <label class="sidebar-toggle secondary-toggle" for="__secondary">
+      <span class="fa-solid fa-outdent"></span>
+  </label>
+  
+
+</div>
+  </nav>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../getting_started/index.html">
+                        Getting Started
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../user_guide/index.html">
+                        User Guide
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../developer_guide/index.html">
+                        Developer Documentation
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="index.html">
+                        API Documentation
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../authors.html">
+                        Development Team
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../history.html">
+                        History
+                      </a>
+                    </li>
+                
+
+                <li class="nav-item">
+                  <a class="nav-link nav-external" href="https://molssi-seamm.github.io">
+                    SEAMM Documentation
+                  </a>
+                </li>
+                
+
+                <li class="nav-item">
+                  <a class="nav-link nav-external" href="https://molssi.org">
+                    MolSSI
+                  </a>
+                </li>
+                
+                </div>
+            </div>
+            
+    </ul>
+</nav>
+      </div>
+      
+      </div>
+    
+
+    
+    
+    <div class="sidebar-header-items__end">
+      
+      <div class="navbar-end-item">
+        <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+</button>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/molssi-seamm/mopac_step" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fa-brands fa-square-github"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://twitter.com/MolSSI_NSF" title="Twitter" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fa-brands fa-square-twitter"></i></span>
+            <label class="sr-only">Twitter</label></a>
+        </li>
+      </ul>
+      </div>
+      
+    </div>
+    
+  </div>
+
+  
+  <div class="sidebar-start-items sidebar-primary__section">
+    <div class="sidebar-start-items__item"><nav class="bd-links" id="bd-docs-nav" aria-label="Section navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">
+    Section Navigation
+  </p>
+  <div class="bd-toc-item navbar-nav">
+    <ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="current reference internal" href="#">mopac_step</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="mopac_step.html">mopac_step package</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+</nav>
+    </div>
+  </div>
+  
+
+  
+  <div class="sidebar-end-items sidebar-primary__section">
+    <div class="sidebar-end-items__item">
+    </div>
+  </div>
+
+  
+  <div id="rtd-footer-container"></div>
+
+      </div>
+      <main id="main-content" class="bd-main">
+        
+        
+        <div class="bd-content">
+          <div class="bd-article-container">
+            
+            <div class="bd-header-article">
+                
+            </div>
+            
+            
+            <article class="bd-article" role="main">
+              
+  <section id="mopac-step">
+<h1>mopac_step<a class="headerlink" href="#mopac-step" title="Permalink to this heading">#</a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="mopac_step.html">mopac_step package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="mopac_step.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mopac_step.html#module-mopac_step.energy">mopac_step.energy module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="mopac_step.html#mopac_step.energy.Energy"><code class="docutils literal notranslate"><span class="pre">Energy</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mopac_step.html#mopac_step.energy.Energy.analyze"><code class="docutils literal notranslate"><span class="pre">Energy.analyze()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mopac_step.html#mopac_step.energy.Energy.description_text"><code class="docutils literal notranslate"><span class="pre">Energy.description_text()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mopac_step.html#mopac_step.energy.Energy.get_input"><code class="docutils literal notranslate"><span class="pre">Energy.get_input()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mopac_step.html#mopac_step.energy.Energy.git_revision"><code class="docutils literal notranslate"><span class="pre">Energy.git_revision</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mopac_step.html#mopac_step.energy.Energy.header"><code class="docutils literal notranslate"><span class="pre">Energy.header</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mopac_step.html#mopac_step.energy.Energy.version"><code class="docutils literal notranslate"><span class="pre">Energy.version</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="mopac_step.html#module-mopac_step.energy_parameters">mopac_step.energy_parameters module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="mopac_step.html#mopac_step.energy_parameters.EnergyParameters"><code class="docutils literal notranslate"><span class="pre">EnergyParameters</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mopac_step.html#mopac_step.energy_parameters.EnergyParameters.parameters"><code class="docutils literal notranslate"><span class="pre">EnergyParameters.parameters</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="mopac_step.html#module-mopac_step.energy_step">mopac_step.energy_step module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="mopac_step.html#mopac_step.energy_step.EnergyStep"><code class="docutils literal notranslate"><span class="pre">EnergyStep</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mopac_step.html#mopac_step.energy_step.EnergyStep.create_node"><code class="docutils literal notranslate"><span class="pre">EnergyStep.create_node()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mopac_step.html#mopac_step.energy_step.EnergyStep.create_tk_node"><code class="docutils literal notranslate"><span class="pre">EnergyStep.create_tk_node()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mopac_step.html#mopac_step.energy_step.EnergyStep.description"><code class="docutils literal notranslate"><span class="pre">EnergyStep.description()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mopac_step.html#mopac_step.energy_step.EnergyStep.my_description"><code class="docutils literal notranslate"><span class="pre">EnergyStep.my_description</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="mopac_step.html#module-mopac_step.forceconstants">mopac_step.forceconstants module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="mopac_step.html#mopac_step.forceconstants.Forceconstants"><code class="docutils literal notranslate"><span class="pre">Forceconstants</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mopac_step.html#mopac_step.forceconstants.Forceconstants.analyze"><code class="docutils literal notranslate"><span class="pre">Forceconstants.analyze()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mopac_step.html#mopac_step.forceconstants.Forceconstants.description_text"><code class="docutils literal notranslate"><span class="pre">Forceconstants.description_text()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mopac_step.html#mopac_step.forceconstants.Forceconstants.get_input"><code class="docutils literal notranslate"><span class="pre">Forceconstants.get_input()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="mopac_step.html#module-mopac_step.forceconstants_parameters">mopac_step.forceconstants_parameters module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="mopac_step.html#mopac_step.forceconstants_parameters.ForceconstantsParameters"><code class="docutils literal notranslate"><span class="pre">ForceconstantsParameters</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mopac_step.html#mopac_step.forceconstants_parameters.ForceconstantsParameters.parameters"><code class="docutils literal notranslate"><span class="pre">ForceconstantsParameters.parameters</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="mopac_step.html#module-mopac_step.forceconstants_step">mopac_step.forceconstants_step module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="mopac_step.html#mopac_step.forceconstants_step.ForceconstantsStep"><code class="docutils literal notranslate"><span class="pre">ForceconstantsStep</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mopac_step.html#mopac_step.forceconstants_step.ForceconstantsStep.create_node"><code class="docutils literal notranslate"><span class="pre">ForceconstantsStep.create_node()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mopac_step.html#mopac_step.forceconstants_step.ForceconstantsStep.create_tk_node"><code class="docutils literal notranslate"><span class="pre">ForceconstantsStep.create_tk_node()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mopac_step.html#mopac_step.forceconstants_step.ForceconstantsStep.description"><code class="docutils literal notranslate"><span class="pre">ForceconstantsStep.description()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mopac_step.html#mopac_step.forceconstants_step.ForceconstantsStep.my_description"><code class="docutils literal notranslate"><span class="pre">ForceconstantsStep.my_description</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="mopac_step.html#mopac-step-installer-module">mopac_step.installer module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mopac_step.html#module-mopac_step.ir">mopac_step.ir module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="mopac_step.html#mopac_step.ir.IR"><code class="docutils literal notranslate"><span class="pre">IR</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mopac_step.html#mopac_step.ir.IR.analyze"><code class="docutils literal notranslate"><span class="pre">IR.analyze()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mopac_step.html#mopac_step.ir.IR.description_text"><code class="docutils literal notranslate"><span class="pre">IR.description_text()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mopac_step.html#mopac_step.ir.IR.get_input"><code class="docutils literal notranslate"><span class="pre">IR.get_input()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="mopac_step.html#module-mopac_step.ir_parameters">mopac_step.ir_parameters module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="mopac_step.html#mopac_step.ir_parameters.IRParameters"><code class="docutils literal notranslate"><span class="pre">IRParameters</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mopac_step.html#mopac_step.ir_parameters.IRParameters.parameters"><code class="docutils literal notranslate"><span class="pre">IRParameters.parameters</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="mopac_step.html#module-mopac_step.ir_step">mopac_step.ir_step module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="mopac_step.html#mopac_step.ir_step.IRStep"><code class="docutils literal notranslate"><span class="pre">IRStep</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mopac_step.html#mopac_step.ir_step.IRStep.create_node"><code class="docutils literal notranslate"><span class="pre">IRStep.create_node()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mopac_step.html#mopac_step.ir_step.IRStep.create_tk_node"><code class="docutils literal notranslate"><span class="pre">IRStep.create_tk_node()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mopac_step.html#mopac_step.ir_step.IRStep.description"><code class="docutils literal notranslate"><span class="pre">IRStep.description()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mopac_step.html#mopac_step.ir_step.IRStep.my_description"><code class="docutils literal notranslate"><span class="pre">IRStep.my_description</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="mopac_step.html#module-mopac_step.lewis_structure">mopac_step.lewis_structure module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="mopac_step.html#mopac_step.lewis_structure.LewisStructure"><code class="docutils literal notranslate"><span class="pre">LewisStructure</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mopac_step.html#mopac_step.lewis_structure.LewisStructure.analyze"><code class="docutils literal notranslate"><span class="pre">LewisStructure.analyze()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mopac_step.html#mopac_step.lewis_structure.LewisStructure.description_text"><code class="docutils literal notranslate"><span class="pre">LewisStructure.description_text()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mopac_step.html#mopac_step.lewis_structure.LewisStructure.run"><code class="docutils literal notranslate"><span class="pre">LewisStructure.run()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="mopac_step.html#module-mopac_step.lewis_structure_parameters">mopac_step.lewis_structure_parameters module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="mopac_step.html#mopac_step.lewis_structure_parameters.LewisStructureParameters"><code class="docutils literal notranslate"><span class="pre">LewisStructureParameters</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mopac_step.html#mopac_step.lewis_structure_parameters.LewisStructureParameters.parameters"><code class="docutils literal notranslate"><span class="pre">LewisStructureParameters.parameters</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="mopac_step.html#module-mopac_step.lewis_structure_step">mopac_step.lewis_structure_step module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="mopac_step.html#mopac_step.lewis_structure_step.LewisStructureStep"><code class="docutils literal notranslate"><span class="pre">LewisStructureStep</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mopac_step.html#mopac_step.lewis_structure_step.LewisStructureStep.create_node"><code class="docutils literal notranslate"><span class="pre">LewisStructureStep.create_node()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mopac_step.html#mopac_step.lewis_structure_step.LewisStructureStep.create_tk_node"><code class="docutils literal notranslate"><span class="pre">LewisStructureStep.create_tk_node()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mopac_step.html#mopac_step.lewis_structure_step.LewisStructureStep.description"><code class="docutils literal notranslate"><span class="pre">LewisStructureStep.description()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mopac_step.html#mopac_step.lewis_structure_step.LewisStructureStep.my_description"><code class="docutils literal notranslate"><span class="pre">LewisStructureStep.my_description</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="mopac_step.html#module-mopac_step.metadata">mopac_step.metadata module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="mopac_step.html#mopac_step.metadata.metadata"><code class="docutils literal notranslate"><span class="pre">metadata</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="mopac_step.html#module-mopac_step.mopac">mopac_step.mopac module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="mopac_step.html#mopac_step.mopac.MOPAC"><code class="docutils literal notranslate"><span class="pre">MOPAC</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mopac_step.html#mopac_step.mopac.MOPAC.analyze"><code class="docutils literal notranslate"><span class="pre">MOPAC.analyze()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mopac_step.html#mopac_step.mopac.MOPAC.description_text"><code class="docutils literal notranslate"><span class="pre">MOPAC.description_text()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mopac_step.html#mopac_step.mopac.MOPAC.run"><code class="docutils literal notranslate"><span class="pre">MOPAC.run()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mopac_step.html#mopac_step.mopac.MOPAC.set_id"><code class="docutils literal notranslate"><span class="pre">MOPAC.set_id()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="mopac_step.html#module-mopac_step.mopac_base">mopac_step.mopac_base module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="mopac_step.html#mopac_step.mopac_base.MOPACBase"><code class="docutils literal notranslate"><span class="pre">MOPACBase</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mopac_step.html#mopac_step.mopac_base.MOPACBase.create_parser"><code class="docutils literal notranslate"><span class="pre">MOPACBase.create_parser()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mopac_step.html#mopac_step.mopac_base.MOPACBase.git_revision"><code class="docutils literal notranslate"><span class="pre">MOPACBase.git_revision</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mopac_step.html#mopac_step.mopac_base.MOPACBase.mopac_structure"><code class="docutils literal notranslate"><span class="pre">MOPACBase.mopac_structure()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mopac_step.html#mopac_step.mopac_base.MOPACBase.parse_arc"><code class="docutils literal notranslate"><span class="pre">MOPACBase.parse_arc()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mopac_step.html#mopac_step.mopac_base.MOPACBase.parse_aux"><code class="docutils literal notranslate"><span class="pre">MOPACBase.parse_aux()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mopac_step.html#mopac_step.mopac_base.MOPACBase.version"><code class="docutils literal notranslate"><span class="pre">MOPACBase.version</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="mopac_step.html#module-mopac_step.mopac_step">mopac_step.mopac_step module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="mopac_step.html#mopac_step.mopac_step.MOPACStep"><code class="docutils literal notranslate"><span class="pre">MOPACStep</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mopac_step.html#mopac_step.mopac_step.MOPACStep.create_node"><code class="docutils literal notranslate"><span class="pre">MOPACStep.create_node()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mopac_step.html#mopac_step.mopac_step.MOPACStep.create_tk_node"><code class="docutils literal notranslate"><span class="pre">MOPACStep.create_tk_node()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mopac_step.html#mopac_step.mopac_step.MOPACStep.description"><code class="docutils literal notranslate"><span class="pre">MOPACStep.description()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mopac_step.html#mopac_step.mopac_step.MOPACStep.my_description"><code class="docutils literal notranslate"><span class="pre">MOPACStep.my_description</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="mopac_step.html#module-mopac_step.optimization">mopac_step.optimization module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="mopac_step.html#mopac_step.optimization.Optimization"><code class="docutils literal notranslate"><span class="pre">Optimization</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mopac_step.html#mopac_step.optimization.Optimization.analyze"><code class="docutils literal notranslate"><span class="pre">Optimization.analyze()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mopac_step.html#mopac_step.optimization.Optimization.description_text"><code class="docutils literal notranslate"><span class="pre">Optimization.description_text()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mopac_step.html#mopac_step.optimization.Optimization.get_input"><code class="docutils literal notranslate"><span class="pre">Optimization.get_input()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="mopac_step.html#module-mopac_step.optimization_parameters">mopac_step.optimization_parameters module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="mopac_step.html#mopac_step.optimization_parameters.OptimizationParameters"><code class="docutils literal notranslate"><span class="pre">OptimizationParameters</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mopac_step.html#mopac_step.optimization_parameters.OptimizationParameters.parameters"><code class="docutils literal notranslate"><span class="pre">OptimizationParameters.parameters</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="mopac_step.html#module-mopac_step.optimization_step">mopac_step.optimization_step module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="mopac_step.html#mopac_step.optimization_step.OptimizationStep"><code class="docutils literal notranslate"><span class="pre">OptimizationStep</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mopac_step.html#mopac_step.optimization_step.OptimizationStep.create_node"><code class="docutils literal notranslate"><span class="pre">OptimizationStep.create_node()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mopac_step.html#mopac_step.optimization_step.OptimizationStep.create_tk_node"><code class="docutils literal notranslate"><span class="pre">OptimizationStep.create_tk_node()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mopac_step.html#mopac_step.optimization_step.OptimizationStep.description"><code class="docutils literal notranslate"><span class="pre">OptimizationStep.description()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mopac_step.html#mopac_step.optimization_step.OptimizationStep.my_description"><code class="docutils literal notranslate"><span class="pre">OptimizationStep.my_description</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="mopac_step.html#module-mopac_step.thermodynamics">mopac_step.thermodynamics module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="mopac_step.html#mopac_step.thermodynamics.Thermodynamics"><code class="docutils literal notranslate"><span class="pre">Thermodynamics</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mopac_step.html#mopac_step.thermodynamics.Thermodynamics.analyze"><code class="docutils literal notranslate"><span class="pre">Thermodynamics.analyze()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mopac_step.html#mopac_step.thermodynamics.Thermodynamics.description_text"><code class="docutils literal notranslate"><span class="pre">Thermodynamics.description_text()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mopac_step.html#mopac_step.thermodynamics.Thermodynamics.get_input"><code class="docutils literal notranslate"><span class="pre">Thermodynamics.get_input()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="mopac_step.html#module-mopac_step.thermodynamics_parameters">mopac_step.thermodynamics_parameters module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="mopac_step.html#mopac_step.thermodynamics_parameters.ThermodynamicsParameters"><code class="docutils literal notranslate"><span class="pre">ThermodynamicsParameters</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mopac_step.html#mopac_step.thermodynamics_parameters.ThermodynamicsParameters.parameters"><code class="docutils literal notranslate"><span class="pre">ThermodynamicsParameters.parameters</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="mopac_step.html#module-mopac_step.thermodynamics_step">mopac_step.thermodynamics_step module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="mopac_step.html#mopac_step.thermodynamics_step.ThermodynamicsStep"><code class="docutils literal notranslate"><span class="pre">ThermodynamicsStep</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mopac_step.html#mopac_step.thermodynamics_step.ThermodynamicsStep.create_node"><code class="docutils literal notranslate"><span class="pre">ThermodynamicsStep.create_node()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mopac_step.html#mopac_step.thermodynamics_step.ThermodynamicsStep.create_tk_node"><code class="docutils literal notranslate"><span class="pre">ThermodynamicsStep.create_tk_node()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mopac_step.html#mopac_step.thermodynamics_step.ThermodynamicsStep.description"><code class="docutils literal notranslate"><span class="pre">ThermodynamicsStep.description()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mopac_step.html#mopac_step.thermodynamics_step.ThermodynamicsStep.my_description"><code class="docutils literal notranslate"><span class="pre">ThermodynamicsStep.my_description</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="mopac_step.html#module-mopac_step.tk_energy">mopac_step.tk_energy module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="mopac_step.html#mopac_step.tk_energy.TkEnergy"><code class="docutils literal notranslate"><span class="pre">TkEnergy</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mopac_step.html#mopac_step.tk_energy.TkEnergy.create_dialog"><code class="docutils literal notranslate"><span class="pre">TkEnergy.create_dialog()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mopac_step.html#mopac_step.tk_energy.TkEnergy.reset_dialog"><code class="docutils literal notranslate"><span class="pre">TkEnergy.reset_dialog()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mopac_step.html#mopac_step.tk_energy.TkEnergy.reset_energy_frame"><code class="docutils literal notranslate"><span class="pre">TkEnergy.reset_energy_frame()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mopac_step.html#mopac_step.tk_energy.TkEnergy.right_click"><code class="docutils literal notranslate"><span class="pre">TkEnergy.right_click()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="mopac_step.html#module-mopac_step.tk_forceconstants">mopac_step.tk_forceconstants module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="mopac_step.html#mopac_step.tk_forceconstants.TkForceconstants"><code class="docutils literal notranslate"><span class="pre">TkForceconstants</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mopac_step.html#mopac_step.tk_forceconstants.TkForceconstants.create_dialog"><code class="docutils literal notranslate"><span class="pre">TkForceconstants.create_dialog()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mopac_step.html#mopac_step.tk_forceconstants.TkForceconstants.reset_dialog"><code class="docutils literal notranslate"><span class="pre">TkForceconstants.reset_dialog()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="mopac_step.html#module-mopac_step.tk_ir">mopac_step.tk_ir module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="mopac_step.html#mopac_step.tk_ir.TkIR"><code class="docutils literal notranslate"><span class="pre">TkIR</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mopac_step.html#mopac_step.tk_ir.TkIR.create_dialog"><code class="docutils literal notranslate"><span class="pre">TkIR.create_dialog()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mopac_step.html#mopac_step.tk_ir.TkIR.reset_dialog"><code class="docutils literal notranslate"><span class="pre">TkIR.reset_dialog()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="mopac_step.html#module-mopac_step.tk_lewis_structure">mopac_step.tk_lewis_structure module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="mopac_step.html#mopac_step.tk_lewis_structure.TkLewisStructure"><code class="docutils literal notranslate"><span class="pre">TkLewisStructure</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mopac_step.html#mopac_step.tk_lewis_structure.TkLewisStructure.create_dialog"><code class="docutils literal notranslate"><span class="pre">TkLewisStructure.create_dialog()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mopac_step.html#mopac_step.tk_lewis_structure.TkLewisStructure.right_click"><code class="docutils literal notranslate"><span class="pre">TkLewisStructure.right_click()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="mopac_step.html#module-mopac_step.tk_mopac">mopac_step.tk_mopac module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="mopac_step.html#mopac_step.tk_mopac.TkMOPAC"><code class="docutils literal notranslate"><span class="pre">TkMOPAC</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mopac_step.html#mopac_step.tk_mopac.TkMOPAC.create_dialog"><code class="docutils literal notranslate"><span class="pre">TkMOPAC.create_dialog()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mopac_step.html#mopac_step.tk_mopac.TkMOPAC.right_click"><code class="docutils literal notranslate"><span class="pre">TkMOPAC.right_click()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="mopac_step.html#module-mopac_step.tk_optimization">mopac_step.tk_optimization module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="mopac_step.html#mopac_step.tk_optimization.TkOptimization"><code class="docutils literal notranslate"><span class="pre">TkOptimization</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mopac_step.html#mopac_step.tk_optimization.TkOptimization.create_dialog"><code class="docutils literal notranslate"><span class="pre">TkOptimization.create_dialog()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mopac_step.html#mopac_step.tk_optimization.TkOptimization.reset_dialog"><code class="docutils literal notranslate"><span class="pre">TkOptimization.reset_dialog()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mopac_step.html#mopac_step.tk_optimization.TkOptimization.reset_optimization_frame"><code class="docutils literal notranslate"><span class="pre">TkOptimization.reset_optimization_frame()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mopac_step.html#mopac_step.tk_optimization.TkOptimization.right_click"><code class="docutils literal notranslate"><span class="pre">TkOptimization.right_click()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="mopac_step.html#module-mopac_step.tk_thermodynamics">mopac_step.tk_thermodynamics module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="mopac_step.html#mopac_step.tk_thermodynamics.TkThermodynamics"><code class="docutils literal notranslate"><span class="pre">TkThermodynamics</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mopac_step.html#mopac_step.tk_thermodynamics.TkThermodynamics.create_dialog"><code class="docutils literal notranslate"><span class="pre">TkThermodynamics.create_dialog()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mopac_step.html#mopac_step.tk_thermodynamics.TkThermodynamics.reset_dialog"><code class="docutils literal notranslate"><span class="pre">TkThermodynamics.reset_dialog()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="mopac_step.html#module-mopac_step">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+
+
+            </article>
+            
+            
+            
+            <footer class="bd-footer-article">
+                <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+  <a class='left-prev' id="prev-link" href="index.html" title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+          <p class="prev-next-subtitle">previous</p>
+          <p class="prev-next-title">API Documentation</p>
+      </div>
+  </a>
+  <a class='right-next' id="next-link" href="mopac_step.html" title="next page">
+  <div class="prev-next-info">
+      <p class="prev-next-subtitle">next</p>
+      <p class="prev-next-title">mopac_step package</p>
+  </div>
+  <i class="fa-solid fa-angle-right"></i>
+  </a>
+</div>
+            </footer>
+            
+          </div>
+          
+          
+          
+            <div class="bd-sidebar-secondary bd-toc">
+              
+<div class="toc-item">
+  
+<div class="tocsection sourcelink">
+    <a href="../_sources/api/modules.rst.txt">
+        <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+</div>
+
+</div>
+
+            </div>
+          
+          
+        </div>
+        <footer class="bd-footer-content">
+          <div class="bd-footer-content__inner">
+            
+          </div>
+        </footer>
+        
+      </main>
+    </div>
+  </div>
+
+  
+    
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=796348d33e8b1d947c94"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=796348d33e8b1d947c94"></script>
+
+  <footer class="bd-footer"><div class="bd-footer__inner container">
+  
+  <div class="footer-item">
+    
+  
+
+
+
+  
+  
+  
+  
+  
+  
+  
+
+
+<div class="row h-10">
+    <div class="col-2">
+        <a href="https://molssi.org/" target="_blank" title="Go to MolSSI in a new tab">
+            <img src="../_static/molssi_main_logo.png" class="logo__image only-light footer_logo" alt="Logo image">
+            <img src="../_static/molssi_main_logo_inverted_white.png" class="logo__image only-dark footer_logo" alt="Logo image">
+        </a>
+    </div>
+    <div class="col-8">
+        <p> &copy; Copyright 2019-2023 <a href="https://molssi.org/">The Molecular Sciences Software Institute</a></p>
+        <p>Funded by the National Science Foundation 
+          <a href="https://nsf.gov/awardsearch/showAward?AWD_ID=1547580">OAC-1547580</a> and 
+          <a href="https://www.nsf.gov/awardsearch/showAward?AWD_ID=2136142">CHE-2136142.</a></p>
+ 
+        
+
+    </div>
+    <div class="col-2">
+        <a href="https://nsf.gov/" target="_blank" title="Go to the NSF in a new tab">
+            <img src="../_static/nsf.png" class="footer_logo" alt="The NSF">
+          </a>
+    </div>
+</div>
+  </div>
+  
+</div>
+  </footer>
+  </body>
+</html>
