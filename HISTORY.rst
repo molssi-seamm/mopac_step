@@ -1,6 +1,10 @@
 =======
 History
 =======
+2023.3.15 -- Bugfix
+  A copy of the input and output files for MOPAC was inadvertently written to the main
+  job directory. This has been fixed.
+  
 2023.2.13 -- Added Lewis Structure step
   Provide access to the 'LEWIS' keyword in MOPAC for generating the Lewis dot
   structure. This step also allows assigning the bonds of the system using either the
