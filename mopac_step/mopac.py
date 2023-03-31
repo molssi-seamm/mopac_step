@@ -269,6 +269,7 @@ class MOPAC(mopac_step.MOPACBase):
             return_files=return_files,
             env=env,
             in_situ=True,
+            directory=self.directory,
         )
 
         if not result:
@@ -280,13 +281,6 @@ class MOPAC(mopac_step.MOPACBase):
         self.logger.debug(
             "\n\nOutput from MOPAC\n\n" + result["mopac.out"]["data"] + "\n\n"
         )
-
-        for filename in result["files"]:
-            with open(os.path.join(self.directory, filename), mode="w") as fd:
-                if result[filename]["data"] is not None:
-                    fd.write(result[filename]["data"])
-                else:
-                    fd.write(result[filename]["exception"])
 
         # Analyze the results
         self.analyze(n_calculations=n_calculations)
