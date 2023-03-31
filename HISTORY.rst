@@ -1,6 +1,9 @@
 =======
 History
 =======
+2023.3.31 -- Bugfix
+  Lewis structure could reference a variable before it was set, and crash.
+  
 2023.3.15 -- Bugfix
   A copy of the input and output files for MOPAC was inadvertently written to the main
   job directory. This has been fixed.
