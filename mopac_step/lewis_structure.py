@@ -272,6 +272,7 @@ class LewisStructure(mopac_step.MOPACBase):
         neighbors = data["neighbors"] = [[] for i in range(n_atoms)]
         bonds = data["bonds"] = {"i": [], "j": [], "bondorder": []}
         lone_pairs = data["lone pairs"] = [0] * n_atoms
+        have_lewis_structure = False
         for line in lines:
             line = line.strip()
             if "MOLECULAR POINT GROUP" in line:
@@ -308,6 +309,7 @@ class LewisStructure(mopac_step.MOPACBase):
                         neighbors[i] = [int(j) - 1 for j in tmp[2:]]
 
             if line == "Lewis Structure":
+                have_lewis_structure = True
                 next(lines)
                 next(lines)
                 tmp_bonds = {}
@@ -356,23 +358,25 @@ class LewisStructure(mopac_step.MOPACBase):
         self.logger.debug(json.dumps(lone_pairs, indent=4))
 
         # Check the Lewis structure for consistency with neighbors.
-        same = True
-        for i in range(n_atoms):
-            if sorted(neighbors[i]) != sorted(lneighbors[i]):
-                same = False
-                break
+        same = False
+        if have_lewis_structure:
+            same = True
+            for i in range(n_atoms):
+                if sorted(neighbors[i]) != sorted(lneighbors[i]):
+                    same = False
+                    break
 
-        if not same:
-            if no_error:
-                self.logger.warning(
-                    "The Lewis structure yields different connectivity than the simple "
-                    "connectivity."
-                )
-            elif not fallback:
-                raise RuntimeError(
-                    "The Lewis structure yields different connectivity than the simple "
-                    "connectivity shows."
-                )
+            if not same:
+                if no_error:
+                    self.logger.warning(
+                        "The Lewis structure yields different connectivity than the "
+                        "simple connectivity."
+                    )
+                elif not fallback:
+                    raise RuntimeError(
+                        "The Lewis structure yields different connectivity than the "
+                        "simple connectivity shows."
+                    )
 
         # Generate the printed output if requested
         text = ""
@@ -438,7 +442,7 @@ class LewisStructure(mopac_step.MOPACBase):
         # If requested, overwrite the bonding information in the system
         if P["use bonds"]:
             ids = configuration.atoms.ids
-            if not same and fallback:
+            if same:
                 iatoms = []
                 jatoms = []
                 bondorders = []
@@ -453,7 +457,7 @@ class LewisStructure(mopac_step.MOPACBase):
                     i=iatoms, j=jatoms, bondorder=bonds["bondorder"]
                 )
                 text += "\nReplaced the bonds in the configuration with those from the "
-                text += "simple connectivity structure.\n"
+                text += "Lewis structure.\n"
             else:
                 iatoms = [ids[i] for i in bonds["i"]]
                 jatoms = [ids[j] for j in bonds["j"]]
@@ -462,7 +466,7 @@ class LewisStructure(mopac_step.MOPACBase):
                     i=iatoms, j=jatoms, bondorder=bonds["bondorder"]
                 )
                 text += "\nReplaced the bonds in the configuration with those from the "
-                text += "Lewis structure.\n"
+                text += "simple connectivity structure.\n"
 
         # Put any requested results into variables or tables
         self.store_results(
