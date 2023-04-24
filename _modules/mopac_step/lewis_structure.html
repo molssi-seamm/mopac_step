@@ -8,7 +8,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mopac_step.lewis_structure &#8212; SEAMM MOPAC Plug-in 2023.3.31.1 documentation</title>
+    <title>mopac_step.lewis_structure &#8212; SEAMM MOPAC Plug-in 2023.4.24 documentation</title>
   
   
   
@@ -30,7 +30,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
@@ -528,6 +528,7 @@ document.write(`
         <span class="c1"># Don&#39;t want user to change keywords!</span>
         <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_metadata</span><span class="p">[</span><span class="s2">&quot;keywords&quot;</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span> <span class="o">=</span> <span class="n">mopac_step</span><span class="o">.</span><span class="n">LewisStructureParameters</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_lattice_opt</span> <span class="o">=</span> <span class="kc">False</span>
 
 <div class="viewcode-block" id="LewisStructure.description_text"><a class="viewcode-back" href="../../api/mopac_step.html#mopac_step.lewis_structure.LewisStructure.description_text">[docs]</a>    <span class="k">def</span> <span class="nf">description_text</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">P</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a short description of this step.</span>
@@ -638,7 +639,7 @@ document.write(`
 
         <span class="n">text</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
         <span class="n">lines</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s2">&quot;LEWIS&quot;</span><span class="p">,</span> <span class="s2">&quot;LET&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">extra_keywords</span><span class="p">))</span>
+        <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s2">&quot;LEWIS&quot;</span><span class="p">,</span> <span class="s2">&quot;LET&quot;</span><span class="p">,</span> <span class="s2">&quot;GEO-OK&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">extra_keywords</span><span class="p">))</span>
         <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">system</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
         <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">configuration</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
 
