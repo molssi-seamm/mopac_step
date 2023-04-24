@@ -1,6 +1,10 @@
 =======
 History
 =======
+2023.4.24 -- Bugfixes for Lewis structure
+  * Correctly handle periodic systems in Lewis structure.
+  * Fixed and issue with the Lewis structure GUI not displaying all the widgets.
+    
 2023.3.31 -- Bugfix
   Lewis structure could reference a variable before it was set, and crash.
   

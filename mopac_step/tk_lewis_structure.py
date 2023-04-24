@@ -55,8 +55,6 @@ class TkLewisStructure(seamm.TkNode):
         frame = super().create_dialog(title=title)
 
         # Create all the widgets
-        print(type(self.node))
-        print(type(self.node.parameters))
         P = self.node.parameters
         row = 0
         widgets = []
@@ -65,6 +63,7 @@ class TkLewisStructure(seamm.TkNode):
                 w = self[key] = P[key].widget(frame)
                 w.grid(row=row, column=0, sticky=tk.EW)
                 widgets.append(w)
+                row += 1
         sw.align_labels(widgets, sticky=tk.E)
 
         self.setup_results()

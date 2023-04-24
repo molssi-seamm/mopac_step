@@ -47,6 +47,7 @@ class LewisStructure(mopac_step.MOPACBase):
         # Don't want user to change keywords!
         del self._metadata["keywords"]
         self.parameters = mopac_step.LewisStructureParameters()
+        self._lattice_opt = False
 
     def description_text(self, P=None):
         """Return a short description of this step.
@@ -157,7 +158,7 @@ class LewisStructure(mopac_step.MOPACBase):
 
         text = ""
         lines = []
-        lines.append(" ".join(["LEWIS", "LET"] + extra_keywords))
+        lines.append(" ".join(["LEWIS", "LET", "GEO-OK"] + extra_keywords))
         lines.append(system.name)
         lines.append(configuration.name)
 
