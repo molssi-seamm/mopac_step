@@ -317,7 +317,7 @@ class MOPAC(mopac_step.MOPACBase):
         lineno = 0
         section = 0
         for line in lines_aux:
-            if "END OF MOPAC FILE" in line:
+            if "END OF MOPAC FILE" in line or "END OF MOPAC PROGRAM" in line:
                 self.logger.debug("\nAUX file section {}".format(section))
                 self.logger.debug("------------------")
 
