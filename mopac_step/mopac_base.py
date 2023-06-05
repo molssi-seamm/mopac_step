@@ -192,6 +192,8 @@ class MOPACBase(seamm.Node):
             line = lines[lineno].strip()
             if "END OF MOPAC PROGRAM" in line:
                 continue
+            if "END OF MOPAC FILE" in line:
+                continue
             if line[0] == "#":
                 continue
             if "=" not in line:

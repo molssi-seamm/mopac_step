@@ -1,6 +1,11 @@
 =======
 History
 =======
+2023.6.5 -- Bugfix working around MOPAC problem
+  * MOPAC is not consistent about putting end of file and end of program markers in the
+    AUX file. This caused carashed in SEAMM, which this fixes until MOPAC can be
+    corrected.
+    
 2023.4.24 -- Bugfixes for Lewis structure
   * Correctly handle periodic systems in Lewis structure.
   * Fixed and issue with the Lewis structure GUI not displaying all the widgets.
