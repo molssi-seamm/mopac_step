@@ -1,6 +1,10 @@
 =======
 History
 =======
+2023.7.24 -- Bugfix in Lewis structure with bond orders
+  * Major issue in getting the bonds from the Lewis structure where the atoms and bond
+    orders were mixed up.
+    
 2023.6.5 -- Bugfix working around MOPAC problem
   * MOPAC is not consistent about putting end of file and end of program markers in the
     AUX file. This caused carashed in SEAMM, which this fixes until MOPAC can be
