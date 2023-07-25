@@ -444,6 +444,15 @@ class LewisStructure(mopac_step.MOPACBase):
         if P["use bonds"]:
             ids = configuration.atoms.ids
             if same:
+                iatoms = [ids[i] for i in bonds["i"]]
+                jatoms = [ids[j] for j in bonds["j"]]
+                configuration.bonds.delete()
+                configuration.bonds.append(
+                    i=iatoms, j=jatoms, bondorder=bonds["bondorder"]
+                )
+                text += "\nReplaced the bonds in the configuration with those from the "
+                text += "Lewis structure.\n"
+            else:
                 iatoms = []
                 jatoms = []
                 bondorders = []
@@ -453,15 +462,6 @@ class LewisStructure(mopac_step.MOPACBase):
                             iatoms.append(ids[i])
                             jatoms.append(ids[j])
                             bondorders.append(1)
-                configuration.bonds.delete()
-                configuration.bonds.append(
-                    i=iatoms, j=jatoms, bondorder=bonds["bondorder"]
-                )
-                text += "\nReplaced the bonds in the configuration with those from the "
-                text += "Lewis structure.\n"
-            else:
-                iatoms = [ids[i] for i in bonds["i"]]
-                jatoms = [ids[j] for j in bonds["j"]]
                 configuration.bonds.delete()
                 configuration.bonds.append(
                     i=iatoms, j=jatoms, bondorder=bonds["bondorder"]
