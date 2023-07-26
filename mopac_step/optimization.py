@@ -394,12 +394,19 @@ class Optimization(mopac_step.Energy):
                 "structure handling" in P
                 and P["structure handling"] == "be put in a new configuration"
             ):
-                configuration = system.create_configuration(
-                    periodicity=periodicity,
-                    atomset=starting_configuration.atomset,
-                    bondset=starting_configuration.bondset,
-                    cell_id=starting_configuration.cell_id,
-                )
+                if P["bond orders"] == "yes, and apply to structure":
+                    configuration = system.create_configuration(
+                        periodicity=periodicity,
+                        atomset=starting_configuration.atomset,
+                        cell_id=starting_configuration.cell_id,
+                    )
+                else:
+                    configuration = system.create_configuration(
+                        periodicity=periodicity,
+                        atomset=starting_configuration.atomset,
+                        bondset=starting_configuration.bondset,
+                        cell_id=starting_configuration.cell_id,
+                    )
                 configuration.charge = starting_configuration.charge
                 configuration.spin_multiplicity = (
                     starting_configuration.spin_multiplicity

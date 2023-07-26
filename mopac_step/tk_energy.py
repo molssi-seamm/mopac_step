@@ -155,6 +155,11 @@ class TkEnergy(seamm.TkNode):
                 row += 1
             sw.align_labels(widgets1, sticky=tk.E)
 
+        for key in ("bond orders",):
+            self[key].grid(row=row, column=0, columnspan=2, sticky=tk.EW)
+            widgets.append(self[key])
+            row += 1
+
         sw.align_labels(widgets, sticky=tk.E)
         frame.columnconfigure(0, minsize=100)
 
