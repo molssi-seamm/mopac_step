@@ -141,6 +141,15 @@ class Energy(seamm.Node):
                 "{nspa} grid points per atom, and a cutoff of {disex}."
             )
 
+        # And bond orders
+        if P["bond orders"] == "yes":
+            text += "\n\nThe bond orders will be calculated."
+        elif P["bond orders"] == "yes, and apply to structure":
+            text += (
+                "\n\nThe bond orders will be calculated and used to set the bonding "
+                "for the structure."
+            )
+
         return self.header + "\n" + __(text, **P, indent=4 * " ").__str__()
 
     def get_input(self):
@@ -653,6 +662,9 @@ class Energy(seamm.Node):
         if P["calculate gradients"]:
             keywords.append("GRADIENTS")
 
+        if "yes" in P["bond orders"]:
+            keywords.append("BONDS")
+
         # Add any extra keywords so that they appear at the end
         metadata = self.metadata["keywords"]
         for keyword in P["extra keywords"]:
@@ -965,6 +977,11 @@ class Energy(seamm.Node):
         text += "\n\n"
         text += textwrap.indent("\n".join(text_lines), self.indent + 7 * " ")
 
+        if "BOND_ORDERS" in data:
+            text += self._bond_orders(
+                P["bond orders"], data["BOND_ORDERS"], starting_configuration
+            )
+
         printer.normal(text)
 
         if used_mozyme and "CPU_TIME" in data_sections[0]:
@@ -988,3 +1005,97 @@ class Energy(seamm.Node):
             data=data,
             create_tables=self.parameters["create tables"].get(),
         )
+
+    def _bond_orders(self, control, bond_order_matrix, configuration):
+        """Analyze and print the bond orders, and optionally use for the bonding
+        in the structure.
+
+        Parameters
+        ----------
+        control : str
+            The control option for the bond order analysis
+        bond_order_matrix : [float]
+            Lower triangular part of the bond order matrix.
+        configuration : molsystem.Configuration
+            The configuration to put the bonds on, if requested.
+        """
+        text = ""
+        n_atoms = configuration.n_atoms
+        bond_i = []
+        bond_j = []
+        bond_order = []
+        bond_order_str = []
+        orders = []
+        ij = 0
+        for j in range(n_atoms):
+            for i in range(j + 1):
+                if i != j:
+                    order = bond_order_matrix[ij]
+                    if order > 0.5:
+                        bond_i.append(i)
+                        bond_j.append(j)
+                        if order > 1.3 and order < 1.7:
+                            bond_order.append(5)
+                            bond_order_str.append("aromatic")
+                        else:
+                            bond_order.append(round(order))
+                            bond_order_str.append(str(round(order)))
+                        orders.append(order)
+                ij += 1
+
+        symbols = configuration.atoms.symbols
+        options = self.parent.options
+        text_lines = []
+        if len(symbols) <= int(options["max_atoms_to_print"]):
+            if "name" in configuration.atoms:
+                name = configuration.atoms.get_column_data("name")
+            else:
+                name = []
+                count = {}
+                for symbol in symbols:
+                    if symbol not in count:
+                        count[symbol] = 1
+                    else:
+                        count[symbol] += 1
+                    name.append(f"{symbol}{count[symbol]}")
+            table = {
+                "i": [name[i] for i in bond_i],
+                "j": [name[j] for j in bond_j],
+                "bond order": orders,
+                "bond multiplicity": bond_order_str,
+            }
+            tmp = tabulate(
+                table,
+                headers="keys",
+                tablefmt="pretty",
+                disable_numparse=True,
+                colalign=("center", "center", "right", "center"),
+            )
+            length = len(tmp.splitlines()[0])
+            text_lines.append("\n")
+            text_lines.append("Bond Orders".center(length))
+            text_lines.append(
+                tabulate(
+                    table,
+                    headers="keys",
+                    tablefmt="psql",
+                    colalign=("center", "center", "decimal", "center"),
+                )
+            )
+            text += "\n\n"
+            text += textwrap.indent("\n".join(text_lines), self.indent + 7 * " ")
+
+        if control == "yes, and apply to structure":
+            ids = configuration.atoms.ids
+            iatoms = [ids[i] for i in bond_i]
+            jatoms = [ids[j] for j in bond_j]
+            configuration.bonds.delete()
+            configuration.bonds.append(i=iatoms, j=jatoms, bondorder=bond_order)
+            text2 = (
+                "\nReplaced the bonds in the configuration with those from the "
+                "calculated bond orders.\n"
+            )
+
+        text += str(__(text2, indent=self.indent + 4 * " "))
+
+        return text

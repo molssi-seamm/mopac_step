@@ -244,6 +244,15 @@ class EnergyParameters(seamm.Parameters):
                 "change in energy between iterations."
             ),
         },
+        "bond orders": {
+            "default": "yes",
+            "kind": "enum",
+            "default_units": "",
+            "enumeration": ("yes", "yes, and apply to structure", "no"),
+            "format_string": "",
+            "description": "Calculate bond orders:",
+            "help_text": "Whether to calculate bond orders and also apply to structure",
+        },
         "extra keywords": {
             "default": [],
             "kind": "list",

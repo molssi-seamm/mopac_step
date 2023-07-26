@@ -1333,6 +1333,12 @@ metadata["results"] = {
         "type": "float",
         "units": "Å",
     },
+    "BOND_ORDERS": {
+        "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
+        "description": "bond order matrix",
+        "dimensionality": ["triangular", "n_atoms", "n_atoms"],
+        "type": "float",
+    },
     "COMMENTS": {
         "calculation": [],
         "description": "User comment line",

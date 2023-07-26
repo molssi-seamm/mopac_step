@@ -1,6 +1,10 @@
 =======
 History
 =======
+2023.7.26 -- Added output of bond orders
+  * Also added capability to use the bond orders to put bond multiplicities on the
+    structure.
+    
 2023.7.24 -- Bugfix in Lewis structure with bond orders
   * Major issue in getting the bonds from the Lewis structure where the atoms and bond
     orders were mixed up.
