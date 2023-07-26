@@ -8,7 +8,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mopac_step.optimization &#8212; SEAMM MOPAC Plug-in 2023.7.24 documentation</title>
+    <title>mopac_step.optimization &#8212; SEAMM MOPAC Plug-in 2023.7.26 documentation</title>
   
   
   
@@ -872,12 +872,19 @@ document.write(`
                 <span class="s2">&quot;structure handling&quot;</span> <span class="ow">in</span> <span class="n">P</span>
                 <span class="ow">and</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;structure handling&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;be put in a new configuration&quot;</span>
             <span class="p">):</span>
-                <span class="n">configuration</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">create_configuration</span><span class="p">(</span>
-                    <span class="n">periodicity</span><span class="o">=</span><span class="n">periodicity</span><span class="p">,</span>
-                    <span class="n">atomset</span><span class="o">=</span><span class="n">starting_configuration</span><span class="o">.</span><span class="n">atomset</span><span class="p">,</span>
-                    <span class="n">bondset</span><span class="o">=</span><span class="n">starting_configuration</span><span class="o">.</span><span class="n">bondset</span><span class="p">,</span>
-                    <span class="n">cell_id</span><span class="o">=</span><span class="n">starting_configuration</span><span class="o">.</span><span class="n">cell_id</span><span class="p">,</span>
-                <span class="p">)</span>
+                <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;bond orders&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;yes, and apply to structure&quot;</span><span class="p">:</span>
+                    <span class="n">configuration</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">create_configuration</span><span class="p">(</span>
+                        <span class="n">periodicity</span><span class="o">=</span><span class="n">periodicity</span><span class="p">,</span>
+                        <span class="n">atomset</span><span class="o">=</span><span class="n">starting_configuration</span><span class="o">.</span><span class="n">atomset</span><span class="p">,</span>
+                        <span class="n">cell_id</span><span class="o">=</span><span class="n">starting_configuration</span><span class="o">.</span><span class="n">cell_id</span><span class="p">,</span>
+                    <span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">configuration</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">create_configuration</span><span class="p">(</span>
+                        <span class="n">periodicity</span><span class="o">=</span><span class="n">periodicity</span><span class="p">,</span>
+                        <span class="n">atomset</span><span class="o">=</span><span class="n">starting_configuration</span><span class="o">.</span><span class="n">atomset</span><span class="p">,</span>
+                        <span class="n">bondset</span><span class="o">=</span><span class="n">starting_configuration</span><span class="o">.</span><span class="n">bondset</span><span class="p">,</span>
+                        <span class="n">cell_id</span><span class="o">=</span><span class="n">starting_configuration</span><span class="o">.</span><span class="n">cell_id</span><span class="p">,</span>
+                    <span class="p">)</span>
                 <span class="n">configuration</span><span class="o">.</span><span class="n">charge</span> <span class="o">=</span> <span class="n">starting_configuration</span><span class="o">.</span><span class="n">charge</span>
                 <span class="n">configuration</span><span class="o">.</span><span class="n">spin_multiplicity</span> <span class="o">=</span> <span class="p">(</span>
                     <span class="n">starting_configuration</span><span class="o">.</span><span class="n">spin_multiplicity</span>

@@ -8,7 +8,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mopac_step.energy &#8212; SEAMM MOPAC Plug-in 2023.7.24 documentation</title>
+    <title>mopac_step.energy &#8212; SEAMM MOPAC Plug-in 2023.7.26 documentation</title>
   
   
   
@@ -619,6 +619,15 @@ document.write(`
                 <span class="s2">&quot;</span><span class="si">{nspa}</span><span class="s2"> grid points per atom, and a cutoff of </span><span class="si">{disex}</span><span class="s2">.&quot;</span>
             <span class="p">)</span>
 
+        <span class="c1"># And bond orders</span>
+        <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;bond orders&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;yes&quot;</span><span class="p">:</span>
+            <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">The bond orders will be calculated.&quot;</span>
+        <span class="k">elif</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;bond orders&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;yes, and apply to structure&quot;</span><span class="p">:</span>
+            <span class="n">text</span> <span class="o">+=</span> <span class="p">(</span>
+                <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">The bond orders will be calculated and used to set the bonding &quot;</span>
+                <span class="s2">&quot;for the structure.&quot;</span>
+            <span class="p">)</span>
+
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">header</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">__</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="o">**</span><span class="n">P</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span> <span class="o">*</span> <span class="s2">&quot; &quot;</span><span class="p">)</span><span class="o">.</span><span class="fm">__str__</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="Energy.get_input"><a class="viewcode-back" href="../../api/mopac_step.html#mopac_step.energy.Energy.get_input">[docs]</a>    <span class="k">def</span> <span class="nf">get_input</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -1131,6 +1140,9 @@ document.write(`
         <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;calculate gradients&quot;</span><span class="p">]:</span>
             <span class="n">keywords</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;GRADIENTS&quot;</span><span class="p">)</span>
 
+        <span class="k">if</span> <span class="s2">&quot;yes&quot;</span> <span class="ow">in</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;bond orders&quot;</span><span class="p">]:</span>
+            <span class="n">keywords</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;BONDS&quot;</span><span class="p">)</span>
+
         <span class="c1"># Add any extra keywords so that they appear at the end</span>
         <span class="n">metadata</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;keywords&quot;</span><span class="p">]</span>
         <span class="k">for</span> <span class="n">keyword</span> <span class="ow">in</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;extra keywords&quot;</span><span class="p">]:</span>
@@ -1443,6 +1455,11 @@ document.write(`
         <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span>
         <span class="n">text</span> <span class="o">+=</span> <span class="n">textwrap</span><span class="o">.</span><span class="n">indent</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">text_lines</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">indent</span> <span class="o">+</span> <span class="mi">7</span> <span class="o">*</span> <span class="s2">&quot; &quot;</span><span class="p">)</span>
 
+        <span class="k">if</span> <span class="s2">&quot;BOND_ORDERS&quot;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+            <span class="n">text</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bond_orders</span><span class="p">(</span>
+                <span class="n">P</span><span class="p">[</span><span class="s2">&quot;bond orders&quot;</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;BOND_ORDERS&quot;</span><span class="p">],</span> <span class="n">starting_configuration</span>
+            <span class="p">)</span>
+
         <span class="n">printer</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">used_mozyme</span> <span class="ow">and</span> <span class="s2">&quot;CPU_TIME&quot;</span> <span class="ow">in</span> <span class="n">data_sections</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
@@ -1465,7 +1482,101 @@ document.write(`
             <span class="n">configuration</span><span class="o">=</span><span class="n">configuration</span><span class="p">,</span>
             <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span>
             <span class="n">create_tables</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;create tables&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(),</span>
-        <span class="p">)</span></div></div>
+        <span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_bond_orders</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">control</span><span class="p">,</span> <span class="n">bond_order_matrix</span><span class="p">,</span> <span class="n">configuration</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Analyze and print the bond orders, and optionally use for the bonding</span>
+<span class="sd">        in the structure.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        control : str</span>
+<span class="sd">            The control option for the bond order analysis</span>
+<span class="sd">        bond_order_matrix : [float]</span>
+<span class="sd">            Lower triangular part of the bond order matrix.</span>
+<span class="sd">        configuration : molsystem.Configuration</span>
+<span class="sd">            The configuration to put the bonds on, if requested.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">n_atoms</span> <span class="o">=</span> <span class="n">configuration</span><span class="o">.</span><span class="n">n_atoms</span>
+        <span class="n">bond_i</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">bond_j</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">bond_order</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">bond_order_str</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">orders</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">ij</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_atoms</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">i</span> <span class="o">!=</span> <span class="n">j</span><span class="p">:</span>
+                    <span class="n">order</span> <span class="o">=</span> <span class="n">bond_order_matrix</span><span class="p">[</span><span class="n">ij</span><span class="p">]</span>
+                    <span class="k">if</span> <span class="n">order</span> <span class="o">&gt;</span> <span class="mf">0.5</span><span class="p">:</span>
+                        <span class="n">bond_i</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+                        <span class="n">bond_j</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">j</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="n">order</span> <span class="o">&gt;</span> <span class="mf">1.3</span> <span class="ow">and</span> <span class="n">order</span> <span class="o">&lt;</span> <span class="mf">1.7</span><span class="p">:</span>
+                            <span class="n">bond_order</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+                            <span class="n">bond_order_str</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;aromatic&quot;</span><span class="p">)</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">bond_order</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">order</span><span class="p">))</span>
+                            <span class="n">bond_order_str</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">order</span><span class="p">)))</span>
+                        <span class="n">orders</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">order</span><span class="p">)</span>
+                <span class="n">ij</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="n">symbols</span> <span class="o">=</span> <span class="n">configuration</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">symbols</span>
+        <span class="n">options</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">options</span>
+        <span class="n">text_lines</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">symbols</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="nb">int</span><span class="p">(</span><span class="n">options</span><span class="p">[</span><span class="s2">&quot;max_atoms_to_print&quot;</span><span class="p">]):</span>
+            <span class="k">if</span> <span class="s2">&quot;name&quot;</span> <span class="ow">in</span> <span class="n">configuration</span><span class="o">.</span><span class="n">atoms</span><span class="p">:</span>
+                <span class="n">name</span> <span class="o">=</span> <span class="n">configuration</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">get_column_data</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">name</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="n">count</span> <span class="o">=</span> <span class="p">{}</span>
+                <span class="k">for</span> <span class="n">symbol</span> <span class="ow">in</span> <span class="n">symbols</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">symbol</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">count</span><span class="p">:</span>
+                        <span class="n">count</span><span class="p">[</span><span class="n">symbol</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">count</span><span class="p">[</span><span class="n">symbol</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+                    <span class="n">name</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">symbol</span><span class="si">}{</span><span class="n">count</span><span class="p">[</span><span class="n">symbol</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">table</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;i&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">name</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">bond_i</span><span class="p">],</span>
+                <span class="s2">&quot;j&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">name</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">bond_j</span><span class="p">],</span>
+                <span class="s2">&quot;bond order&quot;</span><span class="p">:</span> <span class="n">orders</span><span class="p">,</span>
+                <span class="s2">&quot;bond multiplicity&quot;</span><span class="p">:</span> <span class="n">bond_order_str</span><span class="p">,</span>
+            <span class="p">}</span>
+            <span class="n">tmp</span> <span class="o">=</span> <span class="n">tabulate</span><span class="p">(</span>
+                <span class="n">table</span><span class="p">,</span>
+                <span class="n">headers</span><span class="o">=</span><span class="s2">&quot;keys&quot;</span><span class="p">,</span>
+                <span class="n">tablefmt</span><span class="o">=</span><span class="s2">&quot;pretty&quot;</span><span class="p">,</span>
+                <span class="n">disable_numparse</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">colalign</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;center&quot;</span><span class="p">,</span> <span class="s2">&quot;center&quot;</span><span class="p">,</span> <span class="s2">&quot;right&quot;</span><span class="p">,</span> <span class="s2">&quot;center&quot;</span><span class="p">),</span>
+            <span class="p">)</span>
+            <span class="n">length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">tmp</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">text_lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">text_lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;Bond Orders&quot;</span><span class="o">.</span><span class="n">center</span><span class="p">(</span><span class="n">length</span><span class="p">))</span>
+            <span class="n">text_lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="n">tabulate</span><span class="p">(</span>
+                    <span class="n">table</span><span class="p">,</span>
+                    <span class="n">headers</span><span class="o">=</span><span class="s2">&quot;keys&quot;</span><span class="p">,</span>
+                    <span class="n">tablefmt</span><span class="o">=</span><span class="s2">&quot;psql&quot;</span><span class="p">,</span>
+                    <span class="n">colalign</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;center&quot;</span><span class="p">,</span> <span class="s2">&quot;center&quot;</span><span class="p">,</span> <span class="s2">&quot;decimal&quot;</span><span class="p">,</span> <span class="s2">&quot;center&quot;</span><span class="p">),</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+            <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span>
+            <span class="n">text</span> <span class="o">+=</span> <span class="n">textwrap</span><span class="o">.</span><span class="n">indent</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">text_lines</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">indent</span> <span class="o">+</span> <span class="mi">7</span> <span class="o">*</span> <span class="s2">&quot; &quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">control</span> <span class="o">==</span> <span class="s2">&quot;yes, and apply to structure&quot;</span><span class="p">:</span>
+            <span class="n">ids</span> <span class="o">=</span> <span class="n">configuration</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">ids</span>
+            <span class="n">iatoms</span> <span class="o">=</span> <span class="p">[</span><span class="n">ids</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">bond_i</span><span class="p">]</span>
+            <span class="n">jatoms</span> <span class="o">=</span> <span class="p">[</span><span class="n">ids</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">bond_j</span><span class="p">]</span>
+            <span class="n">configuration</span><span class="o">.</span><span class="n">bonds</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
+            <span class="n">configuration</span><span class="o">.</span><span class="n">bonds</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="n">iatoms</span><span class="p">,</span> <span class="n">j</span><span class="o">=</span><span class="n">jatoms</span><span class="p">,</span> <span class="n">bondorder</span><span class="o">=</span><span class="n">bond_order</span><span class="p">)</span>
+            <span class="n">text2</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Replaced the bonds in the configuration with those from the &quot;</span>
+                <span class="s2">&quot;calculated bond orders.</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+
+        <span class="n">text</span> <span class="o">+=</span> <span class="nb">str</span><span class="p">(</span><span class="n">__</span><span class="p">(</span><span class="n">text2</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">indent</span> <span class="o">+</span> <span class="mi">4</span> <span class="o">*</span> <span class="s2">&quot; &quot;</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">text</span></div>
 </pre></div>
 
                 </article>
