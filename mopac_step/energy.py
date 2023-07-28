@@ -1096,6 +1096,6 @@ class Energy(seamm.Node):
                 "calculated bond orders.\n"
             )
 
-        text += str(__(text2, indent=self.indent + 4 * " "))
+            text += str(__(text2, indent=self.indent + 4 * " "))
 
         return text

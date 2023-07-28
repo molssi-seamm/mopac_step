@@ -1,6 +1,9 @@
 =======
 History
 =======
+2023.7.27 -- Bugfix: printing bond order info
+  * If the bond orders were printed but not used on the system, the code crashed.
+    
 2023.7.26 -- Added output of bond orders
   * Also added capability to use the bond orders to put bond multiplicities on the
     structure.
