@@ -1,6 +1,8 @@
 =======
 History
 =======
+2023.8.30 -- Support for spacegroup symmetry
+
 2023.7.27 -- Bugfix: printing bond order info
   * If the bond orders were printed but not used on the system, the code crashed.
     
