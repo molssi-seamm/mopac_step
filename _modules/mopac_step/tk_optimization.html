@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mopac_step.tk_optimization &#8212; SEAMM MOPAC Plug-in 2023.7.27 documentation</title>
+    <title>mopac_step.tk_optimization &#8212; SEAMM MOPAC Plug-in 2023.8.30 documentation</title>
   
   
   
@@ -27,10 +27,10 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css?v=c224919a" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
@@ -44,12 +44,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/sphinx_highlight.js"></script>
-    <script src="../../_static/clipboard.min.js"></script>
-    <script src="../../_static/copybutton.js"></script>
-    <script src="../../_static/design-tabs.js"></script>
+    <script src="../../_static/documentation_options.js?v=e6c77f19"></script>
+    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/design-tabs.js?v=36754332"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/mopac_step/tk_optimization';</script>
 
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -485,7 +485,9 @@ document.write(`
 <span class="kn">import</span> <span class="nn">tkinter.ttk</span> <span class="k">as</span> <span class="nn">ttk</span>
 
 
-<div class="viewcode-block" id="TkOptimization"><a class="viewcode-back" href="../../api/mopac_step.html#mopac_step.tk_optimization.TkOptimization">[docs]</a><span class="k">class</span> <span class="nc">TkOptimization</span><span class="p">(</span><span class="n">mopac_step</span><span class="o">.</span><span class="n">TkEnergy</span><span class="p">):</span>
+<div class="viewcode-block" id="TkOptimization">
+<a class="viewcode-back" href="../../api/mopac_step.html#mopac_step.tk_optimization.TkOptimization">[docs]</a>
+<span class="k">class</span> <span class="nc">TkOptimization</span><span class="p">(</span><span class="n">mopac_step</span><span class="o">.</span><span class="n">TkEnergy</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">tk_flowchart</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">node</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">canvas</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="mi">120</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">w</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">h</span><span class="o">=</span><span class="mi">50</span>
     <span class="p">):</span>
@@ -498,7 +500,9 @@ document.write(`
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">mopac_parameters</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">parameters</span>
 
-<div class="viewcode-block" id="TkOptimization.right_click"><a class="viewcode-back" href="../../api/mopac_step.html#mopac_step.tk_optimization.TkOptimization.right_click">[docs]</a>    <span class="k">def</span> <span class="nf">right_click</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+<div class="viewcode-block" id="TkOptimization.right_click">
+<a class="viewcode-back" href="../../api/mopac_step.html#mopac_step.tk_optimization.TkOptimization.right_click">[docs]</a>
+    <span class="k">def</span> <span class="nf">right_click</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Probably need to add our dialog...&quot;&quot;&quot;</span>
 
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">right_click</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
@@ -506,7 +510,10 @@ document.write(`
 
         <span class="bp">self</span><span class="o">.</span><span class="n">popup_menu</span><span class="o">.</span><span class="n">tk_popup</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">x_root</span><span class="p">,</span> <span class="n">event</span><span class="o">.</span><span class="n">y_root</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="TkOptimization.create_dialog"><a class="viewcode-back" href="../../api/mopac_step.html#mopac_step.tk_optimization.TkOptimization.create_dialog">[docs]</a>    <span class="k">def</span> <span class="nf">create_dialog</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;MOPAC Optimization&quot;</span><span class="p">):</span>
+
+<div class="viewcode-block" id="TkOptimization.create_dialog">
+<a class="viewcode-back" href="../../api/mopac_step.html#mopac_step.tk_optimization.TkOptimization.create_dialog">[docs]</a>
+    <span class="k">def</span> <span class="nf">create_dialog</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;MOPAC Optimization&quot;</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Create the dialog!&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Creating the dialog&quot;</span><span class="p">)</span>
 
@@ -539,7 +546,10 @@ document.write(`
 
         <span class="k">return</span> <span class="n">frame</span></div>
 
-<div class="viewcode-block" id="TkOptimization.reset_dialog"><a class="viewcode-back" href="../../api/mopac_step.html#mopac_step.tk_optimization.TkOptimization.reset_dialog">[docs]</a>    <span class="k">def</span> <span class="nf">reset_dialog</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">widget</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="TkOptimization.reset_dialog">
+<a class="viewcode-back" href="../../api/mopac_step.html#mopac_step.tk_optimization.TkOptimization.reset_dialog">[docs]</a>
+    <span class="k">def</span> <span class="nf">reset_dialog</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">widget</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="n">row</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">reset_dialog</span><span class="p">()</span>
 
         <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;optimization frame&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="n">row</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">sticky</span><span class="o">=</span><span class="n">tk</span><span class="o">.</span><span class="n">EW</span><span class="p">)</span>
@@ -550,7 +560,10 @@ document.write(`
 
         <span class="k">return</span> <span class="n">row</span></div>
 
-<div class="viewcode-block" id="TkOptimization.reset_optimization_frame"><a class="viewcode-back" href="../../api/mopac_step.html#mopac_step.tk_optimization.TkOptimization.reset_optimization_frame">[docs]</a>    <span class="k">def</span> <span class="nf">reset_optimization_frame</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">widget</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="TkOptimization.reset_optimization_frame">
+<a class="viewcode-back" href="../../api/mopac_step.html#mopac_step.tk_optimization.TkOptimization.reset_optimization_frame">[docs]</a>
+    <span class="k">def</span> <span class="nf">reset_optimization_frame</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">widget</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Layout the widgets in the optimization frame</span>
 
 <span class="sd">        We&#39;ll let &#39;TkEnergy&#39; layout the initial set of widgets,</span>
@@ -606,7 +619,9 @@ document.write(`
 
         <span class="n">frame</span><span class="o">.</span><span class="n">columnconfigure</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">minsize</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">row</span></div></div>
+        <span class="k">return</span> <span class="n">row</span></div>
+</div>
+
 </pre></div>
 
                 </article>
