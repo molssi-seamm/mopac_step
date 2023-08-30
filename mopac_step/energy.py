@@ -8,6 +8,7 @@ import logging
 from pathlib import Path
 import textwrap
 
+import numpy as np
 from tabulate import tabulate
 
 import mopac_step
@@ -903,15 +904,26 @@ class Energy(seamm.Node):
         directory.mkdir(parents=True, exist_ok=True)
 
         system, configuration = self.get_system_configuration(None)
-        symbols = configuration.atoms.symbols
+        symbols = configuration.atoms.asymmetric_symbols
         atoms = configuration.atoms
+        symmetry = configuration.symmetry
         if "ATOM_CHARGES" in data:
             # Add to atoms (in coordinate table)
             if "charge" not in atoms:
                 atoms.add_attribute(
                     "charge", coltype="float", configuration_dependent=True
                 )
-            atoms["charge"][0:] = data["ATOM_CHARGES"]
+            if symmetry.n_symops == 1:
+                chgs = data["ATOM_CHARGES"]
+            else:
+                chgs, delta = symmetry.symmetrize_atomic_scalar(data["ATOM_CHARGES"])
+                delta = np.array(delta)
+                max_delta = np.max(abs(delta))
+                text_lines.append(
+                    "The maximum difference of the charges of symmetry related atoms "
+                    f"was {max_delta:.4f}\n"
+                )
+            atoms["charge"][0:] = chgs
 
             # Print the charges and dump to a csv file
             chg_tbl = {
@@ -932,7 +944,17 @@ class Energy(seamm.Node):
                         atoms.add_attribute(
                             "spin", coltype="float", configuration_dependent=True
                         )
-                        atoms["spin"][0:] = spins
+                        if symmetry.n_symops == 1:
+                            atoms["spin"][0:] = spins
+                        else:
+                            spins, delta = symmetry.symmetrize_atomic_scalar(spins)
+                            atoms["spins"][0:] = spins
+                            delta = np.array(delta)
+                            max_delta = np.max(abs(delta))
+                            text_lines.append(
+                                " The maximum difference of the spins of symmetry "
+                                f"related atoms was {max_delta:.4f}.\n"
+                            )
 
                     header = "        Atomic charges and spins"
                     chg_tbl["Spin"] = []
@@ -940,7 +962,7 @@ class Energy(seamm.Node):
                     for atom, symbol, q, s in zip(
                         range(1, len(symbols) + 1),
                         symbols,
-                        data["ATOM_CHARGES"],
+                        chgs,
                         spins,
                     ):
                         q = f"{q:.3f}"
@@ -956,7 +978,7 @@ class Energy(seamm.Node):
                     for atom, symbol, q in zip(
                         range(1, len(symbols) + 1),
                         symbols,
-                        data["ATOM_CHARGES"],
+                        chgs,
                     ):
                         q = f"{q:.2f}"
                         writer.writerow([atom, symbol, q])
@@ -1047,17 +1069,7 @@ class Energy(seamm.Node):
         options = self.parent.options
         text_lines = []
         if len(symbols) <= int(options["max_atoms_to_print"]):
-            if "name" in configuration.atoms:
-                name = configuration.atoms.get_column_data("name")
-            else:
-                name = []
-                count = {}
-                for symbol in symbols:
-                    if symbol not in count:
-                        count[symbol] = 1
-                    else:
-                        count[symbol] += 1
-                    name.append(f"{symbol}{count[symbol]}")
+            name = configuration.atoms.names
             table = {
                 "i": [name[i] for i in bond_i],
                 "j": [name[j] for j in bond_j],

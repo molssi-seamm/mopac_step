@@ -7,6 +7,8 @@ from pathlib import Path
 import textwrap
 import traceback
 
+import numpy as np
+
 import mopac_step
 import seamm
 import seamm_util.printing as printing
@@ -67,14 +69,14 @@ class Optimization(mopac_step.Energy):
             text += " The cell for periodic systems will not be optimized."
 
         if P["gnorm"] == "default":
-            text += " The geometrical convergence is the default of " "1.0 kcal/mol/Å."
+            text += " The geometrical convergence is the default of 1.0 kcal/mol/Å."
         elif P["gnorm"][0] == "$":
             text += (
                 " The geometrical convergence will be determined "
                 "at runtime by '{gnorm}'."
             )
         else:
-            text += " The geometrical convergence is {gnorm} kcal/mol/Å."
+            text += " The geometrical convergence is {gnorm}."
 
         # Put in the description of the energy calculation
         text += "\n\nThe energy and forces will be c" + energy_description[1:]
@@ -399,6 +401,7 @@ class Optimization(mopac_step.Energy):
                         periodicity=periodicity,
                         atomset=starting_configuration.atomset,
                         cell_id=starting_configuration.cell_id,
+                        symmetry=starting_configuration.symmetry_id,
                     )
                 else:
                     configuration = system.create_configuration(
@@ -406,10 +409,15 @@ class Optimization(mopac_step.Energy):
                         atomset=starting_configuration.atomset,
                         bondset=starting_configuration.bondset,
                         cell_id=starting_configuration.cell_id,
+                        symmetry=starting_configuration.symmetry_id,
                     )
                 configuration.charge = starting_configuration.charge
                 configuration.spin_multiplicity = (
                     starting_configuration.spin_multiplicity
+                )
+                # Add initial coordinates so symmetry is handled properly
+                configuration.atoms.set_coordinates(
+                    starting_configuration.atoms.get_coordinates(asymmetric=True)
                 )
             else:
                 configuration = starting_configuration
@@ -442,6 +450,19 @@ class Optimization(mopac_step.Energy):
                 it = iter(data["ATOM_X_UPDATED"][-1])
             for x in it:
                 xyz.append([float(x), float(next(it)), float(next(it))])
+
+            if configuration.symmetry.n_symops > 1:
+                # Convert to coordinates of just the asymmetric atoms.
+                xyz, delta = configuration.symmetry.symmetrize_coordinates(
+                    xyz, fractionals=False
+                )
+                delta = np.array(delta)
+                displacement = np.linalg.norm(delta, axis=1)
+                max_disp = displacement.max()
+                text += (
+                    f"\nThe largest displacement from symmetry was {max_disp:.6f} Å.\n"
+                )
+
             configuration.atoms.set_coordinates(xyz, fractionals=False)
 
             # And the name of the configuration.
