@@ -3,6 +3,7 @@
 """The graphical part of a MOPAC Energy node"""
 
 import mopac_step
+import seamm
 import seamm_widgets as sw
 import tkinter as tk
 import tkinter.ttk as ttk
@@ -45,7 +46,7 @@ class TkOptimization(mopac_step.TkEnergy):
         for key in mopac_step.OptimizationParameters.parameters:
             self[key] = P[key].widget(oframe)
             row += 1
-        for key in mopac_step.structure_handling_parameters:
+        for key in seamm.standard_parameters.structure_handling_parameters:
             self[key] = P[key].widget(oframe)
             row += 1
 
@@ -119,7 +120,7 @@ class TkOptimization(mopac_step.TkEnergy):
             widgets_2.append(self["dmax"])
             row += 1
 
-        for key in ("structure handling", "configuration name"):
+        for key in ("structure handling", "system name", "configuration name"):
             self[key].grid(row=row, column=0, columnspan=2, sticky=tk.EW)
             widgets.append(self[key])
             row += 1

@@ -293,5 +293,10 @@ class EnergyParameters(seamm.Parameters):
         parameters given in the class"""
 
         super().__init__(
-            defaults={**EnergyParameters.parameters, **defaults}, data=data
+            defaults={
+                **EnergyParameters.parameters,
+                **seamm.standard_parameters.structure_handling_parameters,
+                **defaults,
+            },
+            data=data,
         )

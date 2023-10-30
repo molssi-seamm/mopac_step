@@ -446,7 +446,7 @@ class LewisStructure(mopac_step.MOPACBase):
             if same:
                 iatoms = [ids[i] for i in bonds["i"]]
                 jatoms = [ids[j] for j in bonds["j"]]
-                configuration.bonds.delete()
+                configuration.new_bondset()
                 configuration.bonds.append(
                     i=iatoms, j=jatoms, bondorder=bonds["bondorder"]
                 )
@@ -462,7 +462,7 @@ class LewisStructure(mopac_step.MOPACBase):
                             iatoms.append(ids[i])
                             jatoms.append(ids[j])
                             bondorders.append(1)
-                configuration.bonds.delete()
+                configuration.new_bondset()
                 configuration.bonds.append(
                     i=iatoms, j=jatoms, bondorder=bonds["bondorder"]
                 )
@@ -479,4 +479,4 @@ class LewisStructure(mopac_step.MOPACBase):
             t_total = data["CPU_TIME"]
             text += f"\nThe Lewis structure took a total of {t_total:.2f} s.\n"
 
-        printer.normal(textwrap.indent(text, self.indent + 4 * " "))
+        printer.normal(textwrap.indent(text, 4 * " "))

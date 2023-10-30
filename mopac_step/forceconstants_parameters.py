@@ -90,8 +90,16 @@ class ForceconstantsParameters(mopac_step.EnergyParameters):
         super().__init__(
             defaults={
                 **ForceconstantsParameters.parameters,
-                **mopac_step.structure_handling_parameters,
                 **defaults,
             },
             data=data,
         )
+
+        # Do any local editing of defaults
+        tmp = self["system name"]
+        tmp._data["enumeration"] = (*tmp.enumeration, "MOPAC standard orientation")
+        tmp.default = "keep current name"
+
+        tmp = self["configuration name"]
+        tmp._data["enumeration"] = ["MOPAC standard orientation", *tmp.enumeration]
+        tmp.default = "MOPAC standard optimization"

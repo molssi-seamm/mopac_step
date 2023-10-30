@@ -124,7 +124,7 @@ class Forceconstants(mopac_step.Energy):
 
         # Save the description for later printing
         self.description = []
-        self.description.append(__(self.description_text(PP), **PP, indent=self.indent))
+        self.description.append(__(self.description_text(PP), **PP, indent=4 * " "))
 
         _, configuration = self.get_system_configuration(None)
 

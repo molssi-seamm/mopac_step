@@ -34,6 +34,7 @@ class Energy(seamm.Node):
         self._calculation = "energy"
         self._model = None
         self._metadata = mopac_step.metadata
+        self._use_mozyme = None
         self.parameters = mopac_step.EnergyParameters()
         self.description = "A single point energy calculation"
 
@@ -83,13 +84,17 @@ class Energy(seamm.Node):
             )
 
         # MOZYME localized molecular orbitals.
-        if P["MOZYME"] == "always":
+        if ["MOZYME"] == "always" or (
+            self._use_mozyme is not None and self._use_mozyme
+        ):
             text += (
                 "\n\nThe SCF will be solved using localized molecular orbitals "
                 "(MOZYME), which is faster than the traditional method for larger "
                 "systems."
             )
             used_mozyme = True
+        elif self._use_mozyme is not None and not self._use_mozyme:
+            used_mozyme = False
         elif P["MOZYME"] == "for larger systems":
             text += (
                 "\n\nThe SCF will be solved using localized molecular orbitals "
@@ -171,9 +176,19 @@ class Energy(seamm.Node):
             if isinstance(PP[key], units_class):
                 PP[key] = "{:~P}".format(PP[key])
 
+        if P["MOZYME"] == "always":
+            self._use_mozyme = True
+        elif (
+            P["MOZYME"] == "for larger systems"
+            and configuration.n_atoms >= P["nMOZYME"]
+        ):
+            self._use_mozyme = True
+        else:
+            self._use_mozyme = False
+
         # Save the description for later printing
         self.description = []
-        self.description.append(__(self.description_text(PP), **PP, indent=self.indent))
+        self.description.append(__(self.description_text(PP), **PP, indent=4 * " "))
 
         # Start gathering the keywords
         keywords = copy.deepcopy(P["extra keywords"])
@@ -748,16 +763,14 @@ class Energy(seamm.Node):
         else:
             data = data_sections[0]
 
-        if "GRADIENT_NORM" in data:
-            tmp = data["GRADIENT_NORM"]
-            table["Property"].append("Gradient Norm")
-            table["Value"].append(f"{tmp:.2f}")
-            table["Units"].append("kcal/mol/Å")
-
         if "POINT_GROUP" in data and data["POINT_GROUP"] != "":
-            text += "The molecule has {POINT_GROUP} symmetry."
+            table["Property"].append("Symmetry")
+            table["Value"].append(data["POINT_GROUP"])
+            table["Units"].append("")
         else:
-            text += "The symmetry of the molecule was not determined."
+            table["Property"].append("Symmetry")
+            table["Value"].append("?")
+            table["Units"].append("")
 
         if "HEAT_OF_FORMATION" in data:
             tmp = data["HEAT_OF_FORMATION"]
@@ -794,9 +807,15 @@ class Energy(seamm.Node):
                         text += (
                             " You followed up with an exact calculation. A large "
                             "difference in the energy could indicate a problem "
-                            "with the localcized molecular orbitals. Check the MOPAC "
+                            "with the localized molecular orbitals. Check the MOPAC "
                             "output carefully!"
                         )
+
+        if "GRADIENT_NORM" in data:
+            tmp = data["GRADIENT_NORM"]
+            table["Property"].append("Gradient Norm")
+            table["Value"].append(f"{tmp:.2f}")
+            table["Units"].append("kcal/mol/Å")
 
         if "SPIN_COMPONENT" in data:
             tmp = data["SPIN_COMPONENT"]
@@ -995,9 +1014,9 @@ class Energy(seamm.Node):
                     )
                 )
 
-        text = str(__(text, **data, indent=self.indent + 4 * " "))
+        text = str(__(text, **data, indent=8 * " "))
         text += "\n\n"
-        text += textwrap.indent("\n".join(text_lines), self.indent + 7 * " ")
+        text += textwrap.indent("\n".join(text_lines), 12 * " ")
 
         if "BOND_ORDERS" in data:
             text += self._bond_orders(
@@ -1019,7 +1038,7 @@ class Energy(seamm.Node):
         elif "CPU_TIME" in data:
             t0 = data_sections[0]["CPU_TIME"]
             text = f"This calculation took {t0:.2f} s."
-        printer.normal(str(__(text, **data, indent=self.indent + 4 * " ")))
+        printer.normal(str(__(text, **data, indent=4 * " ")))
 
         # Put any requested results into variables or tables
         self.store_results(
@@ -1073,41 +1092,34 @@ class Energy(seamm.Node):
             table = {
                 "i": [name[i] for i in bond_i],
                 "j": [name[j] for j in bond_j],
-                "bond order": orders,
+                "bond order": [f"{o:6.3f}" for o in orders],
                 "bond multiplicity": bond_order_str,
             }
             tmp = tabulate(
                 table,
                 headers="keys",
-                tablefmt="pretty",
+                tablefmt="psql",
                 disable_numparse=True,
-                colalign=("center", "center", "right", "center"),
+                colalign=("center", "center", "center", "center"),
             )
             length = len(tmp.splitlines()[0])
             text_lines.append("\n")
             text_lines.append("Bond Orders".center(length))
-            text_lines.append(
-                tabulate(
-                    table,
-                    headers="keys",
-                    tablefmt="psql",
-                    colalign=("center", "center", "decimal", "center"),
-                )
-            )
+            text_lines.append(tmp)
             text += "\n\n"
-            text += textwrap.indent("\n".join(text_lines), self.indent + 7 * " ")
+            text += textwrap.indent("\n".join(text_lines), 12 * " ")
 
         if control == "yes, and apply to structure":
             ids = configuration.atoms.ids
             iatoms = [ids[i] for i in bond_i]
             jatoms = [ids[j] for j in bond_j]
-            configuration.bonds.delete()
+            configuration.bonds.new_bondset()
             configuration.bonds.append(i=iatoms, j=jatoms, bondorder=bond_order)
             text2 = (
                 "\nReplaced the bonds in the configuration with those from the "
                 "calculated bond orders.\n"
             )
 
-            text += str(__(text2, indent=self.indent + 4 * " "))
+            text += str(__(text2, indent=8 * " "))
 
         return text
