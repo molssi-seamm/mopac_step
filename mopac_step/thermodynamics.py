@@ -117,7 +117,7 @@ class Thermodynamics(mopac_step.Energy):
 
         # Save the description for later printing
         self.description = []
-        self.description.append(__(self.description_text(PP), **PP, indent=self.indent))
+        self.description.append(__(self.description_text(PP), **PP, indent=4 * ""))
 
         # Convert values with units to the right units, and remove
         # the unit string.
@@ -245,7 +245,7 @@ class Thermodynamics(mopac_step.Energy):
             tablefmt="psql",
         )
         text_lines += "\n"
-        text = textwrap.indent(text_lines, self.indent + 7 * " ")
+        text = textwrap.indent(text_lines, 8 * " ")
         printer.normal(text)
 
         with open(directory / "thermodynamics.csv", "w", newline="") as fd:

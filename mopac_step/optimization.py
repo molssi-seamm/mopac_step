@@ -82,22 +82,11 @@ class Optimization(mopac_step.Energy):
         text += "\n\nThe energy and forces will be c" + energy_description[1:]
         text += "\n\n"
 
-        text += "The optimized structures will {structure handling} "
-
-        confname = P["configuration name"]
-        if confname == "use SMILES string":
-            text += "using SMILES as its name."
-        elif confname == "use Canonical SMILES string":
-            text += "using canonical SMILES as its name."
-        elif confname == "keep current name":
-            text += "keeping the current name."
-        elif confname == "optimized with <Hamiltonian>":
-            text += "with 'optimized with {hamiltonian}' as its name."
-        elif confname == "use configuration number":
-            text += "using the index of the configuration (1, 2, ...) as its name."
+        if self.is_expr(P["hamiltonian"]):
+            kwargs = {}
         else:
-            confname = confname.replace("<Hamiltonian>", P["hamiltonian"])
-            text += f"with '{confname}' as its name."
+            kwargs = {"Hamiltonian": P["hamiltonian"]}
+        text += seamm.standard_parameters.structure_handling_description(P, **kwargs)
 
         return self.header + "\n" + __(text, **P, indent=4 * " ").__str__()
 
@@ -257,7 +246,7 @@ class Optimization(mopac_step.Energy):
             context=seamm.flowchart_variables._data
         )
 
-        system, starting_configuration = self.get_system_configuration(None)
+        starting_system, starting_configuration = self.get_system_configuration(None)
 
         # Get the data.
         data = data_sections[0]
@@ -390,38 +379,11 @@ class Optimization(mopac_step.Energy):
             )
 
         # Update the structure
+        periodicity = starting_configuration.periodicity
         if "ATOM_X_OPT" in data or "ATOM_X_UPDATED" in data:
-            periodicity = starting_configuration.periodicity
-            if (
-                "structure handling" in P
-                and P["structure handling"] == "be put in a new configuration"
-            ):
-                if P["bond orders"] == "yes, and apply to structure":
-                    configuration = system.create_configuration(
-                        periodicity=periodicity,
-                        atomset=starting_configuration.atomset,
-                        cell_id=starting_configuration.cell_id,
-                        symmetry=starting_configuration.symmetry_id,
-                    )
-                else:
-                    configuration = system.create_configuration(
-                        periodicity=periodicity,
-                        atomset=starting_configuration.atomset,
-                        bondset=starting_configuration.bondset,
-                        cell_id=starting_configuration.cell_id,
-                        symmetry=starting_configuration.symmetry_id,
-                    )
-                configuration.charge = starting_configuration.charge
-                configuration.spin_multiplicity = (
-                    starting_configuration.spin_multiplicity
-                )
-                # Add initial coordinates so symmetry is handled properly
-                configuration.atoms.set_coordinates(
-                    starting_configuration.atoms.get_coordinates(asymmetric=True)
-                )
-            else:
-                configuration = starting_configuration
-
+            system, configuration = self.get_system_configuration(
+                P, same_as=starting_configuration
+            )
             if periodicity != 0 and P["LatticeOpt"]:
                 if "TRANS_VECTS" in data:
                     vectors = data["TRANS_VECTS"]
@@ -465,42 +427,34 @@ class Optimization(mopac_step.Energy):
 
             configuration.atoms.set_coordinates(xyz, fractionals=False)
 
-            # And the name of the configuration.
-            if "configuration name" in P:
-                if P["configuration name"] == "use SMILES string":
-                    configuration.name = configuration.smiles
-                elif P["configuration name"] == "use Canonical SMILES string":
-                    configuration.name = configuration.canonical_smiles
-                elif P["configuration name"] == "keep current name":
-                    pass
-                elif P["configuration name"] == "optimized with <Hamiltonian>":
-                    configuration.name = f"optimized with {P['hamiltonian']}"
-                else:
-                    confname = P["configuration name"]
-                    confname = confname.replace("<Hamiltonian>", P["hamiltonian"])
-                    configuration.name = confname
+            text += seamm.standard_parameters.set_names(
+                system, configuration, P, _first=True, Hamiltonian=P["hamiltonian"]
+            )
 
         # Write the structure out for viewing.
         directory = Path(self.directory)
         directory.mkdir(parents=True, exist_ok=True)
 
-        #  MMCIF file has bonds
-        try:
-            path = directory / "optimized.mmcif"
-            path.write_text(configuration.to_mmcif_text())
-        except Exception:
-            message = "Error creating the mmcif file\n\n" + traceback.format_exc()
-            logger.warning(message)
-        # CIF file has cell
-        if configuration.periodicity == 3:
+        if periodicity == 0:
+            configuration.to_sdf(directory / "optimized.sdf")
+        else:
+            #  MMCIF file has bonds
             try:
-                path = directory / "optimized.cif"
-                path.write_text(configuration.to_cif_text())
+                path = directory / "optimized.mmcif"
+                path.write_text(configuration.to_mmcif_text())
             except Exception:
-                message = "Error creating the cif file\n\n" + traceback.format_exc()
+                message = "Error creating the mmcif file\n\n" + traceback.format_exc()
                 logger.warning(message)
+            # CIF file has cell
+            if configuration.periodicity == 3:
+                try:
+                    path = directory / "optimized.cif"
+                    path.write_text(configuration.to_cif_text())
+                except Exception:
+                    message = "Error creating the cif file\n\n" + traceback.format_exc()
+                    logger.warning(message)
 
-        printer.normal(__(text, **data, indent=self.indent + 4 * " "))
+        printer.normal(__(text, **data, indent=8 * " "))
 
         super().analyze(
             indent=indent,

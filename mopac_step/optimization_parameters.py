@@ -121,8 +121,19 @@ class OptimizationParameters(mopac_step.EnergyParameters):
         super().__init__(
             defaults={
                 **OptimizationParameters.parameters,
-                **mopac_step.structure_handling_parameters,
                 **defaults,
             },
             data=data,
         )
+
+        # Do any local editing of defaults
+        tmp = self["structure handling"]
+        tmp.description = "Structure handling:"
+
+        tmp = self["system name"]
+        tmp._data["enumeration"] = (*tmp.enumeration, "optimized with {Hamiltonian}")
+        tmp.default = "keep current name"
+
+        tmp = self["configuration name"]
+        tmp._data["enumeration"] = ["optimized with {Hamiltonian}", *tmp.enumeration]
+        tmp.default = "optimized with {Hamiltonian}"

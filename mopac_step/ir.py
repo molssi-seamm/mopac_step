@@ -113,7 +113,7 @@ class IR(mopac_step.Energy):
 
         # Save the description for later printing
         self.description = []
-        self.description.append(__(self.description_text(PP), **PP, indent=self.indent))
+        self.description.append(__(self.description_text(PP), **PP, indent=4 * " "))
 
         # Remove the 1SCF keyword from the energy setup
         inputs = super().get_input()
@@ -221,7 +221,7 @@ class IR(mopac_step.Energy):
             colalign=("center", "decimal", "decimal", "decimal", "left"),
         )
         text_lines += "\n"
-        text = textwrap.indent(text_lines, self.indent + 7 * " ")
+        text = textwrap.indent(text_lines, 8 * " ")
         printer.normal(text)
 
         # And the vibrational modes to a csv file
