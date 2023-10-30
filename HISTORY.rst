@@ -1,6 +1,10 @@
 =======
 History
 =======
+2023.10.30 -- Updated to standard structure handling
+  * Adds IUPAC names, InChI and InChIKey as possible names for configurations
+  * Cleaned up output to be properly indented and laid out.
+    
 2023.8.30 -- Support for spacegroup symmetry
 
 2023.7.27 -- Bugfix: printing bond order info
