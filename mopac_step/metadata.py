@@ -1498,6 +1498,13 @@ metadata["results"] = {
         "type": "float",
         "units": "kcal/mol/Å",
     },
+    "GRADIENT_NORM_UPDATED": {
+        "calculation": ["optimization"],
+        "description": "current norm of the gradient",
+        "dimensionality": "scalar",
+        "type": "float",
+        "units": "kcal/mol/Å",
+    },
     "GRADIENT_UPDATED": {
         "calculation": ["optimization"],
         "description": "forces in trajectory",
