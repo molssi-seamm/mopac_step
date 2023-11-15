@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mopac_step.optimization &#8212; SEAMM MOPAC Plug-in 2023.11.14 documentation</title>
+    <title>mopac_step.optimization &#8212; SEAMM MOPAC Plug-in 2023.11.15 documentation</title>
   
   
   
@@ -45,7 +45,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="../../_static/documentation_options.js?v=8ab9f9ef"></script>
+    <script src="../../_static/documentation_options.js?v=2ec17df6"></script>
     <script src="../../_static/doctools.js?v=888ff710"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -579,7 +579,7 @@ document.write(`
         <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_expr</span><span class="p">(</span><span class="n">P</span><span class="p">[</span><span class="s2">&quot;hamiltonian&quot;</span><span class="p">]):</span>
-            <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Hamiltonian&quot;</span><span class="p">:</span> <span class="s2">&quot;{{&quot;</span> <span class="o">+</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;hamiltonian&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;}}&quot;</span><span class="p">}</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Hamiltonian&quot;</span><span class="p">:</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;hamiltonian&quot;</span><span class="p">]}</span>
         <span class="n">text</span> <span class="o">+=</span> <span class="n">seamm</span><span class="o">.</span><span class="n">standard_parameters</span><span class="o">.</span><span class="n">structure_handling_description</span><span class="p">(</span><span class="n">P</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
