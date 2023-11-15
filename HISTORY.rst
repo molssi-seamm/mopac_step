@@ -1,6 +1,10 @@
 =======
 History
 =======
+2023.11.14 -- Updated for MOPAC v2022.1.0
+  * MOPAC v2022.1.0 added GRADIENT_NORM_UPDATED to the AUX file. This updates adds it to
+    the results recognized by the plug-in
+    
 2023.10.30 -- Updated to standard structure handling
   * Adds IUPAC names, InChI and InChIKey as possible names for configurations
   * Cleaned up output to be properly indented and laid out.
