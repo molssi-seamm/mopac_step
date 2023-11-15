@@ -1,6 +1,10 @@
 =======
 History
 =======
+2023.11.15 -- More updates for v2022.1.0
+  * Added PM6-ORG Hamiltonian to options
+  * Added other new data types for the AUX file.
+    
 2023.11.14 -- Updated for MOPAC v2022.1.0
   * MOPAC v2022.1.0 added GRADIENT_NORM_UPDATED to the AUX file. This updates adds it to
     the results recognized by the plug-in

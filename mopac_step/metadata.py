@@ -38,6 +38,13 @@ metadata["computational models"] = {
                         "optimization": True,
                         "code": "mopac",
                     },
+                    "PM6-ORG": {
+                        "elements": "1-60,62-83",
+                        "periodic": True,
+                        "reactions": True,
+                        "optimization": True,
+                        "code": "mopac",
+                    },
                     "PM6-D3": {
                         "description": (
                             "The PM6 Hamiltonian with Grimme's corrections for "
@@ -1505,12 +1512,24 @@ metadata["results"] = {
         "type": "float",
         "units": "kcal/mol/Å",
     },
-    "GRADIENT_UPDATED": {
+    "GRADIENTS_UPDATED": {
         "calculation": ["optimization"],
         "description": "forces in trajectory",
         "dimensionality": ["nsteps", [3, "n_atoms"]],
         "type": "float",
         "units": "kcal/mol/Å",
+    },
+    "VOIGT_STRESS": {
+        "description": "Voigt stress",
+        "dimensionality": [6],
+        "type": "float",
+        "units": "GPa",
+    },
+    "VOIGT_STRESS_UPDATED": {
+        "description": "Voigt stress in trajectory",
+        "dimensionality": [6],
+        "type": "float",
+        "units": "GPa",
     },
     "HEAT_CAPACITY_TOT": {
         "calculation": ["thermodynamics", "vibrations"],

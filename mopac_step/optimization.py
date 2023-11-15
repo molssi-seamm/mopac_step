@@ -83,7 +83,7 @@ class Optimization(mopac_step.Energy):
         text += "\n\n"
 
         if self.is_expr(P["hamiltonian"]):
-            kwargs = {}
+            kwargs = {"Hamiltonian": "{{" + P["hamiltonian"] + "}}"}
         else:
             kwargs = {"Hamiltonian": P["hamiltonian"]}
         text += seamm.standard_parameters.structure_handling_description(P, **kwargs)
