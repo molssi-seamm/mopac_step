@@ -1,6 +1,9 @@
 =======
 History
 =======
+2023.12.18 -- Added readonly flag
+  * Added a flag to prepare the input but not run the calculation.
+    
 2023.11.15 -- More updates for v2022.1.0
   * Added PM6-ORG Hamiltonian to options
   * Added other new data types for the AUX file.

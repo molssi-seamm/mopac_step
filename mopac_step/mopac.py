@@ -54,10 +54,20 @@ class MOPAC(mopac_step.MOPACBase):
             )
         self._data = {}
         self._lattice_opt = True
+        self._input_only = False
 
         super().__init__(
             flowchart=flowchart, title=title, extension=extension, logger=logger
         )
+
+    @property
+    def input_only(self):
+        """Whether to write the input only, not run MOPAC."""
+        return self._input_only
+
+    @input_only.setter
+    def input_only(self, value):
+        self._input_only = value
 
     def description_text(self, P=None):
         """Return a short description of this step.
@@ -83,6 +93,10 @@ class MOPAC(mopac_step.MOPACBase):
 
     def run(self, printer=printer):
         """Run MOPAC"""
+        # Create the directory
+        directory = Path(self.directory)
+        directory.mkdir(parents=True, exist_ok=True)
+
         system, configuration = self.get_system_configuration(None)
         n_atoms = configuration.n_atoms
         if n_atoms == 0:
@@ -255,35 +269,44 @@ class MOPAC(mopac_step.MOPACBase):
                     text += "\n"
             node = node.next()
 
-        files = {"mopac.dat": text}
-        self.logger.debug("mopac.dat:\n" + files["mopac.dat"])
-        os.makedirs(self.directory, exist_ok=True)
-        for filename in files:
-            with open(os.path.join(self.directory, filename), mode="w") as fd:
-                fd.write(files[filename])
-        local = seamm.ExecLocal()
-        return_files = ["mopac.arc", "mopac.out", "mopac.aux"]
-        result = local.run(
-            cmd=[str(mopac_exe), "mopac.dat"],
-            files=files,
-            return_files=return_files,
-            env=env,
-            in_situ=True,
-            directory=self.directory,
-        )
+        # Check for successful run, don't rerun
+        success = directory / "success.dat"
+        if not success.exists():
+            files = {"mopac.dat": text}
+            self.logger.debug("mopac.dat:\n" + files["mopac.dat"])
+            for filename in files:
+                path = directory / filename
+                path.write_text(files[filename])
 
-        if not result:
-            self.logger.error("There was an error running MOPAC")
-            return None
+            if not self.input_only:
+                local = self.flowchart.executor
+                print(f"{self.flowchart=} --> {local=}")
+                return_files = ["mopac.arc", "mopac.out", "mopac.aux"]
+                result = local.run(
+                    cmd=[str(mopac_exe), "mopac.dat"],
+                    files=files,
+                    return_files=return_files,
+                    env=env,
+                    in_situ=True,
+                    directory=self.directory,
+                )
 
-        self.logger.debug("\n" + pprint.pformat(result))
+                if not result:
+                    self.logger.error("There was an error running MOPAC")
+                    return None
 
-        self.logger.debug(
-            "\n\nOutput from MOPAC\n\n" + result["mopac.out"]["data"] + "\n\n"
-        )
+                self.logger.debug("\n" + pprint.pformat(result))
 
-        # Analyze the results
-        self.analyze(n_calculations=n_calculations)
+                self.logger.debug(
+                    "\n\nOutput from MOPAC\n\n" + result["mopac.out"]["data"] + "\n\n"
+                )
+
+        # Ran successfully, put out the success file
+        success.write_text("success")
+
+        if not self.input_only:
+            # Analyze the results
+            self.analyze(n_calculations=n_calculations)
 
         # Close the reference handler, which should force it to close the
         # connection.
