@@ -12,6 +12,18 @@ class EnergyParameters(seamm.Parameters):
     """The control parameters for creating a structure from SMILES"""
 
     parameters = {
+        "input only": {
+            "default": "no",
+            "kind": "boolean",
+            "default_units": "",
+            "enumeration": (
+                "yes",
+                "no",
+            ),
+            "format_string": "s",
+            "description": "Write the input files and stop:",
+            "help_text": "Don't run MOPAC. Just write the input files.",
+        },
         "structure": {
             "default": "default",
             "kind": "enumeration",
