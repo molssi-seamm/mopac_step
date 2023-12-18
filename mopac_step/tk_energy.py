@@ -55,6 +55,11 @@ class TkEnergy(seamm.TkNode):
         self.logger.debug("Creating the dialog")
         frame = super().create_dialog(title=title, widget="notebook", results_tab=True)
 
+        P = self.node.parameters
+
+        # Just write input
+        self["input only"] = P["input only"].widget(frame)
+
         # Frame to isolate widgets
         e_frame = self["energy frame"] = ttk.LabelFrame(
             frame,
@@ -66,9 +71,8 @@ class TkEnergy(seamm.TkNode):
         )
 
         # Create all the widgets
-        P = self.node.parameters
         for key in mopac_step.EnergyParameters.parameters:
-            if key not in ("results", "extra keywords", "create tables"):
+            if key not in ("results", "extra keywords", "create tables", "input only"):
                 self[key] = P[key].widget(e_frame)
 
         # Set the callbacks for changes
@@ -89,8 +93,12 @@ class TkEnergy(seamm.TkNode):
         for slave in frame.grid_slaves():
             slave.grid_forget()
 
-        # Put in the energy frame
         row = 0
+        # Whether to just write input
+        self["input only"].grid(row=row, column=0, sticky=tk.W)
+        row += 1
+
+        # Put in the energy frame
         self["energy frame"].grid(row=row, column=0, sticky=tk.EW)
         row += 1
 
