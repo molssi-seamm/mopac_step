@@ -713,6 +713,9 @@ class Energy(seamm.Node):
             else:
                 logger.error(f"Don't recognize the MOZYME follow-up: '{follow_up}'")
 
+        # Set the attribute in the main MOPAC step for writing just the input
+        self.parent.input_only = P["input only"]
+
         return result
 
     def analyze(self, indent="", data_sections=[], out_sections=[], table=None):
@@ -1113,7 +1116,7 @@ class Energy(seamm.Node):
             ids = configuration.atoms.ids
             iatoms = [ids[i] for i in bond_i]
             jatoms = [ids[j] for j in bond_j]
-            configuration.bonds.new_bondset()
+            configuration.new_bondset()
             configuration.bonds.append(i=iatoms, j=jatoms, bondorder=bond_order)
             text2 = (
                 "\nReplaced the bonds in the configuration with those from the "
