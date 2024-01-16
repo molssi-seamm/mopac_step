@@ -371,7 +371,7 @@ class Optimization(mopac_step.Energy):
         else:
             data["NUMBER_SCF_CYCLES"] = len(data["HEAT_OF_FORM_UPDATED"])
             data["HEAT_OF_FORMATION"] = data["HEAT_OF_FORM_UPDATED"][-1]
-            data["GRADIENT_NORM"] = data["GRADIENT_UPDATED"][-1]
+            data["GRADIENT_NORM"] = data["GRADIENT_NORM_UPDATED"][-1]
             text = (
                 f"The geometry optimization using {opt_method} -- did not converge in "
                 "{NUMBER_SCF_CYCLES} steps. The following results are for the final "
