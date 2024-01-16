@@ -10,7 +10,6 @@ dependencies:
 
   # SEAMM
   - molsystem
-  - psutil
   - requests
   - seamm
   - tabulate
@@ -28,5 +27,8 @@ dependencies:
 
   # Pip-only installs
   - pip:
+    # SEAMM
+    - seamm-exec
+    
     # Documentation
     - sphinx-copybutton

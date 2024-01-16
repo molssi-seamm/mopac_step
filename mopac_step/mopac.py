@@ -3,6 +3,7 @@
 """Setup and run MOPAC"""
 
 import calendar
+import configparser
 import datetime
 import logging
 import os
@@ -12,11 +13,9 @@ import pkg_resources
 import pprint
 import string
 
-import psutil
-
 import molsystem
 import seamm
-import seamm_util
+import seamm_exec
 import seamm_util.printing as printing
 from seamm_util.printing import FormattedText as __
 import mopac_step
@@ -107,71 +106,10 @@ class MOPAC(mopac_step.MOPACBase):
         printer.normal(self.header)
         printer.normal("")
 
-        # Access the options and find the executable
+        # Access the options
         options = self.options
         seamm_options = self.global_options
 
-        if options["mopac_path"] == "":
-            mopac_exe = seamm_util.check_executable(options["mopac_exe"])
-        else:
-            mopac_exe = (
-                Path(options["mopac_path"]).expanduser().resolve()
-                / options["mopac_exe"]
-            )
-        mopac_path = Path(mopac_exe).parent.expanduser().resolve()
-
-        # How many processors does this node have?
-        n_cores = psutil.cpu_count(logical=False)
-        self.logger.info("The number of cores is {}".format(n_cores))
-
-        if seamm_options["ncores"] != "available":
-            n_cores = min(n_cores, int(seamm_options["ncores"]))
-        # Currently, on the Mac, it is not clear that any parallelism helps
-        # much.
-
-        # if options["ncores"] == "default":
-        #     # Wild guess!
-        #     # mopac_mkl_num_threads = int(pow(n_atoms / 16, 0.3333))
-        #     mkl_num_threads = 1
-        # else:
-        #     if options["mkl_num_threads"] == "default":
-        #         mkl_num_threads = n_cores
-        #     else:
-        #         mkl_num_threads = int(options["mkl_num_threads"])
-        # if mkl_num_threads > n_cores:
-        #     mkl_num_threads = n_cores
-        # elif mkl_num_threads < 1:
-        #     mkl_num_threads = 1
-        # self.logger.info(f"MKL will use {mkl_num_threads} threads.")
-
-        n_hydrogens = configuration.atoms.get_n_atoms("atno", "==", 1)
-        n_basis = (n_atoms - n_hydrogens) * 4 + n_hydrogens
-        if options["ncores"] == "default":
-            # Since it is the matrix diagonalization, work out rough
-            # size of matrix
-
-            # Wild guess!
-            mopac_num_threads = int(pow(n_basis / 1000, 3))
-            if mopac_num_threads > n_cores:
-                mopac_num_threads = n_cores
-        else:
-            mopac_num_threads = int(options["ncores"])
-        if mopac_num_threads > n_cores:
-            mopac_num_threads = n_cores
-        if mopac_num_threads < 1:
-            mopac_num_threads = 1
-        self.logger.info(
-            f"MOPAC will use {mopac_num_threads} threads for about {n_basis} basis "
-            "functions."
-        )
-
-        env = {
-            "LD_LIBRARY_PATH": str(mopac_path),
-            "OMP_NUM_THREADS": str(mopac_num_threads),
-        }
-        # "MKL_NUM_THREADS": str(mkl_num_threads),
-
-        # extra_keywords = ["AUX(MOS=10,XP,XS)", "NOXYZ"]
         extra_keywords = ["AUX(MOS=10,XP,XS,PRECISION=3)"]
 
         # Always add the charge since that will cause MOZYME, if used, to check.
@@ -270,8 +208,10 @@ class MOPAC(mopac_step.MOPACBase):
             node = node.next()
 
         # Check for successful run, don't rerun
+        output = ""  # Text output to print
         success = directory / "success.dat"
         if not success.exists():
+            # Input files
             files = {"mopac.dat": text}
             self.logger.debug("mopac.dat:\n" + files["mopac.dat"])
             for filename in files:
@@ -279,16 +219,77 @@ class MOPAC(mopac_step.MOPACBase):
                 path.write_text(files[filename])
 
             if not self.input_only:
-                local = self.flowchart.executor
-                print(f"{self.flowchart=} --> {local=}")
-                return_files = ["mopac.arc", "mopac.out", "mopac.aux"]
-                result = local.run(
-                    cmd=[str(mopac_exe), "mopac.dat"],
+                # Get the computational environment and set limits
+                ce = seamm_exec.computational_environment()
+
+                n_cores = ce["NTASKS"]
+                if seamm_options["ncores"] != "available":
+                    n_cores = min(n_cores, int(seamm_options["ncores"]))
+                # Currently, on the Mac, it is not clear that any parallelism helps
+                # much.
+
+                n_hydrogens = configuration.atoms.get_n_atoms("atno", "==", 1)
+                n_basis = (n_atoms - n_hydrogens) * 4 + n_hydrogens
+                if options["ncores"] == "default":
+                    # Since it is the matrix diagonalization, work out rough
+                    # size of matrix
+
+                    # Wild guess!
+                    # tmp = max(1, int(pow(n_basis / 1000, 3)))
+                    # if tmp < n_cores:
+                    #     n_cores = tmp
+
+                    # It appears that MOPAC gets little benefit from parallel,
+                    # so run serial
+                    tmp = 1
+                else:
+                    tmp = int(options["ncores"])
+                if tmp < n_cores:
+                    n_cores = tmp
+                if n_cores < 1:
+                    n_cores = 1
+                ce["NTASKS"] = n_cores
+
+                output = (
+                    f"MOPAC will use {n_cores} threads for {n_atoms} atoms with "
+                    f"{n_basis} basis functions."
+                )
+                output = __(output, indent=8 * " ")
+
+                env = {
+                    "OMP_NUM_THREADS": str(n_cores),
+                }
+
+                executor = self.flowchart.executor
+
+                # Read configuration file for MOPAC
+                ini_dir = Path(seamm_options["root"]).expanduser()
+                full_config = configparser.ConfigParser()
+                full_config.read(ini_dir / "mopac.ini")
+                executor_type = executor.name
+                if executor_type not in full_config:
+                    raise RuntimeError(
+                        f"No section for '{executor_type}' in MOPAC ini file "
+                        f"({ini_dir / 'mopac.ini'})"
+                    )
+                config = dict(full_config.items(executor_type))
+
+                return_files = [
+                    "mopac.arc",
+                    "mopac.out",
+                    "mopac.aux",
+                    "stdout.txt",
+                    "stderr.txt",
+                ]
+                result = executor.run(
+                    cmd=["{code}", "mopac.dat", ">", "stdout.txt", "2>", "stderr.txt"],
+                    config=config,
+                    directory=self.directory,
                     files=files,
                     return_files=return_files,
-                    env=env,
                     in_situ=True,
-                    directory=self.directory,
+                    shell=True,
+                    env=env,
                 )
 
                 if not result:
@@ -306,7 +307,7 @@ class MOPAC(mopac_step.MOPACBase):
 
         if not self.input_only:
             # Analyze the results
-            self.analyze(n_calculations=n_calculations)
+            self.analyze(n_calculations=n_calculations, output=output)
 
         # Close the reference handler, which should force it to close the
         # connection.
@@ -321,7 +322,7 @@ class MOPAC(mopac_step.MOPACBase):
 
         return super().set_id(node_id)
 
-    def analyze(self, indent="", lines=[], n_calculations=None):
+    def analyze(self, indent="", lines=[], n_calculations=None, output=""):
         """Read the results from MOPAC calculations and analyze them,
         putting key results into variables for subsequent use by
         other stages
@@ -414,6 +415,10 @@ class MOPAC(mopac_step.MOPACBase):
             # Print the header for the node
             for value in node.description:
                 printer.normal(value)
+                if output != "":
+                    printer.normal(output)
+                    printer.normal("")
+                    output = ""
 
             last = first + n_calculations[n_node]
             if last > len(out):
