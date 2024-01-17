@@ -1999,7 +1999,37 @@ metadata["results"] = {
         "calculation": ["Lewis structure"],
         "description": "net charge",
         "dimensionality": "scalar",
-        "type": "float",
+        "type": "int",
+    },
+    "sum of positive charges": {
+        "calculation": ["Lewis structure"],
+        "description": "sum of positive charges",
+        "dimensionality": "scalar",
+        "type": "int",
+    },
+    "sum of negative charges": {
+        "calculation": ["Lewis structure"],
+        "description": "sum of negative charges",
+        "dimensionality": "scalar",
+        "type": "int",
+    },
+    "n sigma bonds": {
+        "calculation": ["Lewis structure"],
+        "description": "number of sigma bonds",
+        "dimensionality": "scalar",
+        "type": "int",
+    },
+    "n pi bonds": {
+        "calculation": ["Lewis structure"],
+        "description": "number of pi bonds",
+        "dimensionality": "scalar",
+        "type": "int",
+    },
+    "n lone pairs": {
+        "calculation": ["Lewis structure"],
+        "description": "number of lone pairs",
+        "dimensionality": "scalar",
+        "type": "int",
     },
     "neighbors": {
         "calculation": ["Lewis structure"],

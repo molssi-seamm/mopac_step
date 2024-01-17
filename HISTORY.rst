@@ -1,6 +1,17 @@
 =======
 History
 =======
+2024.1.16 -- Added support for containers.
+  * Added access to the new PM6-ORG parameterization and made it the default, though PM7
+    is still preferred for materials simulation. PM6-ORG handle organic and biomolecules
+    well.
+  * Made the Lewis structure analysis more robust and added information to the output.
+  * Provided an option for the Lewis structure calculation to set the charge of the
+    system to that calculaed by the Lewis structure.
+  * Added support for containers
+  * Made default to run serially, since parallel doesn't provide much benefit.
+  * Fixed bug in analysis if optimization doesn't converge.
+
 2023.12.18 -- Added readonly flag
   * Added a flag to prepare the input but not run the calculation.
     
