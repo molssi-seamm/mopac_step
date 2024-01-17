@@ -30,6 +30,15 @@ class LewisStructureParameters(seamm.Parameters):
             "description": "Replace bonds in structure:",
             "help_text": "Replace the bonds on the structure.",
         },
+        "adjust charge": {
+            "default": "no",
+            "kind": "boolean",
+            "default_units": "",
+            "enumeration": ("yes", "no"),
+            "format_string": "s",
+            "description": "Adjust charge on structure:",
+            "help_text": "Adjust the charge on the structure.",
+        },
         "ignore errors": {
             "default": "no",
             "kind": "boolean",

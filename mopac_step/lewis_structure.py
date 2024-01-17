@@ -3,6 +3,7 @@
 """Setup and run MOPAC for the Lewis structure"""
 
 import calendar
+import configparser
 import datetime
 import json  # noqa: F401
 import logging
@@ -16,7 +17,6 @@ from tabulate import tabulate
 
 import mopac_step
 import seamm
-import seamm_util
 import seamm_util.printing as printing
 from seamm_util.printing import FormattedText as __
 
@@ -85,22 +85,8 @@ class LewisStructure(mopac_step.MOPACBase):
         printer.normal(self.header)
         printer.normal("")
 
-        # Access the options and find the executable
-        options = self.options
-
-        if options["mopac_path"] == "":
-            mopac_exe = seamm_util.check_executable(options["mopac_exe"])
-        else:
-            mopac_exe = (
-                Path(options["mopac_path"]).expanduser().resolve()
-                / options["mopac_exe"]
-            )
-        mopac_path = Path(mopac_exe).parent.expanduser().resolve()
-
-        env = {
-            "LD_LIBRARY_PATH": str(mopac_path),
-            "OMP_NUM_THREADS": "1",
-        }
+        # Access the options
+        seamm_options = self.global_options
 
         extra_keywords = ["AUX(MOS=10,XP,XS,PRECISION=3)"]
 
@@ -170,16 +156,30 @@ class LewisStructure(mopac_step.MOPACBase):
         files = {"mopac.dat": text}
         self.logger.debug("mopac.dat:\n" + files["mopac.dat"])
         os.makedirs(self.directory, exist_ok=True)
-        for filename in files:
-            with open(os.path.join(self.directory, filename), mode="w") as fd:
-                fd.write(files[filename])
-        local = seamm.ExecLocal()
+
+        executor = self.flowchart.executor
+
+        # Read configuration file for MOPAC
+        ini_dir = Path(seamm_options["root"]).expanduser()
+        full_config = configparser.ConfigParser()
+        full_config.read(ini_dir / "mopac.ini")
+        executor_type = executor.name
+        if executor_type not in full_config:
+            raise RuntimeError(
+                f"No section for '{executor_type}' in MOPAC ini file "
+                f"({ini_dir / 'mopac.ini'})"
+            )
+        config = dict(full_config.items(executor_type))
+
         return_files = ["mopac.arc", "mopac.out", "mopac.aux"]
-        result = local.run(
-            cmd=[str(mopac_exe), "mopac.dat"],
+        result = executor.run(
+            cmd=["{code}", "mopac.dat", ">", "stdout.txt", "2>", "stderr.txt"],
+            config=config,
+            directory=self.directory,
             files=files,
             return_files=return_files,
-            env=env,
+            in_situ=True,
+            shell=True,
         )
 
         if not result:
@@ -191,13 +191,6 @@ class LewisStructure(mopac_step.MOPACBase):
         self.logger.debug(
             "\n\nOutput from MOPAC\n\n" + result["mopac.out"]["data"] + "\n\n"
         )
-
-        for filename in result["files"]:
-            with open(os.path.join(self.directory, filename), mode="w") as fd:
-                if result[filename]["data"] is not None:
-                    fd.write(result[filename]["data"])
-                else:
-                    fd.write(result[filename]["exception"])
 
         # Analyze the results
         self.analyze()
@@ -270,28 +263,45 @@ class LewisStructure(mopac_step.MOPACBase):
         charge = None
         n_atoms = configuration.n_atoms
         point_group = None
+        n_sigma_bonds = None
+        n_lone_pairs = None
+        n_pi_bonds = None
+        sum_positive_charges = None
+        sum_negative_charges = None
+        ions = {}
         neighbors = data["neighbors"] = [[] for i in range(n_atoms)]
         bonds = data["bonds"] = {"i": [], "j": [], "bondorder": []}
         lone_pairs = data["lone pairs"] = [0] * n_atoms
         have_lewis_structure = False
+        charge_error = False
         for line in lines:
             line = line.strip()
             if "MOLECULAR POINT GROUP" in line:
                 point_group = line.split()[-1]
 
+            if "Ion Atom No.  Type    Charge" in line:
+                for line in lines:
+                    line = line.strip()
+                    if not line:
+                        continue
+                    if "COMPUTED CHARGE ON SYSTEM" in line:
+                        break
+                    ion, atom, type_, charge = line.split()
+                    ions[int(atom) - 1] = {"charge": int(charge), "type": type_}
             if "COMPUTED CHARGE ON SYSTEM" in line:
                 charge = int(line.split()[4].rstrip(","))
                 if "THIS IS THE SAME AS THE CHARGE DEFINED" not in line:
-                    if no_error or fallback:
-                        self.logger.warning(
-                            f"The charge on the system {configuration.charge} is not "
-                            f"the same as Lewis structure indicates: {charge}"
-                        )
-                    else:
-                        raise RuntimeError(
-                            f"The charge on the system {configuration.charge} is not "
-                            f"the same as Lewis structure indicates: {charge}"
-                        )
+                    charge_error = True
+            if "SIGMA BONDS" in line:
+                n_sigma_bonds = int(line.split()[2])
+            if "LONE PAIRS" in line:
+                n_lone_pairs = int(line.split()[2])
+            if "PI BONDS" in line:
+                n_pi_bonds = int(line.split()[2])
+            if "SUM OF POSITIVE CHARGES" in line:
+                sum_positive_charges = int(line.split()[4])
+            if "SUM OF NEGATIVE CHARGES" in line:
+                sum_negative_charges = int(line.split()[4])
             if "TOPOGRAPHY OF SYSTEM" in line:
                 next(lines)
                 next(lines)
@@ -348,6 +358,16 @@ class LewisStructure(mopac_step.MOPACBase):
             data["charge"] = charge
         if point_group is not None:
             data["point group"] = point_group
+        if n_sigma_bonds is not None:
+            data["n sigma bonds"] = n_sigma_bonds
+        if n_lone_pairs is not None:
+            data["n lone pairs"] = n_lone_pairs
+        if n_pi_bonds is not None:
+            data["n pi bonds"] = n_pi_bonds
+        if sum_positive_charges is not None:
+            data["sum positive charges"] = sum_positive_charges
+        if sum_negative_charges is not None:
+            data["sum negative charges"] = sum_negative_charges
 
         self.logger.debug(f"Point group = {point_group}")
         self.logger.debug(f"     Charge = {charge}")
@@ -382,8 +402,31 @@ class LewisStructure(mopac_step.MOPACBase):
         # Generate the printed output if requested
         text = ""
         if P["atom cutoff"] != "no printing":
-            text += f"Point group symmetry: {point_group}\n"
-            text += f"          Net charge: {charge}\n"
+            text += f"   Point group symmetry: {point_group}\n"
+            text += f"             Net charge: {charge}\n"
+            text += f"Sum of positive charges: {sum_positive_charges}\n"
+            text += f"Sum of negative charges: {sum_negative_charges}\n"
+            text += f"  Number of sigma bonds: {n_sigma_bonds}\n"
+            text += f"     Number of pi bonds: {n_pi_bonds}\n"
+            text += f"   Number of lone pairs: {n_lone_pairs}\n"
+            text += "\n"
+        if charge_error:
+            if P["adjust charge"]:
+                configuration.charge = charge
+                text += (
+                    "The total charge on the system has been adjusted to "
+                    f"{configuration.charge}.\n"
+                )
+            elif no_error or fallback:
+                text += (
+                    f"The charge on the system {configuration.charge} is not "
+                    f"the same as Lewis structure indicates: {charge}\n"
+                )
+            else:
+                raise RuntimeError(
+                    f"The charge on the system {configuration.charge} is not "
+                    f"the same as Lewis structure indicates: {charge}"
+                )
 
         if P["atom cutoff"] == "no printing":
             pass
