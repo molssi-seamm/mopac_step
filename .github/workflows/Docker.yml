@@ -7,7 +7,7 @@ name: Docker
 on:
   push:
     branches:
-      - *
+      - main
 env:
   IMAGE_NAME: molssi-seamm/seamm-mopac
 
