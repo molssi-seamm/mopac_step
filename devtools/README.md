@@ -6,15 +6,6 @@ conda installation, and other development tools not directly related to the codi
 
 ## Manifest
 
-### Continuous Integration
-
-You should test your code, but do not feel compelled to use these specific programs. You also may not need Unix and 
-Windows testing if you only plan to deploy on specific platforms. These are just to help you get started
-
-* `travis-ci`: Linux and OSX based testing through [Travis-CI](https://about.travis-ci.com/) 
-  * `before_install.sh`: Pip/Miniconda pre-package installation script for Travis 
-* `appveyor`: Windows based testing through [AppVeyor](https://www.appveyor.com/) (there are no files directly related to this)
-
 ### Conda Environment:
 
 This directory contains the files to setup the Conda environment for testing purposes
@@ -27,6 +18,12 @@ This directory contains the files to setup the Conda environment for testing pur
 This directory contains OS agnostic helper scripts which don't fall in any of the previous categories
 * `scripts`
   * `create_conda_env.py`: Helper program for spinning up new conda environments based on a starter file with Python Version and Env. Name command-line options
+
+### Docker Scripts and Files `docker`:
+
+This directory contains the files to setup the Docker environment for testing purposes
+* `Dockerfile`: Dockerfile for building the Docker image
+* `environment.yml`: Conda environment file for the Docker image
 
 
 ## How to contribute changes
