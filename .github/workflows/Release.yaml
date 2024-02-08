@@ -16,6 +16,7 @@ jobs:
 
   docker:
     name: Docker
+    needs: release
     uses: molssi-seamm/devops/.github/workflows/Docker.yaml@main
     with:
       image : molssi-seamm/mopac_step
