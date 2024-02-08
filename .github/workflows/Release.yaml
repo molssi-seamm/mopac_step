@@ -13,3 +13,10 @@ jobs:
     with:
       src : mopac_step
     secrets: inherit
+
+  docker:
+    name: Docker
+    uses: molssi-seamm/devops/.github/workflows/Docker.yaml@main
+    with:
+      image : molssi-seamm/mopac_step
+    secrets: inherit
