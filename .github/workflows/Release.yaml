@@ -20,4 +20,5 @@ jobs:
     uses: molssi-seamm/devops/.github/workflows/Docker.yaml@main
     with:
       image : molssi-seamm/seamm-mopac
+      description: An openMOPAC executable packaged for use with SEAMM or standalone
     secrets: inherit
