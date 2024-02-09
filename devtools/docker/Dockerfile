@@ -4,6 +4,6 @@ COPY ./environment.yml /root/environment.yml
 
 RUN mamba env update -f /root/environment.yml
 
-WD /home
+WORKDIR /home
 ENTRYPOINT ["mopac"]
 CMD ["mopac.dat"]
