@@ -50,6 +50,24 @@ Features
 
 .. _tables: https://molssi-seamm.github.io/table_step/index.html
 
+seamm-mopac Docker image
+------------------------
+There is a Docker image available for the SEAMM MOPAC plug-in for running mopac. It is
+available at
+
+.. code-block:: bash
+
+    ghcr.io/molssi-seamm/seamm-mopac:latest
+
+It can also be run standalone with the following command:
+
+.. code-block:: bash
+
+    docker run --rm -v $PWD:/home ghcr.io/molssi-seamm/seamm-mopac:latest <input file>
+
+where `<input file>` is the input file for the MOPAC calculation. By default, the input
+file is `mopac.dat`. The output files will be written to the current directory.
+
 Acknowledgements
 ----------------
 
