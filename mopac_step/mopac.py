@@ -290,7 +290,7 @@ class MOPAC(mopac_step.MOPACBase):
                     else:
                         full_config[executor_type] = {
                             "installation": "local",
-                            "code": str(path)
+                            "code": str(path),
                         }
 
                 config = dict(full_config.items(executor_type))
