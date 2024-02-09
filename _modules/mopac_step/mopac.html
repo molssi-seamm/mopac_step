@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mopac_step.mopac &#8212; SEAMM MOPAC Plug-in 2024.2.9.1 documentation</title>
+    <title>mopac_step.mopac &#8212; SEAMM MOPAC Plug-in 2024.2.9.2 documentation</title>
   
   
   
@@ -45,7 +45,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="../../_static/documentation_options.js?v=13faf6a7"></script>
+    <script src="../../_static/documentation_options.js?v=24027ccd"></script>
     <script src="../../_static/doctools.js?v=888ff710"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -496,12 +496,13 @@ document.write(`
 <span class="kn">import</span> <span class="nn">calendar</span>
 <span class="kn">import</span> <span class="nn">configparser</span>
 <span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">import</span> <span class="nn">importlib</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">os.path</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
-<span class="kn">import</span> <span class="nn">pkg_resources</span>
 <span class="kn">import</span> <span class="nn">pprint</span>
+<span class="kn">import</span> <span class="nn">shutil</span>
 <span class="kn">import</span> <span class="nn">string</span>
 
 <span class="kn">import</span> <span class="nn">molsystem</span>
@@ -516,8 +517,8 @@ document.write(`
 <span class="n">printer</span> <span class="o">=</span> <span class="n">printing</span><span class="o">.</span><span class="n">getPrinter</span><span class="p">(</span><span class="s2">&quot;mopac&quot;</span><span class="p">)</span>
 
 <span class="c1"># Add MOPAC&#39;s properties to the standard properties</span>
-<span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">pkg_resources</span><span class="o">.</span><span class="n">resource_filename</span><span class="p">(</span><span class="vm">__name__</span><span class="p">,</span> <span class="s2">&quot;data/&quot;</span><span class="p">))</span>
-<span class="n">csv_file</span> <span class="o">=</span> <span class="n">path</span> <span class="o">/</span> <span class="s2">&quot;properties.csv&quot;</span>
+<span class="n">resources</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">files</span><span class="p">(</span><span class="s2">&quot;mopac_step&quot;</span><span class="p">)</span> <span class="o">/</span> <span class="s2">&quot;data&quot;</span>
+<span class="n">csv_file</span> <span class="o">=</span> <span class="n">resources</span> <span class="o">/</span> <span class="s2">&quot;properties.csv&quot;</span>
 <span class="n">molsystem</span><span class="o">.</span><span class="n">add_properties_from_file</span><span class="p">(</span><span class="n">csv_file</span><span class="p">)</span>
 
 
@@ -760,16 +761,36 @@ document.write(`
 
                 <span class="n">executor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">flowchart</span><span class="o">.</span><span class="n">executor</span>
 
-                <span class="c1"># Read configuration file for MOPAC</span>
-                <span class="n">ini_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">seamm_options</span><span class="p">[</span><span class="s2">&quot;root&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">expanduser</span><span class="p">()</span>
-                <span class="n">full_config</span> <span class="o">=</span> <span class="n">configparser</span><span class="o">.</span><span class="n">ConfigParser</span><span class="p">()</span>
-                <span class="n">full_config</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">ini_dir</span> <span class="o">/</span> <span class="s2">&quot;mopac.ini&quot;</span><span class="p">)</span>
+                <span class="c1"># Read configuration file for MOPAC if it exists</span>
                 <span class="n">executor_type</span> <span class="o">=</span> <span class="n">executor</span><span class="o">.</span><span class="n">name</span>
+                <span class="n">full_config</span> <span class="o">=</span> <span class="n">configparser</span><span class="o">.</span><span class="n">ConfigParser</span><span class="p">()</span>
+                <span class="n">ini_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">seamm_options</span><span class="p">[</span><span class="s2">&quot;root&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">expanduser</span><span class="p">()</span>
+                <span class="n">path</span> <span class="o">=</span> <span class="n">ini_dir</span> <span class="o">/</span> <span class="s2">&quot;mopac.ini&quot;</span>
+
+                <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+                    <span class="n">full_config</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">ini_dir</span> <span class="o">/</span> <span class="s2">&quot;mopac.ini&quot;</span><span class="p">)</span>
+
+                <span class="c1"># If the section we need doesn&#39;t exists, get the default</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span> <span class="ow">or</span> <span class="n">executor_type</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">full_config</span><span class="p">:</span>
+                    <span class="n">resources</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">files</span><span class="p">(</span><span class="s2">&quot;mopac_step&quot;</span><span class="p">)</span> <span class="o">/</span> <span class="s2">&quot;data&quot;</span>
+                    <span class="n">ini_text</span> <span class="o">=</span> <span class="p">(</span><span class="n">resources</span> <span class="o">/</span> <span class="s2">&quot;mopac.ini&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">read_text</span><span class="p">()</span>
+                    <span class="n">full_config</span><span class="o">.</span><span class="n">read_string</span><span class="p">(</span><span class="n">ini_text</span><span class="p">)</span>
+
+                <span class="c1"># Getting desperate! Look for an executable in the path</span>
                 <span class="k">if</span> <span class="n">executor_type</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">full_config</span><span class="p">:</span>
-                    <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
-                        <span class="sa">f</span><span class="s2">&quot;No section for &#39;</span><span class="si">{</span><span class="n">executor_type</span><span class="si">}</span><span class="s2">&#39; in MOPAC ini file &quot;</span>
-                        <span class="sa">f</span><span class="s2">&quot;(</span><span class="si">{</span><span class="n">ini_dir</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="s1">&#39;mopac.ini&#39;</span><span class="si">}</span><span class="s2">)&quot;</span>
-                    <span class="p">)</span>
+                    <span class="n">path</span> <span class="o">=</span> <span class="n">shutil</span><span class="o">.</span><span class="n">which</span><span class="p">(</span><span class="s2">&quot;mopac&quot;</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+                            <span class="sa">f</span><span class="s2">&quot;No section for &#39;</span><span class="si">{</span><span class="n">executor_type</span><span class="si">}</span><span class="s2">&#39; in MOPAC ini file &quot;</span>
+                            <span class="sa">f</span><span class="s2">&quot;(</span><span class="si">{</span><span class="n">ini_dir</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="s1">&#39;mopac.ini&#39;</span><span class="si">}</span><span class="s2">), nor in the defaults, nor &quot;</span>
+                            <span class="s2">&quot;in the path!&quot;</span>
+                        <span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">full_config</span><span class="p">[</span><span class="n">executor_type</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                            <span class="s2">&quot;installation&quot;</span><span class="p">:</span> <span class="s2">&quot;local&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;code&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">path</span><span class="p">),</span>
+                        <span class="p">}</span>
+
                 <span class="n">config</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">full_config</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="n">executor_type</span><span class="p">))</span>
 
                 <span class="n">return_files</span> <span class="o">=</span> <span class="p">[</span>
