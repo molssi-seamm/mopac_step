@@ -53,20 +53,26 @@ Features
 seamm-mopac Docker image
 ------------------------
 There is a Docker image available for the SEAMM MOPAC plug-in for running mopac. It is
-available at
+available at the Github Container Registry (ghcr.io) as
 
 .. code-block:: bash
 
-    ghcr.io/molssi-seamm/seamm-mopac:latest
+    ghcr.io/molssi-seamm/seamm-mopac:<version>
 
-It can also be run standalone with the following command:
+Where <version> is the explicit version tag for the desired image. The tag `latest` is
+quite confusing, and does not mean the latest version of the image, so we recomend using
+explcit versions rather than `latest`.
+
+The container can also be run standalone with the following command:
 
 .. code-block:: bash
 
-    docker run --rm -v $PWD:/home ghcr.io/molssi-seamm/seamm-mopac:latest <input file>
+    docker run --rm -v $PWD:/home ghcr.io/molssi-seamm/seamm-mopac:<version> ?mopac <input file>?
 
-where `<input file>` is the input file for the MOPAC calculation. By default, the input
-file is `mopac.dat`. The output files will be written to the current directory.
+where `<input file>` is the input file for the MOPAC calculation. By default, mopac is
+run using the input file `mopac.dat`. The output files will be written to the current
+directory. The `--rm` option removes the container after it exits, and the `-v` option
+mounts the current directory to the `/home` directory in the container.
 
 Acknowledgements
 ----------------
@@ -78,7 +84,7 @@ This package was created with Cookiecutter_ and the `molssi-seamm/cookiecutter-s
 
 Developed by the Molecular Sciences Software Institute (MolSSI_),
 which receives funding from the `National Science Foundation`_ under
-award ACI-1547580
+awards OAC-1547580 and CHE-2136142.
 
 .. _MolSSI: https://www.molssi.org
 .. _`National Science Foundation`: https://www.nsf.gov
