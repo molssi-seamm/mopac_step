@@ -294,6 +294,8 @@ class MOPAC(mopac_step.MOPACBase):
                         }
 
                 config = dict(full_config.items(executor_type))
+                # Use the matching version of the seamm-mopac image by default.
+                config["version"] = self.version
 
                 return_files = [
                     "mopac.arc",
