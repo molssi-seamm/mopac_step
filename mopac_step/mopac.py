@@ -293,6 +293,13 @@ class MOPAC(mopac_step.MOPACBase):
                             "code": str(path),
                         }
 
+                # If the ini file does not exist, write it out!
+                if not path.exists():
+                    with path.open("w") as fd:
+                        full_config.write(fd)
+                    printer.normal(f"Wrote the MOPAC configuration file to {path}")
+                    printer.normal("")
+
                 config = dict(full_config.items(executor_type))
                 # Use the matching version of the seamm-mopac image by default.
                 config["version"] = self.version
