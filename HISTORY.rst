@@ -1,6 +1,10 @@
 =======
 History
 =======
+2024.3.17 -- Updated installation
+  * Updated the installation to reflect the new way to install SEAMM plug-ins to support
+    both Conda and Docker
+    
 2024.1.16 -- Added support for containers.
   * Added access to the new PM6-ORG parameterization and made it the default, though PM7
     is still preferred for materials simulation. PM6-ORG handle organic and biomolecules
