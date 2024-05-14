@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mopac_step.energy &#8212; SEAMM MOPAC Plug-in 2024.3.17 documentation</title>
+    <title>mopac_step.energy &#8212; SEAMM MOPAC Plug-in 2024.5.14 documentation</title>
   
   
   
@@ -45,8 +45,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="../../_static/documentation_options.js?v=f2da1504"></script>
-    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/documentation_options.js?v=abb61732"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../_static/copybutton.js?v=f281be69"></script>
@@ -1545,6 +1545,11 @@ document.write(`
         <span class="n">printer</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">__</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="o">**</span><span class="n">data</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span> <span class="o">*</span> <span class="s2">&quot; &quot;</span><span class="p">)))</span>
 
         <span class="c1"># Put any requested results into variables or tables</span>
+        <span class="k">if</span> <span class="s2">&quot;HEAT_OF_FORMATION&quot;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+            <span class="n">data</span><span class="p">[</span><span class="s2">&quot;energy&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;HEAT_OF_FORMATION&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="s2">&quot;GRADIENTS&quot;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+            <span class="n">tmp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;GRADIENTS&quot;</span><span class="p">])</span>
+            <span class="n">data</span><span class="p">[</span><span class="s2">&quot;gradients&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tmp</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">store_results</span><span class="p">(</span>
             <span class="n">configuration</span><span class="o">=</span><span class="n">configuration</span><span class="p">,</span>
             <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span>
