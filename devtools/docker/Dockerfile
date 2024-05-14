@@ -1,6 +1,6 @@
 FROM molssi/mamba141
 
-COPY ./mopac_step/data/seamm_mopac.yml /root/environment.yml
+COPY ./mopac_step/data/seamm-mopac.yml /root/environment.yml
 
 RUN mamba env update -f /root/environment.yml
 
