@@ -1,6 +1,9 @@
 =======
 History
 =======
+2024.5.14 -- Added output of energy & gradients to JSON
+   * To support the Energy Scan step.
+     
 2024.3.17 -- Updated installation
   * Updated the installation to reflect the new way to install SEAMM plug-ins to support
     both Conda and Docker
