@@ -1245,6 +1245,20 @@ units : str
     An optional unit string for the value as returned by the code.
 """
 metadata["results"] = {
+    "energy": {
+        "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
+        "description": "enthalpy of formation",
+        "dimensionality": "scalar",
+        "type": "float",
+        "units": "kcal/mol",
+    },
+    "gradients": {
+        "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
+        "description": "gradients on the atoms",
+        "dimensionality": [3, "n_atoms"],
+        "type": "float",
+        "units": "kcal/mol/Å",
+    },
     "ERROR_MESSAGE": {
         "description": "An error message",
         "dimensionality": "scalar",

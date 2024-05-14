@@ -1044,6 +1044,11 @@ class Energy(seamm.Node):
         printer.normal(str(__(text, **data, indent=4 * " ")))
 
         # Put any requested results into variables or tables
+        if "HEAT_OF_FORMATION" in data:
+            data["energy"] = data["HEAT_OF_FORMATION"]
+        if "GRADIENTS" in data:
+            tmp = np.array(data["GRADIENTS"])
+            data["gradients"] = tmp.reshape(-1, 3).tolist()
         self.store_results(
             configuration=configuration,
             data=data,
