@@ -1070,6 +1070,10 @@ class Energy(seamm.Node):
         """
         text = ""
         n_atoms = configuration.n_atoms
+
+        if n_atoms == 1:
+            return "\n\n        No bonds, since there is only one atom.\n"
+
         bond_i = []
         bond_j = []
         bond_order = []
