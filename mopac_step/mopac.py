@@ -17,6 +17,7 @@ import string
 import molsystem
 import seamm
 import seamm_exec
+from seamm_util import Configuration
 import seamm_util.printing as printing
 from seamm_util.printing import FormattedText as __
 import mopac_step
@@ -268,15 +269,19 @@ class MOPAC(mopac_step.MOPACBase):
                 full_config = configparser.ConfigParser()
                 ini_dir = Path(seamm_options["root"]).expanduser()
                 path = ini_dir / "mopac.ini"
-
-                if path.exists():
-                    full_config.read(ini_dir / "mopac.ini")
-
-                # If the section we need doesn't exists, get the default
-                if not path.exists() or executor_type not in full_config:
+                # If the config file doesn't exists, get the default
+                if not path.exists():
                     resources = importlib.resources.files("mopac_step") / "data"
                     ini_text = (resources / "mopac.ini").read_text()
-                    full_config.read_string(ini_text)
+                    txt_config = Configuration(path)
+                    txt_config.from_string(ini_text)
+
+                    # Work out the conda info needed
+                    txt_config.set_value("local", "conda", os.environ["CONDA_EXE"])
+                    txt_config.set_value("local", "conda-environment", "seamm-mopac")
+                    txt_config.save()
+
+                full_config.read(ini_dir / "mopac.ini")
 
                 # Getting desperate! Look for an executable in the path
                 if executor_type not in full_config:
@@ -288,19 +293,15 @@ class MOPAC(mopac_step.MOPACBase):
                             "in the path!"
                         )
                     else:
-                        full_config[executor_type] = {
-                            "installation": "local",
-                            "code": str(path),
-                        }
-
-                # If the ini file does not exist, write it out!
-                if not path.exists():
-                    with path.open("w") as fd:
-                        full_config.write(fd)
-                    printer.normal(f"Wrote the MOPAC configuration file to {path}")
-                    printer.normal("")
+                        txt_config = Configuration(path)
+                        txt_config.add_section(executor_type)
+                        txt_config.set_value(executor_type, "installation", "local")
+                        txt_config.set_value(executor_type, "code", str(path))
+                        txt_config.save()
+                        full_config.read(ini_dir / "mopac.ini")
 
                 config = dict(full_config.items(executor_type))
+
                 # Use the matching version of the seamm-mopac image by default.
                 config["version"] = self.version
 

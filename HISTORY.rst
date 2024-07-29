@@ -1,6 +1,12 @@
 =======
 History
 =======
+2024.7.29 -- Bugfix in bond analysis for atoms and mopac.ini
+  * Fixed a bug in the bond analysis that caused the code to crash for calculations on
+    atoms. 
+  * Fixed a bug in the mopac.ini file created if it did not exists that caused the code
+    to crash when the calculation was run.
+
 2024.5.14 -- Added output of energy & gradients to JSON
    * To support the Energy Scan step.
      
