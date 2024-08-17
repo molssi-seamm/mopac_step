@@ -1,7 +1,7 @@
 =======
 History
 =======
-2024.8.17 --
+2024.8.17 -- Added CI calculations and better handling of transition states
   * Added ability to do the various types of CI calculations that MOPAC supports.
   * Improved the handling of TS calculations and added NLLSQ and SIGMA methods in
     the optimization step.
