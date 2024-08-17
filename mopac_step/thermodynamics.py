@@ -75,12 +75,23 @@ class Thermodynamics(mopac_step.Energy):
             "\nThe thermodynamics functions will be calculated from "
             "{Tmin} to {Tmax} in steps of {Tstep}. {trans} lowest "
             "modes will be ignored to approximately account for {trans} "
-            "internal rotations.\n\n"
+            "internal rotations."
         )
+        ts = P["transition state"]
+        if isinstance(ts, bool) and ts:
+            text += (
+                " Since the structure is a transition state, the lowest mode -- "
+                "the imaginary frequency -- will be ignored."
+            )
+        if isinstance(ts, str) and ts == "yes":
+            text += (
+                " Since the structure is a transition state, the lowest mode -- "
+                "the imaginary frequency -- will be ignored."
+            )
+        text += "\n\n"
 
         # Put in the description of the energy calculation
-        text += "\n\nThe energy and forces will be c" + energy_description[1:]
-        text += "\n\n"
+        text += energy_description + "\n\n"
 
         # Structure handling
         text += "The structure in the standard orientation will {structure handling} "
@@ -130,7 +141,11 @@ class Thermodynamics(mopac_step.Energy):
         if "1SCF" in keywords:
             keywords.remove("1SCF")
         keywords.append("THERMO=({Tmin},{Tmax},{Tstep})".format(**P))
-        keywords.append("TRANS={trans}".format(**P))
+        trans = P["trans"]
+        if P["transition state"]:
+            trans += 1
+        if trans > 0:
+            keywords.append(f"TRANS={trans}")
 
         return inputs
 
@@ -211,6 +226,69 @@ class Thermodynamics(mopac_step.Energy):
                 message = "Error creating the cif file\n\n" + traceback.format_exc()
                 logger.warning(message)
 
+        # First, how many rotations are there?
+        n_rot = sum([0 if PMI < 0.001 else 1 for PMI in data["PRI_MOM_OF_I"]])
+        n_vib = len(data["VIB._FREQ"]) - 3 - n_rot
+
+        # Check for imaginary frequencies
+        imaginary = []
+        low = []
+        for frequency in data["VIB._FREQ"][0:n_vib]:
+            if frequency < 0:
+                imaginary.append(frequency)
+            elif frequency < 100:
+                low.append(frequency)
+
+        n_trans = P["trans"]
+
+        text_lines = ""
+
+        if len(imaginary) > 0:
+            tmp = [f"{-f:.1f}i" for f in imaginary]
+            tmp = ", ".join(tmp)
+            if len(imaginary) == 1:
+                text_lines += (
+                    textwrap.fill(
+                        "The structure is a transition state with one-mode with an "
+                        f"imaginary frequency of {tmp} cm^-1."
+                    )
+                    + "\n\n"
+                )
+            else:
+                text_lines += (
+                    textwrap.fill(
+                        "The structure is a more general saddle point with "
+                        f"{len(imaginary)} modes with imaginary frequencies: "
+                        f"{tmp} cm^-1."
+                    )
+                    + "\n\n"
+                )
+
+        if n_trans > 0:
+            tmp = [f"{-f:.1f}" for f in low[0:n_trans]]
+            tmp = ", ".join(tmp)
+            text_lines += (
+                textwrap.fill(
+                    f"You asked that {n_trans} low-lying modes be ignored: {tmp} cm^-1."
+                    " These should correspond to (almost) free rotors."
+                )
+                + "\n\n"
+            )
+            low = low[n_trans:]
+
+        if len(low) > 0:
+            tmp = [f"{f:.1f}" for f in low]
+            tmp = ", ".join(tmp)
+            text_lines += (
+                textwrap.fill(
+                    f"The structure has {len(low)} low-frequency modes: {tmp} cm^-1. "
+                    "You may wish to exclude these from the thermodynamics if they are "
+                    "(almost) free rotors that should not be handled within the "
+                    "harmonic approximation."
+                )
+                + "\n\n"
+            )
+
         # Print the moments of inertia
         p1, p2, p3 = data["PRI_MOM_OF_I"]
         r1, r2, r3 = data["ROTAT_CONSTS"]
@@ -221,7 +299,7 @@ class Thermodynamics(mopac_step.Energy):
             "3": (p3, r3),
             "Units": ("1.0E-40 g.cm^2", "1/cm"),
         }
-        text_lines = "                  Rotational Constants\n"
+        text_lines += "                  Rotational Constants\n"
         text_lines += tabulate(
             tbl,
             headers="keys",
@@ -261,9 +339,6 @@ class Thermodynamics(mopac_step.Energy):
                 writer.writerow(row)
 
         # And the vibrational modes to a csv file
-        # First, how many rotations are there?
-        n_rot = sum([0 if PMI < 0.001 else 1 for PMI in data["PRI_MOM_OF_I"]])
-        n_vib = len(data["VIB._FREQ"]) - 3 - n_rot
         with open(directory / "vibrations.csv", "w", newline="") as fd:
             writer = csv.writer(fd)
             writer.writerow(
