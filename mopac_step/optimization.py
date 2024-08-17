@@ -54,6 +54,12 @@ class Optimization(mopac_step.Energy):
             text += "BFGS method."
         elif P["method"][0:5] == "L-BFGS":
             text += "L-BFGS small memory version of the BFGS method."
+        elif P["method"].startswith("TS"):
+            text += "EF method for a transition state."
+        elif P["method"].startswith("SIGMA"):
+            text += "McIver-Komornicki method for transition states."
+        elif P["method"].startswith("NLLSQ"):
+            text += "Bartel's method of nonlinear least squares of the gradient."
         else:
             text += "optimization method determined at runtime by '{method}'."
 
@@ -79,7 +85,7 @@ class Optimization(mopac_step.Energy):
             text += " The geometrical convergence is {gnorm}."
 
         # Put in the description of the energy calculation
-        text += "\n\nThe energy and forces will be c" + energy_description[1:]
+        text += "\n\n" + energy_description
         text += "\n\n"
 
         if self.is_expr(P["hamiltonian"]):

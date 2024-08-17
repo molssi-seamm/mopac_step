@@ -112,7 +112,7 @@ class TkOptimization(mopac_step.TkEnergy):
             self["gnorm"].grid(row=row, column=1, sticky=tk.EW)
             widgets_2.append(self["gnorm"])
             row += 1
-        if method[0:2] == "EF" or method[0] == "$":
+        if method.startswith("EF") or method.startswith("TS") or self.is_expr(method):
             self["recalc"].grid(row=row, column=1, sticky=tk.EW)
             widgets_2.append(self["recalc"])
             row += 1
