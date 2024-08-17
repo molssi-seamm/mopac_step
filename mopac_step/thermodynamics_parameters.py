@@ -58,6 +58,15 @@ class ThermodynamicsParameters(mopac_step.EnergyParameters):
                 "will be ignored, which is a first approximation."
             ),
         },
+        "transition state": {
+            "default": "no",
+            "kind": "boolean",
+            "default_units": "",
+            "enumeration": ("yes", "no"),
+            "format_string": "",
+            "description": "Transition state?:",
+            "help_text": "Whether this is a transition state.",
+        },
     }
 
     def __init__(self, defaults={}, data=None):

@@ -76,7 +76,7 @@ class TkEnergy(seamm.TkNode):
                 self[key] = P[key].widget(e_frame)
 
         # Set the callbacks for changes
-        for widget in ("convergence", "MOZYME", "COSMO"):
+        for widget in ("calculation", "convergence", "MOZYME", "COSMO"):
             w = self[widget]
             w.combobox.bind("<<ComboboxSelected>>", self.reset_energy_frame)
             w.combobox.bind("<Return>", self.reset_energy_frame)
@@ -112,13 +112,25 @@ class TkEnergy(seamm.TkNode):
         for slave in frame.grid_slaves():
             slave.grid_forget()
 
+        calculation = self["calculation"].get()
         convergence = self["convergence"].get()
         cosmo = self["COSMO"].get()
         mozyme = self["MOZYME"].get()
 
         widgets = []
         row = 0
-        for key in ("hamiltonian", "uhf", "convergence"):
+        for key in ("hamiltonian", "calculation"):
+            self[key].grid(row=row, column=0, columnspan=2, sticky=tk.EW)
+            widgets.append(self[key])
+            row += 1
+
+        if "hf" in calculation.lower():
+            for key in ("uhf",):
+                self[key].grid(row=row, column=0, columnspan=2, sticky=tk.EW)
+                widgets.append(self[key])
+                row += 1
+
+        for key in ("convergence",):
             self[key].grid(row=row, column=0, columnspan=2, sticky=tk.EW)
             widgets.append(self[key])
             row += 1
@@ -137,19 +149,31 @@ class TkEnergy(seamm.TkNode):
             row += 1
             sw.align_labels((self["relative"], self["absolute"]), sticky=tk.E)
 
-        self["MOZYME"].grid(row=row, column=0, columnspan=2, sticky=tk.EW)
-        widgets.append(self["MOZYME"])
-        row += 1
-        subwidgets = []
-        if mozyme != "always" and mozyme != "never":
-            self["nMOZYME"].grid(row=row, column=1, sticky=tk.W)
-            subwidgets.append(self["nMOZYME"])
+        if "hf" in calculation.lower():
+            self["MOZYME"].grid(row=row, column=0, columnspan=2, sticky=tk.EW)
+            widgets.append(self["MOZYME"])
             row += 1
-        if mozyme != "never":
-            self["MOZYME follow-up"].grid(row=row, column=1, sticky=tk.W)
-            subwidgets.append(self["MOZYME"])
-            row += 1
-        sw.align_labels(subwidgets, sticky=tk.E)
+            subwidgets = []
+            if mozyme != "always" and mozyme != "never":
+                self["nMOZYME"].grid(row=row, column=1, sticky=tk.W)
+                subwidgets.append(self["nMOZYME"])
+                row += 1
+            if mozyme != "never":
+                self["MOZYME follow-up"].grid(row=row, column=1, sticky=tk.W)
+                subwidgets.append(self["MOZYME"])
+                row += 1
+            sw.align_labels(subwidgets, sticky=tk.E)
+
+        if "ci" in calculation.lower():
+            for key in (
+                "number ci orbitals",
+                "number doubly occupied ci orbitals",
+                "ci root",
+                "print ci details",
+            ):
+                self[key].grid(row=row, column=0, columnspan=2, sticky=tk.EW)
+                widgets.append(self[key])
+                row += 1
 
         self["COSMO"].grid(row=row, column=0, columnspan=2, sticky=tk.EW)
         widgets.append(self["COSMO"])

@@ -1,6 +1,13 @@
 =======
 History
 =======
+2024.8.17 --
+  * Added ability to do the various types of CI calculations that MOPAC supports.
+  * Improved the handling of TS calculations and added NLLSQ and SIGMA methods in
+    the optimization step.
+  * Added option to correctly handle transition states in the thermodynamics step and
+    improved the output to include the imaginary and low-lying frequencies.
+    
 2024.7.29 -- Bugfix in bond analysis for atoms and mopac.ini
   * Fixed a bug in the bond analysis that caused the code to crash for calculations on
     atoms. 
