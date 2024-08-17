@@ -6,6 +6,7 @@ import copy
 import csv
 import logging
 from pathlib import Path
+import pprint  # noqa: F401
 import textwrap
 
 import numpy as np
@@ -59,7 +60,36 @@ class Energy(seamm.Node):
         if not P:
             P = self.parameters.values_to_dict()
 
-        text = "Calculated with {hamiltonian}, converged to "
+        calculation = P["calculation"].lower()
+        if self.is_expr(calculation):
+            text = "The type of calculation will be determined by {calculation}, which "
+        elif "hf" in calculation:
+            text = "The Hartree-Fock calculation "
+        elif "ci" in calculation:
+            if "cisdt" in calculation:
+                text = "This will be a CI calculation with single, double, and triple "
+                text += "excitations"
+            elif "cisd" in calculation:
+                text = "This will be a CI calculation with single and double "
+                text += "excitations"
+            elif "cis" in calculation:
+                text = "This will be a CI calculation with single excitations"
+            elif "casci" in calculation:
+                text = "This will be a complete active space (CAS) CI "
+            n_docc = P["number doubly occupied ci orbitals"]
+            if n_docc == "default":
+                text += " using {number ci orbitals} orbitals centered on the highest "
+                text += "doubly occupied orbital."
+            else:
+                text += " using {number ci orbitals} with "
+                text += "{number doubly occupied ci orbitals} doubly occupied "
+                text += "orbitals."
+            text += " If there are an odd number of electrons, the singly occupied "
+            text += "orbital will be in the calculation, so there will be one less "
+            text += "virtual orbital than in the closed-shell case."
+            text += " The CI calculations will use orbitals from a Hartree-Fock "
+            text += "calculation that "
+        text += "will use the Hamiltonian {hamiltonian}, converged to "
         # Convergence
         if P["convergence"] == "normal":
             text += "the 'normal' level of 1.0e-04 kcal/mol."
@@ -70,78 +100,82 @@ class Energy(seamm.Node):
         elif P["convergence"] == "absolute":
             text += "converged to {absolute}."
 
-        if self.parameters["uhf"].is_expr:
-            text += (
-                " Whether to use spin-unrestricted SCF (UHF) for closed-shell molecules"
-                "will be determined by '{uhf}'."
-            )
-        elif self.parameters["uhf"].get():
-            text += " The SCF will be spin-unrestricted (UHF) for all molecules."
-        else:
-            text += (
-                " The SCF will be restricted for closed-shell molecules (RHF) and "
-                "spin-unrestricted (UHF) for all others."
-            )
-
-        # MOZYME localized molecular orbitals.
-        if ["MOZYME"] == "always" or (
-            self._use_mozyme is not None and self._use_mozyme
-        ):
-            text += (
-                "\n\nThe SCF will be solved using localized molecular orbitals "
-                "(MOZYME), which is faster than the traditional method for larger "
-                "systems."
-            )
-            used_mozyme = True
-        elif self._use_mozyme is not None and not self._use_mozyme:
-            used_mozyme = False
-        elif P["MOZYME"] == "for larger systems":
-            text += (
-                "\n\nThe SCF will be solved using localized molecular orbitals "
-                "(MOZYME) for systems with {nMOZYME} atoms or more. This method is "
-                "faster than the traditional method for larger systems."
-            )
-            used_mozyme = True
-        else:
-            used_mozyme = False
-
-        if used_mozyme:
-            follow_up = P["MOZYME follow-up"]
-            if "exact" in follow_up:
+        if "hf" in calculation:
+            if self.parameters["uhf"].is_expr:
                 text += (
-                    " The energy given by MOZYME slowly accumulates error due to the "
-                    "increasing non-orthogonality of the localized orbitals after "
-                    "many iterations. A single point energy using the traditional "
-                    "method will be run to get the correct energy."
+                    " Whether to use spin-unrestricted SCF (UHF) for closed-shell "
+                    "molecules will be determined by '{uhf}'."
                 )
-            elif "new" in follow_up:
-                text += (
-                    " The energy given by MOZYME slowly accumulates error due to the "
-                    "increasing non-orthogonality of the localized orbitals after "
-                    "many iterations. A single point energy using fresh localized "
-                    "orbitals will be run to get the correct energy."
-                )
-            elif follow_up == "none":
-                text += (
-                    " The energy given by MOZYME slowly accumulates error due to the "
-                    "increasing non-orthogonality of the localized orbitals after "
-                    "many iterations. No follow-up calculation will be done, so be "
-                    "careful with the final energies produced."
-                )
-                used_mozyme = False
+            elif self.parameters["uhf"].get():
+                text += " The SCF will be spin-unrestricted (UHF) for all molecules."
             else:
-                logger.error(f"Don't recognize the MOZYME follow-up: '{follow_up}'")
+                text += (
+                    " The SCF will be restricted for closed-shell molecules (RHF) and "
+                    "spin-unrestricted (UHF) for all others."
+                )
+
+            # MOZYME localized molecular orbitals.
+            if ["MOZYME"] == "always" or (
+                self._use_mozyme is not None and self._use_mozyme
+            ):
+                text += (
+                    "\n\nThe SCF will be solved using localized molecular orbitals "
+                    "(MOZYME), which is faster than the traditional method for larger "
+                    "systems."
+                )
+                used_mozyme = True
+            elif self._use_mozyme is not None and not self._use_mozyme:
+                used_mozyme = False
+            elif P["MOZYME"] == "for larger systems":
+                text += (
+                    "\n\nThe SCF will be solved using localized molecular orbitals "
+                    "(MOZYME) for systems with {nMOZYME} atoms or more. This method is "
+                    "faster than the traditional method for larger systems."
+                )
+                used_mozyme = True
+            else:
+                used_mozyme = False
+
+            if used_mozyme:
+                follow_up = P["MOZYME follow-up"]
+                if "exact" in follow_up:
+                    text += (
+                        " The energy given by MOZYME slowly accumulates error due to "
+                        "th increasing non-orthogonality of the localized orbitals "
+                        "after many iterations. A single point energy using the "
+                        "traditional method will be run to get the correct energy."
+                    )
+                elif "new" in follow_up:
+                    text += (
+                        " The energy given by MOZYME slowly accumulates error due to "
+                        "the increasing non-orthogonality of the localized orbitals "
+                        "after many iterations. A single point energy using fresh "
+                        "localized orbitals will be run to get the correct energy."
+                    )
+                elif follow_up == "none":
+                    text += (
+                        " The energy given by MOZYME slowly accumulates error due to "
+                        "the increasing non-orthogonality of the localized orbitals "
+                        "after many iterations. No follow-up calculation will be done, "
+                        "so be careful with the final energies produced."
+                    )
+                    used_mozyme = False
+                else:
+                    logger.error(f"Don't recognize the MOZYME follow-up: '{follow_up}'")
 
         # Handle COSMO
-        if self.parameters["COSMO"].is_expr:
+        cosmo = P["COSMO"]
+        if isinstance(cosmo, bool):
+            cosmo = "yes" if cosmo else "no"
+        if self.is_expr(cosmo):
             text += (
                 "\n\n'{COSMO}' will determine whether to use the COSMO solvation "
                 "model. If it is used the parameters will be "
             )
-        elif self.parameters["COSMO"].get():
+        elif cosmo.lower() == "yes":
             text += "\n\nThe COSMO solvation model will be used with "
 
-        if self.parameters["COSMO"].is_expr or self.parameters["COSMO"].get():
+        if self.is_expr(cosmo) or cosmo.lower() == "yes":
             text += (
                 "dielectric constant = {eps}, solvent radius = {rsolve}, "
                 "{nspa} grid points per atom, and a cutoff of {disex}."
@@ -657,16 +691,47 @@ class Energy(seamm.Node):
                 "Don't recognize convergence '{}'".format(P["convergence"])
             )
 
-        if P["uhf"]:
-            keywords.append("UHF")
+        # The type of calculation
+        calculation = P["calculation"].lower()
+        if "hf" in calculation:
+            if P["uhf"]:
+                keywords.append("UHF")
 
-        if P["MOZYME"] == "always":
-            keywords.append("MOZYME")
-        elif (
-            P["MOZYME"] == "for larger systems"
-            and configuration.n_atoms >= P["nMOZYME"]
-        ):
-            keywords.append("MOZYME")
+            if P["MOZYME"] == "always":
+                keywords.append("MOZYME")
+            elif (
+                P["MOZYME"] == "for larger systems"
+                and configuration.n_atoms >= P["nMOZYME"]
+            ):
+                keywords.append("MOZYME")
+        elif "ci" in calculation:
+            # Make sure no UHF specified
+            while "UHF" in keywords:
+                keywords.remove("UHF")
+
+            # Number of orbitals
+            n_orbitals = P["number ci orbitals"]
+            n_docc = P["number doubly occupied ci orbitals"]
+            if n_docc == "default":
+                keywords.append(f"C.I.={n_orbitals}")
+            else:
+                keywords.append(f"C.I.=({n_orbitals},{n_docc})")
+
+            # Limited CI?
+            if "cisdt" in calculation:
+                keywords.append("CISDT")
+            elif "cisd" in calculation:
+                keywords.append("CISD")
+            elif "cis" in calculation:
+                keywords.append("CIS")
+            elif "casci" in calculation:
+                pass
+            else:
+                raise RuntimeError(f"Don't recognize type of CI: '{calculation}'")
+            if P["print ci details"]:
+                keywords.append("MECI")
+        else:
+            raise RuntimeError(f"Don't recognize calculation '{calculation}'")
 
         if P["COSMO"]:
             keywords.append(f"EPS={P['eps']}")
@@ -685,7 +750,10 @@ class Energy(seamm.Node):
         metadata = self.metadata["keywords"]
         for keyword in P["extra keywords"]:
             if "=" in keyword:
+                # Delete the copy already in the list
+                keywords.remove(keyword)
                 keyword, value = keyword.split("=")
+                value = self.parent.get_value(value)
                 if keyword not in metadata or "format" not in metadata[keyword]:
                     keywords.append(keyword + "=" + value)
                 else:
@@ -883,10 +951,11 @@ class Energy(seamm.Node):
                             Elumo = E
                         break
 
-            data["HOMO Energy"] = Ehomo
-            table["Property"].append("HOMO Energy")
-            table["Value"].append(f"{Ehomo:.2f}")
-            table["Units"].append("eV")
+            if Ehomo is not None:
+                data["HOMO Energy"] = Ehomo
+                table["Property"].append("HOMO Energy")
+                table["Value"].append(f"{Ehomo:.2f}")
+                table["Units"].append("eV")
             if Elumo is not None:
                 data["LUMO Energy"] = Elumo
                 table["Property"].append("LUMO Energy")
@@ -1047,8 +1116,32 @@ class Energy(seamm.Node):
         if "HEAT_OF_FORMATION" in data:
             data["energy"] = data["HEAT_OF_FORMATION"]
         if "GRADIENTS" in data:
-            tmp = np.array(data["GRADIENTS"])
-            data["gradients"] = tmp.reshape(-1, 3).tolist()
+            tmp = np.array(data["GRADIENTS"]).reshape(-1, 3)
+            # Remove any translation
+            delta = np.average(tmp, axis=0)
+            tmp -= delta
+            data["gradients"] = tmp.tolist()
+        elif "GRADIENT_NORM" in data:
+            # MOPAC does not currently write gradients to the AUX file if they are small
+            # They are, however, written to the output file.
+            lines = iter(out_sections[0])
+            for line in lines:
+                if "FINAL  POINT  AND  DERIVATIVES" in line:
+                    for line in lines:
+                        if "GRADIENT" in line:
+                            break
+                    tmp = []
+                    for line in lines:
+                        if "KCAL/ANGSTROM" not in line:
+                            break
+                        tmp.append(float(line.split()[5]))
+                    if len(tmp) == 3 * configuration.n_atoms:
+                        tmp = np.array(tmp).reshape(-1, 3)
+                        # Remove any translation
+                        delta = np.average(tmp, axis=0)
+                        tmp -= delta
+                        data["gradients"] = tmp.tolist()
+
         self.store_results(
             configuration=configuration,
             data=data,
@@ -1096,42 +1189,43 @@ class Energy(seamm.Node):
                         orders.append(order)
                 ij += 1
 
-        symbols = configuration.atoms.symbols
-        options = self.parent.options
-        text_lines = []
-        if len(symbols) <= int(options["max_atoms_to_print"]):
-            name = configuration.atoms.names
-            table = {
-                "i": [name[i] for i in bond_i],
-                "j": [name[j] for j in bond_j],
-                "bond order": [f"{o:6.3f}" for o in orders],
-                "bond multiplicity": bond_order_str,
-            }
-            tmp = tabulate(
-                table,
-                headers="keys",
-                tablefmt="psql",
-                disable_numparse=True,
-                colalign=("center", "center", "center", "center"),
-            )
-            length = len(tmp.splitlines()[0])
-            text_lines.append("\n")
-            text_lines.append("Bond Orders".center(length))
-            text_lines.append(tmp)
-            text += "\n\n"
-            text += textwrap.indent("\n".join(text_lines), 12 * " ")
+        if len(bond_order) > 0:
+            symbols = configuration.atoms.symbols
+            options = self.parent.options
+            text_lines = []
+            if len(symbols) <= int(options["max_atoms_to_print"]):
+                name = configuration.atoms.names
+                table = {
+                    "i": [name[i] for i in bond_i],
+                    "j": [name[j] for j in bond_j],
+                    "bond order": [f"{o:6.3f}" for o in orders],
+                    "bond multiplicity": bond_order_str,
+                }
+                tmp = tabulate(
+                    table,
+                    headers="keys",
+                    tablefmt="psql",
+                    disable_numparse=True,
+                    colalign=("center", "center", "center", "center"),
+                )
+                length = len(tmp.splitlines()[0])
+                text_lines.append("\n")
+                text_lines.append("Bond Orders".center(length))
+                text_lines.append(tmp)
+                text += "\n\n"
+                text += textwrap.indent("\n".join(text_lines), 12 * " ")
 
-        if control == "yes, and apply to structure":
-            ids = configuration.atoms.ids
-            iatoms = [ids[i] for i in bond_i]
-            jatoms = [ids[j] for j in bond_j]
-            configuration.new_bondset()
-            configuration.bonds.append(i=iatoms, j=jatoms, bondorder=bond_order)
-            text2 = (
-                "\nReplaced the bonds in the configuration with those from the "
-                "calculated bond orders.\n"
-            )
+            if control == "yes, and apply to structure":
+                ids = configuration.atoms.ids
+                iatoms = [ids[i] for i in bond_i]
+                jatoms = [ids[j] for j in bond_j]
+                configuration.new_bondset()
+                configuration.bonds.append(i=iatoms, j=jatoms, bondorder=bond_order)
+                text2 = (
+                    "\nReplaced the bonds in the configuration with those from the "
+                    "calculated bond orders.\n"
+                )
 
-            text += str(__(text2, indent=8 * " "))
+                text += str(__(text2, indent=8 * " "))
 
         return text
