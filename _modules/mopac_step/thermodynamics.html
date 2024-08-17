@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mopac_step.thermodynamics &#8212; SEAMM MOPAC Plug-in 2024.7.29 documentation</title>
+    <title>mopac_step.thermodynamics &#8212; SEAMM MOPAC Plug-in 2024.8.17 documentation</title>
   
   
   
@@ -29,7 +29,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=87e54e7c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css?v=c224919a" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
@@ -45,7 +45,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="../../_static/documentation_options.js?v=58f0b27b"></script>
+    <script src="../../_static/documentation_options.js?v=53a1b1fa"></script>
     <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -568,12 +568,23 @@ document.write(`
             <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">The thermodynamics functions will be calculated from &quot;</span>
             <span class="s2">&quot;</span><span class="si">{Tmin}</span><span class="s2"> to </span><span class="si">{Tmax}</span><span class="s2"> in steps of </span><span class="si">{Tstep}</span><span class="s2">. </span><span class="si">{trans}</span><span class="s2"> lowest &quot;</span>
             <span class="s2">&quot;modes will be ignored to approximately account for </span><span class="si">{trans}</span><span class="s2"> &quot;</span>
-            <span class="s2">&quot;internal rotations.</span><span class="se">\n\n</span><span class="s2">&quot;</span>
+            <span class="s2">&quot;internal rotations.&quot;</span>
         <span class="p">)</span>
+        <span class="n">ts</span> <span class="o">=</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;transition state&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ts</span><span class="p">,</span> <span class="nb">bool</span><span class="p">)</span> <span class="ow">and</span> <span class="n">ts</span><span class="p">:</span>
+            <span class="n">text</span> <span class="o">+=</span> <span class="p">(</span>
+                <span class="s2">&quot; Since the structure is a transition state, the lowest mode -- &quot;</span>
+                <span class="s2">&quot;the imaginary frequency -- will be ignored.&quot;</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ts</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="n">ts</span> <span class="o">==</span> <span class="s2">&quot;yes&quot;</span><span class="p">:</span>
+            <span class="n">text</span> <span class="o">+=</span> <span class="p">(</span>
+                <span class="s2">&quot; Since the structure is a transition state, the lowest mode -- &quot;</span>
+                <span class="s2">&quot;the imaginary frequency -- will be ignored.&quot;</span>
+            <span class="p">)</span>
+        <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span>
 
         <span class="c1"># Put in the description of the energy calculation</span>
-        <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">The energy and forces will be c&quot;</span> <span class="o">+</span> <span class="n">energy_description</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
-        <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span>
+        <span class="n">text</span> <span class="o">+=</span> <span class="n">energy_description</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span>
 
         <span class="c1"># Structure handling</span>
         <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot;The structure in the standard orientation will {structure handling} &quot;</span>
@@ -626,7 +637,11 @@ document.write(`
         <span class="k">if</span> <span class="s2">&quot;1SCF&quot;</span> <span class="ow">in</span> <span class="n">keywords</span><span class="p">:</span>
             <span class="n">keywords</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s2">&quot;1SCF&quot;</span><span class="p">)</span>
         <span class="n">keywords</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;THERMO=(</span><span class="si">{Tmin}</span><span class="s2">,</span><span class="si">{Tmax}</span><span class="s2">,</span><span class="si">{Tstep}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="n">P</span><span class="p">))</span>
-        <span class="n">keywords</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;TRANS=</span><span class="si">{trans}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="n">P</span><span class="p">))</span>
+        <span class="n">trans</span> <span class="o">=</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;trans&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;transition state&quot;</span><span class="p">]:</span>
+            <span class="n">trans</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="n">trans</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">keywords</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;TRANS=</span><span class="si">{</span><span class="n">trans</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">inputs</span></div>
 
@@ -710,6 +725,69 @@ document.write(`
                 <span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;Error creating the cif file</span><span class="se">\n\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">traceback</span><span class="o">.</span><span class="n">format_exc</span><span class="p">()</span>
                 <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
 
+        <span class="c1"># First, how many rotations are there?</span>
+        <span class="n">n_rot</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">([</span><span class="mi">0</span> <span class="k">if</span> <span class="n">PMI</span> <span class="o">&lt;</span> <span class="mf">0.001</span> <span class="k">else</span> <span class="mi">1</span> <span class="k">for</span> <span class="n">PMI</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;PRI_MOM_OF_I&quot;</span><span class="p">]])</span>
+        <span class="n">n_vib</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;VIB._FREQ&quot;</span><span class="p">])</span> <span class="o">-</span> <span class="mi">3</span> <span class="o">-</span> <span class="n">n_rot</span>
+
+        <span class="c1"># Check for imaginary frequencies</span>
+        <span class="n">imaginary</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">low</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">frequency</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;VIB._FREQ&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">:</span><span class="n">n_vib</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">frequency</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">imaginary</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">frequency</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">frequency</span> <span class="o">&lt;</span> <span class="mi">100</span><span class="p">:</span>
+                <span class="n">low</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">frequency</span><span class="p">)</span>
+
+        <span class="n">n_trans</span> <span class="o">=</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;trans&quot;</span><span class="p">]</span>
+
+        <span class="n">text_lines</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">imaginary</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">tmp</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="o">-</span><span class="n">f</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">i&quot;</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">imaginary</span><span class="p">]</span>
+            <span class="n">tmp</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">imaginary</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">text_lines</span> <span class="o">+=</span> <span class="p">(</span>
+                    <span class="n">textwrap</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span>
+                        <span class="s2">&quot;The structure is a transition state with one-mode with an &quot;</span>
+                        <span class="sa">f</span><span class="s2">&quot;imaginary frequency of </span><span class="si">{</span><span class="n">tmp</span><span class="si">}</span><span class="s2"> cm^-1.&quot;</span>
+                    <span class="p">)</span>
+                    <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">text_lines</span> <span class="o">+=</span> <span class="p">(</span>
+                    <span class="n">textwrap</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span>
+                        <span class="s2">&quot;The structure is a more general saddle point with &quot;</span>
+                        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">imaginary</span><span class="p">)</span><span class="si">}</span><span class="s2"> modes with imaginary frequencies: &quot;</span>
+                        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">tmp</span><span class="si">}</span><span class="s2"> cm^-1.&quot;</span>
+                    <span class="p">)</span>
+                    <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span>
+                <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">n_trans</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">tmp</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="o">-</span><span class="n">f</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">low</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">n_trans</span><span class="p">]]</span>
+            <span class="n">tmp</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span>
+            <span class="n">text_lines</span> <span class="o">+=</span> <span class="p">(</span>
+                <span class="n">textwrap</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;You asked that </span><span class="si">{</span><span class="n">n_trans</span><span class="si">}</span><span class="s2"> low-lying modes be ignored: </span><span class="si">{</span><span class="n">tmp</span><span class="si">}</span><span class="s2"> cm^-1.&quot;</span>
+                    <span class="s2">&quot; These should correspond to (almost) free rotors.&quot;</span>
+                <span class="p">)</span>
+                <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+            <span class="n">low</span> <span class="o">=</span> <span class="n">low</span><span class="p">[</span><span class="n">n_trans</span><span class="p">:]</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">low</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">tmp</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">f</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">low</span><span class="p">]</span>
+            <span class="n">tmp</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span>
+            <span class="n">text_lines</span> <span class="o">+=</span> <span class="p">(</span>
+                <span class="n">textwrap</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;The structure has </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">low</span><span class="p">)</span><span class="si">}</span><span class="s2"> low-frequency modes: </span><span class="si">{</span><span class="n">tmp</span><span class="si">}</span><span class="s2"> cm^-1. &quot;</span>
+                    <span class="s2">&quot;You may wish to exclude these from the thermodynamics if they are &quot;</span>
+                    <span class="s2">&quot;(almost) free rotors that should not be handled within the &quot;</span>
+                    <span class="s2">&quot;harmonic approximation.&quot;</span>
+                <span class="p">)</span>
+                <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+
         <span class="c1"># Print the moments of inertia</span>
         <span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span> <span class="n">p3</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;PRI_MOM_OF_I&quot;</span><span class="p">]</span>
         <span class="n">r1</span><span class="p">,</span> <span class="n">r2</span><span class="p">,</span> <span class="n">r3</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;ROTAT_CONSTS&quot;</span><span class="p">]</span>
@@ -720,7 +798,7 @@ document.write(`
             <span class="s2">&quot;3&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">p3</span><span class="p">,</span> <span class="n">r3</span><span class="p">),</span>
             <span class="s2">&quot;Units&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;1.0E-40 g.cm^2&quot;</span><span class="p">,</span> <span class="s2">&quot;1/cm&quot;</span><span class="p">),</span>
         <span class="p">}</span>
-        <span class="n">text_lines</span> <span class="o">=</span> <span class="s2">&quot;                  Rotational Constants</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="n">text_lines</span> <span class="o">+=</span> <span class="s2">&quot;                  Rotational Constants</span><span class="se">\n</span><span class="s2">&quot;</span>
         <span class="n">text_lines</span> <span class="o">+=</span> <span class="n">tabulate</span><span class="p">(</span>
             <span class="n">tbl</span><span class="p">,</span>
             <span class="n">headers</span><span class="o">=</span><span class="s2">&quot;keys&quot;</span><span class="p">,</span>
@@ -760,9 +838,6 @@ document.write(`
                 <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">(</span><span class="n">row</span><span class="p">)</span>
 
         <span class="c1"># And the vibrational modes to a csv file</span>
-        <span class="c1"># First, how many rotations are there?</span>
-        <span class="n">n_rot</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">([</span><span class="mi">0</span> <span class="k">if</span> <span class="n">PMI</span> <span class="o">&lt;</span> <span class="mf">0.001</span> <span class="k">else</span> <span class="mi">1</span> <span class="k">for</span> <span class="n">PMI</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;PRI_MOM_OF_I&quot;</span><span class="p">]])</span>
-        <span class="n">n_vib</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;VIB._FREQ&quot;</span><span class="p">])</span> <span class="o">-</span> <span class="mi">3</span> <span class="o">-</span> <span class="n">n_rot</span>
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">directory</span> <span class="o">/</span> <span class="s2">&quot;vibrations.csv&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fd</span><span class="p">:</span>
             <span class="n">writer</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">writer</span><span class="p">(</span><span class="n">fd</span><span class="p">)</span>
             <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">(</span>

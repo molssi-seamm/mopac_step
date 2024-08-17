@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mopac_step.energy &#8212; SEAMM MOPAC Plug-in 2024.7.29 documentation</title>
+    <title>mopac_step.energy &#8212; SEAMM MOPAC Plug-in 2024.8.17 documentation</title>
   
   
   
@@ -29,7 +29,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=87e54e7c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css?v=c224919a" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
@@ -45,7 +45,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="../../_static/documentation_options.js?v=58f0b27b"></script>
+    <script src="../../_static/documentation_options.js?v=53a1b1fa"></script>
     <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -495,6 +495,7 @@ document.write(`
 <span class="kn">import</span> <span class="nn">csv</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">import</span> <span class="nn">pprint</span>  <span class="c1"># noqa: F401</span>
 <span class="kn">import</span> <span class="nn">textwrap</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -552,7 +553,36 @@ document.write(`
         <span class="k">if</span> <span class="ow">not</span> <span class="n">P</span><span class="p">:</span>
             <span class="n">P</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">values_to_dict</span><span class="p">()</span>
 
-        <span class="n">text</span> <span class="o">=</span> <span class="s2">&quot;Calculated with </span><span class="si">{hamiltonian}</span><span class="s2">, converged to &quot;</span>
+        <span class="n">calculation</span> <span class="o">=</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;calculation&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_expr</span><span class="p">(</span><span class="n">calculation</span><span class="p">):</span>
+            <span class="n">text</span> <span class="o">=</span> <span class="s2">&quot;The type of calculation will be determined by </span><span class="si">{calculation}</span><span class="s2">, which &quot;</span>
+        <span class="k">elif</span> <span class="s2">&quot;hf&quot;</span> <span class="ow">in</span> <span class="n">calculation</span><span class="p">:</span>
+            <span class="n">text</span> <span class="o">=</span> <span class="s2">&quot;The Hartree-Fock calculation &quot;</span>
+        <span class="k">elif</span> <span class="s2">&quot;ci&quot;</span> <span class="ow">in</span> <span class="n">calculation</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s2">&quot;cisdt&quot;</span> <span class="ow">in</span> <span class="n">calculation</span><span class="p">:</span>
+                <span class="n">text</span> <span class="o">=</span> <span class="s2">&quot;This will be a CI calculation with single, double, and triple &quot;</span>
+                <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot;excitations&quot;</span>
+            <span class="k">elif</span> <span class="s2">&quot;cisd&quot;</span> <span class="ow">in</span> <span class="n">calculation</span><span class="p">:</span>
+                <span class="n">text</span> <span class="o">=</span> <span class="s2">&quot;This will be a CI calculation with single and double &quot;</span>
+                <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot;excitations&quot;</span>
+            <span class="k">elif</span> <span class="s2">&quot;cis&quot;</span> <span class="ow">in</span> <span class="n">calculation</span><span class="p">:</span>
+                <span class="n">text</span> <span class="o">=</span> <span class="s2">&quot;This will be a CI calculation with single excitations&quot;</span>
+            <span class="k">elif</span> <span class="s2">&quot;casci&quot;</span> <span class="ow">in</span> <span class="n">calculation</span><span class="p">:</span>
+                <span class="n">text</span> <span class="o">=</span> <span class="s2">&quot;This will be a complete active space (CAS) CI &quot;</span>
+            <span class="n">n_docc</span> <span class="o">=</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;number doubly occupied ci orbitals&quot;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">n_docc</span> <span class="o">==</span> <span class="s2">&quot;default&quot;</span><span class="p">:</span>
+                <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot; using {number ci orbitals} orbitals centered on the highest &quot;</span>
+                <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot;doubly occupied orbital.&quot;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot; using {number ci orbitals} with &quot;</span>
+                <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot;{number doubly occupied ci orbitals} doubly occupied &quot;</span>
+                <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot;orbitals.&quot;</span>
+            <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot; If there are an odd number of electrons, the singly occupied &quot;</span>
+            <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot;orbital will be in the calculation, so there will be one less &quot;</span>
+            <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot;virtual orbital than in the closed-shell case.&quot;</span>
+            <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot; The CI calculations will use orbitals from a Hartree-Fock &quot;</span>
+            <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot;calculation that &quot;</span>
+        <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot;will use the Hamiltonian </span><span class="si">{hamiltonian}</span><span class="s2">, converged to &quot;</span>
         <span class="c1"># Convergence</span>
         <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;convergence&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;normal&quot;</span><span class="p">:</span>
             <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot;the &#39;normal&#39; level of 1.0e-04 kcal/mol.&quot;</span>
@@ -563,78 +593,82 @@ document.write(`
         <span class="k">elif</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;convergence&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;absolute&quot;</span><span class="p">:</span>
             <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot;converged to </span><span class="si">{absolute}</span><span class="s2">.&quot;</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;uhf&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">is_expr</span><span class="p">:</span>
-            <span class="n">text</span> <span class="o">+=</span> <span class="p">(</span>
-                <span class="s2">&quot; Whether to use spin-unrestricted SCF (UHF) for closed-shell molecules&quot;</span>
-                <span class="s2">&quot;will be determined by &#39;</span><span class="si">{uhf}</span><span class="s2">&#39;.&quot;</span>
-            <span class="p">)</span>
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;uhf&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">():</span>
-            <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot; The SCF will be spin-unrestricted (UHF) for all molecules.&quot;</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">text</span> <span class="o">+=</span> <span class="p">(</span>
-                <span class="s2">&quot; The SCF will be restricted for closed-shell molecules (RHF) and &quot;</span>
-                <span class="s2">&quot;spin-unrestricted (UHF) for all others.&quot;</span>
-            <span class="p">)</span>
-
-        <span class="c1"># MOZYME localized molecular orbitals.</span>
-        <span class="k">if</span> <span class="p">[</span><span class="s2">&quot;MOZYME&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;always&quot;</span> <span class="ow">or</span> <span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_use_mozyme</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_use_mozyme</span>
-        <span class="p">):</span>
-            <span class="n">text</span> <span class="o">+=</span> <span class="p">(</span>
-                <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">The SCF will be solved using localized molecular orbitals &quot;</span>
-                <span class="s2">&quot;(MOZYME), which is faster than the traditional method for larger &quot;</span>
-                <span class="s2">&quot;systems.&quot;</span>
-            <span class="p">)</span>
-            <span class="n">used_mozyme</span> <span class="o">=</span> <span class="kc">True</span>
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_use_mozyme</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_use_mozyme</span><span class="p">:</span>
-            <span class="n">used_mozyme</span> <span class="o">=</span> <span class="kc">False</span>
-        <span class="k">elif</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;MOZYME&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;for larger systems&quot;</span><span class="p">:</span>
-            <span class="n">text</span> <span class="o">+=</span> <span class="p">(</span>
-                <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">The SCF will be solved using localized molecular orbitals &quot;</span>
-                <span class="s2">&quot;(MOZYME) for systems with </span><span class="si">{nMOZYME}</span><span class="s2"> atoms or more. This method is &quot;</span>
-                <span class="s2">&quot;faster than the traditional method for larger systems.&quot;</span>
-            <span class="p">)</span>
-            <span class="n">used_mozyme</span> <span class="o">=</span> <span class="kc">True</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">used_mozyme</span> <span class="o">=</span> <span class="kc">False</span>
-
-        <span class="k">if</span> <span class="n">used_mozyme</span><span class="p">:</span>
-            <span class="n">follow_up</span> <span class="o">=</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;MOZYME follow-up&quot;</span><span class="p">]</span>
-            <span class="k">if</span> <span class="s2">&quot;exact&quot;</span> <span class="ow">in</span> <span class="n">follow_up</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s2">&quot;hf&quot;</span> <span class="ow">in</span> <span class="n">calculation</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;uhf&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">is_expr</span><span class="p">:</span>
                 <span class="n">text</span> <span class="o">+=</span> <span class="p">(</span>
-                    <span class="s2">&quot; The energy given by MOZYME slowly accumulates error due to the &quot;</span>
-                    <span class="s2">&quot;increasing non-orthogonality of the localized orbitals after &quot;</span>
-                    <span class="s2">&quot;many iterations. A single point energy using the traditional &quot;</span>
-                    <span class="s2">&quot;method will be run to get the correct energy.&quot;</span>
+                    <span class="s2">&quot; Whether to use spin-unrestricted SCF (UHF) for closed-shell &quot;</span>
+                    <span class="s2">&quot;molecules will be determined by &#39;</span><span class="si">{uhf}</span><span class="s2">&#39;.&quot;</span>
                 <span class="p">)</span>
-            <span class="k">elif</span> <span class="s2">&quot;new&quot;</span> <span class="ow">in</span> <span class="n">follow_up</span><span class="p">:</span>
-                <span class="n">text</span> <span class="o">+=</span> <span class="p">(</span>
-                    <span class="s2">&quot; The energy given by MOZYME slowly accumulates error due to the &quot;</span>
-                    <span class="s2">&quot;increasing non-orthogonality of the localized orbitals after &quot;</span>
-                    <span class="s2">&quot;many iterations. A single point energy using fresh localized &quot;</span>
-                    <span class="s2">&quot;orbitals will be run to get the correct energy.&quot;</span>
-                <span class="p">)</span>
-            <span class="k">elif</span> <span class="n">follow_up</span> <span class="o">==</span> <span class="s2">&quot;none&quot;</span><span class="p">:</span>
-                <span class="n">text</span> <span class="o">+=</span> <span class="p">(</span>
-                    <span class="s2">&quot; The energy given by MOZYME slowly accumulates error due to the &quot;</span>
-                    <span class="s2">&quot;increasing non-orthogonality of the localized orbitals after &quot;</span>
-                    <span class="s2">&quot;many iterations. No follow-up calculation will be done, so be &quot;</span>
-                    <span class="s2">&quot;careful with the final energies produced.&quot;</span>
-                <span class="p">)</span>
-                <span class="n">used_mozyme</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;uhf&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">():</span>
+                <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot; The SCF will be spin-unrestricted (UHF) for all molecules.&quot;</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Don&#39;t recognize the MOZYME follow-up: &#39;</span><span class="si">{</span><span class="n">follow_up</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
+                <span class="n">text</span> <span class="o">+=</span> <span class="p">(</span>
+                    <span class="s2">&quot; The SCF will be restricted for closed-shell molecules (RHF) and &quot;</span>
+                    <span class="s2">&quot;spin-unrestricted (UHF) for all others.&quot;</span>
+                <span class="p">)</span>
+
+            <span class="c1"># MOZYME localized molecular orbitals.</span>
+            <span class="k">if</span> <span class="p">[</span><span class="s2">&quot;MOZYME&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;always&quot;</span> <span class="ow">or</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_use_mozyme</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_use_mozyme</span>
+            <span class="p">):</span>
+                <span class="n">text</span> <span class="o">+=</span> <span class="p">(</span>
+                    <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">The SCF will be solved using localized molecular orbitals &quot;</span>
+                    <span class="s2">&quot;(MOZYME), which is faster than the traditional method for larger &quot;</span>
+                    <span class="s2">&quot;systems.&quot;</span>
+                <span class="p">)</span>
+                <span class="n">used_mozyme</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_use_mozyme</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_use_mozyme</span><span class="p">:</span>
+                <span class="n">used_mozyme</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="k">elif</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;MOZYME&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;for larger systems&quot;</span><span class="p">:</span>
+                <span class="n">text</span> <span class="o">+=</span> <span class="p">(</span>
+                    <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">The SCF will be solved using localized molecular orbitals &quot;</span>
+                    <span class="s2">&quot;(MOZYME) for systems with </span><span class="si">{nMOZYME}</span><span class="s2"> atoms or more. This method is &quot;</span>
+                    <span class="s2">&quot;faster than the traditional method for larger systems.&quot;</span>
+                <span class="p">)</span>
+                <span class="n">used_mozyme</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">used_mozyme</span> <span class="o">=</span> <span class="kc">False</span>
+
+            <span class="k">if</span> <span class="n">used_mozyme</span><span class="p">:</span>
+                <span class="n">follow_up</span> <span class="o">=</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;MOZYME follow-up&quot;</span><span class="p">]</span>
+                <span class="k">if</span> <span class="s2">&quot;exact&quot;</span> <span class="ow">in</span> <span class="n">follow_up</span><span class="p">:</span>
+                    <span class="n">text</span> <span class="o">+=</span> <span class="p">(</span>
+                        <span class="s2">&quot; The energy given by MOZYME slowly accumulates error due to &quot;</span>
+                        <span class="s2">&quot;th increasing non-orthogonality of the localized orbitals &quot;</span>
+                        <span class="s2">&quot;after many iterations. A single point energy using the &quot;</span>
+                        <span class="s2">&quot;traditional method will be run to get the correct energy.&quot;</span>
+                    <span class="p">)</span>
+                <span class="k">elif</span> <span class="s2">&quot;new&quot;</span> <span class="ow">in</span> <span class="n">follow_up</span><span class="p">:</span>
+                    <span class="n">text</span> <span class="o">+=</span> <span class="p">(</span>
+                        <span class="s2">&quot; The energy given by MOZYME slowly accumulates error due to &quot;</span>
+                        <span class="s2">&quot;the increasing non-orthogonality of the localized orbitals &quot;</span>
+                        <span class="s2">&quot;after many iterations. A single point energy using fresh &quot;</span>
+                        <span class="s2">&quot;localized orbitals will be run to get the correct energy.&quot;</span>
+                    <span class="p">)</span>
+                <span class="k">elif</span> <span class="n">follow_up</span> <span class="o">==</span> <span class="s2">&quot;none&quot;</span><span class="p">:</span>
+                    <span class="n">text</span> <span class="o">+=</span> <span class="p">(</span>
+                        <span class="s2">&quot; The energy given by MOZYME slowly accumulates error due to &quot;</span>
+                        <span class="s2">&quot;the increasing non-orthogonality of the localized orbitals &quot;</span>
+                        <span class="s2">&quot;after many iterations. No follow-up calculation will be done, &quot;</span>
+                        <span class="s2">&quot;so be careful with the final energies produced.&quot;</span>
+                    <span class="p">)</span>
+                    <span class="n">used_mozyme</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Don&#39;t recognize the MOZYME follow-up: &#39;</span><span class="si">{</span><span class="n">follow_up</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
 
         <span class="c1"># Handle COSMO</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;COSMO&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">is_expr</span><span class="p">:</span>
+        <span class="n">cosmo</span> <span class="o">=</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;COSMO&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">cosmo</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+            <span class="n">cosmo</span> <span class="o">=</span> <span class="s2">&quot;yes&quot;</span> <span class="k">if</span> <span class="n">cosmo</span> <span class="k">else</span> <span class="s2">&quot;no&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_expr</span><span class="p">(</span><span class="n">cosmo</span><span class="p">):</span>
             <span class="n">text</span> <span class="o">+=</span> <span class="p">(</span>
                 <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&#39;</span><span class="si">{COSMO}</span><span class="s2">&#39; will determine whether to use the COSMO solvation &quot;</span>
                 <span class="s2">&quot;model. If it is used the parameters will be &quot;</span>
             <span class="p">)</span>
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;COSMO&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">():</span>
+        <span class="k">elif</span> <span class="n">cosmo</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;yes&quot;</span><span class="p">:</span>
             <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">The COSMO solvation model will be used with &quot;</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;COSMO&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">is_expr</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;COSMO&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">():</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_expr</span><span class="p">(</span><span class="n">cosmo</span><span class="p">)</span> <span class="ow">or</span> <span class="n">cosmo</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;yes&quot;</span><span class="p">:</span>
             <span class="n">text</span> <span class="o">+=</span> <span class="p">(</span>
                 <span class="s2">&quot;dielectric constant = </span><span class="si">{eps}</span><span class="s2">, solvent radius = </span><span class="si">{rsolve}</span><span class="s2">, &quot;</span>
                 <span class="s2">&quot;</span><span class="si">{nspa}</span><span class="s2"> grid points per atom, and a cutoff of </span><span class="si">{disex}</span><span class="s2">.&quot;</span>
@@ -1153,16 +1187,47 @@ document.write(`
                 <span class="s2">&quot;Don&#39;t recognize convergence &#39;</span><span class="si">{}</span><span class="s2">&#39;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">P</span><span class="p">[</span><span class="s2">&quot;convergence&quot;</span><span class="p">])</span>
             <span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;uhf&quot;</span><span class="p">]:</span>
-            <span class="n">keywords</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;UHF&quot;</span><span class="p">)</span>
+        <span class="c1"># The type of calculation</span>
+        <span class="n">calculation</span> <span class="o">=</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;calculation&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="k">if</span> <span class="s2">&quot;hf&quot;</span> <span class="ow">in</span> <span class="n">calculation</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;uhf&quot;</span><span class="p">]:</span>
+                <span class="n">keywords</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;UHF&quot;</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;MOZYME&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;always&quot;</span><span class="p">:</span>
-            <span class="n">keywords</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;MOZYME&quot;</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="p">(</span>
-            <span class="n">P</span><span class="p">[</span><span class="s2">&quot;MOZYME&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;for larger systems&quot;</span>
-            <span class="ow">and</span> <span class="n">configuration</span><span class="o">.</span><span class="n">n_atoms</span> <span class="o">&gt;=</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;nMOZYME&quot;</span><span class="p">]</span>
-        <span class="p">):</span>
-            <span class="n">keywords</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;MOZYME&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;MOZYME&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;always&quot;</span><span class="p">:</span>
+                <span class="n">keywords</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;MOZYME&quot;</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="p">(</span>
+                <span class="n">P</span><span class="p">[</span><span class="s2">&quot;MOZYME&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;for larger systems&quot;</span>
+                <span class="ow">and</span> <span class="n">configuration</span><span class="o">.</span><span class="n">n_atoms</span> <span class="o">&gt;=</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;nMOZYME&quot;</span><span class="p">]</span>
+            <span class="p">):</span>
+                <span class="n">keywords</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;MOZYME&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="s2">&quot;ci&quot;</span> <span class="ow">in</span> <span class="n">calculation</span><span class="p">:</span>
+            <span class="c1"># Make sure no UHF specified</span>
+            <span class="k">while</span> <span class="s2">&quot;UHF&quot;</span> <span class="ow">in</span> <span class="n">keywords</span><span class="p">:</span>
+                <span class="n">keywords</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s2">&quot;UHF&quot;</span><span class="p">)</span>
+
+            <span class="c1"># Number of orbitals</span>
+            <span class="n">n_orbitals</span> <span class="o">=</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;number ci orbitals&quot;</span><span class="p">]</span>
+            <span class="n">n_docc</span> <span class="o">=</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;number doubly occupied ci orbitals&quot;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">n_docc</span> <span class="o">==</span> <span class="s2">&quot;default&quot;</span><span class="p">:</span>
+                <span class="n">keywords</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;C.I.=</span><span class="si">{</span><span class="n">n_orbitals</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">keywords</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;C.I.=(</span><span class="si">{</span><span class="n">n_orbitals</span><span class="si">}</span><span class="s2">,</span><span class="si">{</span><span class="n">n_docc</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+
+            <span class="c1"># Limited CI?</span>
+            <span class="k">if</span> <span class="s2">&quot;cisdt&quot;</span> <span class="ow">in</span> <span class="n">calculation</span><span class="p">:</span>
+                <span class="n">keywords</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;CISDT&quot;</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="s2">&quot;cisd&quot;</span> <span class="ow">in</span> <span class="n">calculation</span><span class="p">:</span>
+                <span class="n">keywords</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;CISD&quot;</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="s2">&quot;cis&quot;</span> <span class="ow">in</span> <span class="n">calculation</span><span class="p">:</span>
+                <span class="n">keywords</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;CIS&quot;</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="s2">&quot;casci&quot;</span> <span class="ow">in</span> <span class="n">calculation</span><span class="p">:</span>
+                <span class="k">pass</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Don&#39;t recognize type of CI: &#39;</span><span class="si">{</span><span class="n">calculation</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;print ci details&quot;</span><span class="p">]:</span>
+                <span class="n">keywords</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;MECI&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Don&#39;t recognize calculation &#39;</span><span class="si">{</span><span class="n">calculation</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;COSMO&quot;</span><span class="p">]:</span>
             <span class="n">keywords</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;EPS=</span><span class="si">{</span><span class="n">P</span><span class="p">[</span><span class="s1">&#39;eps&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -1181,7 +1246,10 @@ document.write(`
         <span class="n">metadata</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;keywords&quot;</span><span class="p">]</span>
         <span class="k">for</span> <span class="n">keyword</span> <span class="ow">in</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;extra keywords&quot;</span><span class="p">]:</span>
             <span class="k">if</span> <span class="s2">&quot;=&quot;</span> <span class="ow">in</span> <span class="n">keyword</span><span class="p">:</span>
+                <span class="c1"># Delete the copy already in the list</span>
+                <span class="n">keywords</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">keyword</span><span class="p">)</span>
                 <span class="n">keyword</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="n">keyword</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;=&quot;</span><span class="p">)</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">get_value</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">keyword</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">metadata</span> <span class="ow">or</span> <span class="s2">&quot;format&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">metadata</span><span class="p">[</span><span class="n">keyword</span><span class="p">]:</span>
                     <span class="n">keywords</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">keyword</span> <span class="o">+</span> <span class="s2">&quot;=&quot;</span> <span class="o">+</span> <span class="n">value</span><span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
@@ -1382,10 +1450,11 @@ document.write(`
                             <span class="n">Elumo</span> <span class="o">=</span> <span class="n">E</span>
                         <span class="k">break</span>
 
-            <span class="n">data</span><span class="p">[</span><span class="s2">&quot;HOMO Energy&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Ehomo</span>
-            <span class="n">table</span><span class="p">[</span><span class="s2">&quot;Property&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;HOMO Energy&quot;</span><span class="p">)</span>
-            <span class="n">table</span><span class="p">[</span><span class="s2">&quot;Value&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">Ehomo</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-            <span class="n">table</span><span class="p">[</span><span class="s2">&quot;Units&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;eV&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">Ehomo</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">data</span><span class="p">[</span><span class="s2">&quot;HOMO Energy&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Ehomo</span>
+                <span class="n">table</span><span class="p">[</span><span class="s2">&quot;Property&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;HOMO Energy&quot;</span><span class="p">)</span>
+                <span class="n">table</span><span class="p">[</span><span class="s2">&quot;Value&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">Ehomo</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">table</span><span class="p">[</span><span class="s2">&quot;Units&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;eV&quot;</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">Elumo</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">data</span><span class="p">[</span><span class="s2">&quot;LUMO Energy&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Elumo</span>
                 <span class="n">table</span><span class="p">[</span><span class="s2">&quot;Property&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;LUMO Energy&quot;</span><span class="p">)</span>
@@ -1546,8 +1615,32 @@ document.write(`
         <span class="k">if</span> <span class="s2">&quot;HEAT_OF_FORMATION&quot;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
             <span class="n">data</span><span class="p">[</span><span class="s2">&quot;energy&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;HEAT_OF_FORMATION&quot;</span><span class="p">]</span>
         <span class="k">if</span> <span class="s2">&quot;GRADIENTS&quot;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
-            <span class="n">tmp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;GRADIENTS&quot;</span><span class="p">])</span>
-            <span class="n">data</span><span class="p">[</span><span class="s2">&quot;gradients&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tmp</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+            <span class="n">tmp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;GRADIENTS&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+            <span class="c1"># Remove any translation</span>
+            <span class="n">delta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">average</span><span class="p">(</span><span class="n">tmp</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">tmp</span> <span class="o">-=</span> <span class="n">delta</span>
+            <span class="n">data</span><span class="p">[</span><span class="s2">&quot;gradients&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tmp</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="s2">&quot;GRADIENT_NORM&quot;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+            <span class="c1"># MOPAC does not currently write gradients to the AUX file if they are small</span>
+            <span class="c1"># They are, however, written to the output file.</span>
+            <span class="n">lines</span> <span class="o">=</span> <span class="nb">iter</span><span class="p">(</span><span class="n">out_sections</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">:</span>
+                <span class="k">if</span> <span class="s2">&quot;FINAL  POINT  AND  DERIVATIVES&quot;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="s2">&quot;GRADIENT&quot;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+                            <span class="k">break</span>
+                    <span class="n">tmp</span> <span class="o">=</span> <span class="p">[]</span>
+                    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="s2">&quot;KCAL/ANGSTROM&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+                            <span class="k">break</span>
+                        <span class="n">tmp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">5</span><span class="p">]))</span>
+                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">configuration</span><span class="o">.</span><span class="n">n_atoms</span><span class="p">:</span>
+                        <span class="n">tmp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+                        <span class="c1"># Remove any translation</span>
+                        <span class="n">delta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">average</span><span class="p">(</span><span class="n">tmp</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+                        <span class="n">tmp</span> <span class="o">-=</span> <span class="n">delta</span>
+                        <span class="n">data</span><span class="p">[</span><span class="s2">&quot;gradients&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tmp</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">store_results</span><span class="p">(</span>
             <span class="n">configuration</span><span class="o">=</span><span class="n">configuration</span><span class="p">,</span>
             <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span>
@@ -1596,43 +1689,44 @@ document.write(`
                         <span class="n">orders</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">order</span><span class="p">)</span>
                 <span class="n">ij</span> <span class="o">+=</span> <span class="mi">1</span>
 
-        <span class="n">symbols</span> <span class="o">=</span> <span class="n">configuration</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">symbols</span>
-        <span class="n">options</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">options</span>
-        <span class="n">text_lines</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">symbols</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="nb">int</span><span class="p">(</span><span class="n">options</span><span class="p">[</span><span class="s2">&quot;max_atoms_to_print&quot;</span><span class="p">]):</span>
-            <span class="n">name</span> <span class="o">=</span> <span class="n">configuration</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">names</span>
-            <span class="n">table</span> <span class="o">=</span> <span class="p">{</span>
-                <span class="s2">&quot;i&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">name</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">bond_i</span><span class="p">],</span>
-                <span class="s2">&quot;j&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">name</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">bond_j</span><span class="p">],</span>
-                <span class="s2">&quot;bond order&quot;</span><span class="p">:</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">o</span><span class="si">:</span><span class="s2">6.3f</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">orders</span><span class="p">],</span>
-                <span class="s2">&quot;bond multiplicity&quot;</span><span class="p">:</span> <span class="n">bond_order_str</span><span class="p">,</span>
-            <span class="p">}</span>
-            <span class="n">tmp</span> <span class="o">=</span> <span class="n">tabulate</span><span class="p">(</span>
-                <span class="n">table</span><span class="p">,</span>
-                <span class="n">headers</span><span class="o">=</span><span class="s2">&quot;keys&quot;</span><span class="p">,</span>
-                <span class="n">tablefmt</span><span class="o">=</span><span class="s2">&quot;psql&quot;</span><span class="p">,</span>
-                <span class="n">disable_numparse</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                <span class="n">colalign</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;center&quot;</span><span class="p">,</span> <span class="s2">&quot;center&quot;</span><span class="p">,</span> <span class="s2">&quot;center&quot;</span><span class="p">,</span> <span class="s2">&quot;center&quot;</span><span class="p">),</span>
-            <span class="p">)</span>
-            <span class="n">length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">tmp</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span>
-            <span class="n">text_lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-            <span class="n">text_lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;Bond Orders&quot;</span><span class="o">.</span><span class="n">center</span><span class="p">(</span><span class="n">length</span><span class="p">))</span>
-            <span class="n">text_lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span>
-            <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span>
-            <span class="n">text</span> <span class="o">+=</span> <span class="n">textwrap</span><span class="o">.</span><span class="n">indent</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">text_lines</span><span class="p">),</span> <span class="mi">12</span> <span class="o">*</span> <span class="s2">&quot; &quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">bond_order</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">symbols</span> <span class="o">=</span> <span class="n">configuration</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">symbols</span>
+            <span class="n">options</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">options</span>
+            <span class="n">text_lines</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">symbols</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="nb">int</span><span class="p">(</span><span class="n">options</span><span class="p">[</span><span class="s2">&quot;max_atoms_to_print&quot;</span><span class="p">]):</span>
+                <span class="n">name</span> <span class="o">=</span> <span class="n">configuration</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">names</span>
+                <span class="n">table</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="s2">&quot;i&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">name</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">bond_i</span><span class="p">],</span>
+                    <span class="s2">&quot;j&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">name</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">bond_j</span><span class="p">],</span>
+                    <span class="s2">&quot;bond order&quot;</span><span class="p">:</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">o</span><span class="si">:</span><span class="s2">6.3f</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">orders</span><span class="p">],</span>
+                    <span class="s2">&quot;bond multiplicity&quot;</span><span class="p">:</span> <span class="n">bond_order_str</span><span class="p">,</span>
+                <span class="p">}</span>
+                <span class="n">tmp</span> <span class="o">=</span> <span class="n">tabulate</span><span class="p">(</span>
+                    <span class="n">table</span><span class="p">,</span>
+                    <span class="n">headers</span><span class="o">=</span><span class="s2">&quot;keys&quot;</span><span class="p">,</span>
+                    <span class="n">tablefmt</span><span class="o">=</span><span class="s2">&quot;psql&quot;</span><span class="p">,</span>
+                    <span class="n">disable_numparse</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                    <span class="n">colalign</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;center&quot;</span><span class="p">,</span> <span class="s2">&quot;center&quot;</span><span class="p">,</span> <span class="s2">&quot;center&quot;</span><span class="p">,</span> <span class="s2">&quot;center&quot;</span><span class="p">),</span>
+                <span class="p">)</span>
+                <span class="n">length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">tmp</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span>
+                <span class="n">text_lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">text_lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;Bond Orders&quot;</span><span class="o">.</span><span class="n">center</span><span class="p">(</span><span class="n">length</span><span class="p">))</span>
+                <span class="n">text_lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span>
+                <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span>
+                <span class="n">text</span> <span class="o">+=</span> <span class="n">textwrap</span><span class="o">.</span><span class="n">indent</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">text_lines</span><span class="p">),</span> <span class="mi">12</span> <span class="o">*</span> <span class="s2">&quot; &quot;</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">control</span> <span class="o">==</span> <span class="s2">&quot;yes, and apply to structure&quot;</span><span class="p">:</span>
-            <span class="n">ids</span> <span class="o">=</span> <span class="n">configuration</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">ids</span>
-            <span class="n">iatoms</span> <span class="o">=</span> <span class="p">[</span><span class="n">ids</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">bond_i</span><span class="p">]</span>
-            <span class="n">jatoms</span> <span class="o">=</span> <span class="p">[</span><span class="n">ids</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">bond_j</span><span class="p">]</span>
-            <span class="n">configuration</span><span class="o">.</span><span class="n">new_bondset</span><span class="p">()</span>
-            <span class="n">configuration</span><span class="o">.</span><span class="n">bonds</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="n">iatoms</span><span class="p">,</span> <span class="n">j</span><span class="o">=</span><span class="n">jatoms</span><span class="p">,</span> <span class="n">bondorder</span><span class="o">=</span><span class="n">bond_order</span><span class="p">)</span>
-            <span class="n">text2</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Replaced the bonds in the configuration with those from the &quot;</span>
-                <span class="s2">&quot;calculated bond orders.</span><span class="se">\n</span><span class="s2">&quot;</span>
-            <span class="p">)</span>
+            <span class="k">if</span> <span class="n">control</span> <span class="o">==</span> <span class="s2">&quot;yes, and apply to structure&quot;</span><span class="p">:</span>
+                <span class="n">ids</span> <span class="o">=</span> <span class="n">configuration</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">ids</span>
+                <span class="n">iatoms</span> <span class="o">=</span> <span class="p">[</span><span class="n">ids</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">bond_i</span><span class="p">]</span>
+                <span class="n">jatoms</span> <span class="o">=</span> <span class="p">[</span><span class="n">ids</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">bond_j</span><span class="p">]</span>
+                <span class="n">configuration</span><span class="o">.</span><span class="n">new_bondset</span><span class="p">()</span>
+                <span class="n">configuration</span><span class="o">.</span><span class="n">bonds</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="n">iatoms</span><span class="p">,</span> <span class="n">j</span><span class="o">=</span><span class="n">jatoms</span><span class="p">,</span> <span class="n">bondorder</span><span class="o">=</span><span class="n">bond_order</span><span class="p">)</span>
+                <span class="n">text2</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Replaced the bonds in the configuration with those from the &quot;</span>
+                    <span class="s2">&quot;calculated bond orders.</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="p">)</span>
 
-            <span class="n">text</span> <span class="o">+=</span> <span class="nb">str</span><span class="p">(</span><span class="n">__</span><span class="p">(</span><span class="n">text2</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">8</span> <span class="o">*</span> <span class="s2">&quot; &quot;</span><span class="p">))</span>
+                <span class="n">text</span> <span class="o">+=</span> <span class="nb">str</span><span class="p">(</span><span class="n">__</span><span class="p">(</span><span class="n">text2</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">8</span> <span class="o">*</span> <span class="s2">&quot; &quot;</span><span class="p">))</span>
 
         <span class="k">return</span> <span class="n">text</span></div>
 
