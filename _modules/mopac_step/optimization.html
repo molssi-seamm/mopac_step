@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mopac_step.optimization &#8212; SEAMM MOPAC Plug-in 2024.8.17 documentation</title>
+    <title>mopac_step.optimization &#8212; SEAMM MOPAC Plug-in 2024.8.21 documentation</title>
   
   
   
@@ -45,7 +45,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="../../_static/documentation_options.js?v=53a1b1fa"></script>
+    <script src="../../_static/documentation_options.js?v=9100d5e2"></script>
     <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -635,7 +635,7 @@ document.write(`
         <span class="k">elif</span> <span class="n">method</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;EF&quot;</span><span class="p">:</span>
             <span class="n">keywords</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;EF&quot;</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;recalc&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;never&quot;</span><span class="p">:</span>
-                <span class="n">keywords</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">P</span><span class="p">[</span><span class="s2">&quot;recalc&quot;</span><span class="p">])</span>
+                <span class="n">keywords</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;RECALC=</span><span class="si">{</span><span class="n">P</span><span class="p">[</span><span class="s2">&quot;recalc&quot;</span><span class="p">]</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
             <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">P</span><span class="p">[</span><span class="s2">&quot;dmax&quot;</span><span class="p">])</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;dmax&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">default</span><span class="p">:</span>
                 <span class="n">keywords</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;DMAX=</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">P</span><span class="p">[</span><span class="s2">&quot;dmax&quot;</span><span class="p">]))</span>
             <span class="n">references</span><span class="o">.</span><span class="n">cite</span><span class="p">(</span>
@@ -693,6 +693,10 @@ document.write(`
             <span class="p">)</span>
         <span class="k">elif</span> <span class="n">method</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;TS&quot;</span><span class="p">:</span>
             <span class="n">keywords</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;TS&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;recalc&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;never&quot;</span><span class="p">:</span>
+                <span class="n">keywords</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;RECALC=</span><span class="si">{</span><span class="n">P</span><span class="p">[</span><span class="s2">&quot;recalc&quot;</span><span class="p">]</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">P</span><span class="p">[</span><span class="s2">&quot;dmax&quot;</span><span class="p">])</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;dmax&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">default</span><span class="p">:</span>
+                <span class="n">keywords</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;DMAX=</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">P</span><span class="p">[</span><span class="s2">&quot;dmax&quot;</span><span class="p">]))</span>
             <span class="n">references</span><span class="o">.</span><span class="n">cite</span><span class="p">(</span>
                 <span class="n">raw</span><span class="o">=</span><span class="n">bibliography</span><span class="p">[</span><span class="s2">&quot;Baker_1986&quot;</span><span class="p">],</span>
                 <span class="n">alias</span><span class="o">=</span><span class="s2">&quot;Baker_1986&quot;</span><span class="p">,</span>
