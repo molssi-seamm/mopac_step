@@ -130,6 +130,17 @@ class TkEnergy(seamm.TkNode):
                 widgets.append(self[key])
                 row += 1
 
+        if "ci" in calculation.lower():
+            for key in (
+                "number ci orbitals",
+                "number doubly occupied ci orbitals",
+                "ci root",
+                "print ci details",
+            ):
+                self[key].grid(row=row, column=0, columnspan=2, sticky=tk.EW)
+                widgets.append(self[key])
+                row += 1
+
         for key in ("convergence",):
             self[key].grid(row=row, column=0, columnspan=2, sticky=tk.EW)
             widgets.append(self[key])
@@ -160,20 +171,9 @@ class TkEnergy(seamm.TkNode):
                 row += 1
             if mozyme != "never":
                 self["MOZYME follow-up"].grid(row=row, column=1, sticky=tk.W)
-                subwidgets.append(self["MOZYME"])
+                subwidgets.append(self["MOZYME follow-up"])
                 row += 1
             sw.align_labels(subwidgets, sticky=tk.E)
-
-        if "ci" in calculation.lower():
-            for key in (
-                "number ci orbitals",
-                "number doubly occupied ci orbitals",
-                "ci root",
-                "print ci details",
-            ):
-                self[key].grid(row=row, column=0, columnspan=2, sticky=tk.EW)
-                widgets.append(self[key])
-                row += 1
 
         self["COSMO"].grid(row=row, column=0, columnspan=2, sticky=tk.EW)
         widgets.append(self["COSMO"])
@@ -187,7 +187,7 @@ class TkEnergy(seamm.TkNode):
                 row += 1
             sw.align_labels(widgets1, sticky=tk.E)
 
-        for key in ("bond orders",):
+        for key in ("calculate gradients", "bond orders"):
             self[key].grid(row=row, column=0, columnspan=2, sticky=tk.EW)
             widgets.append(self[key])
             row += 1
