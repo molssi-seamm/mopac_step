@@ -139,7 +139,7 @@ class Optimization(mopac_step.Energy):
         elif method[0:2] == "EF":
             keywords.append("EF")
             if P["recalc"] != "never":
-                keywords.append(P["recalc"])
+                keywords.append(f'RECALC={P["recalc"]}')
             if str(P["dmax"]) != self.parameters["dmax"].default:
                 keywords.append("DMAX={}".format(P["dmax"]))
             references.cite(
@@ -197,6 +197,10 @@ class Optimization(mopac_step.Energy):
             )
         elif method[0:2] == "TS":
             keywords.append("TS")
+            if P["recalc"] != "never":
+                keywords.append(f'RECALC={P["recalc"]}')
+            if str(P["dmax"]) != self.parameters["dmax"].default:
+                keywords.append("DMAX={}".format(P["dmax"]))
             references.cite(
                 raw=bibliography["Baker_1986"],
                 alias="Baker_1986",

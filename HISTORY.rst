@@ -1,6 +1,14 @@
 =======
 History
 =======
+2024.8.21 -- Bugfix for PM7-TS and optimization, GUI clean up for CI calculations.
+  * Calculations using PM7-TS do not write information to the AUX file, so added code to
+    get the energy from the output file.
+  * For optimizations, the option for the frequency of calculating the force constants
+    and the maximum radius of convergence were missing from the GUI for the EF
+    method. The frequency also was not being correctly handled in the input to MOPAC.
+  * The GUI for using CI calculations was cleaned up.
+    
 2024.8.17 -- Added CI calculations and better handling of transition states
   * Added ability to do the various types of CI calculations that MOPAC supports.
   * Improved the handling of TS calculations and added NLLSQ and SIGMA methods in

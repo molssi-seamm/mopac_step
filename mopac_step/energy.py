@@ -1115,6 +1115,17 @@ class Energy(seamm.Node):
         # Put any requested results into variables or tables
         if "HEAT_OF_FORMATION" in data:
             data["energy"] = data["HEAT_OF_FORMATION"]
+        else:
+            # See if it is in the output. PM7-TS does not write to AUX!
+            lines = iter(out_sections[0])
+            for line in lines:
+                if "FINAL HEAT OF FORMATION =" in line:
+                    try:
+                        data["HEAT_OF_FORMATION"] = float(line.split()[5])
+                        data["energy"] = data["HEAT_OF_FORMATION"]
+                    except Exception:
+                        pass
+
         if "GRADIENTS" in data:
             tmp = np.array(data["GRADIENTS"]).reshape(-1, 3)
             # Remove any translation
