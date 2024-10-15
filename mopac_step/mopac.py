@@ -98,6 +98,8 @@ class MOPAC(mopac_step.MOPACBase):
         directory = Path(self.directory)
         directory.mkdir(parents=True, exist_ok=True)
 
+        next_node = super().run(printer)
+
         system, configuration = self.get_system_configuration(None)
         n_atoms = configuration.n_atoms
         if n_atoms == 0:
@@ -177,8 +179,6 @@ class MOPAC(mopac_step.MOPACBase):
 
         # Work through the subflowchart to find out what to do.
         self.subflowchart.root_directory = self.flowchart.root_directory
-
-        next_node = super().run(printer)
 
         # Get the first real node
         node = self.subflowchart.get_node("1").next()
