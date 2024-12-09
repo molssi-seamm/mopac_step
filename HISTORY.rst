@@ -1,6 +1,10 @@
 =======
 History
 =======
+2024.12.9 -- Add the force constants as a property.
+   * Add the force constants as a property of the configuration when running
+     thermodynamics, IR, or force constants calculations.
+     
 2024.10.15 -- Bugfix: error if used in a loop and previous directories deleted.
    * The code crashed if called with a loop in the flowchart, and the last directory of
      a previous loop iteration was deleted before running the next iteration.

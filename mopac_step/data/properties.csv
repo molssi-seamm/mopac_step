@@ -10,7 +10,8 @@ electronic energy#MOPAC#{model},float,eV,"The {model} electronic energy.",
 enthalpy of formation#MOPAC#{model},float,kJ/mol,"The {model} enthalpy of formation, DHf.",https://en.wikipedia.org/wiki/Standard_enthalpy_of_formation
 entropy#MOPAC#{model},float,J/mol/K,"The {model} standard entropy.",https://en.wikipedia.org/wiki/Entropy
 ionization energy#MOPAC#{model},float,eV,"The {model} ionization energy.",https://en.wikipedia.org/wiki/Ionization_energy
-surface area#MOPAC,float,Å^2,"The molecular surface area.",
+surface area#MOPAC#{model},float,Å^2,"The molecular surface area.",
 total energy#MOPAC#{model},float,eV,"The {model} total energy (electronic + nuclear).",
-volume#MOPAC,float,Å^3,"The molecular volume.",
+volume#MOPAC#{model},float,Å^3,"The molecular volume.",
 zero point energy#MOPAC#{model},float,kJ/mol,"The {model} zero-point vibrational energy.",
+force constants#MOPAC#{model},json,kcal/mol/Å^2,The {model} force constants,
