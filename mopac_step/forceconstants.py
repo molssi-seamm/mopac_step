@@ -26,7 +26,7 @@ class Forceconstants(mopac_step.Energy):
 
         super().__init__(flowchart=flowchart, title=title, extension=extension)
 
-        self._calculation = "vibrations"
+        self._calculation = "force constants"
         self._model = None
         self._metadata = mopac_step.metadata
         self.parameters = mopac_step.ForceconstantsParameters()
@@ -221,7 +221,7 @@ class Forceconstants(mopac_step.Energy):
             The forceconstant calculation
 
         Since the forceconstant matrix is symmetric (we hope!) we will work with the
-        lower triangle as a lineary array.
+        lower triangle as a linear array.
         """
         P = self.parameters.current_values_to_dict(
             context=seamm.flowchart_variables._data
@@ -465,6 +465,11 @@ class Forceconstants(mopac_step.Energy):
                     fd.write(f"{result[ij]:12.6f} ")
                     ij += 1
                 fd.write("\n")
+
+        # Save the force constant matrix (Hessian) in the data sections
+        data = data_sections[0]
+        fac = Q_(1.0, P["atom_units"]).m_as("kJ/mol/Å^2")
+        data["force constants"] = [v * fac for v in result]
 
         # Let the energy module do its thing
         super().analyze(

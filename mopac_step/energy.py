@@ -5,6 +5,7 @@
 import copy
 import csv
 import logging
+from math import sqrt
 from pathlib import Path
 import pprint  # noqa: F401
 import textwrap
@@ -1152,6 +1153,25 @@ class Energy(seamm.Node):
                         delta = np.average(tmp, axis=0)
                         tmp -= delta
                         data["gradients"] = tmp.tolist()
+
+        # Handle the force constant matrix (Hessian) if it exists
+        if "HESSIAN_MATRIX" in data:
+            # It is mass weighted so we need to remove the weighting
+            if "ISOTOPIC_MASSES" not in data:
+                raise RuntimeError("Found no atomic masses")
+            # Expand the mass array for x, y, z
+            mass = [v for v in data["ISOTOPIC_MASSES"] for j in range(3)]
+
+            # Get the atom part of the force constant matrix.
+            hessian = data["HESSIAN_MATRIX"]
+            ij = 0
+            factor = Q_(1.0, "mdyne/Å").m_as("kcal/mol/Å^2")
+            tmp = []
+            for i, mass_i in enumerate(mass):
+                for mass_j in mass[0 : i + 1]:
+                    tmp.append(factor * hessian[ij] * sqrt(mass_i * mass_j))
+                    ij += 1
+            data["force constants"] = tmp
 
         self.store_results(
             configuration=configuration,
