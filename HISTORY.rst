@@ -1,6 +1,8 @@
 =======
 History
 =======
+2025.2.24 -- Changed the structure option to "Discard the structure".
+
 2025.2.23 -- Added RMSD and ability to discard the optimized stucture
    * Added the RMSD between the initial and final structures during optimization, make
      the RMSD, maximumim displacement, and the index of the maximally displaced atom

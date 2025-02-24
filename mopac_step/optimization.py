@@ -394,7 +394,7 @@ class Optimization(mopac_step.Energy):
         if "ATOM_X_OPT" in data or "ATOM_X_UPDATED" in data:
             initial_RDKMol = starting_configuration.to_RDKMol()
 
-            if P["structure handling"] == "Ignore":
+            if P["structure handling"] == "Discard the structure":
                 system = starting_configuration
                 configuration = starting_configuration
             else:
@@ -442,7 +442,7 @@ class Optimization(mopac_step.Energy):
                     f"\nThe largest displacement from symmetry was {max_disp:.6f} Å.\n"
                 )
 
-            if P["structure handling"] == "Ignore":
+            if P["structure handling"] == "Discard the structure":
                 RDKMol = starting_configuration.to_RDKMol()
                 RDKMol.GetConformer(0).SetPositions(np.array(xyz))
             else:
