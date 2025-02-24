@@ -10,6 +10,7 @@ import traceback
 import numpy as np
 
 import mopac_step
+from molsystem import RMSD
 import seamm
 import seamm_util.printing as printing
 from seamm_util import units_class
@@ -391,30 +392,36 @@ class Optimization(mopac_step.Energy):
         # Update the structure
         periodicity = starting_configuration.periodicity
         if "ATOM_X_OPT" in data or "ATOM_X_UPDATED" in data:
-            system, configuration = self.get_system_configuration(
-                P, same_as=starting_configuration
-            )
-            if periodicity != 0 and P["LatticeOpt"]:
-                if "TRANS_VECTS" in data:
-                    vectors = data["TRANS_VECTS"]
-                    lattice = [
-                        [vectors[0], vectors[1], vectors[2]],
-                        [vectors[3], vectors[4], vectors[5]],
-                        [vectors[6], vectors[7], vectors[8]],
-                    ]
-                    configuration.cell.from_vectors(lattice)
-                elif "TRANS_VECTS_UPDATED" in data:
-                    vectors = data["TRANS_VECTS_UPDATED"][-1]
-                    lattice = [
-                        [vectors[0], vectors[1], vectors[2]],
-                        [vectors[3], vectors[4], vectors[5]],
-                        [vectors[6], vectors[7], vectors[8]],
-                    ]
-                    configuration.cell.from_vectors(lattice)
-                else:
-                    logger.warning(
-                        "Expected updated lattice vectors, but did not find!"
-                    )
+            initial_RDKMol = starting_configuration.to_RDKMol()
+
+            if P["structure handling"] == "Ignore":
+                system = starting_configuration
+                configuration = starting_configuration
+            else:
+                system, configuration = self.get_system_configuration(
+                    P, same_as=starting_configuration
+                )
+                if periodicity != 0 and P["LatticeOpt"]:
+                    if "TRANS_VECTS" in data:
+                        vectors = data["TRANS_VECTS"]
+                        lattice = [
+                            [vectors[0], vectors[1], vectors[2]],
+                            [vectors[3], vectors[4], vectors[5]],
+                            [vectors[6], vectors[7], vectors[8]],
+                        ]
+                        configuration.cell.from_vectors(lattice)
+                    elif "TRANS_VECTS_UPDATED" in data:
+                        vectors = data["TRANS_VECTS_UPDATED"][-1]
+                        lattice = [
+                            [vectors[0], vectors[1], vectors[2]],
+                            [vectors[3], vectors[4], vectors[5]],
+                            [vectors[6], vectors[7], vectors[8]],
+                        ]
+                        configuration.cell.from_vectors(lattice)
+                    else:
+                        logger.warning(
+                            "Expected updated lattice vectors, but did not find!"
+                        )
             xyz = []
             if "ATOM_X_OPT" in data:
                 it = iter(data["ATOM_X_OPT"])
@@ -435,7 +442,24 @@ class Optimization(mopac_step.Energy):
                     f"\nThe largest displacement from symmetry was {max_disp:.6f} Å.\n"
                 )
 
-            configuration.atoms.set_coordinates(xyz, fractionals=False)
+            if P["structure handling"] == "Ignore":
+                RDKMol = starting_configuration.to_RDKMol()
+                RDKMol.GetConformer(0).SetPositions(np.array(xyz))
+            else:
+                configuration.atoms.set_coordinates(xyz, fractionals=False)
+                RDKMol = configuration.to_RDKMol()
+
+            result = RMSD(RDKMol, initial_RDKMol, symmetry=True, flavor="rdkit")
+            data["RMSD"] = result["RMSD"]
+            data["displaced atom"] = result["displaced atom"]
+            data["maximum displacement"] = result["maximum displacement"]
+
+            result = configuration.RMSD(
+                initial_RDKMol, symmetry=True, include_h=True, flavor="rdkit"
+            )
+            data["RMSD with H"] = result["RMSD"]
+            data["displaced atom with H"] = result["displaced atom"]
+            data["maximum displacement with H"] = result["maximum displacement"]
 
             text += seamm.standard_parameters.set_names(
                 system, configuration, P, _first=True, Hamiltonian=P["hamiltonian"]

@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Control parameters for a MOPAC optimization calculation
-"""
+"""Control parameters for a MOPAC optimization calculation"""
 
 import logging
 import mopac_step

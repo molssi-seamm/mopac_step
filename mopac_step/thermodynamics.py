@@ -34,20 +34,6 @@ class Thermodynamics(mopac_step.Energy):
         self._metadata = mopac_step.metadata
         self.parameters = mopac_step.ThermodynamicsParameters()
 
-        # Customize the options for naming the configuration
-        p = self.parameters["configuration name"]
-        enumeration = (
-            "use SMILES string",
-            "use Canonical SMILES string",
-            "keep current name",
-            "vibrations with <Hamiltonian>",
-            "use configuration number",
-        )
-        p.default = "vibrations with <Hamiltonian>"
-        if p.value in p._data["enumeration"] and p.value not in enumeration:
-            p.value = p.default
-        p._data["enumeration"] = enumeration
-
         self.description = "Thermodynamic functions"
 
     def description_text(self, P=None):
@@ -96,20 +82,9 @@ class Thermodynamics(mopac_step.Energy):
         # Structure handling
         text += "The structure in the standard orientation will {structure handling} "
 
-        confname = P["configuration name"]
-        if confname == "use SMILES string":
-            text += "using SMILES as its name."
-        elif confname == "use Canonical SMILES string":
-            text += "using canonical SMILES as its name."
-        elif confname == "keep current name":
-            text += "keeping the current name."
-        elif confname == "vibrations with <Hamiltonian>":
-            text += "with 'vibrations with {hamiltonian}' as its name."
-        elif confname == "use configuration number":
-            text += "using the index of the configuration (1, 2, ...) as its name."
-        else:
-            confname = confname.replace("<Hamiltonian>", P["hamiltonian"])
-            text += f"with '{confname}' as its name."
+        text += seamm.standard_parameters.structure_handling_description(
+            P, Hamiltonian=P["hamiltonian"]
+        )
 
         return self.header + "\n" + __(text, **P, indent=4 * " ").__str__()
 
@@ -162,24 +137,11 @@ class Thermodynamics(mopac_step.Energy):
         data = data_sections[0]
 
         if "ORIENTATION_ATOM_X" in data:
-            system, starting_configuration = self.get_system_configuration(None)
+            starting_system, starting_configuration = self.get_system_configuration()
+            system, configuration = self.get_system_configuration(P)
+            if configuration is None:
+                system, configuration = starting_system, starting_configuration
             periodicity = starting_configuration.periodicity
-            if (
-                "structure handling" in P
-                and P["structure handling"] == "be put in a new configuration"
-            ):
-                configuration = system.create_configuration(
-                    periodicity=periodicity,
-                    atomset=starting_configuration.atomset,
-                    bondset=starting_configuration.bondset,
-                    cell_id=starting_configuration.cell_id,
-                )
-                configuration.charge = starting_configuration.charge
-                configuration.spin_multiplicity = (
-                    starting_configuration.spin_multiplicity
-                )
-            else:
-                configuration = starting_configuration
 
             if periodicity != 0:
                 raise NotImplementedError(
@@ -189,22 +151,11 @@ class Thermodynamics(mopac_step.Energy):
             it = iter(data["ORIENTATION_ATOM_X"])
             for x in it:
                 xyz.append([float(x), float(next(it)), float(next(it))])
-            configuration.atoms.set_coordinates(xyz, fractionals=False)
-
-            # And the name of the configuration.
-            if "configuration name" in P:
-                if P["configuration name"] == "use SMILES string":
-                    configuration.name = configuration.smiles
-                elif P["configuration name"] == "use Canonical SMILES string":
-                    configuration.name = configuration.canonical_smiles
-                elif P["configuration name"] == "keep current name":
-                    pass
-                elif P["configuration name"] == "vibrations with <Hamiltonian>":
-                    configuration.name = f"vibrations with {P['hamiltonian']}"
-                else:
-                    confname = P["configuration name"]
-                    confname = confname.replace("<Hamiltonian>", P["hamiltonian"])
-                    configuration.name = confname
+            if P["structure handling"] != "Ignore":
+                configuration.atoms.set_coordinates(xyz, fractionals=False)
+                seamm.standard_parameters.set_names(
+                    system, configuration, P, _first=True, Hamiltonian=P["hamiltonian"]
+                )
 
         # Write the structure out for viewing.
         directory = Path(self.directory)

@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
-"""Control parameters for a MOPAC vibrational (IR/Raman) calculation
-"""
+"""Control parameters for a MOPAC vibrational (IR/Raman) calculation"""
 
 import logging
 import mopac_step
@@ -42,9 +41,9 @@ class IRParameters(mopac_step.EnergyParameters):
 
         # Do any local editing of defaults
         tmp = self["system name"]
-        tmp._data["enumeration"] = (*tmp.enumeration, "MOPAC standard orientation")
+        tmp._data["enumeration"] = (*tmp.enumeration, "vibrations with {Hamiltonian}")
         tmp.default = "keep current name"
 
         tmp = self["configuration name"]
-        tmp._data["enumeration"] = ["MOPAC standard orientation", *tmp.enumeration]
-        tmp.default = "MOPAC standard optimization"
+        tmp._data["enumeration"] = ("vibrations with {Hamiltonian}", *tmp.enumeration)
+        tmp.default = "vibrations with {Hamiltonian}"

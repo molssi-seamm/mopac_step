@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Control parameters for a MOPAC thermodynamics calculation
-"""
+"""Control parameters for a MOPAC thermodynamics calculation"""
 
 import logging
 import mopac_step
@@ -83,9 +82,15 @@ class ThermodynamicsParameters(mopac_step.EnergyParameters):
 
         # Do any local editing of defaults
         tmp = self["system name"]
-        tmp._data["enumeration"] = (*tmp.enumeration, "MOPAC standard orientation")
+        tmp._data["enumeration"] = (
+            *tmp.enumeration,
+            "thermochemistry with {Hamiltonian}",
+        )
         tmp.default = "keep current name"
 
         tmp = self["configuration name"]
-        tmp._data["enumeration"] = ["MOPAC standard orientation", *tmp.enumeration]
-        tmp.default = "MOPAC standard optimization"
+        tmp._data["enumeration"] = (
+            "thermochemistry with {Hamiltonian}",
+            *tmp.enumeration,
+        )
+        tmp.default = "thermochemistry with {Hamiltonian}"
