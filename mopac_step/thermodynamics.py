@@ -151,7 +151,7 @@ class Thermodynamics(mopac_step.Energy):
             it = iter(data["ORIENTATION_ATOM_X"])
             for x in it:
                 xyz.append([float(x), float(next(it)), float(next(it))])
-            if P["structure handling"] != "Ignore":
+            if P["structure handling"] != "Discard the structure":
                 configuration.atoms.set_coordinates(xyz, fractionals=False)
                 seamm.standard_parameters.set_names(
                     system, configuration, P, _first=True, Hamiltonian=P["hamiltonian"]
