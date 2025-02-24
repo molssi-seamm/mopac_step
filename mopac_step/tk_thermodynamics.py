@@ -46,7 +46,7 @@ class TkThermodynamics(mopac_step.TkEnergy):
         )
         row = 0
         widgets = []
-        for key in ("structure handling", "configuration name"):
+        for key in ("structure handling", "system name", "configuration name"):
             self[key] = P[key].widget(sframe)
             self[key].grid(row=row, column=0, sticky=tk.EW)
             widgets.append(self[key])

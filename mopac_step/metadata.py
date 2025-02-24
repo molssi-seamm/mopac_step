@@ -2393,6 +2393,48 @@ metadata["results"] = {
         "type": "float",
         "units": "kcal/mol",
     },
+    "RMSD": {
+        "calculation": ["optimization"],
+        "description": "RMSD with H removed",
+        "dimensionality": "scalar",
+        "type": "float",
+        "units": "Å",
+    },
+    "displaced atom": {
+        "calculation": ["optimization"],
+        "description": "Atom index with largest displacement",
+        "dimensionality": "scalar",
+        "type": "int",
+        "units": "",
+    },
+    "maximum displacement": {
+        "calculation": ["optimization"],
+        "description": "Maximum displacement of an atom",
+        "dimensionality": "scalar",
+        "type": "float",
+        "units": "Å",
+    },
+    "RMSD with H": {
+        "calculation": ["optimization"],
+        "description": "RMSD including H atoms",
+        "dimensionality": "scalar",
+        "type": "float",
+        "units": "Å",
+    },
+    "displaced atom with H": {
+        "calculation": ["optimization"],
+        "description": "Atom index with largest displacement, including H",
+        "dimensionality": "scalar",
+        "type": "int",
+        "units": "",
+    },
+    "maximum displacement with H": {
+        "calculation": ["optimization"],
+        "description": "Maximum displacement of an atom, including H",
+        "dimensionality": "scalar",
+        "type": "float",
+        "units": "Å",
+    },
     # Lewis results
     "point group": {
         "calculation": ["Lewis structure"],

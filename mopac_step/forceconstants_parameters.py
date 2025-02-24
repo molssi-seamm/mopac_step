@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
-"""Control parameters for a MOPAC vibrational (Forceconstants/Raman) calculation
-"""
+"""Control parameters for a MOPAC vibrational (Forceconstants/Raman) calculation"""
 
 import logging
 import mopac_step

@@ -1,6 +1,12 @@
 =======
 History
 =======
+2025.2.23 -- Added RMSD and ability to discard the optimized stucture
+   * Added the RMSD between the initial and final structures during optimization, make
+     the RMSD, maximumim displacement, and the index of the maximally displaced atom
+     results that can be tabulated and stored.
+   * Added an option to discard the structure from an optimization.
+     
 2024.12.9 -- Add the force constants as a property.
    * Add the force constants as a property of the configuration when running
      thermodynamics, IR, or force constants calculations.

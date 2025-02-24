@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Control parameters for a MOPAC single-point energy calculation
-"""
+"""Control parameters for a MOPAC single-point energy calculation"""
 
 import logging
 import seamm

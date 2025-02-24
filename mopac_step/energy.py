@@ -889,6 +889,24 @@ class Energy(seamm.Node):
             table["Value"].append(f"{tmp:.2f}")
             table["Units"].append("kcal/mol/Å")
 
+        if "RMSD" in data:
+            tmp = data["RMSD"]
+            table["Property"].append("RMSD in Geometry")
+            table["Value"].append(f"{tmp:.2f}")
+            table["Units"].append("Å")
+
+        if "maximum displacement" in data:
+            tmp = data["maximum displacement"]
+            table["Property"].append("Largest Displacement")
+            table["Value"].append(f"{tmp:.2f}")
+            table["Units"].append("Å")
+
+        if "displaced atom" in data:
+            tmp = data["displaced atom"]
+            table["Property"].append("Displaced Atom")
+            table["Value"].append(f"{tmp + 1}")
+            table["Units"].append("")
+
         if "SPIN_COMPONENT" in data:
             tmp = data["SPIN_COMPONENT"]
             table["Property"].append("Sz")
