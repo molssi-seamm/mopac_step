@@ -449,17 +449,19 @@ class Optimization(mopac_step.Energy):
                 configuration.atoms.set_coordinates(xyz, fractionals=False)
                 RDKMol = configuration.to_RDKMol()
 
-            result = RMSD(RDKMol, initial_RDKMol, symmetry=True, flavor="rdkit")
-            data["RMSD"] = result["RMSD"]
-            data["displaced atom"] = result["displaced atom"]
-            data["maximum displacement"] = result["maximum displacement"]
-
-            result = configuration.RMSD(
-                initial_RDKMol, symmetry=True, include_h=True, flavor="rdkit"
-            )
+            result = RMSD(RDKMol, initial_RDKMol, symmetry=True, include_h=True)
             data["RMSD with H"] = result["RMSD"]
             data["displaced atom with H"] = result["displaced atom"]
             data["maximum displacement with H"] = result["maximum displacement"]
+
+            # Align the structure
+            if P["structure handling"] != "Discard the structure":
+                configuration.from_RDKMol(RDKMol)
+
+            result = RMSD(RDKMol, initial_RDKMol, symmetry=True)
+            data["RMSD"] = result["RMSD"]
+            data["displaced atom"] = result["displaced atom"]
+            data["maximum displacement"] = result["maximum displacement"]
 
             text += seamm.standard_parameters.set_names(
                 system, configuration, P, _first=True, Hamiltonian=P["hamiltonian"]
