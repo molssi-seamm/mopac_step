@@ -56,6 +56,8 @@ class Installer(seamm_installer.InstallerBase):
 
         logger.debug("Initializing the MOPAC installer object.")
 
+        # Define this step's details
+        self.environment = "seamm-mopac"
         self.section = "mopac-step"
         self.executables = ["mopac"]
         self.resource_path = Path(pkg_resources.resource_filename(__name__, "data/"))
@@ -63,144 +65,6 @@ class Installer(seamm_installer.InstallerBase):
         # The environment.yaml file for Conda installations.
         logger.debug(f"data directory: {self.resource_path}")
         self.environment_file = self.resource_path / "seamm-mopac.yml"
-
-    def check(self):
-        """Check the status of the MOPAC installation."""
-        print("Checking the MOPAC installation.")
-
-        # What Conda environment is the default?
-        path = self.configuration.path.parent / "mopac.ini"
-        if not path.exists():
-            text = (self.resource_path / "mopac.ini").read_text()
-            path.write_text(text)
-            print(f"    The mopac.ini file did not exist. Created {path}")
-
-        self.exe_config.path = path
-
-        # Get the current values
-        data = self.exe_config.get_values("local")
-
-        if "conda-environment" in data and data["conda-environment"] != "":
-            self.environment = data["conda-environment"]
-        else:
-            self.environment = "seamm-mopac"
-
-        super().check()
-
-    def install(self):
-        """Install MOPAC in a conda environment."""
-        print("Installing MOPAC.")
-
-        # What Conda environment is the default?
-        path = self.configuration.path.parent / "mopac.ini"
-        if not path.exists():
-            text = (self.resource_path / "mopac.ini").read_text()
-            path.write_text(text)
-            print(f"    The mopac.ini file did not exist. Created {path}")
-
-        self.exe_config.path = path
-
-        # Get the current values
-        data = self.exe_config.get_values("local")
-
-        if "conda-environment" in data and data["conda-environment"] != "":
-            self.environment = data["conda-environment"]
-        else:
-            self.environment = "seamm-mopac"
-
-        super().install()
-
-    def show(self):
-        """Show the status of the MOPAC installation."""
-        print("Showing the MOPAC installation.")
-
-        # What Conda environment is the default?
-        path = self.configuration.path.parent / "mopac.ini"
-        if not path.exists():
-            text = (self.resource_path / "mopac.ini").read_text()
-            path.write_text(text)
-            print(f"    The mopac.ini file does not exist at {path}")
-            print("    The 'check' command will create it if MOPAC is installed.")
-            print("    Otherwise 'install' will install MOPAC.")
-            return
-
-        self.exe_config.path = path
-
-        if not self.exe_config.section_exists("local"):
-            print(
-                "    MOPAC is not configured: there is no 'local' section in "
-                f"     {path}."
-            )
-            return
-
-        # Get the current values
-        data = self.exe_config.get_values("local")
-
-        if "conda-environment" in data and data["conda-environment"] != "":
-            self.environment = data["conda-environment"]
-        else:
-            self.environment = "seamm-mopac"
-
-        super().show()
-
-    def uninstall(self):
-        """Uninstall the MOPAC installation."""
-        print("Uninstall the MOPAC installation.")
-
-        # What Conda environment is the default?
-        path = self.configuration.path.parent / "mopac.ini"
-        if not path.exists():
-            text = (self.resource_path / "mopac.ini").read_text()
-            path.write_text(text)
-            print(
-                f""""    The mopac.ini file does not exist at {path}
-    Perhaps MOPAC is not installed, but if it is the 'check' command may locate it
-    and create the ini file, after which 'uninstall' will remove it."""
-            )
-            return
-
-        self.exe_config.path = path
-
-        if not self.exe_config.section_exists("local"):
-            print(
-                f""""    The mopac.ini file at {path} does not have local section.
-    Perhaps MOPAC is not installed, but if it is the 'check' command may locate it
-    and update the ini file, after which 'uninstall' will remove it."""
-            )
-            return
-
-        # Get the current values
-        data = self.exe_config.get_values("local")
-
-        if "conda-environment" in data and data["conda-environment"] != "":
-            self.environment = data["conda-environment"]
-        else:
-            self.environment = "seamm-mopac"
-
-        super().uninstall()
-
-    def update(self):
-        """Updates the MOPAC installation."""
-        print("Updating the MOPAC installation.")
-
-        # What Conda environment is the default?
-        path = self.configuration.path.parent / "mopac.ini"
-        if not path.exists():
-            text = (self.resource_path / "mopac.ini").read_text()
-            path.write_text(text)
-            print(f"    The mopac.ini file did not exist. Created {path}")
-
-        self.exe_config.path = path
-
-        # Get the current values
-        data = self.exe_config.get_values("local")
-
-        if "conda-environment" in data and data["conda-environment"] != "":
-            self.environment = data["conda-environment"]
-        else:
-            self.environment = "seamm-mopac"
-
-        super().update()
 
     def exe_version(self, config):
         """Get the version of the MOPAC executable.

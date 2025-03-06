@@ -4,15 +4,20 @@
 
 import calendar
 import configparser
-import datetime
+import csv
+from datetime import datetime, timezone
 import importlib
 import logging
 import os
 import os.path
 from pathlib import Path
+import platform
 import pprint
 import shutil
 import string
+import time
+
+from cpuinfo import get_cpu_info
 
 import molsystem
 import seamm
@@ -60,6 +65,47 @@ class MOPAC(mopac_step.MOPACBase):
         super().__init__(
             flowchart=flowchart, title=title, extension=extension, logger=logger
         )
+
+        # Set up the timing information
+        self._timing_data = []
+        self._timing_path = Path("~/.seamm.d/timing/mopac.csv").expanduser()
+        self._timing_header = [
+            "node",  # 0
+            "cpu",  # 1
+            "cpu_version",  # 2
+            "cpu_count",  # 3
+            "cpu_speed",  # 4
+            "date",  # 5
+            "H_SMILES",  # 6
+            "ISOMERIC_SMILES",  # 7
+            "formula",  # 8
+            "net_charge",  # 9
+            "spin_multiplicity",  # 10
+            "keywords",  # 11
+            "nproc",  # 12
+            "time",  # 13
+        ]
+        try:
+            self._timing_path.parent.mkdir(parents=True, exist_ok=True)
+
+            self._timing_data = 14 * [""]
+            self._timing_data[0] = platform.node()
+            tmp = get_cpu_info()
+            if "arch" in tmp:
+                self._timing_data[1] = tmp["arch"]
+            if "cpuinfo_version_string" in tmp:
+                self._timing_data[2] = tmp["cpuinfo_version_string"]
+            if "count" in tmp:
+                self._timing_data[3] = str(tmp["count"])
+            if "hz_advertized_friendly" in tmp:
+                self._timing_data[4] = tmp["hz_advertized_friendly"]
+
+            if not self._timing_path.exists():
+                with self._timing_path.open("w", newline="") as fd:
+                    writer = csv.writer(fd)
+                    writer.writerow(self._timing_header)
+        except Exception:
+            self._timing_data = None
 
     @property
     def input_only(self):
@@ -185,12 +231,14 @@ class MOPAC(mopac_step.MOPACBase):
 
         text = ""
         n_calculations = []
+        all_keywords = []
         while node:
             node.parent = self
             inputs = node.get_input()
             n_calculations.append(len(inputs))
             for keywords, structure, comment in inputs:
                 lines = []
+                all_keywords.append(" ".join(keywords + extra_keywords))
                 lines.append(" ".join(keywords + extra_keywords))
                 lines.append(system.name)
                 if comment is None:
@@ -212,7 +260,9 @@ class MOPAC(mopac_step.MOPACBase):
         # Check for successful run, don't rerun
         output = ""  # Text output to print
         success = directory / "success.dat"
-        if not success.exists():
+        if success.exists():
+            self._timing_data = None
+        else:
             # Input files
             files = {"mopac.dat": text}
             self.logger.debug("mopac.dat:\n" + files["mopac.dat"])
@@ -220,7 +270,9 @@ class MOPAC(mopac_step.MOPACBase):
                 path = directory / filename
                 path.write_text(files[filename])
 
-            if not self.input_only:
+            if self.input_only:
+                self._timing_data = None
+            else:
                 # Get the computational environment and set limits
                 ce = seamm_exec.computational_environment()
 
@@ -312,6 +364,36 @@ class MOPAC(mopac_step.MOPACBase):
                     "stdout.txt",
                     "stderr.txt",
                 ]
+
+                if self._timing_data is not None:
+                    try:
+                        self._timing_data[6] = configuration.to_smiles(
+                            canonical=True, hydrogens=True
+                        )
+                    except Exception:
+                        self._timing_data[6] = ""
+                    try:
+                        self._timing_data[7] = configuration.isomeric_smiles
+                    except Exception:
+                        self._timing_data[7] = ""
+                    try:
+                        self._timing_data[8] = configuration.formula[0]
+                    except Exception:
+                        self._timing_data[7] = ""
+                    try:
+                        self._timing_data[9] = str(configuration.charge)
+                    except Exception:
+                        self._timing_data[9] = ""
+                    try:
+                        self._timing_data[10] = str(configuration.spin_multiplicity)
+                    except Exception:
+                        self._timing_data[10] = ""
+
+                    self._timing_data[11] = " && ".join(all_keywords)
+                    self._timing_data[5] = datetime.now(timezone.utc).isoformat()
+
+                t0 = time.time_ns()
+
                 result = executor.run(
                     cmd=["{code}", "mopac.dat", ">", "stdout.txt", "2>", "stderr.txt"],
                     config=config,
@@ -322,6 +404,17 @@ class MOPAC(mopac_step.MOPACBase):
                     shell=True,
                     env=env,
                 )
+
+                t = (time.time_ns() - t0) / 1.0e9
+                if self._timing_data is not None:
+                    self._timing_data[13] = f"{t:.3f}"
+                    self._timing_data[12] = str(n_cores)
+                    try:
+                        with self._timing_path.open("a", newline="") as fd:
+                            writer = csv.writer(fd)
+                            writer.writerow(self._timing_data)
+                    except Exception:
+                        pass
 
                 if not result:
                     self.logger.error("There was an error running MOPAC")
@@ -413,7 +506,7 @@ class MOPAC(mopac_step.MOPACBase):
                 # like MOPAC2016.20.191M
                 release, version = data["MOPAC_VERSION"].split(".", maxsplit=1)
                 try:
-                    t = datetime.datetime.strptime(version[0:-1], "%y.%j")
+                    t = datetime.strptime(version[0:-1], "%y.%j")
                     year = t.year
                     month = t.month
                     template = string.Template(self._bibliography["Stewart_2016"])

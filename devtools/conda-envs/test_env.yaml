@@ -10,6 +10,7 @@ dependencies:
 
   # SEAMM
   - molsystem
+  - py-cpuinfo
   - requests
   - seamm
   - tabulate

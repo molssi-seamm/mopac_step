@@ -1,6 +1,12 @@
 =======
 History
 =======
+2025.3.6 -- Updated the installer and added timing information
+   * Updated the MOPAC installer to work with recent changes in the SEAMM installer.
+   * Saving timing information to ~/SEAMM/timing/mopac.csv for tools to predict the
+     length of calculations.
+   * Corrected a small issue with the RMSD calculations.
+
 2025.2.24 -- Changed the structure option to "Discard the structure".
 
 2025.2.23 -- Added RMSD and ability to discard the optimized stucture
