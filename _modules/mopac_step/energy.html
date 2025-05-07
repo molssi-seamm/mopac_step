@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mopac_step.energy &#8212; SEAMM MOPAC Plug-in 2025.3.6 documentation</title>
+    <title>mopac_step.energy &#8212; SEAMM MOPAC Plug-in 2025.5.7 documentation</title>
   
   
   
@@ -48,7 +48,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="../../_static/documentation_options.js?v=e9ac57a2"></script>
+    <script src="../../_static/documentation_options.js?v=b25a682c"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -60,7 +60,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <link rel="search" title="Search" href="../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2025.3.6" />
+  <meta name="docsearch:version" content="2025.5.7" />
   </head>
   
   
@@ -1056,6 +1056,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                         <span class="n">note</span><span class="o">=</span><span class="s2">&quot;The citation for the MOPAC parameterization.&quot;</span><span class="p">,</span>
                     <span class="p">)</span>
                     <span class="k">break</span>
+        <span class="k">elif</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;hamiltonian&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;pm6-org&quot;</span><span class="p">:</span>
+            <span class="n">references</span><span class="o">.</span><span class="n">cite</span><span class="p">(</span>
+                <span class="n">raw</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">_bibliography</span><span class="p">[</span><span class="s2">&quot;PM6-ORG&quot;</span><span class="p">],</span>
+                <span class="n">alias</span><span class="o">=</span><span class="s2">&quot;PM6-ORG&quot;</span><span class="p">,</span>
+                <span class="n">module</span><span class="o">=</span><span class="s2">&quot;mopac_step&quot;</span><span class="p">,</span>
+                <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                <span class="n">note</span><span class="o">=</span><span class="s2">&quot;The PM6-ORG parameterization in MOPAC.&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
         <span class="k">elif</span> <span class="s2">&quot;PM6&quot;</span> <span class="ow">in</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;hamiltonian&quot;</span><span class="p">]:</span>
             <span class="n">references</span><span class="o">.</span><span class="n">cite</span><span class="p">(</span>
                 <span class="n">raw</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">_bibliography</span><span class="p">[</span><span class="s2">&quot;Stewart_2007&quot;</span><span class="p">],</span>
