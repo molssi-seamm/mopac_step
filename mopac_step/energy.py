@@ -578,6 +578,14 @@ class Energy(seamm.Node):
                         note="The citation for the MOPAC parameterization.",
                     )
                     break
+        elif P["hamiltonian"].lower() == "pm6-org":
+            references.cite(
+                raw=self.parent._bibliography["PM6-ORG"],
+                alias="PM6-ORG",
+                module="mopac_step",
+                level=1,
+                note="The PM6-ORG parameterization in MOPAC.",
+            )
         elif "PM6" in P["hamiltonian"]:
             references.cite(
                 raw=self.parent._bibliography["Stewart_2007"],
