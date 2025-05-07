@@ -456,7 +456,7 @@ class Optimization(mopac_step.Energy):
 
             # Align the structure
             if P["structure handling"] != "Discard the structure":
-                configuration.from_RDKMol(RDKMol)
+                configuration.coordinates_from_RDKMol(RDKMol)
 
             result = RMSD(RDKMol, initial_RDKMol, symmetry=True)
             data["RMSD"] = result["RMSD"]
