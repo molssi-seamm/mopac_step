@@ -1,6 +1,11 @@
 =======
 History
 =======
+2025.5.7 -- Bugfix and reference for PM6-ORG
+   * Added the reference for PM6-ORG
+   * Fixed a bug that was resulting in deleting atoms from other configurations when
+     updating the structure after minimization.
+     
 2025.3.6 -- Updated the installer and added timing information
    * Updated the MOPAC installer to work with recent changes in the SEAMM installer.
    * Saving timing information to ~/SEAMM/timing/mopac.csv for tools to predict the
