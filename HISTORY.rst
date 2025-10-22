@@ -1,6 +1,10 @@
 =======
 History
 =======
+2025.10.22 -- Bugfix: corrected incorrect keywords
+    * Some of the keywords in the metadata had '=xxx' as part of the keyword. This was
+      incorrect and stripped leaving just the keyword.
+      
 2025.5.7.1 -- Bugfix: typo in PM6-ORG reference BibTeX
 
 2025.5.7 -- Bugfix and added the reference for PM6-ORG
