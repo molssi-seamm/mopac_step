@@ -156,7 +156,7 @@ class Forceconstants(mopac_step.Energy):
                     vector = 6 * [0.0]
                     vector[direction] = P["stepsize"]
                     configuration.strain(vector)
-                    structure = self.parent.mopac_structure()
+                    structure, symlines = self.parent.mopac_structure()
                     inputs.append(
                         [[*keywords], structure, f"Strained +{P['stepsize']} in {name}"]
                     )
@@ -167,7 +167,7 @@ class Forceconstants(mopac_step.Energy):
                     vector = 6 * [0.0]
                     vector[direction] = -P["stepsize"]
                     configuration.strain(vector)
-                    structure = self.parent.mopac_structure()
+                    structure, symlines = self.parent.mopac_structure()
                     inputs.append(
                         [[*keywords], structure, f"Strained -{P['stepsize']} in {name}"]
                     )
@@ -184,7 +184,7 @@ class Forceconstants(mopac_step.Energy):
                     vector = 6 * [0.0]
                     vector[direction] = P["stepsize"]
                     configuration.strain(vector)
-                    structure = self.parent.mopac_structure()
+                    structure, symlines = self.parent.mopac_structure()
                     inputs.append(
                         [[*keywords], structure, f"Strained {P['stepsize']} in {name}"]
                     )
@@ -206,7 +206,7 @@ class Forceconstants(mopac_step.Energy):
                 if "PRECISE" in keywords:
                     keywords.remove("PRECISE")
 
-            structure = self.parent.mopac_structure()
+            structure, symlines = self.parent.mopac_structure()
             inputs.append([[*keywords], structure, "Atomic Hessian calculation"])
 
         return inputs

@@ -102,6 +102,26 @@ class OptimizationParameters(mopac_step.EnergyParameters):
             "description": "Optimize the cell (if periodic):",
             "help_text": "Allow the lattice vectors to change during optimization.",
         },
+        "allow shear": {
+            "default": "yes",
+            "kind": "boolean",
+            "format_string": "s",
+            "enumeration": ("no", "yes"),
+            "description": "Allow the cell to shear",
+            "help_text": "Whether the cell angles can change.",
+        },
+        "couple": {
+            "default": "none",
+            "kind": "enumeration",
+            "enumeration": ("x, y and z", "x and y", "x and z", "y and z", "none"),
+            "format_string": "s",
+            "description": "Directions to couple:",
+            "help_text": (
+                "The stress in these directions will be "
+                "averaged and the cell dilated in fixed "
+                "proportions in these directions."
+            ),
+        },
         "pressure": {
             "default": 0.0,
             "kind": "float",

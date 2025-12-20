@@ -8,6 +8,7 @@ import textwrap
 import traceback
 
 import numpy as np
+from tabulate import tabulate
 
 import mopac_step
 from molsystem import RMSD
@@ -117,6 +118,8 @@ class Optimization(mopac_step.Energy):
 
         # Let parent know about cell optimization
         self.parent._lattice_opt = P["LatticeOpt"]
+        self.parent._lattice_shear = P["allow shear"]
+        self.parent._lattice_couple = P["couple"]
 
         # Get the inputs from the energy class. This also sets the description properly.
         inputs = super().get_input()
@@ -257,7 +260,7 @@ class Optimization(mopac_step.Energy):
             context=seamm.flowchart_variables._data
         )
 
-        starting_system, starting_configuration = self.get_system_configuration(None)
+        initial_system, initial_configuration = self.get_system_configuration(None)
 
         # Get the data.
         data = data_sections[0]
@@ -390,16 +393,16 @@ class Optimization(mopac_step.Energy):
             )
 
         # Update the structure
-        periodicity = starting_configuration.periodicity
+        periodicity = initial_configuration.periodicity
         if "ATOM_X_OPT" in data or "ATOM_X_UPDATED" in data:
-            initial_RDKMol = starting_configuration.to_RDKMol()
+            initial_RDKMol = initial_configuration.to_RDKMol()
 
             if P["structure handling"] == "Discard the structure":
-                system = starting_configuration
-                configuration = starting_configuration
+                system = initial_configuration
+                configuration = initial_configuration
             else:
                 system, configuration = self.get_system_configuration(
-                    P, same_as=starting_configuration
+                    P, same_as=initial_configuration
                 )
                 if periodicity != 0 and P["LatticeOpt"]:
                     if "TRANS_VECTS" in data:
@@ -443,7 +446,7 @@ class Optimization(mopac_step.Energy):
                 )
 
             if P["structure handling"] == "Discard the structure":
-                RDKMol = starting_configuration.to_RDKMol()
+                RDKMol = initial_configuration.to_RDKMol()
                 RDKMol.GetConformer(0).SetPositions(np.array(xyz))
             else:
                 configuration.atoms.set_coordinates(xyz, fractionals=False)
@@ -498,3 +501,81 @@ class Optimization(mopac_step.Energy):
             out_sections=out_sections,
             table=table,
         )
+
+        # Tabulate the change in cell parameters
+        # For periodic systems, the change in cell
+        if initial_configuration.periodicity != 0:
+            a0, b0, c0, alpha0, beta0, gamma0 = initial_configuration.cell.parameters
+            a, b, c, alpha, beta, gamma = configuration.cell.parameters
+            data["a"] = a
+            data["b"] = b
+            data["c"] = c
+            data["alpha"] = alpha
+            data["beta"] = beta
+            data["gamma"] = gamma
+            data["delta a"] = a - a0
+            data["delta b"] = b - b0
+            data["delta c"] = c - c0
+            data["delta alpha"] = alpha - alpha0
+            data["delta beta"] = beta - beta0
+            data["delta gamma"] = gamma - gamma0
+
+            V0 = initial_configuration.cell.volume
+            V = configuration.cell.volume
+            rho0 = initial_configuration.density
+            rho = configuration.density
+            data["V"] = V
+            data["density"] = rho
+            data["delta V"] = V - V0
+            data["delta density"] = rho - rho0
+
+            ctable = {
+                "": ("𝗮", "𝗯", "𝗰", "𝞪", "𝞫", "𝞬", "V", "ρ"),
+                "Initial": (
+                    f"{a0:.3f}",
+                    f"{b0:.3f}",
+                    f"{c0:.3f}",
+                    f"{alpha0:.1f}",
+                    f"{beta0:.1f}",
+                    f"{gamma0:.1f}",
+                    f"{V0:.1f}",
+                    f"{rho0:.3f}",
+                ),
+                "Final": (
+                    f"{a:.3f}",
+                    f"{b:.3f}",
+                    f"{c:.3f}",
+                    f"{alpha:.1f}",
+                    f"{beta:.1f}",
+                    f"{gamma:.1f}",
+                    f"{V:.1f}",
+                    f"{rho:.3f}",
+                ),
+                "Change": (
+                    f"{a - a0:.3f}",
+                    f"{b - b0:.3f}",
+                    f"{c - c0:.3f}",
+                    f"{alpha - alpha0:.1f}",
+                    f"{beta - beta0:.1f}",
+                    f"{gamma - gamma0:.1f}",
+                    f"{V - V0:.1f}",
+                    f"{rho - rho0:.3f}",
+                ),
+                "Units": ("Å", "Å", "Å", "°", "°", "°", "Å³", "g/mL"),
+            }
+
+            tmp = tabulate(
+                ctable,
+                headers="keys",
+                tablefmt="rounded_outline",
+                colalign=("center", "decimal", "decimal", "decimal", "center"),
+                disable_numparse=True,
+            )
+            length = len(tmp.splitlines()[0])
+            text_lines = []
+            text_lines.append("Cell Parameters".center(length))
+            text_lines.append(tmp)
+            printer.normal(
+                textwrap.indent("\n".join(text_lines), self.indent + 7 * " ")
+            )
+            printer.normal("")

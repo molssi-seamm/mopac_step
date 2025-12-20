@@ -15,3 +15,6 @@ total energy#MOPAC#{model},float,eV,"The {model} total energy (electronic + nucl
 volume#MOPAC#{model},float,Å^3,"The molecular volume.",
 zero point energy#MOPAC#{model},float,kJ/mol,"The {model} zero-point vibrational energy.",
 force constants#MOPAC#{model},json,kcal/mol/Å^2,The {model} force constants,
+gradients#MOPAC#{model},json,kcal/mol/Å,The {model} gradients,
+pressure#MOPAC#{model},float,GPa,"The pressure.",https://en.wikipedia.org/wiki/Pressure
+stress#MOPAC#{model},json,GPa,"The stress tensor.",https://en.wikipedia.org/wiki/Pressure

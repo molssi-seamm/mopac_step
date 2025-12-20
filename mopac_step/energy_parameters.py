@@ -275,9 +275,10 @@ class EnergyParameters(seamm.Parameters):
         },
         "calculate gradients": {
             "default": "yes",
-            "kind": "boolean",
+            "kind": "string",
             "default_units": "",
             "enumeration": (
+                "save to structure",
                 "yes",
                 "no",
             ),

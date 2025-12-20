@@ -119,21 +119,44 @@ class MOPACBase(seamm.Node):
             )
             structure += line
 
+        symlines = ""
         if configuration.periodicity == 3:
             # The three translation vectors
             element = "Tv"
             uvw = [[1, 0, 0], [0, 1, 0], [0, 0, 1]]
             XYZ = configuration.cell.to_cartesians(uvw)
-            frz = 1 if self._lattice_opt else 0
-            for xyz in XYZ:
+            n = configuration.n_atoms
+            tv1 = n + 1
+            tv2 = n + 2
+            tv3 = n + 3
+            if self._lattice_opt:
+                if self._lattice_shear:
+                    freeze = [[1, 1, 1], [1, 1, 1], [1, 1, 1]]
+                else:
+                    freeze = [[1, 0, 0], [0, 1, 0], [0, 0, 1]]
+                if self._lattice_couple == "x, y and z":
+                    freeze[1][1] = 0
+                    freeze[2][2] = 0
+                    symlines += f"    {tv1} 14 {tv2}\n"
+                    symlines += f"    {tv1}  9 {tv3}\n"
+                elif self._lattice_couple == "x and y":
+                    freeze[1][1] = 0
+                    symlines += f"    {tv1} 14 {tv2}\n"
+                elif self._lattice_couple == "x and z":
+                    freeze[2][2] = 0
+                    symlines += f"    {tv1} 9 {tv2}\n"
+                elif self._lattice_couple == "y and z":
+                    freeze[2][2] = 0
+                    symlines += f"    {tv2} 15 {tv3}\n"
+            else:
+                freeze = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
+            for xyz, frz in zip(XYZ, freeze):
                 x, y, z = xyz
-                line = (
-                    f"{element:2} {x: 12.8f} {frz} {y: 12.8f} {frz} "
-                    f"{z: 12.8f} {frz}\n"
-                )
+                fx, fy, fz = frz
+                line = f"{element:2} {x: 12.8f} {fx} {y: 12.8f} {fy} {z: 12.8f} {fz}\n"
                 structure += line
 
-        return structure
+        return structure, symlines
 
     def parse_arc(self, filename="mopac.arc"):
         """Digest the ARC file and get the coordinates.
