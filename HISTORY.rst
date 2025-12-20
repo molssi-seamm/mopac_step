@@ -1,6 +1,13 @@
 =======
 History
 =======
+2025.12.20 -- Added control over cell optimization for periodic systems
+    * Added control over whether to shear the cell when optimizing, and also to couple
+      the diagonal directions so they have identical values.
+    * Enhanced the output to show changes in the cell parameters, volume, and denisty
+      and also to print the stress.
+    * Added an option to save the gradients to the configuration.
+
 2025.10.22 -- Bugfix: corrected incorrect keywords
     * Some of the keywords in the metadata had '=xxx' as part of the keyword. This was
       incorrect and stripped leaving just the keyword.

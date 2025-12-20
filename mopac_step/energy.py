@@ -749,7 +749,7 @@ class Energy(seamm.Node):
             keywords.append(f"NSPA={P['nspa']}")
             keywords.append(f"DISEX={P['disex']}")
 
-        if P["calculate gradients"]:
+        if P["calculate gradients"].lower() != "no":
             keywords.append("GRADIENTS")
 
         if "yes" in P["bond orders"]:
@@ -806,13 +806,13 @@ class Energy(seamm.Node):
             context=seamm.flowchart_variables._data
         )
 
-        system, starting_configuration = self.get_system_configuration(None)
+        system, configuration = self.get_system_configuration(None)
 
         if P["MOZYME"] == "always":
             used_mozyme = True
         elif (
             P["MOZYME"] == "for larger systems"
-            and starting_configuration.n_atoms >= P["nMOZYME"]
+            and configuration.n_atoms >= P["nMOZYME"]
         ):
             used_mozyme = True
         else:
@@ -1005,6 +1005,31 @@ class Energy(seamm.Node):
             table["Value"].append(f"{tmp:.2f}")
             table["Units"].append("Å^3")
 
+        # For periodic systems the volume and density, cell parameters and stress
+        if configuration.periodicity == 3:
+            V = configuration.cell.volume
+            rho = configuration.density
+            a, b, c, alpha, beta, gamma = configuration.cell.parameters
+            table["Property"].extend(("𝗮", "𝗯", "𝗰", "𝞪", "𝞫", "𝞬", "V", "ρ"))
+            table["Value"].extend(
+                (
+                    f"{a:.3f}",
+                    f"{b:.3f}",
+                    f"{c:.3f}",
+                    f"{alpha:.1f}",
+                    f"{beta:.1f}",
+                    f"{gamma:.1f}",
+                    f"{V:.1f}",
+                    f"{rho:.3f}",
+                )
+            )
+            table["Units"].extend(("Å", "Å", "Å", "°", "°", "°", "Å³", "g/mL"))
+            if "VOIGT_STRESS" in data:
+                table["Property"].extend(("Sxx", "Syy", "Szz", "Syz", "Sxz", "Sxy"))
+                tmp = [f"{float(v):.3f}" for v in data["VOIGT_STRESS"]]
+                table["Value"].extend(tmp)
+                table["Units"].extend(["GPa"] * 6)
+
         text_lines = []
         text_lines.append("                     Results")
         text_lines.append(
@@ -1021,7 +1046,6 @@ class Energy(seamm.Node):
         directory = Path(self.directory)
         directory.mkdir(parents=True, exist_ok=True)
 
-        system, configuration = self.get_system_configuration(None)
         symbols = configuration.atoms.asymmetric_symbols
         atoms = configuration.atoms
         symmetry = configuration.symmetry
@@ -1119,7 +1143,7 @@ class Energy(seamm.Node):
 
         if "BOND_ORDERS" in data:
             text += self._bond_orders(
-                P["bond orders"], data["BOND_ORDERS"], starting_configuration
+                P["bond orders"], data["BOND_ORDERS"], configuration
             )
 
         printer.normal(text)
@@ -1154,11 +1178,19 @@ class Energy(seamm.Node):
                         pass
 
         if "GRADIENTS" in data:
-            tmp = np.array(data["GRADIENTS"]).reshape(-1, 3)
+            # Ouch. MOPAC has the gradients of the cell vectors at the end
+            n_atoms = configuration.n_atoms
+            tmp = np.array(data["GRADIENTS"][: 3 * n_atoms]).reshape(n_atoms, 3)
             # Remove any translation
             delta = np.average(tmp, axis=0)
             tmp -= delta
+            del data["GRADIENTS"]
             data["gradients"] = tmp.tolist()
+            if "save" in P["calculate gradients"].lower():
+                # MOPAC has Cartesian gradients, in kcal/mol/Å
+                factor = Q_("kcal/mol/Å").m_as("kJ/mol/Å")
+                tmp *= factor
+                configuration.atoms.set_gradients(tmp, fractionals=False)
         elif "GRADIENT_NORM" in data:
             # MOPAC does not currently write gradients to the AUX file if they are small
             # They are, however, written to the output file.

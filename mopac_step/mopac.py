@@ -60,6 +60,8 @@ class MOPAC(mopac_step.MOPACBase):
             )
         self._data = {}
         self._lattice_opt = True
+        self._lattice_shear = True
+        self._lattice_couple = "none"
         self._input_only = False
 
         super().__init__(
@@ -238,6 +240,12 @@ class MOPAC(mopac_step.MOPACBase):
             n_calculations.append(len(inputs))
             for keywords, structure, comment in inputs:
                 lines = []
+                if "OLDGEO" not in keywords:
+                    structure_lines, symlines = self.mopac_structure()
+                    if symlines != "" and "SYMMETRY" not in extra_keywords:
+                        extra_keywords.append("SYMMETRY")
+                else:
+                    symlines = ""
                 all_keywords.append(" ".join(keywords + extra_keywords))
                 lines.append(" ".join(keywords + extra_keywords))
                 lines.append(system.name)
@@ -250,10 +258,13 @@ class MOPAC(mopac_step.MOPACBase):
                 text += "\n"
                 if structure is None:
                     if "OLDGEO" not in keywords:
-                        text += self.mopac_structure()
+                        text += structure_lines
                         text += "\n"
+                        if symlines != "":
+                            text += symlines
+                            text += "\n"
                 else:
-                    text += structure
+                    text += structure_lines
                     text += "\n"
             node = node.next()
 

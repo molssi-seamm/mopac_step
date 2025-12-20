@@ -97,8 +97,9 @@ class TkOptimization(mopac_step.TkEnergy):
         row += 1
 
         if lattice_opt == "Yes":
-            self["pressure"].grid(row=row, column=1, sticky=tk.EW)
-            row += 1
+            for key in ("pressure", "allow shear", "couple"):
+                self[key].grid(row=row, column=1, sticky=tk.EW)
+                row += 1
 
         self["method"].grid(row=row, column=0, columnspan=2, sticky=tk.EW)
         widgets.append(self["method"])

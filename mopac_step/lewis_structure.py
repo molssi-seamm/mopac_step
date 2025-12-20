@@ -150,7 +150,8 @@ class LewisStructure(mopac_step.MOPACBase):
 
         text += "\n".join(lines)
         text += "\n"
-        text += self.mopac_structure()
+        structure_lines, symlines = self.mopac_structure()
+        text += structure_lines
         text += "\n"
 
         files = {"mopac.dat": text}
