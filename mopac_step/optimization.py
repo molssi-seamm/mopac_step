@@ -395,7 +395,8 @@ class Optimization(mopac_step.Energy):
         # Update the structure
         periodicity = initial_configuration.periodicity
         if "ATOM_X_OPT" in data or "ATOM_X_UPDATED" in data:
-            initial_RDKMol = initial_configuration.to_RDKMol()
+            if periodicity == 0:
+                initial_RDKMol = initial_configuration.to_RDKMol()
 
             if P["structure handling"] == "Discard the structure":
                 system = initial_configuration
@@ -446,25 +447,28 @@ class Optimization(mopac_step.Energy):
                 )
 
             if P["structure handling"] == "Discard the structure":
-                RDKMol = initial_configuration.to_RDKMol()
-                RDKMol.GetConformer(0).SetPositions(np.array(xyz))
+                if periodicity == 0:
+                    RDKMol = initial_configuration.to_RDKMol()
+                    RDKMol.GetConformer(0).SetPositions(np.array(xyz))
             else:
                 configuration.atoms.set_coordinates(xyz, fractionals=False)
-                RDKMol = configuration.to_RDKMol()
+                if periodicity == 0:
+                    RDKMol = configuration.to_RDKMol()
 
-            result = RMSD(RDKMol, initial_RDKMol, symmetry=True, include_h=True)
-            data["RMSD with H"] = result["RMSD"]
-            data["displaced atom with H"] = result["displaced atom"]
-            data["maximum displacement with H"] = result["maximum displacement"]
+            if periodicity == 0:
+                result = RMSD(RDKMol, initial_RDKMol, symmetry=True, include_h=True)
+                data["RMSD with H"] = result["RMSD"]
+                data["displaced atom with H"] = result["displaced atom"]
+                data["maximum displacement with H"] = result["maximum displacement"]
 
-            # Align the structure
-            if P["structure handling"] != "Discard the structure":
-                configuration.coordinates_from_RDKMol(RDKMol)
+                # Align the structure
+                if P["structure handling"] != "Discard the structure":
+                    configuration.coordinates_from_RDKMol(RDKMol)
 
-            result = RMSD(RDKMol, initial_RDKMol, symmetry=True)
-            data["RMSD"] = result["RMSD"]
-            data["displaced atom"] = result["displaced atom"]
-            data["maximum displacement"] = result["maximum displacement"]
+                result = RMSD(RDKMol, initial_RDKMol, symmetry=True)
+                data["RMSD"] = result["RMSD"]
+                data["displaced atom"] = result["displaced atom"]
+                data["maximum displacement"] = result["maximum displacement"]
 
             text += seamm.standard_parameters.set_names(
                 system, configuration, P, _first=True, Hamiltonian=P["hamiltonian"]
