@@ -1,6 +1,15 @@
 =======
 History
 =======
+2025.12.21 -- Fixed an issue with periodic systems and lattice size
+    * Mopac is sensitive to where the atoms are in periodic systems, and stops with a
+      warning if the atoms are too far out of the unit cell. SEAMM now avoids this by
+      translating the atoms into the unit cell before running MOPAC.
+    * Added error checking for a bond matrix with incompatible size to the number of
+      atoms and print a warning but continue.
+    * For periodic systems, avoid calculating the RMS and maximum displacement of atoms,
+      which is not well-defined and also causes problems in the current code.
+
 2025.12.20 -- Added control over cell optimization for periodic systems
     * Added control over whether to shear the cell when optimizing, and also to couple
       the diagonal directions so they have identical values.

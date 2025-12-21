@@ -1256,6 +1256,21 @@ class Energy(seamm.Node):
         if n_atoms == 1:
             return "\n\n        No bonds, since there is only one atom.\n"
 
+        # Check dimensions
+        if len(bond_order_matrix) != n_atoms * (n_atoms + 1) / 2:
+            result = (
+                "\n\n        The was an error in the size of the bond order matrix:"
+            )
+            result += f"\n             n_atoms = {n_atoms}"
+            result += (
+                f"\n             size of bond order matrix = {len(bond_order_matrix)}"
+            )
+            result += (
+                f"\n             n_atoms * (n_atoms + 1) / 2 = {n_atoms*(n_atoms+1)/2}"
+            )
+            result += "\n"
+            return result
+
         bond_i = []
         bond_j = []
         bond_order = []

@@ -101,7 +101,7 @@ class MOPACBase(seamm.Node):
         structure = ""
         atoms = configuration.atoms
         elements = atoms.symbols
-        coordinates = atoms.get_coordinates(fractionals=False)
+        coordinates = atoms.get_coordinates(fractionals=False, in_cell=True)
         if "freeze" in atoms:
             freeze = atoms["freeze"]
         else:
