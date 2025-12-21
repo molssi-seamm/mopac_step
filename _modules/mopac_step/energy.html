@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mopac_step.energy &#8212; SEAMM MOPAC Plug-in 2025.12.20 documentation</title>
+    <title>mopac_step.energy &#8212; SEAMM MOPAC Plug-in 2025.12.21 documentation</title>
   
   
   
@@ -48,7 +48,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="../../_static/documentation_options.js?v=8d4c450e"></script>
+    <script src="../../_static/documentation_options.js?v=2934c117"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -60,7 +60,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <link rel="search" title="Search" href="../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2025.12.20" />
+  <meta name="docsearch:version" content="2025.12.21" />
   </head>
   
   
@@ -1737,6 +1737,21 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
         <span class="k">if</span> <span class="n">n_atoms</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
             <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">        No bonds, since there is only one atom.</span><span class="se">\n</span><span class="s2">&quot;</span>
+
+        <span class="c1"># Check dimensions</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">bond_order_matrix</span><span class="p">)</span> <span class="o">!=</span> <span class="n">n_atoms</span> <span class="o">*</span> <span class="p">(</span><span class="n">n_atoms</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">        The was an error in the size of the bond order matrix:&quot;</span>
+            <span class="p">)</span>
+            <span class="n">result</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">             n_atoms = </span><span class="si">{</span><span class="n">n_atoms</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="n">result</span> <span class="o">+=</span> <span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">             size of bond order matrix = </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">bond_order_matrix</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+            <span class="n">result</span> <span class="o">+=</span> <span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">             n_atoms * (n_atoms + 1) / 2 = </span><span class="si">{</span><span class="n">n_atoms</span><span class="o">*</span><span class="p">(</span><span class="n">n_atoms</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+            <span class="n">result</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="k">return</span> <span class="n">result</span>
 
         <span class="n">bond_i</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">bond_j</span> <span class="o">=</span> <span class="p">[]</span>
