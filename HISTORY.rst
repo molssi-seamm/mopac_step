@@ -1,6 +1,8 @@
 =======
 History
 =======
+2026.3.1 -- Internal: switching from deprecated library pkg_resources to importlib
+
 2025.12.21 -- Fixed an issue with periodic systems and lattice size
     * Mopac is sensitive to where the atoms are in periodic systems, and stops with a
       warning if the atoms are too far out of the unit cell. SEAMM now avoids this by
