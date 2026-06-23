@@ -9,3 +9,4 @@ Contents:
    installation
    usage
    contributing
+   campaigns/index

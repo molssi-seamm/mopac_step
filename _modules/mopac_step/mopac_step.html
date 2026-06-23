@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mopac_step.mopac_step &#8212; SEAMM MOPAC Plug-in 2026.3.1 documentation</title>
+    <title>mopac_step.mopac_step &#8212; SEAMM MOPAC Plug-in 2026.6.23 documentation</title>
   
   
   
@@ -26,8 +26,8 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+  <link href="../../_static/styles/theme.css?digest=a95f357e85573c9b56d5" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=a95f357e85573c9b56d5" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -35,10 +35,10 @@
     <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css?v=c224919a" />
   
   <!-- So that users can add custom icons -->
-  <script src="../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <script defer src="../../_static/scripts/fontawesome.js?digest=a95f357e85573c9b56d5"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=a95f357e85573c9b56d5" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=a95f357e85573c9b56d5" />
 
 <!-- Google Tag Manager -->
 <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -48,33 +48,40 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="../../_static/documentation_options.js?v=fec480e4"></script>
+    <script src="../../_static/documentation_options.js?v=1fd19c68"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../_static/copybutton.js?v=f281be69"></script>
     <script src="../../_static/design-tabs.js?v=f930bc37"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/mopac_step/mopac_step';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
 
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.3.1" />
+  <meta name="docsearch:version" content="2026.6.23" />
+  
+    
+    <script src="../../_static/searchtools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script src="../../searchindex.js"></script>
+  
   </head>
-  
-  
-  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
-
+  <body data-default-mode="">
   
   
   <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
   
   <div id="pst-scroll-pixel-helper"></div>
   
   <button type="button" class="btn rounded-pill" id="pst-back-to-top">
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
-
+  
+  
+  
   
   <dialog id="pst-search-dialog">
     
@@ -100,7 +107,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </div>
 
   
-    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
 <div class="bd-header__inner bd-page-width">
   <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
     <span class="fa-solid fa-bars"></span>
@@ -230,11 +237,18 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       
         <div class="navbar-item">
 
-<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
-  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
-  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
-</button></div>
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
       
         <div class="navbar-item"><ul class="navbar-icon-links"
     aria-label="Icon Links">
@@ -247,8 +261,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           
           
           
-          <a href="https://github.com/molssi-seamm/mopac_step" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
-            <span class="sr-only">GitHub</span></a>
+          <a href="https://github.com/molssi-seamm/mopac_step" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
         </li>
         <li class="nav-item">
           
@@ -259,8 +272,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           
           
           
-          <a href="https://twitter.com/MolSSI_NSF" title="Twitter" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-twitter fa-lg" aria-hidden="true"></i>
-            <span class="sr-only">Twitter</span></a>
+          <a href="https://twitter.com/MolSSI_NSF" title="Twitter" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-twitter fa-lg" aria-hidden="true"></i><span class="visually-hidden">Twitter</span></a>
         </li>
 </ul></div>
       
@@ -375,11 +387,18 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         
           <div class="navbar-item">
 
-<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
-  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
-  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
-</button></div>
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
         
           <div class="navbar-item"><ul class="navbar-icon-links"
     aria-label="Icon Links">
@@ -392,8 +411,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           
           
           
-          <a href="https://github.com/molssi-seamm/mopac_step" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
-            <span class="sr-only">GitHub</span></a>
+          <a href="https://github.com/molssi-seamm/mopac_step" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
         </li>
         <li class="nav-item">
           
@@ -404,8 +422,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           
           
           
-          <a href="https://twitter.com/MolSSI_NSF" title="Twitter" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-twitter fa-lg" aria-hidden="true"></i>
-            <span class="sr-only">Twitter</span></a>
+          <a href="https://twitter.com/MolSSI_NSF" title="Twitter" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-twitter fa-lg" aria-hidden="true"></i><span class="visually-hidden">Twitter</span></a>
         </li>
 </ul></div>
         
@@ -469,9 +486,16 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 <article class="bd-article">
                   
   <h1>Source code for mopac_step.mopac_step</h1><div class="highlight"><pre>
-<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span></span><span class="c1"># mopac_step/mopac_step.py</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
 
 <span class="sd">&quot;&quot;&quot;Main module.&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">configparser</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">importlib.resources</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">shutil</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">mopac_step</span>
 
@@ -511,6 +535,292 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <span class="k">def</span><span class="w"> </span><span class="nf">create_tk_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">canvas</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the graphical Tk node object&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">mopac_step</span><span class="o">.</span><span class="n">TkMOPAC</span><span class="p">(</span><span class="n">canvas</span><span class="o">=</span><span class="n">canvas</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+    <span class="c1"># Patch to mopac_step/mopac_step.py -- add to the MOPACStep class,</span>
+    <span class="c1"># alongside description()/create_node()/create_tk_node().</span>
+    <span class="c1">#</span>
+    <span class="c1"># Revision 2026-06-22: now surfaces &quot;sparkle_elements&quot; in the returned</span>
+    <span class="c1"># dict (added to the raw metadata for PM7/PM7-TS/PM6ants on 2026-06-22, but</span>
+    <span class="c1"># the first draft of this classmethod predated that field and never</span>
+    <span class="c1"># passed it through -- caught while writing tests, fixed here).</span>
+
+    <span class="c1"># mopactools.api.MopacSystem.model_dict&#39;s scope -- see mopac_mdi.py&#39;s</span>
+    <span class="c1"># --method choices. This is the authoritative source for what&#39;s</span>
+    <span class="c1"># actually reachable via MDI; update here if mopactools changes.</span>
+
+    <span class="n">_MDI_CAPABLE_METHODS</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;PM7&quot;</span><span class="p">,</span> <span class="s2">&quot;PM6-D3H4&quot;</span><span class="p">,</span> <span class="s2">&quot;PM6-ORG&quot;</span><span class="p">,</span> <span class="s2">&quot;PM6&quot;</span><span class="p">,</span> <span class="s2">&quot;AM1&quot;</span><span class="p">,</span> <span class="s2">&quot;RM1&quot;</span><span class="p">}</span>
+
+    <span class="c1"># Methods actually run periodic via MDI and confirmed working, per</span>
+    <span class="c1"># NOTES_qm_mdi_engines_validation.rst. Cross-checked against the real</span>
+    <span class="c1"># metadata[&quot;computational models&quot;] entries -- PM7, PM6, and PM6-ORG are</span>
+    <span class="c1"># the only three with both periodic=True there AND an actual validated</span>
+    <span class="c1"># periodic MDI run this week. PM6-D3H4 is MDI-capable but deliberately</span>
+    <span class="c1"># excluded: its own metadata entry says periodic=False, and MOPAC&#39;s</span>
+    <span class="c1"># documentation confirms D3H4 does not work under periodic boundary</span>
+    <span class="c1"># conditions at all.</span>
+
+    <span class="n">_MDI_PERIODIC_VALIDATED</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;PM7&quot;</span><span class="p">,</span> <span class="s2">&quot;PM6-ORG&quot;</span><span class="p">,</span> <span class="s2">&quot;PM6&quot;</span><span class="p">}</span>
+
+<div class="viewcode-block" id="MOPACStep.get_model_chemistry_options">
+<a class="viewcode-back" href="../../api/mopac_step.html#mopac_step.mopac_step.MOPACStep.get_model_chemistry_options">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_model_chemistry_options</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">periodic_only</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">mdi_only</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the model chemistries MOPAC can provide.</span>
+
+<span class="sd">        NOTE: only covers methods present in metadata[&quot;computational</span>
+<span class="sd">        models&quot;]. As of 2026-06-22 this includes PM7, PM7-TS, PM6,</span>
+<span class="sd">        PM6-ORG, PM6-D3, PM6-DH+, PM6-DH2, PM6-DH2X, PM6-D3H4, PM6-D3H4X,</span>
+<span class="sd">        AM1, RM1, PM3, MNDO, MNDOD.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        periodic_only : bool</span>
+<span class="sd">            Only return options confirmed to work for a periodic system</span>
+<span class="sd">            via MDI -- conservative by design, a method is only included</span>
+<span class="sd">            if it has actually been run periodic and validated, not</span>
+<span class="sd">            because some other flag suggests it should work.</span>
+<span class="sd">        mdi_only : bool</span>
+<span class="sd">            Only return options actually launchable via mopac_mdi.py, as</span>
+<span class="sd">            opposed to only available through this step&#39;s traditional</span>
+<span class="sd">            batch/file-based path.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        dict</span>
+<span class="sd">            Keyed by bare method name (e.g. &quot;PM6-ORG&quot;). Each value has::</span>
+
+<span class="sd">                model_chemistry  : str   -- &quot;MOPAC:SQM@&lt;name&gt;&quot;</span>
+<span class="sd">                type             : str   -- always &quot;SQM&quot; currently</span>
+<span class="sd">                description      : str</span>
+<span class="sd">                periodic_native  : bool  -- this method&#39;s own metadata flag</span>
+<span class="sd">                periodic_mdi     : bool  -- actually validated periodic via MDI</span>
+<span class="sd">                elements         : str   -- genuine NDDO Hamiltonian coverage</span>
+<span class="sd">                sparkle_elements : str or None -- lanthanides reachable only</span>
+<span class="sd">                                   via the Sparkle point-charge model</span>
+<span class="sd">                                   (currently documented for PM7/PM7-TS/PM6</span>
+<span class="sd">                                   only; None elsewhere, which may mean &quot;not</span>
+<span class="sd">                                   applicable&quot; or &quot;not yet checked&quot; -- see</span>
+<span class="sd">                                   NOTES_mopac_model_chemistry_metadata.rst)</span>
+<span class="sd">                mdi_capable      : bool</span>
+<span class="sd">                mdi_script       : str or None</span>
+<span class="sd">                mdi_method_arg   : str or None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">options</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">theory_class</span><span class="p">,</span> <span class="n">class_data</span> <span class="ow">in</span> <span class="n">mopac_step</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span>
+            <span class="s2">&quot;computational models&quot;</span>
+        <span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">family</span><span class="p">,</span> <span class="n">family_data</span> <span class="ow">in</span> <span class="n">class_data</span><span class="p">[</span><span class="s2">&quot;models&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">family_data</span><span class="p">[</span><span class="s2">&quot;parameterizations&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                    <span class="n">mdi_capable</span> <span class="o">=</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_MDI_CAPABLE_METHODS</span>
+                    <span class="n">periodic_mdi</span> <span class="o">=</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_MDI_PERIODIC_VALIDATED</span>
+
+                    <span class="k">if</span> <span class="n">periodic_only</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">periodic_mdi</span><span class="p">:</span>
+                        <span class="k">continue</span>
+                    <span class="k">if</span> <span class="n">mdi_only</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">mdi_capable</span><span class="p">:</span>
+                        <span class="k">continue</span>
+
+                    <span class="n">options</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                        <span class="s2">&quot;model_chemistry&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;MOPAC:SQM@</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;SQM&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="n">param</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;description&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span>
+                        <span class="s2">&quot;periodic_native&quot;</span><span class="p">:</span> <span class="n">param</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;periodic&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+                        <span class="s2">&quot;periodic_mdi&quot;</span><span class="p">:</span> <span class="n">periodic_mdi</span><span class="p">,</span>
+                        <span class="s2">&quot;elements&quot;</span><span class="p">:</span> <span class="n">param</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;elements&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span>
+                        <span class="s2">&quot;sparkle_elements&quot;</span><span class="p">:</span> <span class="n">param</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;sparkle_elements&quot;</span><span class="p">),</span>
+                        <span class="s2">&quot;mdi_capable&quot;</span><span class="p">:</span> <span class="n">mdi_capable</span><span class="p">,</span>
+                        <span class="s2">&quot;mdi_method_arg&quot;</span><span class="p">:</span> <span class="n">name</span> <span class="k">if</span> <span class="n">mdi_capable</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+                    <span class="p">}</span>
+        <span class="k">return</span> <span class="n">options</span></div>
+
+
+    <span class="c1"># Patch to mopac_step/mopac_step.py -- add to the MOPACStep class,</span>
+    <span class="c1"># alongside get_model_chemistry_options().</span>
+    <span class="c1">#</span>
+    <span class="c1"># 2026-06-23: executor configuration for the MDI engine (Option C --</span>
+    <span class="c1"># the engine script is shipped inside this package, at</span>
+    <span class="c1"># data/mopac_mdi.py, so it is refreshed by `pip install -U mopac-step`</span>
+    <span class="c1"># and never depends on the user re-running the step installer to</span>
+    <span class="c1"># refresh the seamm-mopac environment).</span>
+
+<div class="viewcode-block" id="MOPACStep.get_executor_config">
+<a class="viewcode-back" href="../../api/mopac_step.html#mopac_step.mopac_step.MOPACStep.get_executor_config">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_executor_config</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">executor</span><span class="p">,</span> <span class="n">seamm_options</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return how to launch MOPAC (and its MDI engine) on this machine.</span>
+
+<span class="sd">        Reads the per-plug-in ``mopac.ini`` for the *current* executor type</span>
+<span class="sd">        exactly as ``MOPAC.run()`` does, so the MDI engine runs in the same</span>
+<span class="sd">        conda/local/modules/docker environment as ordinary MOPAC jobs. Adds</span>
+<span class="sd">        one key, ``mdi_script`` -- the absolute path to the bundled</span>
+<span class="sd">        ``data/mopac_mdi.py`` engine.</span>
+
+<span class="sd">        ``mopac_mdi.py`` imports only packages present in ``seamm-mopac``</span>
+<span class="sd">        (``mopactools``, ``pymdi``/``mdi``, ``numpy``, ``seamm_util``) and</span>
+<span class="sd">        nothing from ``mopac_step`` or ``seamm``, so it runs correctly under</span>
+<span class="sd">        that environment&#39;s Python even though the file physically lives in</span>
+<span class="sd">        the ``seamm`` environment&#39;s site-packages.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        executor : seamm.ExecutorBase</span>
+<span class="sd">            The flowchart executor, typically ``self.flowchart.executor`` in</span>
+<span class="sd">            the calling (driver) step. ``executor.name`` selects the ini</span>
+<span class="sd">            section.</span>
+<span class="sd">        seamm_options : dict</span>
+<span class="sd">            The global SEAMM options, typically ``self.global_options`` in</span>
+<span class="sd">            the calling step. ``seamm_options[&quot;root&quot;]`` locates the ini.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        dict</span>
+<span class="sd">            The ini section for the current executor (``installation``,</span>
+<span class="sd">            ``code``, ``conda``, ``conda-environment``, ...), plus::</span>
+
+<span class="sd">                version    : str  -- this plug-in&#39;s version (container tag)</span>
+<span class="sd">                mdi_script : str  -- absolute path to data/mopac_mdi.py</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">executor_type</span> <span class="o">=</span> <span class="n">executor</span><span class="o">.</span><span class="n">name</span>
+        <span class="n">ini_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">seamm_options</span><span class="p">[</span><span class="s2">&quot;root&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">expanduser</span><span class="p">()</span>
+        <span class="n">ini_path</span> <span class="o">=</span> <span class="n">ini_dir</span> <span class="o">/</span> <span class="s2">&quot;mopac.ini&quot;</span>
+        <span class="n">resources</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">files</span><span class="p">(</span><span class="s2">&quot;mopac_step&quot;</span><span class="p">)</span> <span class="o">/</span> <span class="s2">&quot;data&quot;</span>
+
+        <span class="c1"># Bootstrap a default mopac.ini if the user has none yet, mirroring</span>
+        <span class="c1"># the [local] conda/conda-environment defaults written by</span>
+        <span class="c1"># MOPAC.run(). Written with configparser primitives to avoid pulling</span>
+        <span class="c1"># in seamm_util.Configuration here. In practice mopac.ini almost</span>
+        <span class="c1"># always already exists by the time an MDI run is launched, since</span>
+        <span class="c1"># seamm-mopac must be installed for the engine to import mopactools.</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">ini_path</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+            <span class="n">boot</span> <span class="o">=</span> <span class="n">configparser</span><span class="o">.</span><span class="n">ConfigParser</span><span class="p">()</span>
+            <span class="n">boot</span><span class="o">.</span><span class="n">read_string</span><span class="p">((</span><span class="n">resources</span> <span class="o">/</span> <span class="s2">&quot;mopac.ini&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">read_text</span><span class="p">())</span>
+            <span class="k">if</span> <span class="s2">&quot;local&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">boot</span><span class="p">:</span>
+                <span class="n">boot</span><span class="o">.</span><span class="n">add_section</span><span class="p">(</span><span class="s2">&quot;local&quot;</span><span class="p">)</span>
+            <span class="n">boot</span><span class="p">[</span><span class="s2">&quot;local&quot;</span><span class="p">][</span><span class="s2">&quot;conda&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;CONDA_EXE&quot;</span><span class="p">]</span>
+            <span class="n">boot</span><span class="p">[</span><span class="s2">&quot;local&quot;</span><span class="p">][</span><span class="s2">&quot;conda-environment&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;seamm-mopac&quot;</span>
+            <span class="k">with</span> <span class="n">ini_path</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fd</span><span class="p">:</span>
+                <span class="n">boot</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">fd</span><span class="p">)</span>
+
+        <span class="n">full_config</span> <span class="o">=</span> <span class="n">configparser</span><span class="o">.</span><span class="n">ConfigParser</span><span class="p">()</span>
+        <span class="n">full_config</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">ini_path</span><span class="p">)</span>
+
+        <span class="c1"># Last-ditch: fall back to an executable on $PATH.</span>
+        <span class="k">if</span> <span class="n">executor_type</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">full_config</span><span class="p">:</span>
+            <span class="n">path</span> <span class="o">=</span> <span class="n">shutil</span><span class="o">.</span><span class="n">which</span><span class="p">(</span><span class="s2">&quot;mopac&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;No section for &#39;</span><span class="si">{</span><span class="n">executor_type</span><span class="si">}</span><span class="s2">&#39; in the MOPAC ini file &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;(</span><span class="si">{</span><span class="n">ini_path</span><span class="si">}</span><span class="s2">), nor in the defaults, nor on $PATH.&quot;</span>
+                <span class="p">)</span>
+            <span class="n">full_config</span><span class="o">.</span><span class="n">add_section</span><span class="p">(</span><span class="n">executor_type</span><span class="p">)</span>
+            <span class="n">full_config</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">executor_type</span><span class="p">,</span> <span class="s2">&quot;installation&quot;</span><span class="p">,</span> <span class="s2">&quot;local&quot;</span><span class="p">)</span>
+            <span class="n">full_config</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">executor_type</span><span class="p">,</span> <span class="s2">&quot;code&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">path</span><span class="p">))</span>
+            <span class="k">with</span> <span class="n">ini_path</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fd</span><span class="p">:</span>
+                <span class="n">full_config</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">fd</span><span class="p">)</span>
+
+        <span class="n">config</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">full_config</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="n">executor_type</span><span class="p">))</span>
+        <span class="n">config</span><span class="p">[</span><span class="s2">&quot;version&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mopac_step</span><span class="o">.</span><span class="n">__version__</span>
+        <span class="n">config</span><span class="p">[</span><span class="s2">&quot;mdi_script&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">resources</span> <span class="o">/</span> <span class="s2">&quot;mopac_mdi.py&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">config</span></div>
+
+
+<div class="viewcode-block" id="MOPACStep.get_mdi_engine_command">
+<a class="viewcode-back" href="../../api/mopac_step.html#mopac_step.mopac_step.MOPACStep.get_mdi_engine_command">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_mdi_engine_command</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span>
+        <span class="n">executor</span><span class="p">,</span>
+        <span class="n">seamm_options</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">method</span><span class="p">,</span>
+        <span class="n">port</span><span class="p">,</span>
+        <span class="n">hostname</span><span class="o">=</span><span class="s2">&quot;localhost&quot;</span><span class="p">,</span>
+        <span class="n">charge</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+        <span class="n">multiplicity</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="n">engine_name</span><span class="o">=</span><span class="s2">&quot;MOPAC&quot;</span><span class="p">,</span>
+        <span class="n">extra_args</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Build the argv that launches the MOPAC MDI *engine* over TCP.</span>
+
+<span class="sd">        The MDI transport coordination (TCP, ``port``, ``hostname``) is</span>
+<span class="sd">        decided by the *driver* (e.g. lammps_step), which owns the rendezvous</span>
+<span class="sd">        and must give the same values to both sides, and is passed in here.</span>
+<span class="sd">        Everything MOPAC-specific -- the conda environment, the bundled</span>
+<span class="sd">        ``mopac_mdi.py`` path, the engine&#39;s MDI name, and the method /</span>
+<span class="sd">        charge / multiplicity flags -- is supplied by this step, so the</span>
+<span class="sd">        driver hardwires no MOPAC knowledge.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        executor, seamm_options</span>
+<span class="sd">            Passed straight to ``get_executor_config`` to locate the conda</span>
+<span class="sd">            environment and the bundled engine script.</span>
+<span class="sd">        method : str</span>
+<span class="sd">            Semiempirical method, e.g. &quot;PM6-ORG&quot;. Must be one of</span>
+<span class="sd">            ``cls._MDI_CAPABLE_METHODS`` (== the engine&#39;s --method choices).</span>
+<span class="sd">        port : int</span>
+<span class="sd">            TCP port the engine binds; chosen by the driver.</span>
+<span class="sd">        hostname : str</span>
+<span class="sd">            Host the engine binds / the driver connects to (default</span>
+<span class="sd">            &quot;localhost&quot;).</span>
+<span class="sd">        charge, multiplicity : int</span>
+<span class="sd">            Default total charge and 2S+1 multiplicity. Overridden at run</span>
+<span class="sd">            time if the driver sends &gt;TOTCHARGE / &gt;ELEC_MULT (LAMMPS&#39;s</span>
+<span class="sd">            fix mdi/qm currently does not).</span>
+<span class="sd">        engine_name : str</span>
+<span class="sd">            The MDI ``-name`` for the engine and what it returns for &lt;NAME;</span>
+<span class="sd">            must match the driver&#39;s expectation (default &quot;MOPAC&quot;).</span>
+<span class="sd">        extra_args : list of str, optional</span>
+<span class="sd">            Extra engine flags appended verbatim, e.g.</span>
+<span class="sd">            ``[&quot;--mozyme&quot;, &quot;--tolerance&quot;, &quot;0.5&quot;]``.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        list of str</span>
+<span class="sd">            A ready-to-run argv. Render into the launch script with</span>
+<span class="sd">            ``shlex.join(argv)``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">method</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_MDI_CAPABLE_METHODS</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;&#39;</span><span class="si">{</span><span class="n">method</span><span class="si">}</span><span class="s2">&#39; is not an MDI-capable MOPAC method; expected &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;one of </span><span class="si">{</span><span class="nb">sorted</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">_MDI_CAPABLE_METHODS</span><span class="p">)</span><span class="si">}</span><span class="s2">.&quot;</span>
+            <span class="p">)</span>
+
+        <span class="n">config</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_executor_config</span><span class="p">(</span><span class="n">executor</span><span class="p">,</span> <span class="n">seamm_options</span><span class="p">)</span>
+
+        <span class="n">installation</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;installation&quot;</span><span class="p">,</span> <span class="s2">&quot;conda&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">installation</span> <span class="o">!=</span> <span class="s2">&quot;conda&quot;</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
+                <span class="s2">&quot;The MOPAC MDI engine is currently wired up only for a conda &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;installation; mopac.ini selects &#39;</span><span class="si">{</span><span class="n">installation</span><span class="si">}</span><span class="s2">&#39;. &quot;</span>
+                <span class="s2">&quot;TODO (Phase B+): local / modules / docker launches.&quot;</span>
+            <span class="p">)</span>
+
+        <span class="n">mdi_init</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;-role ENGINE -name </span><span class="si">{</span><span class="n">engine_name</span><span class="si">}</span><span class="s2"> -method TCP &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;-port </span><span class="si">{</span><span class="n">port</span><span class="si">}</span><span class="s2"> -hostname </span><span class="si">{</span><span class="n">hostname</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+
+        <span class="n">argv</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">config</span><span class="p">[</span><span class="s2">&quot;conda&quot;</span><span class="p">],</span>
+            <span class="s2">&quot;run&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--live-stream&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;-n&quot;</span><span class="p">,</span>
+            <span class="n">config</span><span class="p">[</span><span class="s2">&quot;conda-environment&quot;</span><span class="p">],</span>
+            <span class="s2">&quot;python&quot;</span><span class="p">,</span>
+            <span class="n">config</span><span class="p">[</span><span class="s2">&quot;mdi_script&quot;</span><span class="p">],</span>
+            <span class="s2">&quot;-mdi&quot;</span><span class="p">,</span>
+            <span class="n">mdi_init</span><span class="p">,</span>
+            <span class="s2">&quot;--method&quot;</span><span class="p">,</span>
+            <span class="n">method</span><span class="p">,</span>
+            <span class="s2">&quot;--charge&quot;</span><span class="p">,</span>
+            <span class="nb">str</span><span class="p">(</span><span class="n">charge</span><span class="p">),</span>
+            <span class="s2">&quot;--multiplicity&quot;</span><span class="p">,</span>
+            <span class="nb">str</span><span class="p">(</span><span class="n">multiplicity</span><span class="p">),</span>
+        <span class="p">]</span>
+        <span class="k">if</span> <span class="n">extra_args</span><span class="p">:</span>
+            <span class="n">argv</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">extra_args</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">argv</span></div>
 </div>
 
 </pre></div>
@@ -542,8 +852,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
-<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+  <script defer src="../../_static/scripts/bootstrap.js?digest=a95f357e85573c9b56d5"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=a95f357e85573c9b56d5"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -555,7 +865,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.19.0.
 </p></div>
       
     </div>
