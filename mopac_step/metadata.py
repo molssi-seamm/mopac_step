@@ -14,14 +14,41 @@ metadata["computational models"] = {
             "PM7": {
                 "parameterizations": {
                     "PM7": {
-                        "elements": "1-60,62-83",
+                        # CORRECTED 2026-06-21 against parameters_for_PM7_C.F90,
+                        # then re-interpreted 2026-06-22 per mopac.py's own
+                        # SPARKLES logic: Ce-Yb (58-70) are genuinely absent
+                        # from the NDDO parameter table because they are
+                        # ONLY representable via the Sparkle point-charge
+                        # model, not full electronic structure -- this is a
+                        # deliberate design choice, not a coverage gap.
+                        # La(57)/Lu(71) have real NDDO parameters AND may
+                        # optionally use SPARKLES (better geometry vs.
+                        # better energy, per mopac.py's comment). "elements"
+                        # below is genuine NDDO Hamiltonian coverage only;
+                        # see "sparkle_elements" for the Sparkle-only set.
+                        # Z=98 ("Mithril" in the source comment -- real
+                        # Californium data or a non-functional placeholder,
+                        # not resolved) remains excluded pending verification.
+                        #
+                        # OPEN QUESTION, not resolved here: mopactools'
+                        # MopacSystem struct (used by mopac_mdi.py) has no
+                        # free-text keyword field -- unclear whether SPARKLES
+                        # is reachable via the MDI path at all. If not, any
+                        # system containing La/Lu/Ce-Yb may be unrunnable via
+                        # mopac_mdi.py regardless of the periodic_mdi flag.
+                        "elements": "1-57,71-83,85,87,90,97",
+                        "sparkle_elements": "57-71",  # La-Lu; 58-70 mandatory,
+                        # 57/71 optional
                         "periodic": True,
                         "reactions": True,
                         "optimization": True,
                         "code": "mopac",
                     },
                     "PM7-TS": {
-                        "elements": "1-60,62-83",
+                        # Same core Hamiltonian and Sparkle situation as PM7
+                        # above.
+                        "elements": "1-57,71-83,85,87,90,97",
+                        "sparkle_elements": "57-71",
                         "periodic": True,
                         "reactions": True,
                         "optimization": False,
@@ -32,14 +59,18 @@ metadata["computational models"] = {
             "PM6": {
                 "parameterizations": {
                     "PM6": {
-                        "elements": "1-60,62-83",
+                        # Same correction and Sparkle situation as PM7 above
+                        # -- both files show an identical coverage pattern.
+                        "elements": "1-57,71-83,85,87,90,97",
+                        "sparkle_elements": "57-71",
                         "periodic": True,
                         "reactions": True,
                         "optimization": True,
                         "code": "mopac",
                     },
                     "PM6-ORG": {
-                        "elements": "1-60,62-83",
+                        "elements": "1-57,71-83,85,87,90,97",
+                        "sparkle_elements": "57-71",
                         "periodic": True,
                         "reactions": True,
                         "optimization": True,
@@ -50,7 +81,8 @@ metadata["computational models"] = {
                             "The PM6 Hamiltonian with Grimme's corrections for "
                             "dispersion"
                         ),
-                        "elements": "1-60,62-83",
+                        "elements": "1-57,71-83,85,87,90,97",
+                        "sparkle_elements": "57-71",
                         "periodic": True,
                         "reactions": True,
                         "optimization": True,
@@ -61,7 +93,8 @@ metadata["computational models"] = {
                             "The PM6 Hamiltonian with corrections for dispersion "
                             "and hydrogen-bonding"
                         ),
-                        "elements": "1-60,62-83",
+                        "elements": "1-57,71-83,85,87,90,97",
+                        "sparkle_elements": "57-71",
                         "periodic": True,
                         "reactions": True,
                         "optimization": True,
@@ -72,7 +105,8 @@ metadata["computational models"] = {
                             "The PM6 Hamiltonian with corrections for dispersion "
                             "and hydrogen-bonding"
                         ),
-                        "elements": "1-60,62-83",
+                        "elements": "1-57,71-83,85,87,90,97",
+                        "sparkle_elements": "57-71",
                         "periodic": True,
                         "reactions": True,
                         "optimization": True,
@@ -83,7 +117,8 @@ metadata["computational models"] = {
                             "The PM6 Hamiltonian with corrections for dispersion "
                             "and hydrogen- and halogen-bonding"
                         ),
-                        "elements": "1-60,62-83",
+                        "elements": "1-57,71-83,85,87,90,97",
+                        "sparkle_elements": "57-71",
                         "periodic": True,
                         "reactions": True,
                         "optimization": True,
@@ -102,7 +137,8 @@ metadata["computational models"] = {
                             "small. For details, see: European Journal of Medicinal "
                             "Chemistry 2015, 89, 189-197."
                         ),
-                        "elements": "1-60,62-83",
+                        "elements": "1-57,71-83,85,87,90,97",
+                        "sparkle_elements": "57-71",
                         "periodic": False,
                         "reactions": True,
                         "optimization": True,
@@ -115,10 +151,114 @@ metadata["computational models"] = {
                             "halogen-oxygen and halogen-nitrogen interactions to the "
                             "D3H4 model."
                         ),
-                        "elements": "1-60,62-83",
+                        "elements": "1-57,71-83,85,87,90,97",
+                        "sparkle_elements": "57-71",
                         "periodic": False,
                         "reactions": True,
                         "optimization": True,
+                        "code": "mopac",
+                    },
+                }
+            },
+            # --- New below this line: AM1/RM1, PM3, MNDO/MNDOD -----------
+            # Added 2026-06-20, elements corrected 2026-06-21 against the
+            # actual MOPAC parameter source (src/models/parameters_for_*_C.F90,
+            # uploaded as parameters.md) -- element lists below are extracted
+            # directly from each file's "Data for Element N: Name" headers,
+            # with pseudo-atom entries (Capped bond, Sparkle) excluded.
+            # periodic/reactions/optimization are NOT determinable from these
+            # parameter files (they describe algorithmic support, not fitted
+            # constants) and remain INFERRED, unverified general knowledge.
+            # None of these five are in MOPACStep._MDI_PERIODIC_VALIDATED
+            # regardless of the "periodic" flag set here -- that set only
+            # grows when a method is actually run periodic via MDI and
+            # confirmed. See NOTES_qm_mdi_engines_validation.rst /
+            # PLAN_model_chemistry_step.rst.
+            "AM1": {
+                "parameterizations": {
+                    "AM1": {
+                        # VERIFIED against parameters_for_AM1_C.F90.
+                        "elements": "1-20,30-38,42,49-56,80-83",
+                        "periodic": True,  # INFERRED, not confirmed
+                        "reactions": True,  # INFERRED
+                        "optimization": True,  # INFERRED
+                        "code": "mopac",
+                    },
+                    "RM1": {
+                        "description": (
+                            "Rocha, Freire, Simas, and Stewart's 2006 "
+                            "reparameterization of AM1, originally fit to "
+                            "H, C, N, O, F, P, S, Cl, Br, I. This MOPAC "
+                            "build's parameter table also includes the full "
+                            "lanthanide series (La-Lu) -- provenance of that "
+                            "extension (separate publication vs. otherwise) "
+                            "not confirmed here."
+                        ),
+                        # VERIFIED against parameters_for_RM1_C.F90. Original
+                        # 10-element set confirmed exactly; lanthanide
+                        # coverage (57-71) is real but unexpected -- see
+                        # description.
+                        "elements": "1,6-9,15-17,35,53,57-71",
+                        "periodic": True,  # INFERRED
+                        "reactions": True,  # INFERRED
+                        "optimization": True,  # INFERRED
+                        "code": "mopac",
+                    },
+                }
+            },
+            "PM3": {
+                "parameterizations": {
+                    "PM3": {
+                        "description": (
+                            "Stewart's 1989 reparameterization of the "
+                            "MNDO/AM1 NDDO formalism. Element coverage was "
+                            "originally built up across four separate papers "
+                            "(Stewart_1989, Stewart_1991, Anders_1993, "
+                            "Stewart_2004) -- see mopac_step's own citation "
+                            "logic for the per-paper breakdown."
+                        ),
+                        # VERIFIED against parameters_for_PM3_C.F90 (combined
+                        # coverage across all four papers' contributions).
+                        "elements": "1-20,30-38,48-56,80-83,87",
+                        "periodic": True,  # INFERRED
+                        "reactions": True,  # INFERRED
+                        "optimization": True,  # INFERRED
+                        "code": "mopac",
+                    },
+                }
+            },
+            "MNDO": {
+                "parameterizations": {
+                    "MNDO": {
+                        "description": (
+                            "Dewar and Thiel's 1977 original NDDO " "Hamiltonian."
+                        ),
+                        # VERIFIED against parameters_for_mndo_C.F90.
+                        # Manganese (25) is genuinely absent -- not an
+                        # extraction error, confirmed by the gap between
+                        # Chromium (24) and Iron (26) in the source.
+                        "elements": "1-24,26-38,40,42,46-56,78,80-83,85,87,90",
+                        "periodic": True,  # INFERRED
+                        "reactions": True,  # INFERRED
+                        "optimization": True,  # INFERRED
+                        "code": "mopac",
+                    },
+                    "MNDOD": {
+                        "description": (
+                            "Thiel and Voityuk's d-orbital extension of "
+                            "MNDO, for hypervalent compounds and heavier "
+                            "main-group/transition elements."
+                        ),
+                        # VERIFIED against parameters_for_mndod_C.F90. This
+                        # file's own coverage (the d-orbital extension itself)
+                        # is narrower than base MNDO above -- whether a
+                        # MNDOD calculation also draws on plain MNDO
+                        # parameters for elements outside this list is not
+                        # resolved here.
+                        "elements": "1-17,30,35,48,53,80",
+                        "periodic": True,  # INFERRED
+                        "reactions": True,  # INFERRED
+                        "optimization": True,  # INFERRED
                         "code": "mopac",
                     },
                 }

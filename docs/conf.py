@@ -48,7 +48,25 @@ extensions = [
     'sphinx_design',
     'sphinx_copybutton',
     'sphinx.ext.todo',
+    'sphinx.ext.intersphinx',
 ]
+
+# The local inventory path lets a local `make html` resolve campaign-doc
+# labels immediately, without needing the main site already pushed live --
+# useful right after writing a brand-new campaign entry, like today's.
+# Falls back to fetching the published inventory over the network if the
+# environment variable isn't set (true for CI and for any other
+# contributor's machine, where this local path wouldn't exist anyway).
+#
+# Set this locally before building docs, e.g.:
+#   export SEAMM_DOCS_OBJECTS_INV=/Users/psaxe/Work/SEAMM/molssi-seamm.github.io/docs/_build/html/objects.inv
+
+intersphinx_mapping = {
+    "seamm": (
+        "https://molssi-seamm.github.io/",
+        os.environ.get("SEAMM_DOCS_OBJECTS_INV"),
+    ),
+}
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
