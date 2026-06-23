@@ -2,5 +2,9 @@ name: seamm-mopac
 channels:
   - conda-forge
 dependencies:
-  - python
+  - python=3.12
   - mopac
+  - mopactools
+  - numpy
+  - pymdi
+  - seamm-util

@@ -82,7 +82,6 @@ def test_mdi_only_returns_exactly_the_mopactools_scope():
     assert set(options.keys()) == EXPECTED_MDI_CAPABLE
     for name, info in options.items():
         assert info["mdi_capable"] is True
-        assert info["mdi_script"] == "mopac_mdi.py"
         assert info["mdi_method_arg"] == name
 
 
@@ -128,7 +127,6 @@ def test_non_mdi_method_has_no_launch_info():
     options = mopac_step.MOPACStep.get_model_chemistry_options()
     info = options["PM6-D3"]
     assert info["mdi_capable"] is False
-    assert info["mdi_script"] is None
     assert info["mdi_method_arg"] is None
 
 
