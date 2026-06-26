@@ -230,6 +230,7 @@ class MOPACStep(object):
         hostname="localhost",
         charge=0,
         multiplicity=1,
+        n_atoms=None,
         engine_name="MOPAC",
         extra_args=None,
     ):
@@ -260,6 +261,10 @@ class MOPACStep(object):
             Default total charge and 2S+1 multiplicity. Overridden at run
             time if the driver sends >TOTCHARGE / >ELEC_MULT (LAMMPS's
             fix mdi/qm currently does not).
+        n_atoms : int, optional
+            Accepted for interface parity with other engines, but ignored:
+            MOPAC does not use threading effectively, so its engine stays
+            single-threaded (the launch script's OMP cap applies).
         engine_name : str
             The MDI ``-name`` for the engine and what it returns for <NAME;
             must match the driver's expectation (default "MOPAC").
