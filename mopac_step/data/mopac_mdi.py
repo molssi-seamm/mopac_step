@@ -262,7 +262,7 @@ def main():
     ]:
         mdi.MDI_Register_command("@DEFAULT", _cmd)
 
-    logger.info(f"MDI connection established. method={args.method}")
+    logger.debug(f"MDI connection established. method={args.method}")
 
     # ----------------------------------------------------------------
     # State accumulated from the MDI handshake -- no input file at all.
@@ -330,7 +330,7 @@ def main():
         system = sys_obj
         state = st_obj
         mozyme_step_count = 0
-        logger.info(
+        logger.debug(
             f"System built: natoms={natoms}, periodic={is_periodic}, "
             f"charge={charge}, multiplicity={raw_multiplicity} "
             f"(spin={spin}), mozyme={args.mozyme}"
@@ -349,7 +349,7 @@ def main():
             and mozyme_step_count > 0
             and mozyme_step_count % args.mozyme_restart_every == 0
         ):
-            logger.info(
+            logger.debug(
                 f"MOZYME restart (count={mozyme_step_count}): "
                 f"rebuilding LMOs from current geometry"
             )
@@ -371,7 +371,7 @@ def main():
         properties = from_data(system, state, relax=False, vibe=False)
         elapsed = time.perf_counter() - t0
         mpack_after = getattr(state, "mpack", None)
-        logger.info(
+        logger.debug(
             f"from_data() took {elapsed:.3f} s "
             f"(state.mpack: {mpack_before} -> {mpack_after})"
         )
@@ -389,7 +389,7 @@ def main():
     # ----------------------------------------------------------------
     # MDI event loop
     # ----------------------------------------------------------------
-    logger.info("Entering MDI event loop ...")
+    logger.debug("Entering MDI event loop ...")
 
     while True:
         command = mdi.MDI_Recv_Command(comm)
@@ -507,13 +507,13 @@ def main():
 
         # ---- Shutdown ---------------------------------------------------
         elif command == "EXIT":
-            logger.info("EXIT -- shutting down.")
+            logger.debug("EXIT -- shutting down.")
             break
 
         else:
             logger.warning(f"unrecognised command {command!r}")
 
-    logger.info("Done.")
+    logger.debug("Done.")
 
 
 if __name__ == "__main__":
