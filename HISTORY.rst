@@ -1,6 +1,12 @@
 =======
 History
 =======
+2026.7.6 -- Quieter MDI engine logging
+    * The MDI engine used to drive MOPAC from other steps (QM/MD, and the Dimer
+      Builder's energy-based contact) logged its connection, setup, and timing
+      lines at INFO, which cluttered the driving step's output. These are now at
+      DEBUG, so normal runs are quiet.
+
 2026.3.1 -- Internal: switching from deprecated library pkg_resources to importlib
 
 2025.12.21 -- Fixed an issue with periodic systems and lattice size
