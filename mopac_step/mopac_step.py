@@ -264,7 +264,9 @@ class MOPACStep(object):
         n_atoms : int, optional
             Accepted for interface parity with other engines, but ignored:
             MOPAC does not use threading effectively, so its engine stays
-            single-threaded (the launch script's OMP cap applies).
+            single-threaded. The bundled ``mopac_mdi.py`` pins
+            OMP/MKL/OpenBLAS to one thread at import (this MDI engine is spawned
+            with an inherited environment, so nothing else caps it).
         engine_name : str
             The MDI ``-name`` for the engine and what it returns for <NAME;
             must match the driver's expectation (default "MOPAC").

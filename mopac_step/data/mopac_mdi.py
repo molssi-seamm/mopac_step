@@ -60,17 +60,33 @@ Logging: three levels, set via --log-level.
     WARNING -- only warnings and errors (quietest)
 """
 
-import argparse
-import logging
-import sys
-import time
-import numpy as np
+# Pin MOPAC (and the BLAS/LAPACK it calls) to a single thread. MOPAC gets little
+# benefit from threading on these small semiempirical SCFs, and an MDI driver
+# typically issues many calls back-to-back, so multiple threads only
+# oversubscribe the cores. Unlike the normal MOPAC step -- which launches MOPAC
+# with an explicit OMP_NUM_THREADS -- this engine is spawned by the MDI driver
+# with an inherited environment, so nothing else caps the thread count. Set the
+# caps here, before numpy (and hence any MKL/OpenBLAS runtime) is imported, or
+# the thread pool is already sized and the setting is ignored. `setdefault`
+# leaves an explicitly-set environment override in place.
+import os
 
-from seamm_util import Q_
+os.environ.setdefault("OMP_NUM_THREADS", "1")
+os.environ.setdefault("MKL_NUM_THREADS", "1")
+os.environ.setdefault("OPENBLAS_NUM_THREADS", "1")
+
+import argparse  # noqa: E402
+import logging  # noqa: E402
+import sys  # noqa: E402
+import time  # noqa: E402
+
+import numpy as np  # noqa: E402
+
+from seamm_util import Q_  # noqa: E402
 
 # mpi4py only needed for -method MPI; harmless if unused for TCP.
 try:
-    from mpi4py import MPI  # noqa: F401
+    from mpi4py import MPI  # noqa: E402, F401
 except ImportError:
     pass
 
