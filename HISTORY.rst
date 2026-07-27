@@ -1,6 +1,16 @@
 =======
 History
 =======
+2026.7.27 -- Bugfix: run MOPAC single-threaded when driven over MDI
+    * When another step drove MOPAC through the MDI engine (QM/MD, and the Dimer
+      Builder's energy-based contact), MOPAC was not held to a single thread the
+      way a normal MOPAC step is, so it spread across all available cores. Since
+      these drivers issue many small calls one after another, the extra threads
+      only oversubscribed the cores and could slow the run. The MDI engine now
+      pins MOPAC -- and the linear-algebra libraries it calls -- to a single
+      thread, matching the normal MOPAC step. Set ``OMP_NUM_THREADS`` in the
+      environment to override.
+
 2026.7.6 -- Quieter MDI engine logging
     * The MDI engine used to drive MOPAC from other steps (QM/MD, and the Dimer
       Builder's energy-based contact) logged its connection, setup, and timing
