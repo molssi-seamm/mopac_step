@@ -1,6 +1,21 @@
 =======
 History
 =======
+2026.10.1 -- Settings that depend on each other; MOZYME force constants
+    * The dialogs show only the settings that apply with the current choices, and SEAMM's
+      flowchart tools use the same rules: UHF and MOZYME only for Hartree-Fock; the CI
+      settings only for CI calculations; the COSMO settings only with COSMO; the
+      gradient criterion, Hessian recalculation, trust radius, pressure and shear only
+      where they apply.
+    * The structure to start from is now shown in the dialog. Bugfix: choosing
+      ``initial`` after the first sub-step raised an UnboundLocalError.
+    * Bugfix: force constants with MOZYME raised NotImplementedError. MOPAC's FORCE works
+      with MOZYME, so only the follow-up calculation is dropped there.
+    * Bugfix: two errors in the descriptions printed in the output.
+    * Documented in the user guide. Needs seamm 2026.10.1.
+    * Internal: CI now installs the package's declared dependencies with uv rather than
+      a conda test environment; seamm-exec, which it uses, is now declared.
+
 2026.7.27 -- Bugfix: run MOPAC single-threaded when driven over MDI
     * When another step drove MOPAC through the MDI engine (QM/MD, and the Dimer
       Builder's energy-based contact), MOPAC was not held to a single thread the

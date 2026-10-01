@@ -6,6 +6,19 @@ import seamm
 
 logger = logging.getLogger(__name__)
 
+# The kinds of calculation, used in the rules for when the other parameters apply.
+# Each parameter's "applies_when" (see seamm.Parameters) says when it has an effect;
+# the dialog shows, and the flowchart builder accepts, only the settings that do.
+HF = "HF: Hartree-Fock"
+"""The SCF calculation, which has the UHF and MOZYME options."""
+CI = (
+    "CASCI: Complete active space CI",
+    "CIS: CI with singles",
+    "CISD: CI with singles and doubles",
+    "CISDT: CI with singles, doubles, and triples",
+)
+"""The CI calculations, which have the CI options."""
+
 
 class EnergyParameters(seamm.Parameters):
     """The control parameters for creating a structure from SMILES"""
@@ -70,13 +83,7 @@ class EnergyParameters(seamm.Parameters):
             "default": "HF: Hartree-Fock",
             "kind": "enumeration",
             "default_units": "",
-            "enumeration": (
-                "HF: Hartree-Fock",
-                "CASCI: Complete active space CI",
-                "CIS: CI with singles",
-                "CISD: CI with singles and doubles",
-                "CISDT: CI with singles, doubles, and triples",
-            ),
+            "enumeration": (HF, *CI),
             "format_string": "s",
             "description": "Calculation:",
             "help_text": ("The type of calculation."),
@@ -107,6 +114,7 @@ class EnergyParameters(seamm.Parameters):
             ),
         },
         "uhf": {
+            "applies_when": {"calculation": HF},
             "default": "no",
             "kind": "boolean",
             "default_units": "",
@@ -119,6 +127,7 @@ class EnergyParameters(seamm.Parameters):
             "help_text": "Whether to use UHF for singlet states.",
         },
         "number ci orbitals": {
+            "applies_when": {"calculation": CI},
             "default": 2,
             "kind": "integer",
             "default_units": "",
@@ -128,6 +137,7 @@ class EnergyParameters(seamm.Parameters):
             "help_text": "The number of orbitals to use in the CI.",
         },
         "number doubly occupied ci orbitals": {
+            "applies_when": {"calculation": CI},
             "default": "default",
             "kind": "integer",
             "default_units": "",
@@ -137,6 +147,7 @@ class EnergyParameters(seamm.Parameters):
             "help_text": "The number of doubly occupied orbitals to use in the CI.",
         },
         "ci root": {
+            "applies_when": {"calculation": CI},
             "default": 1,
             "kind": "integer",
             "default_units": "",
@@ -146,6 +157,7 @@ class EnergyParameters(seamm.Parameters):
             "help_text": "The root to use in the CI.",
         },
         "print ci details": {
+            "applies_when": {"calculation": CI},
             "default": "yes",
             "kind": "boolean",
             "default_units": "",
@@ -170,6 +182,7 @@ class EnergyParameters(seamm.Parameters):
             "help_text": "Whether to use COSMO solvation model.",
         },
         "MOZYME": {
+            "applies_when": {"calculation": HF},
             "default": "for larger systems",
             "kind": "enumeration",
             "default_units": "",
@@ -186,6 +199,7 @@ class EnergyParameters(seamm.Parameters):
             ),
         },
         "nMOZYME": {
+            "applies_when": {"MOZYME": "for larger systems"},
             "default": 300,
             "kind": "integer",
             "default_units": "",
@@ -195,6 +209,7 @@ class EnergyParameters(seamm.Parameters):
             "help_text": ("The number of atoms to switch to using MOZYME."),
         },
         "MOZYME follow-up": {
+            "applies_when": {"MOZYME": {"not": "never"}},
             "default": (
                 "recalculate the energy at the end using new, orthogonal localized "
                 "orbitals"
@@ -216,6 +231,7 @@ class EnergyParameters(seamm.Parameters):
             ),
         },
         "eps": {
+            "applies_when": {"COSMO": "yes"},
             "default": "78.4",
             "kind": "float",
             "default_units": "",
@@ -225,6 +241,7 @@ class EnergyParameters(seamm.Parameters):
             "help_text": "The solvent's dielectric constant.",
         },
         "rsolve": {
+            "applies_when": {"COSMO": "yes"},
             "default": "1.3",
             "kind": "float",
             "default_units": "Å",
@@ -234,6 +251,7 @@ class EnergyParameters(seamm.Parameters):
             "help_text": "The solvent's approximate radius.",
         },
         "nspa": {
+            "applies_when": {"COSMO": "yes"},
             "default": 42,
             "kind": "integer",
             "default_units": "",
@@ -262,6 +280,7 @@ class EnergyParameters(seamm.Parameters):
             ),
         },
         "disex": {
+            "applies_when": {"COSMO": "yes"},
             "default": "2.0",
             "kind": "float",
             "default_units": "",
@@ -287,6 +306,7 @@ class EnergyParameters(seamm.Parameters):
             "help_text": "Whether to calculate the gradients.",
         },
         "relative": {
+            "applies_when": {"convergence": "relative"},
             "default": "0.1",
             "kind": "float",
             "default_units": "",
@@ -300,6 +320,7 @@ class EnergyParameters(seamm.Parameters):
             ),
         },
         "absolute": {
+            "applies_when": {"convergence": "absolute"},
             "default": "1.0E-07",
             "kind": "float",
             "default_units": "kcal/mol",

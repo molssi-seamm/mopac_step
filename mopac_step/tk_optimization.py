@@ -84,20 +84,22 @@ class TkOptimization(mopac_step.TkEnergy):
         for slave in frame.grid_slaves():
             slave.grid_forget()
 
-        convergence = self["convergence"].get()
-        method = self["method"].get()
-        lattice_opt = self["LatticeOpt"].get()
+        # Which controls to show come from the parameters' rules
+        # (mopac_step.OptimizationParameters), which the flowchart builder uses too.
+        P = self.node.parameters
+        values = self._widget_values()
 
         widgets = []
         widgets_2 = []
         row = 0
 
+        # The cell's pressure, shear and coupling when it is optimized
         self["LatticeOpt"].grid(row=row, column=0, columnspan=2, sticky=tk.EW)
         widgets.append(self["LatticeOpt"])
         row += 1
 
-        if lattice_opt == "Yes":
-            for key in ("pressure", "allow shear", "couple"):
+        for key in ("pressure", "allow shear", "couple"):
+            if P.applies(key, values):
                 self[key].grid(row=row, column=1, sticky=tk.EW)
                 row += 1
 
@@ -105,21 +107,13 @@ class TkOptimization(mopac_step.TkEnergy):
         widgets.append(self["method"])
         row += 1
 
-        self["cycles"].grid(row=row, column=1, sticky=tk.EW)
-        widgets_2.append(self["cycles"])
-        row += 1
-
-        if convergence not in ("normal", "precise"):
-            self["gnorm"].grid(row=row, column=1, sticky=tk.EW)
-            widgets_2.append(self["gnorm"])
-            row += 1
-        if method.startswith("EF") or method.startswith("TS") or self.is_expr(method):
-            self["recalc"].grid(row=row, column=1, sticky=tk.EW)
-            widgets_2.append(self["recalc"])
-            row += 1
-            self["dmax"].grid(row=row, column=1, sticky=tk.EW)
-            widgets_2.append(self["dmax"])
-            row += 1
+        # The convergence criterion unless 'normal' or 'precise' convergence sets
+        # it, and the Hessian recalculation and trust radius for the EF methods.
+        for key in ("cycles", "gnorm", "recalc", "dmax"):
+            if P.applies(key, values):
+                self[key].grid(row=row, column=1, sticky=tk.EW)
+                widgets_2.append(self[key])
+                row += 1
 
         for key in ("structure handling", "system name", "configuration name"):
             self[key].grid(row=row, column=0, columnspan=2, sticky=tk.EW)

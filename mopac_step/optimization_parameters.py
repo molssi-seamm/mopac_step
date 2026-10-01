@@ -6,6 +6,13 @@ import mopac_step
 
 logger = logging.getLogger(__name__)
 
+# The optimization methods using eigenvector following, which take the 'recalc' and
+# 'dmax' settings (see "applies_when" below, and seamm.Parameters).
+EF_METHODS = (
+    "EF -- eigenvector following",
+    "TS -- transition state with EF method",
+)
+
 
 class OptimizationParameters(mopac_step.EnergyParameters):
     """The control parameters for optimization in MOPAC"""
@@ -17,10 +24,10 @@ class OptimizationParameters(mopac_step.EnergyParameters):
             "default_units": "",
             "enumeration": (
                 "default",
-                "EF -- eigenvector following",
+                EF_METHODS[0],
                 "BFGS -- Broyden-Fletcher-Goldfarb-Shanno algorithm",
                 "L-BFGS -- smaller memory BFGS for larger systems",
-                "TS -- transition state with EF method",
+                EF_METHODS[1],
                 "SIGMA -- transition state with McIver-Komornicki method",
                 "NLLSQ -- nonlinear least squares of gradient, Bartel's method",
             ),
@@ -29,6 +36,7 @@ class OptimizationParameters(mopac_step.EnergyParameters):
             "help_text": ("The optimization algorithm to use."),
         },
         "gnorm": {
+            "applies_when": {"convergence": {"not": ["normal", "precise"]}},
             "default": "1.0",
             "kind": "float",
             "default_units": "kcal/mol/Å",
@@ -61,6 +69,7 @@ class OptimizationParameters(mopac_step.EnergyParameters):
             ),
         },
         "recalc": {
+            "applies_when": {"method": EF_METHODS},
             "default": "never",
             "kind": "integer",
             "default_units": "",
@@ -79,6 +88,7 @@ class OptimizationParameters(mopac_step.EnergyParameters):
             ),
         },
         "dmax": {
+            "applies_when": {"method": EF_METHODS},
             "default": "0.2",
             "kind": "float",
             "default_units": "",
@@ -103,6 +113,7 @@ class OptimizationParameters(mopac_step.EnergyParameters):
             "help_text": "Allow the lattice vectors to change during optimization.",
         },
         "allow shear": {
+            "applies_when": {"LatticeOpt": "Yes"},
             "default": "yes",
             "kind": "boolean",
             "format_string": "s",
@@ -111,6 +122,7 @@ class OptimizationParameters(mopac_step.EnergyParameters):
             "help_text": "Whether the cell angles can change.",
         },
         "couple": {
+            "applies_when": {"LatticeOpt": "Yes"},
             "default": "none",
             "kind": "enumeration",
             "enumeration": ("x, y and z", "x and y", "x and z", "y and z", "none"),
@@ -123,6 +135,7 @@ class OptimizationParameters(mopac_step.EnergyParameters):
             ),
         },
         "pressure": {
+            "applies_when": {"LatticeOpt": "Yes"},
             "default": 0.0,
             "kind": "float",
             "default_units": "GPa",

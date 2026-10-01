@@ -25,6 +25,26 @@ job = printing.getPrinter()
 printer = printing.getPrinter("mopac")
 
 
+def starting_structure(structure, first):
+    """The structure a sub-step starts from: the incoming one ("initial"), or the
+    current one from the previous MOPAC sub-step ("current", MOPAC's OLDGEO), which
+    the first sub-step does not have. By default the first sub-step uses the
+    incoming structure, and the others the current one.
+
+    Parameters
+    ----------
+    structure : str
+        The 'structure' parameter: "default", "initial" or "current".
+    first : bool
+        Whether this is the first sub-step.
+    """
+    if first:
+        return "initial"
+    if structure in ("default", "current"):
+        return "current"
+    return "initial"
+
+
 class Energy(seamm.Node):
     def __init__(self, flowchart=None, title="Energy", extension=None):
         """Initialize the node"""
@@ -116,7 +136,7 @@ class Energy(seamm.Node):
                 )
 
             # MOZYME localized molecular orbitals.
-            if ["MOZYME"] == "always" or (
+            if P["MOZYME"] == "always" or (
                 self._use_mozyme is not None and self._use_mozyme
             ):
                 text += (
@@ -138,7 +158,7 @@ class Energy(seamm.Node):
                 used_mozyme = False
 
             if used_mozyme:
-                follow_up = P["MOZYME follow-up"]
+                follow_up = self._mozyme_follow_up(P)
                 if "exact" in follow_up:
                     text += (
                         " The energy given by MOZYME slowly accumulates error due to "
@@ -192,6 +212,13 @@ class Energy(seamm.Node):
             )
 
         return self.header + "\n" + __(text, **P, indent=4 * " ").__str__()
+
+    def _mozyme_follow_up(self, P):
+        """The MOZYME follow-up calculation, or "none" where it does not apply
+        (e.g. force constants, which do no follow-up)."""
+        if not self.parameters.applies("MOZYME follow-up"):
+            return "none"
+        return P["MOZYME follow-up"]
 
     def get_input(self):
         """Get the input for an energy calculation for MOPAC"""
@@ -673,16 +700,7 @@ class Energy(seamm.Node):
                 note="RM1 parameterization.",
             )
 
-        # which structure? may need to set default first...
-        if P["structure"] == "default":
-            if self._id[-1] == "1":
-                structure = "initial"
-            else:
-                structure = "current"
-        elif self._id[-1] == "1":
-            structure = "initial"
-        elif P["structure"] == "current":
-            structure = "current"
+        structure = starting_structure(P["structure"], self._id[-1] == "1")
 
         if structure == "current":
             keywords.append("OLDGEO")
@@ -773,7 +791,7 @@ class Energy(seamm.Node):
 
         # Handle MOZYME follow-up calculations
         if "MOZYME" in keywords:
-            follow_up = P["MOZYME follow-up"]
+            follow_up = self._mozyme_follow_up(P)
             if "exact" in follow_up:
                 keywords.remove("MOZYME")
                 if "1SCF" not in keywords:
@@ -819,7 +837,7 @@ class Energy(seamm.Node):
             used_mozyme = False
 
         if used_mozyme:
-            follow_up = P["MOZYME follow-up"]
+            follow_up = self._mozyme_follow_up(P)
             if "exact" in follow_up:
                 pass
             elif "new" in follow_up:

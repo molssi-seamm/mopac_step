@@ -1,5 +1,6 @@
 molsystem
 py-cpuinfo
 requests
-seamm
+seamm>=2026.10.1
 tabulate
+seamm-exec

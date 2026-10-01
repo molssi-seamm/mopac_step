@@ -112,87 +112,82 @@ class TkEnergy(seamm.TkNode):
         for slave in frame.grid_slaves():
             slave.grid_forget()
 
-        calculation = self["calculation"].get()
-        convergence = self["convergence"].get()
-        cosmo = self["COSMO"].get()
-        mozyme = self["MOZYME"].get()
+        # Which controls to show come from the parameters' rules
+        # (mopac_step.EnergyParameters), which the flowchart builder uses too. The
+        # order and indentation stay here.
+        P = self.node.parameters
+        values = self._widget_values()
+
+        def applies(key):
+            return P.applies(key, values)
 
         widgets = []
         row = 0
-        for key in ("hamiltonian", "calculation"):
+
+        def add_full(key):
+            nonlocal row
             self[key].grid(row=row, column=0, columnspan=2, sticky=tk.EW)
             widgets.append(self[key])
             row += 1
 
-        if "hf" in calculation.lower():
-            for key in ("uhf",):
-                self[key].grid(row=row, column=0, columnspan=2, sticky=tk.EW)
-                widgets.append(self[key])
-                row += 1
-
-        if "ci" in calculation.lower():
-            for key in (
-                "number ci orbitals",
-                "number doubly occupied ci orbitals",
-                "ci root",
-                "print ci details",
-            ):
-                self[key].grid(row=row, column=0, columnspan=2, sticky=tk.EW)
-                widgets.append(self[key])
-                row += 1
-
-        for key in ("convergence",):
-            self[key].grid(row=row, column=0, columnspan=2, sticky=tk.EW)
-            widgets.append(self[key])
-            row += 1
-
-        if convergence == "relative":
-            self["relative"].grid(row=row, column=1, sticky=tk.W)
-            row += 1
-        elif convergence == "absolute":
-            self["absolute"].grid(row=row, column=1, sticky=tk.W)
-            row += 1
-        elif convergence not in ("normal", "precise"):
-            # variable ... so put in all possibilities
-            self["relative"].grid(row=row, column=1, sticky=tk.W)
-            row += 1
-            self["absolute"].grid(row=row, column=1, sticky=tk.W)
-            row += 1
-            sw.align_labels((self["relative"], self["absolute"]), sticky=tk.E)
-
-        if "hf" in calculation.lower():
-            self["MOZYME"].grid(row=row, column=0, columnspan=2, sticky=tk.EW)
-            widgets.append(self["MOZYME"])
-            row += 1
+        def add_indented(keys):
+            """Indented controls below their parent, aligned among themselves."""
+            nonlocal row
             subwidgets = []
-            if mozyme != "always" and mozyme != "never":
-                self["nMOZYME"].grid(row=row, column=1, sticky=tk.W)
-                subwidgets.append(self["nMOZYME"])
-                row += 1
-            if mozyme != "never":
-                self["MOZYME follow-up"].grid(row=row, column=1, sticky=tk.W)
-                subwidgets.append(self["MOZYME follow-up"])
-                row += 1
-            sw.align_labels(subwidgets, sticky=tk.E)
+            for key in keys:
+                if applies(key):
+                    self[key].grid(row=row, column=1, sticky=tk.W)
+                    subwidgets.append(self[key])
+                    row += 1
+            if len(subwidgets) > 0:
+                sw.align_labels(subwidgets, sticky=tk.E)
 
-        self["COSMO"].grid(row=row, column=0, columnspan=2, sticky=tk.EW)
-        widgets.append(self["COSMO"])
-        row += 1
-        if cosmo == "yes":
-            widgets1 = []
+        if applies("structure"):
+            add_full("structure")
+        add_full("hamiltonian")
+        add_full("calculation")
 
-            for key in ("eps", "rsolve", "nspa", "disex"):
-                self[key].grid(row=row, column=1, sticky=tk.W)
-                widgets1.append(self[key])
-                row += 1
-            sw.align_labels(widgets1, sticky=tk.E)
+        # UHF for the SCF calculation; the CI controls for the CI calculations.
+        for key in (
+            "uhf",
+            "number ci orbitals",
+            "number doubly occupied ci orbitals",
+            "ci root",
+            "print ci details",
+        ):
+            if applies(key):
+                add_full(key)
 
-        for key in ("calculate gradients", "bond orders"):
-            self[key].grid(row=row, column=0, columnspan=2, sticky=tk.EW)
-            widgets.append(self[key])
-            row += 1
+        # The convergence, with its relative or absolute value, or both when it is
+        # given by a variable.
+        add_full("convergence")
+        add_indented(("relative", "absolute"))
+
+        # Localized orbitals (MOZYME) for the SCF calculation
+        if applies("MOZYME"):
+            add_full("MOZYME")
+            add_indented(("nMOZYME", "MOZYME follow-up"))
+
+        add_full("COSMO")
+        add_indented(("eps", "rsolve", "nspa", "disex"))
+
+        add_full("calculate gradients")
+        add_full("bond orders")
 
         sw.align_labels(widgets, sticky=tk.E)
         frame.columnconfigure(0, minsize=100)
 
         return row
+
+    def _widget_values(self):
+        """The dialog's current values, {name: value}, for the parameters' rules."""
+        values = {}
+        for key in self.node.parameters:
+            if key == "results" or key not in self:
+                continue
+            try:
+                value = self[key].get()
+            except Exception:
+                continue
+            values[key] = value[0] if isinstance(value, tuple) else value
+        return values
