@@ -82,6 +82,23 @@ class ForceconstantsParameters(mopac_step.EnergyParameters):
         },
     }
 
+    # The Energy settings that force constants do not use: the displaced structures
+    # are always given explicitly, and MOZYME's follow-up calculation makes no sense
+    # for the single points of the finite differences.
+    unused = ("structure", "MOZYME follow-up")
+
+    def applies(self, key, values=None, _seen=None):
+        """As EnergyParameters.applies, but the settings not used never apply."""
+        if key in self.unused:
+            return False
+        return super().applies(key, values, _seen)
+
+    def not_applicable_reason(self, key, values=None):
+        """Why a parameter does not apply, for the builder's messages."""
+        if key in self.unused:
+            return "the force constants calculation does not use it"
+        return super().not_applicable_reason(key, values)
+
     def __init__(self, defaults={}, data=None):
         """Initialize the instance, by default from the default
         parameters given in the class"""

@@ -142,6 +142,8 @@ class TkEnergy(seamm.TkNode):
             if len(subwidgets) > 0:
                 sw.align_labels(subwidgets, sticky=tk.E)
 
+        if applies("structure"):
+            add_full("structure")
         add_full("hamiltonian")
         add_full("calculation")
 

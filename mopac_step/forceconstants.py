@@ -44,7 +44,7 @@ class Forceconstants(mopac_step.Energy):
         energy_description = textwrap.dedent("\n".join(tmp.splitlines()[1:]))
 
         # Put in the description of the energy calculation
-        text = "The energy and forces will be c" + energy_description[1:]
+        text = "The energy and forces are calculated as follows. " + energy_description
         text += "\n\n"
 
         if P["what"] == "full Hessian":
@@ -134,10 +134,9 @@ class Forceconstants(mopac_step.Energy):
 
         # Get the underlying SCF setup
         original = super().get_input()
-        # Have to think about MOZYME
-        if len(original) > 1:
-            raise NotImplementedError("MOZYME not yet handles in forceconstants")
-
+        # Only the main calculation: any MOZYME follow-up calculation (a second
+        # input) does not apply to the many single points of the finite differences,
+        # and MOPAC's FORCE works with MOZYME itself.
         keywords, _, _ = original[0]
         if "OLDGEO" in keywords:
             keywords.remove("OLDGEO")

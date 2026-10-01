@@ -130,3 +130,55 @@ def test_builder():
     mopac.add("Energy", COSMO="yes", eps=4.0)
     with pytest.raises(FlowchartBuildError, match="'eps' has no effect"):
         mopac.add("Energy", eps=4.0)
+
+
+def test_forceconstants_refuses_what_it_does_not_use(mopac):
+    """Force constants give the displaced structures themselves and do no MOZYME
+    follow-up calculation (MOPAC's FORCE works with MOZYME itself)."""
+    node = make(mopac, "Forceconstants")
+    for key, value in (
+        ("structure", "current"),
+        ("MOZYME follow-up", "none"),
+    ):
+        with pytest.raises(FlowchartBuildError, match="does not use it"):
+            set_parameters(node, {key: value})
+    set_parameters(node, {"MOZYME": "always"})
+
+
+@pytest.mark.parametrize(
+    "first, structure, expected",
+    [
+        (True, "default", "initial"),
+        (True, "current", "initial"),
+        (False, "default", "current"),
+        (False, "current", "current"),
+        # Was an UnboundLocalError: no structure was chosen
+        (False, "initial", "initial"),
+    ],
+)
+def test_starting_structure(first, structure, expected):
+    """The previous sub-step's structure (OLDGEO) only after the first sub-step."""
+    from mopac_step.energy import starting_structure
+
+    assert starting_structure(structure, first) == expected
+
+
+def test_no_mozyme_follow_up_for_forceconstants(mopac):
+    """Force constants do no follow-up, so neither expect nor describe one."""
+    P = {"MOZYME follow-up": "recalculate the energy at the end using exact, "}
+    energy = make(mopac, "Energy")
+    set_parameters(energy, {"MOZYME": "always"})
+    assert energy._mozyme_follow_up(P) == P["MOZYME follow-up"]
+    forceconstants = make(mopac, "Forceconstants")
+    set_parameters(forceconstants, {"MOZYME": "always"})
+    assert forceconstants._mozyme_follow_up(P) == "none"
+
+
+def test_forceconstants_description(mopac):
+    """The description used to splice 'c' onto the Energy description's first word,
+    giving 'will be che Hartree-Fock calculation'."""
+    node = make(mopac, "Forceconstants")
+    node._id = ("2", "1")
+    text = node.description_text()
+    assert "The energy and forces are calculated as follows. The Hartree-Fock" in text
+    assert "che " not in text

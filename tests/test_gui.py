@@ -11,8 +11,8 @@ import pytest
 SUBSTEPS = ("Energy", "Optimization", "IR Spectrum", "Thermodynamics", "Forceconstants")
 
 # Parameters that have a control in the dialog which is never laid out: the
-# structure to use, and the handling of subsequent structures (MOPAC makes only one).
-NOT_LAID_OUT = {"structure", "subsequent structure handling"}
+# handling of subsequent structures (MOPAC makes only one).
+NOT_LAID_OUT = {"subsequent structure handling"}
 
 
 @pytest.fixture()
@@ -111,6 +111,17 @@ def test_energy_layouts_follow_the_rules(root, substep):
     check(tk_node)
     assert tk_node["relative"].grid_info() != {}
     assert tk_node["absolute"].grid_info() != {}
+
+    # The structure to start from, except for force constants, which give the
+    # displaced structures themselves and do no MOZYME follow-up
+    tk_node["MOZYME"].set("always")
+    check(tk_node)
+    if substep == "Forceconstants":
+        assert tk_node["structure"].grid_info() == {}
+        assert tk_node["MOZYME follow-up"].grid_info() == {}
+    else:
+        assert tk_node["structure"].grid_info() != {}
+        assert tk_node["MOZYME follow-up"].grid_info() != {}
 
 
 def test_optimization_layouts_follow_the_rules(root):
