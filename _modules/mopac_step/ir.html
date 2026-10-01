@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 
 
@@ -7,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mopac_step.ir &#8212; SEAMM MOPAC Plug-in 2026.7.27 documentation</title>
+    <title>mopac_step.ir &#8212; SEAMM MOPAC Plug-in 2026.10.1 documentation</title>
   
   
   
@@ -26,8 +25,8 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+  <link href="../../_static/styles/theme.css?digest=64cc4de3f052d77215f0" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=64cc4de3f052d77215f0" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -35,10 +34,10 @@
     <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css?v=c224919a" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="../../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../../_static/scripts/fontawesome.js?digest=64cc4de3f052d77215f0"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=64cc4de3f052d77215f0" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=64cc4de3f052d77215f0" />
 
 <!-- Google Tag Manager -->
 <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -48,7 +47,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="../../_static/documentation_options.js?v=f166bad5"></script>
+    <script src="../../_static/documentation_options.js?v=65cfade2"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -61,7 +60,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <link rel="search" title="Search" href="../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.7.27" />
+  <meta name="docsearch:version" content="2026.10.1" />
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -109,7 +108,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   
     <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
 <div class="bd-header__inner bd-page-width">
-  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
     <span class="fa-solid fa-bars"></span>
   </button>
   
@@ -227,7 +226,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <div class="navbar-item navbar-persistent--container">
           
 
-<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
  <i class="fa-solid fa-magnifying-glass"></i>
  <span class="search-button__default-text">Search</span>
  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
@@ -238,15 +237,15 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <div class="navbar-item">
 
 <div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
     <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
     <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
     <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
   </button>
   <ul class="dropdown-menu dropdown-menu-end">
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
   </ul>
 </div></div>
       
@@ -283,7 +282,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   
     <div class="navbar-persistent--mobile">
 
-<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
  <i class="fa-solid fa-magnifying-glass"></i>
  <span class="search-button__default-text">Search</span>
  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
@@ -388,15 +387,15 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           <div class="navbar-item">
 
 <div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
     <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
     <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
     <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
   </button>
   <ul class="dropdown-menu dropdown-menu-end">
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
   </ul>
 </div></div>
         
@@ -488,7 +487,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <h1>Source code for mopac_step.ir</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
 
-<span class="sd">&quot;&quot;&quot;Run a vibrational frequency calculation in MOPAC&quot;&quot;&quot;</span>
+<span class="sd">"""Run a vibrational frequency calculation in MOPAC"""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">csv</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
@@ -506,70 +505,70 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 <span class="n">job</span> <span class="o">=</span> <span class="n">printing</span><span class="o">.</span><span class="n">getPrinter</span><span class="p">()</span>
-<span class="n">printer</span> <span class="o">=</span> <span class="n">printing</span><span class="o">.</span><span class="n">getPrinter</span><span class="p">(</span><span class="s2">&quot;mopac&quot;</span><span class="p">)</span>
+<span class="n">printer</span> <span class="o">=</span> <span class="n">printing</span><span class="o">.</span><span class="n">getPrinter</span><span class="p">(</span><span class="s2">"mopac"</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="IR">
 <a class="viewcode-back" href="../../api/mopac_step.html#mopac_step.ir.IR">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">IR</span><span class="p">(</span><span class="n">mopac_step</span><span class="o">.</span><span class="n">Energy</span><span class="p">):</span>
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">flowchart</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;IR Spectrum&quot;</span><span class="p">,</span> <span class="n">extension</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the node&quot;&quot;&quot;</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">flowchart</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">"IR Spectrum"</span><span class="p">,</span> <span class="n">extension</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Initialize the node"""</span>
 
-        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Creating IR </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">"Creating IR </span><span class="si">{}</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
 
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">flowchart</span><span class="o">=</span><span class="n">flowchart</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span> <span class="n">extension</span><span class="o">=</span><span class="n">extension</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">_calculation</span> <span class="o">=</span> <span class="s2">&quot;vibrations&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_calculation</span> <span class="o">=</span> <span class="s2">"vibrations"</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_model</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_metadata</span> <span class="o">=</span> <span class="n">mopac_step</span><span class="o">.</span><span class="n">metadata</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span> <span class="o">=</span> <span class="n">mopac_step</span><span class="o">.</span><span class="n">IRParameters</span><span class="p">()</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;Infrared (vibrational) spectroscopy calculation&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">description</span> <span class="o">=</span> <span class="s2">"Infrared (vibrational) spectroscopy calculation"</span>
 
 <div class="viewcode-block" id="IR.description_text">
 <a class="viewcode-back" href="../../api/mopac_step.html#mopac_step.ir.IR.description_text">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">description_text</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">P</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Prepare information about what this node will do&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Prepare information about what this node will do"""</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="n">P</span><span class="p">:</span>
             <span class="n">P</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">values_to_dict</span><span class="p">()</span>
 
         <span class="c1"># The energy part of the description</span>
         <span class="n">tmp</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">description_text</span><span class="p">(</span><span class="n">P</span><span class="p">)</span>
-        <span class="n">energy_description</span> <span class="o">=</span> <span class="n">textwrap</span><span class="o">.</span><span class="n">dedent</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmp</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()[</span><span class="mi">1</span><span class="p">:]))</span>
+        <span class="n">energy_description</span> <span class="o">=</span> <span class="n">textwrap</span><span class="o">.</span><span class="n">dedent</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmp</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()[</span><span class="mi">1</span><span class="p">:]))</span>
 
         <span class="n">text</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="s2">&quot;Harmonic vibrational calculation using </span><span class="si">{hamiltonian}</span><span class="s2">, &quot;</span>
-            <span class="s2">&quot;with the SCF converged to &quot;</span>
+            <span class="s2">"Harmonic vibrational calculation using </span><span class="si">{hamiltonian}</span><span class="s2">, "</span>
+            <span class="s2">"with the SCF converged to "</span>
         <span class="p">)</span>
         <span class="c1"># Convergence</span>
-        <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;convergence&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;normal&quot;</span><span class="p">:</span>
-            <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot;the &#39;normal&#39; level of 1.0e-07 kcal/mol.&quot;</span>
-        <span class="k">elif</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;convergence&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;precise&quot;</span><span class="p">:</span>
-            <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot;the &#39;precise&#39; level of 1.0e-09 kcal/mol.&quot;</span>
-        <span class="k">elif</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;convergence&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;relative&quot;</span><span class="p">:</span>
-            <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot;a factor of </span><span class="si">{relative}</span><span class="s2"> times the &quot;</span> <span class="s2">&quot;normal criterion.&quot;</span>
-        <span class="k">elif</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;convergence&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;absolute&quot;</span><span class="p">:</span>
-            <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot;converged to </span><span class="si">{absolute}</span><span class="s2">.&quot;</span>
+        <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s2">"convergence"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"normal"</span><span class="p">:</span>
+            <span class="n">text</span> <span class="o">+=</span> <span class="s2">"the 'normal' level of 1.0e-07 kcal/mol."</span>
+        <span class="k">elif</span> <span class="n">P</span><span class="p">[</span><span class="s2">"convergence"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"precise"</span><span class="p">:</span>
+            <span class="n">text</span> <span class="o">+=</span> <span class="s2">"the 'precise' level of 1.0e-09 kcal/mol."</span>
+        <span class="k">elif</span> <span class="n">P</span><span class="p">[</span><span class="s2">"convergence"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"relative"</span><span class="p">:</span>
+            <span class="n">text</span> <span class="o">+=</span> <span class="s2">"a factor of </span><span class="si">{relative}</span><span class="s2"> times the "</span> <span class="s2">"normal criterion."</span>
+        <span class="k">elif</span> <span class="n">P</span><span class="p">[</span><span class="s2">"convergence"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"absolute"</span><span class="p">:</span>
+            <span class="n">text</span> <span class="o">+=</span> <span class="s2">"converged to </span><span class="si">{absolute}</span><span class="s2">."</span>
 
         <span class="c1"># Put in the description of the energy calculation</span>
-        <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">The energy and forces will be c&quot;</span> <span class="o">+</span> <span class="n">energy_description</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
-        <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span>
+        <span class="n">text</span> <span class="o">+=</span> <span class="s2">"</span><span class="se">\n\n</span><span class="s2">The energy and forces will be c"</span> <span class="o">+</span> <span class="n">energy_description</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+        <span class="n">text</span> <span class="o">+=</span> <span class="s2">"</span><span class="se">\n\n</span><span class="s2">"</span>
 
         <span class="c1"># Structure handling</span>
-        <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot;The structure in the standard orientation will {structure handling} &quot;</span>
+        <span class="n">text</span> <span class="o">+=</span> <span class="s2">"The structure in the standard orientation will {structure handling} "</span>
 
         <span class="n">text</span> <span class="o">+=</span> <span class="n">seamm</span><span class="o">.</span><span class="n">standard_parameters</span><span class="o">.</span><span class="n">structure_handling_description</span><span class="p">(</span>
-            <span class="n">P</span><span class="p">,</span> <span class="n">Hamiltonian</span><span class="o">=</span><span class="n">P</span><span class="p">[</span><span class="s2">&quot;hamiltonian&quot;</span><span class="p">]</span>
+            <span class="n">P</span><span class="p">,</span> <span class="n">Hamiltonian</span><span class="o">=</span><span class="n">P</span><span class="p">[</span><span class="s2">"hamiltonian"</span><span class="p">]</span>
         <span class="p">)</span>
 
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">header</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">__</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="o">**</span><span class="n">P</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span> <span class="o">*</span> <span class="s2">&quot; &quot;</span><span class="p">)</span><span class="o">.</span><span class="fm">__str__</span><span class="p">()</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">header</span> <span class="o">+</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span> <span class="o">+</span> <span class="n">__</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="o">**</span><span class="n">P</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span> <span class="o">*</span> <span class="s2">" "</span><span class="p">)</span><span class="o">.</span><span class="fm">__str__</span><span class="p">()</span></div>
 
 
 <div class="viewcode-block" id="IR.get_input">
 <a class="viewcode-back" href="../../api/mopac_step.html#mopac_step.ir.IR.get_input">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_input</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the input for an optimization MOPAC&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Get the input for an optimization MOPAC"""</span>
 
         <span class="n">P</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">current_values_to_dict</span><span class="p">(</span>
             <span class="n">context</span><span class="o">=</span><span class="n">seamm</span><span class="o">.</span><span class="n">flowchart_variables</span><span class="o">.</span><span class="n">_data</span>
@@ -579,30 +578,30 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <span class="n">PP</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">P</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">PP</span><span class="p">:</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">PP</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="n">units_class</span><span class="p">):</span>
-                <span class="n">PP</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;{:~P}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">PP</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
+                <span class="n">PP</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"{:~P}"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">PP</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
 
         <span class="c1"># Save the description for later printing</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">description</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">description</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">__</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">description_text</span><span class="p">(</span><span class="n">PP</span><span class="p">),</span> <span class="o">**</span><span class="n">PP</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span> <span class="o">*</span> <span class="s2">&quot; &quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">description</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">__</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">description_text</span><span class="p">(</span><span class="n">PP</span><span class="p">),</span> <span class="o">**</span><span class="n">PP</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span> <span class="o">*</span> <span class="s2">" "</span><span class="p">))</span>
 
         <span class="c1"># Remove the 1SCF keyword from the energy setup</span>
         <span class="n">inputs</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">get_input</span><span class="p">()</span>
         <span class="n">keywords</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="k">if</span> <span class="s2">&quot;1SCF&quot;</span> <span class="ow">in</span> <span class="n">keywords</span><span class="p">:</span>
-            <span class="n">keywords</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s2">&quot;1SCF&quot;</span><span class="p">)</span>
-        <span class="n">keywords</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;FORCE&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;let&quot;</span><span class="p">]:</span>
-            <span class="n">keywords</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;LET&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">"1SCF"</span> <span class="ow">in</span> <span class="n">keywords</span><span class="p">:</span>
+            <span class="n">keywords</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s2">"1SCF"</span><span class="p">)</span>
+        <span class="n">keywords</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"FORCE"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s2">"let"</span><span class="p">]:</span>
+            <span class="n">keywords</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"LET"</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">inputs</span></div>
 
 
 <div class="viewcode-block" id="IR.analyze">
 <a class="viewcode-back" href="../../api/mopac_step.html#mopac_step.ir.IR.analyze">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">analyze</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">data_sections</span><span class="o">=</span><span class="p">[],</span> <span class="n">out_sections</span><span class="o">=</span><span class="p">[],</span> <span class="n">table</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Parse the output and generating the text output and store the</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">analyze</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="s2">""</span><span class="p">,</span> <span class="n">data_sections</span><span class="o">=</span><span class="p">[],</span> <span class="n">out_sections</span><span class="o">=</span><span class="p">[],</span> <span class="n">table</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Parse the output and generating the text output and store the</span>
 <span class="sd">        data in variables for other stages to access</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="c1"># Update the structure</span>
         <span class="n">P</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">current_values_to_dict</span><span class="p">(</span>
             <span class="n">context</span><span class="o">=</span><span class="n">seamm</span><span class="o">.</span><span class="n">flowchart_variables</span><span class="o">.</span><span class="n">_data</span>
@@ -611,7 +610,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <span class="c1"># Get the data.</span>
         <span class="n">data</span> <span class="o">=</span> <span class="n">data_sections</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
-        <span class="k">if</span> <span class="s2">&quot;ORIENTATION_ATOM_X&quot;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s2">"ORIENTATION_ATOM_X"</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
             <span class="n">starting_system</span><span class="p">,</span> <span class="n">starting_configuration</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_system_configuration</span><span class="p">()</span>
             <span class="n">system</span><span class="p">,</span> <span class="n">configuration</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_system_configuration</span><span class="p">(</span><span class="n">P</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">configuration</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -620,17 +619,17 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
             <span class="k">if</span> <span class="n">periodicity</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
-                    <span class="s2">&quot;Thermodynamics cannot yet handle periodicity&quot;</span>
+                    <span class="s2">"Thermodynamics cannot yet handle periodicity"</span>
                 <span class="p">)</span>
             <span class="n">xyz</span> <span class="o">=</span> <span class="p">[]</span>
-            <span class="n">it</span> <span class="o">=</span> <span class="nb">iter</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;ORIENTATION_ATOM_X&quot;</span><span class="p">])</span>
+            <span class="n">it</span> <span class="o">=</span> <span class="nb">iter</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">"ORIENTATION_ATOM_X"</span><span class="p">])</span>
             <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">it</span><span class="p">:</span>
                 <span class="n">xyz</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="nb">float</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="nb">float</span><span class="p">(</span><span class="nb">next</span><span class="p">(</span><span class="n">it</span><span class="p">)),</span> <span class="nb">float</span><span class="p">(</span><span class="nb">next</span><span class="p">(</span><span class="n">it</span><span class="p">))])</span>
 
-            <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;structure handling&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;Discard the structure&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s2">"structure handling"</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">"Discard the structure"</span><span class="p">:</span>
                 <span class="n">configuration</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">set_coordinates</span><span class="p">(</span><span class="n">xyz</span><span class="p">,</span> <span class="n">fractionals</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
                 <span class="n">seamm</span><span class="o">.</span><span class="n">standard_parameters</span><span class="o">.</span><span class="n">set_names</span><span class="p">(</span>
-                    <span class="n">system</span><span class="p">,</span> <span class="n">configuration</span><span class="p">,</span> <span class="n">P</span><span class="p">,</span> <span class="n">_first</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">Hamiltonian</span><span class="o">=</span><span class="n">P</span><span class="p">[</span><span class="s2">&quot;hamiltonian&quot;</span><span class="p">]</span>
+                    <span class="n">system</span><span class="p">,</span> <span class="n">configuration</span><span class="p">,</span> <span class="n">P</span><span class="p">,</span> <span class="n">_first</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">Hamiltonian</span><span class="o">=</span><span class="n">P</span><span class="p">[</span><span class="s2">"hamiltonian"</span><span class="p">]</span>
                 <span class="p">)</span>
 
         <span class="c1"># Write the structure out for viewing.</span>
@@ -639,66 +638,66 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
         <span class="c1">#  MMCIF file has bonds</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="n">path</span> <span class="o">=</span> <span class="n">directory</span> <span class="o">/</span> <span class="s2">&quot;optimized.mmcif&quot;</span>
+            <span class="n">path</span> <span class="o">=</span> <span class="n">directory</span> <span class="o">/</span> <span class="s2">"optimized.mmcif"</span>
             <span class="n">path</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="n">configuration</span><span class="o">.</span><span class="n">to_mmcif_text</span><span class="p">())</span>
         <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
-            <span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;Error creating the mmcif file</span><span class="se">\n\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">traceback</span><span class="o">.</span><span class="n">format_exc</span><span class="p">()</span>
+            <span class="n">message</span> <span class="o">=</span> <span class="s2">"Error creating the mmcif file</span><span class="se">\n\n</span><span class="s2">"</span> <span class="o">+</span> <span class="n">traceback</span><span class="o">.</span><span class="n">format_exc</span><span class="p">()</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
         <span class="c1"># CIF file has cell</span>
         <span class="k">if</span> <span class="n">configuration</span><span class="o">.</span><span class="n">periodicity</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
             <span class="k">try</span><span class="p">:</span>
-                <span class="n">path</span> <span class="o">=</span> <span class="n">directory</span> <span class="o">/</span> <span class="s2">&quot;optimized.cif&quot;</span>
+                <span class="n">path</span> <span class="o">=</span> <span class="n">directory</span> <span class="o">/</span> <span class="s2">"optimized.cif"</span>
                 <span class="n">path</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="n">configuration</span><span class="o">.</span><span class="n">to_cif_text</span><span class="p">())</span>
             <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
-                <span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;Error creating the cif file</span><span class="se">\n\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">traceback</span><span class="o">.</span><span class="n">format_exc</span><span class="p">()</span>
+                <span class="n">message</span> <span class="o">=</span> <span class="s2">"Error creating the cif file</span><span class="se">\n\n</span><span class="s2">"</span> <span class="o">+</span> <span class="n">traceback</span><span class="o">.</span><span class="n">format_exc</span><span class="p">()</span>
                 <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
 
         <span class="c1"># Print the moments of inertia</span>
-        <span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span> <span class="n">p3</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;PRI_MOM_OF_I&quot;</span><span class="p">]</span>
-        <span class="n">r1</span><span class="p">,</span> <span class="n">r2</span><span class="p">,</span> <span class="n">r3</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;ROTAT_CONSTS&quot;</span><span class="p">]</span>
+        <span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span> <span class="n">p3</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">"PRI_MOM_OF_I"</span><span class="p">]</span>
+        <span class="n">r1</span><span class="p">,</span> <span class="n">r2</span><span class="p">,</span> <span class="n">r3</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">"ROTAT_CONSTS"</span><span class="p">]</span>
         <span class="n">tbl</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;Property&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;Principal moment of inertia&quot;</span><span class="p">,</span> <span class="s2">&quot;Rotational constants&quot;</span><span class="p">),</span>
-            <span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">p1</span><span class="p">,</span> <span class="n">r1</span><span class="p">),</span>
-            <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">p2</span><span class="p">,</span> <span class="n">r2</span><span class="p">),</span>
-            <span class="s2">&quot;3&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">p3</span><span class="p">,</span> <span class="n">r3</span><span class="p">),</span>
-            <span class="s2">&quot;Units&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;1.0E-40 g.cm^2&quot;</span><span class="p">,</span> <span class="s2">&quot;1/cm&quot;</span><span class="p">),</span>
+            <span class="s2">"Property"</span><span class="p">:</span> <span class="p">(</span><span class="s2">"Principal moment of inertia"</span><span class="p">,</span> <span class="s2">"Rotational constants"</span><span class="p">),</span>
+            <span class="s2">"1"</span><span class="p">:</span> <span class="p">(</span><span class="n">p1</span><span class="p">,</span> <span class="n">r1</span><span class="p">),</span>
+            <span class="s2">"2"</span><span class="p">:</span> <span class="p">(</span><span class="n">p2</span><span class="p">,</span> <span class="n">r2</span><span class="p">),</span>
+            <span class="s2">"3"</span><span class="p">:</span> <span class="p">(</span><span class="n">p3</span><span class="p">,</span> <span class="n">r3</span><span class="p">),</span>
+            <span class="s2">"Units"</span><span class="p">:</span> <span class="p">(</span><span class="s2">"1.0E-40 g.cm^2"</span><span class="p">,</span> <span class="s2">"1/cm"</span><span class="p">),</span>
         <span class="p">}</span>
-        <span class="n">text_lines</span> <span class="o">=</span> <span class="s2">&quot;                  Rotational Constants</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="n">text_lines</span> <span class="o">=</span> <span class="s2">"                  Rotational Constants</span><span class="se">\n</span><span class="s2">"</span>
         <span class="n">text_lines</span> <span class="o">+=</span> <span class="n">tabulate</span><span class="p">(</span>
             <span class="n">tbl</span><span class="p">,</span>
-            <span class="n">headers</span><span class="o">=</span><span class="s2">&quot;keys&quot;</span><span class="p">,</span>
-            <span class="n">tablefmt</span><span class="o">=</span><span class="s2">&quot;psql&quot;</span><span class="p">,</span>
-            <span class="n">colalign</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;center&quot;</span><span class="p">,</span> <span class="s2">&quot;decimal&quot;</span><span class="p">,</span> <span class="s2">&quot;decimal&quot;</span><span class="p">,</span> <span class="s2">&quot;decimal&quot;</span><span class="p">,</span> <span class="s2">&quot;left&quot;</span><span class="p">),</span>
+            <span class="n">headers</span><span class="o">=</span><span class="s2">"keys"</span><span class="p">,</span>
+            <span class="n">tablefmt</span><span class="o">=</span><span class="s2">"psql"</span><span class="p">,</span>
+            <span class="n">colalign</span><span class="o">=</span><span class="p">(</span><span class="s2">"center"</span><span class="p">,</span> <span class="s2">"decimal"</span><span class="p">,</span> <span class="s2">"decimal"</span><span class="p">,</span> <span class="s2">"decimal"</span><span class="p">,</span> <span class="s2">"left"</span><span class="p">),</span>
         <span class="p">)</span>
-        <span class="n">text_lines</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
-        <span class="n">text</span> <span class="o">=</span> <span class="n">textwrap</span><span class="o">.</span><span class="n">indent</span><span class="p">(</span><span class="n">text_lines</span><span class="p">,</span> <span class="mi">8</span> <span class="o">*</span> <span class="s2">&quot; &quot;</span><span class="p">)</span>
+        <span class="n">text_lines</span> <span class="o">+=</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">textwrap</span><span class="o">.</span><span class="n">indent</span><span class="p">(</span><span class="n">text_lines</span><span class="p">,</span> <span class="mi">8</span> <span class="o">*</span> <span class="s2">" "</span><span class="p">)</span>
         <span class="n">printer</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
 
         <span class="c1"># And the vibrational modes to a csv file</span>
         <span class="c1"># First, how many rotations are there?</span>
-        <span class="n">n_rot</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">([</span><span class="mi">0</span> <span class="k">if</span> <span class="n">PMI</span> <span class="o">&lt;</span> <span class="mf">0.001</span> <span class="k">else</span> <span class="mi">1</span> <span class="k">for</span> <span class="n">PMI</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;PRI_MOM_OF_I&quot;</span><span class="p">]])</span>
-        <span class="n">n_vib</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;VIB._FREQ&quot;</span><span class="p">])</span> <span class="o">-</span> <span class="mi">3</span> <span class="o">-</span> <span class="n">n_rot</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">directory</span> <span class="o">/</span> <span class="s2">&quot;vibrations.csv&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fd</span><span class="p">:</span>
+        <span class="n">n_rot</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">([</span><span class="mi">0</span> <span class="k">if</span> <span class="n">PMI</span> <span class="o">&lt;</span> <span class="mf">0.001</span> <span class="k">else</span> <span class="mi">1</span> <span class="k">for</span> <span class="n">PMI</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s2">"PRI_MOM_OF_I"</span><span class="p">]])</span>
+        <span class="n">n_vib</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">"VIB._FREQ"</span><span class="p">])</span> <span class="o">-</span> <span class="mi">3</span> <span class="o">-</span> <span class="n">n_rot</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">directory</span> <span class="o">/</span> <span class="s2">"vibrations.csv"</span><span class="p">,</span> <span class="s2">"w"</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s2">""</span><span class="p">)</span> <span class="k">as</span> <span class="n">fd</span><span class="p">:</span>
             <span class="n">writer</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">writer</span><span class="p">(</span><span class="n">fd</span><span class="p">)</span>
             <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">(</span>
                 <span class="p">(</span>
-                    <span class="s2">&quot;Mode&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;Frequency (1/cm)&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;Symmetry&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;Transition Dipole (e-)&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;Travel (Å)&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;Reduced Mass (amu)&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;Effective Mass (amu)&quot;</span><span class="p">,</span>
+                    <span class="s2">"Mode"</span><span class="p">,</span>
+                    <span class="s2">"Frequency (1/cm)"</span><span class="p">,</span>
+                    <span class="s2">"Symmetry"</span><span class="p">,</span>
+                    <span class="s2">"Transition Dipole (e-)"</span><span class="p">,</span>
+                    <span class="s2">"Travel (Å)"</span><span class="p">,</span>
+                    <span class="s2">"Reduced Mass (amu)"</span><span class="p">,</span>
+                    <span class="s2">"Effective Mass (amu)"</span><span class="p">,</span>
                 <span class="p">)</span>
             <span class="p">)</span>
             <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
                 <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_vib</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span>
-                <span class="n">data</span><span class="p">[</span><span class="s2">&quot;VIB._FREQ&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">:</span><span class="n">n_vib</span><span class="p">],</span>
-                <span class="n">data</span><span class="p">[</span><span class="s2">&quot;NORMAL_MODE_SYMMETRY_LABELS&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">:</span><span class="n">n_vib</span><span class="p">],</span>
-                <span class="n">data</span><span class="p">[</span><span class="s2">&quot;VIB._T_DIP&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">:</span><span class="n">n_vib</span><span class="p">],</span>
-                <span class="n">data</span><span class="p">[</span><span class="s2">&quot;VIB._TRAVEL&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">:</span><span class="n">n_vib</span><span class="p">],</span>
-                <span class="n">data</span><span class="p">[</span><span class="s2">&quot;VIB._RED_MASS&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">:</span><span class="n">n_vib</span><span class="p">],</span>
-                <span class="n">data</span><span class="p">[</span><span class="s2">&quot;VIB._EFF_MASS&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">:</span><span class="n">n_vib</span><span class="p">],</span>
+                <span class="n">data</span><span class="p">[</span><span class="s2">"VIB._FREQ"</span><span class="p">][</span><span class="mi">0</span><span class="p">:</span><span class="n">n_vib</span><span class="p">],</span>
+                <span class="n">data</span><span class="p">[</span><span class="s2">"NORMAL_MODE_SYMMETRY_LABELS"</span><span class="p">][</span><span class="mi">0</span><span class="p">:</span><span class="n">n_vib</span><span class="p">],</span>
+                <span class="n">data</span><span class="p">[</span><span class="s2">"VIB._T_DIP"</span><span class="p">][</span><span class="mi">0</span><span class="p">:</span><span class="n">n_vib</span><span class="p">],</span>
+                <span class="n">data</span><span class="p">[</span><span class="s2">"VIB._TRAVEL"</span><span class="p">][</span><span class="mi">0</span><span class="p">:</span><span class="n">n_vib</span><span class="p">],</span>
+                <span class="n">data</span><span class="p">[</span><span class="s2">"VIB._RED_MASS"</span><span class="p">][</span><span class="mi">0</span><span class="p">:</span><span class="n">n_vib</span><span class="p">],</span>
+                <span class="n">data</span><span class="p">[</span><span class="s2">"VIB._EFF_MASS"</span><span class="p">][</span><span class="mi">0</span><span class="p">:</span><span class="n">n_vib</span><span class="p">],</span>
             <span class="p">):</span>
                 <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">(</span><span class="n">row</span><span class="p">)</span>
 
@@ -740,8 +739,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
-<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../../_static/scripts/bootstrap.js?digest=64cc4de3f052d77215f0"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=64cc4de3f052d77215f0"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -753,7 +752,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.20.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.22.0.
 </p></div>
       
     </div>

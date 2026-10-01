@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 
 
@@ -7,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mopac_step.lewis_structure &#8212; SEAMM MOPAC Plug-in 2026.7.27 documentation</title>
+    <title>mopac_step.lewis_structure &#8212; SEAMM MOPAC Plug-in 2026.10.1 documentation</title>
   
   
   
@@ -26,8 +25,8 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+  <link href="../../_static/styles/theme.css?digest=64cc4de3f052d77215f0" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=64cc4de3f052d77215f0" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -35,10 +34,10 @@
     <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css?v=c224919a" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="../../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../../_static/scripts/fontawesome.js?digest=64cc4de3f052d77215f0"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=64cc4de3f052d77215f0" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=64cc4de3f052d77215f0" />
 
 <!-- Google Tag Manager -->
 <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -48,7 +47,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="../../_static/documentation_options.js?v=f166bad5"></script>
+    <script src="../../_static/documentation_options.js?v=65cfade2"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -61,7 +60,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <link rel="search" title="Search" href="../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.7.27" />
+  <meta name="docsearch:version" content="2026.10.1" />
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -109,7 +108,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   
     <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
 <div class="bd-header__inner bd-page-width">
-  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
     <span class="fa-solid fa-bars"></span>
   </button>
   
@@ -227,7 +226,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <div class="navbar-item navbar-persistent--container">
           
 
-<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
  <i class="fa-solid fa-magnifying-glass"></i>
  <span class="search-button__default-text">Search</span>
  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
@@ -238,15 +237,15 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <div class="navbar-item">
 
 <div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
     <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
     <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
     <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
   </button>
   <ul class="dropdown-menu dropdown-menu-end">
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
   </ul>
 </div></div>
       
@@ -283,7 +282,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   
     <div class="navbar-persistent--mobile">
 
-<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
  <i class="fa-solid fa-magnifying-glass"></i>
  <span class="search-button__default-text">Search</span>
  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
@@ -388,15 +387,15 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           <div class="navbar-item">
 
 <div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
     <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
     <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
     <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
   </button>
   <ul class="dropdown-menu dropdown-menu-end">
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
   </ul>
 </div></div>
         
@@ -488,7 +487,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <h1>Source code for mopac_step.lewis_structure</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
 
-<span class="sd">&quot;&quot;&quot;Setup and run MOPAC for the Lewis structure&quot;&quot;&quot;</span>
+<span class="sd">"""Setup and run MOPAC for the Lewis structure"""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">calendar</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">configparser</span>
@@ -513,36 +512,36 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 <span class="n">job</span> <span class="o">=</span> <span class="n">printing</span><span class="o">.</span><span class="n">getPrinter</span><span class="p">()</span>
-<span class="n">printer</span> <span class="o">=</span> <span class="n">printing</span><span class="o">.</span><span class="n">getPrinter</span><span class="p">(</span><span class="s2">&quot;mopac&quot;</span><span class="p">)</span>
+<span class="n">printer</span> <span class="o">=</span> <span class="n">printing</span><span class="o">.</span><span class="n">getPrinter</span><span class="p">(</span><span class="s2">"mopac"</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="LewisStructure">
 <a class="viewcode-back" href="../../api/mopac_step.html#mopac_step.lewis_structure.LewisStructure">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">LewisStructure</span><span class="p">(</span><span class="n">mopac_step</span><span class="o">.</span><span class="n">MOPACBase</span><span class="p">):</span>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">flowchart</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">extension</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the node&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Initialize the node"""</span>
 
-        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Creating MOPAC </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">"Creating MOPAC </span><span class="si">{}</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
 
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
             <span class="n">flowchart</span><span class="o">=</span><span class="n">flowchart</span><span class="p">,</span>
-            <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Lewis Structure&quot;</span><span class="p">,</span>
+            <span class="n">title</span><span class="o">=</span><span class="s2">"Lewis Structure"</span><span class="p">,</span>
             <span class="n">extension</span><span class="o">=</span><span class="n">extension</span><span class="p">,</span>
             <span class="n">logger</span><span class="o">=</span><span class="n">logger</span><span class="p">,</span>
         <span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">_calculation</span> <span class="o">=</span> <span class="s2">&quot;Lewis structure&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_calculation</span> <span class="o">=</span> <span class="s2">"Lewis structure"</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_model</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_metadata</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">mopac_step</span><span class="o">.</span><span class="n">metadata</span><span class="p">}</span>
-        <span class="c1"># Don&#39;t want user to change keywords!</span>
-        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_metadata</span><span class="p">[</span><span class="s2">&quot;keywords&quot;</span><span class="p">]</span>
+        <span class="c1"># Don't want user to change keywords!</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_metadata</span><span class="p">[</span><span class="s2">"keywords"</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span> <span class="o">=</span> <span class="n">mopac_step</span><span class="o">.</span><span class="n">LewisStructureParameters</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_lattice_opt</span> <span class="o">=</span> <span class="kc">False</span>
 
 <div class="viewcode-block" id="LewisStructure.description_text">
 <a class="viewcode-back" href="../../api/mopac_step.html#mopac_step.lewis_structure.LewisStructure.description_text">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">description_text</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">P</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a short description of this step.</span>
+<span class="w">        </span><span class="sd">"""Return a short description of this step.</span>
 
 <span class="sd">        Return a nicely formatted string describing what this step will</span>
 <span class="sd">        do.</span>
@@ -551,125 +550,125 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="sd">            P: a dictionary of parameter values, which may be variables</span>
 <span class="sd">                or final values. If None, then the parameters values will</span>
 <span class="sd">                be used as is.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">P</span><span class="p">:</span>
             <span class="n">P</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">values_to_dict</span><span class="p">()</span>
 
-        <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;use bonds&quot;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s2">"use bonds"</span><span class="p">]:</span>
             <span class="n">text</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="s2">&quot;Generate and print the Lewis structure and replace any existing bonds &quot;</span>
-                <span class="s2">&quot;with those from the Lewis structure.&quot;</span>
+                <span class="s2">"Generate and print the Lewis structure and replace any existing bonds "</span>
+                <span class="s2">"with those from the Lewis structure."</span>
             <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">text</span> <span class="o">=</span> <span class="s2">&quot;Generate and print the Lewis structure.&quot;</span>
+            <span class="n">text</span> <span class="o">=</span> <span class="s2">"Generate and print the Lewis structure."</span>
 
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">header</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">__</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="o">**</span><span class="n">P</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span> <span class="o">*</span> <span class="s2">&quot; &quot;</span><span class="p">)</span><span class="o">.</span><span class="fm">__str__</span><span class="p">()</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">header</span> <span class="o">+</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span> <span class="o">+</span> <span class="n">__</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="o">**</span><span class="n">P</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span> <span class="o">*</span> <span class="s2">" "</span><span class="p">)</span><span class="o">.</span><span class="fm">__str__</span><span class="p">()</span></div>
 
 
 <div class="viewcode-block" id="LewisStructure.run">
 <a class="viewcode-back" href="../../api/mopac_step.html#mopac_step.lewis_structure.LewisStructure.run">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Run MOPAC&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Run MOPAC"""</span>
         <span class="n">system</span><span class="p">,</span> <span class="n">configuration</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_system_configuration</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
         <span class="n">n_atoms</span> <span class="o">=</span> <span class="n">configuration</span><span class="o">.</span><span class="n">n_atoms</span>
         <span class="k">if</span> <span class="n">n_atoms</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;MOPAC run(): there is no structure!&quot;</span><span class="p">)</span>
-            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;MOPAC run(): there is no structure!&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">"MOPAC run(): there is no structure!"</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">"MOPAC run(): there is no structure!"</span><span class="p">)</span>
 
         <span class="c1"># Print our header to the main output</span>
         <span class="n">printer</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="p">)</span>
-        <span class="n">printer</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="n">printer</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="s2">""</span><span class="p">)</span>
 
         <span class="c1"># Access the options</span>
         <span class="n">seamm_options</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">global_options</span>
 
-        <span class="n">extra_keywords</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;AUX(MOS=10,XP,XS,PRECISION=3)&quot;</span><span class="p">]</span>
+        <span class="n">extra_keywords</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"AUX(MOS=10,XP,XS,PRECISION=3)"</span><span class="p">]</span>
 
         <span class="c1"># All Lanthanides (except La and Lu) must use the SPARKLES keyword.</span>
         <span class="c1"># La and Lu use the SPARKLES keyword optionally, depending</span>
-        <span class="c1"># if you&#39;re looking for good structure (do use SPARKLES) or</span>
+        <span class="c1"># if you're looking for good structure (do use SPARKLES) or</span>
         <span class="c1"># energy (do not use SPARKLES)</span>
         <span class="n">La</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="s2">&quot;Ce&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;Pr&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;Nd&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;Pm&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;Sm&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;Eu&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;Gd&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;Tb&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;Dy&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;Ho&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;Er&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;Tm&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;Yb&quot;</span><span class="p">,</span>
+            <span class="s2">"Ce"</span><span class="p">,</span>
+            <span class="s2">"Pr"</span><span class="p">,</span>
+            <span class="s2">"Nd"</span><span class="p">,</span>
+            <span class="s2">"Pm"</span><span class="p">,</span>
+            <span class="s2">"Sm"</span><span class="p">,</span>
+            <span class="s2">"Eu"</span><span class="p">,</span>
+            <span class="s2">"Gd"</span><span class="p">,</span>
+            <span class="s2">"Tb"</span><span class="p">,</span>
+            <span class="s2">"Dy"</span><span class="p">,</span>
+            <span class="s2">"Ho"</span><span class="p">,</span>
+            <span class="s2">"Er"</span><span class="p">,</span>
+            <span class="s2">"Tm"</span><span class="p">,</span>
+            <span class="s2">"Yb"</span><span class="p">,</span>
         <span class="p">]</span>
 
         <span class="n">La_list</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">La</span><span class="p">)</span> <span class="o">&amp;</span> <span class="nb">set</span><span class="p">(</span><span class="n">configuration</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">symbols</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">La_list</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">extra_keywords</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;SPARKLES&quot;</span><span class="p">)</span>
+            <span class="n">extra_keywords</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"SPARKLES"</span><span class="p">)</span>
 
         <span class="c1"># Always add the charge since that will cause MOZYME, if used, to check.</span>
-        <span class="n">extra_keywords</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;CHARGE=</span><span class="si">{</span><span class="n">configuration</span><span class="o">.</span><span class="n">charge</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">extra_keywords</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"CHARGE=</span><span class="si">{</span><span class="n">configuration</span><span class="o">.</span><span class="n">charge</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
         <span class="c1"># Sparkles affect the number of electrons .. each has 3? .. so ignore</span>
         <span class="c1"># multiplicity</span>
         <span class="k">if</span> <span class="kc">False</span><span class="p">:</span>
-            <span class="c1"># if &quot;SPARKLES&quot; not in extra_keywords:</span>
+            <span class="c1"># if "SPARKLES" not in extra_keywords:</span>
             <span class="c1"># And the spin multiplicity</span>
             <span class="n">multiplicity</span> <span class="o">=</span> <span class="n">configuration</span><span class="o">.</span><span class="n">spin_multiplicity</span>
             <span class="k">if</span> <span class="n">multiplicity</span> <span class="o">&lt;=</span> <span class="mi">10</span><span class="p">:</span>
                 <span class="n">extra_keywords</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
                     <span class="p">(</span>
-                        <span class="s2">&quot;SINGLET&quot;</span><span class="p">,</span>
-                        <span class="s2">&quot;DOUBLET&quot;</span><span class="p">,</span>
-                        <span class="s2">&quot;TRIPLET&quot;</span><span class="p">,</span>
-                        <span class="s2">&quot;QUARTET&quot;</span><span class="p">,</span>
-                        <span class="s2">&quot;QUINTET&quot;</span><span class="p">,</span>
-                        <span class="s2">&quot;SEXTET&quot;</span><span class="p">,</span>
-                        <span class="s2">&quot;SEPTET&quot;</span><span class="p">,</span>
-                        <span class="s2">&quot;OCTET&quot;</span><span class="p">,</span>
-                        <span class="s2">&quot;NONET&quot;</span><span class="p">,</span>
+                        <span class="s2">"SINGLET"</span><span class="p">,</span>
+                        <span class="s2">"DOUBLET"</span><span class="p">,</span>
+                        <span class="s2">"TRIPLET"</span><span class="p">,</span>
+                        <span class="s2">"QUARTET"</span><span class="p">,</span>
+                        <span class="s2">"QUINTET"</span><span class="p">,</span>
+                        <span class="s2">"SEXTET"</span><span class="p">,</span>
+                        <span class="s2">"SEPTET"</span><span class="p">,</span>
+                        <span class="s2">"OCTET"</span><span class="p">,</span>
+                        <span class="s2">"NONET"</span><span class="p">,</span>
                     <span class="p">)[</span><span class="n">multiplicity</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
                 <span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">extra_keywords</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;MS=</span><span class="si">{</span><span class="p">(</span><span class="n">multiplicity</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">2</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">extra_keywords</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"MS=</span><span class="si">{</span><span class="p">(</span><span class="n">multiplicity</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">2</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
         <span class="n">next_node</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">printer</span><span class="p">)</span>
 
-        <span class="n">text</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="s2">""</span>
         <span class="n">lines</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s2">&quot;LEWIS&quot;</span><span class="p">,</span> <span class="s2">&quot;LET&quot;</span><span class="p">,</span> <span class="s2">&quot;GEO-OK&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">extra_keywords</span><span class="p">))</span>
+        <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">" "</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s2">"LEWIS"</span><span class="p">,</span> <span class="s2">"LET"</span><span class="p">,</span> <span class="s2">"GEO-OK"</span><span class="p">]</span> <span class="o">+</span> <span class="n">extra_keywords</span><span class="p">))</span>
         <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">system</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
         <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">configuration</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
 
-        <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span>
-        <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="n">text</span> <span class="o">+=</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span>
+        <span class="n">text</span> <span class="o">+=</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span>
         <span class="n">structure_lines</span><span class="p">,</span> <span class="n">symlines</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mopac_structure</span><span class="p">()</span>
         <span class="n">text</span> <span class="o">+=</span> <span class="n">structure_lines</span>
-        <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="n">text</span> <span class="o">+=</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span>
 
-        <span class="n">files</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;mopac.dat&quot;</span><span class="p">:</span> <span class="n">text</span><span class="p">}</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;mopac.dat:</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">files</span><span class="p">[</span><span class="s2">&quot;mopac.dat&quot;</span><span class="p">])</span>
+        <span class="n">files</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"mopac.dat"</span><span class="p">:</span> <span class="n">text</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">"mopac.dat:</span><span class="se">\n</span><span class="s2">"</span> <span class="o">+</span> <span class="n">files</span><span class="p">[</span><span class="s2">"mopac.dat"</span><span class="p">])</span>
         <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">directory</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
         <span class="n">executor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">flowchart</span><span class="o">.</span><span class="n">executor</span>
 
         <span class="c1"># Read configuration file for MOPAC</span>
-        <span class="n">ini_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">seamm_options</span><span class="p">[</span><span class="s2">&quot;root&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">expanduser</span><span class="p">()</span>
+        <span class="n">ini_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">seamm_options</span><span class="p">[</span><span class="s2">"root"</span><span class="p">])</span><span class="o">.</span><span class="n">expanduser</span><span class="p">()</span>
         <span class="n">full_config</span> <span class="o">=</span> <span class="n">configparser</span><span class="o">.</span><span class="n">ConfigParser</span><span class="p">()</span>
-        <span class="n">full_config</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">ini_dir</span> <span class="o">/</span> <span class="s2">&quot;mopac.ini&quot;</span><span class="p">)</span>
+        <span class="n">full_config</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">ini_dir</span> <span class="o">/</span> <span class="s2">"mopac.ini"</span><span class="p">)</span>
         <span class="n">executor_type</span> <span class="o">=</span> <span class="n">executor</span><span class="o">.</span><span class="n">name</span>
         <span class="k">if</span> <span class="n">executor_type</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">full_config</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;No section for &#39;</span><span class="si">{</span><span class="n">executor_type</span><span class="si">}</span><span class="s2">&#39; in MOPAC ini file &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;(</span><span class="si">{</span><span class="n">ini_dir</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="s1">&#39;mopac.ini&#39;</span><span class="si">}</span><span class="s2">)&quot;</span>
+                <span class="sa">f</span><span class="s2">"No section for '</span><span class="si">{</span><span class="n">executor_type</span><span class="si">}</span><span class="s2">' in MOPAC ini file "</span>
+                <span class="sa">f</span><span class="s2">"(</span><span class="si">{</span><span class="n">ini_dir</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="s1">'mopac.ini'</span><span class="si">}</span><span class="s2">)"</span>
             <span class="p">)</span>
         <span class="n">config</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">full_config</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="n">executor_type</span><span class="p">))</span>
 
-        <span class="n">return_files</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;mopac.arc&quot;</span><span class="p">,</span> <span class="s2">&quot;mopac.out&quot;</span><span class="p">,</span> <span class="s2">&quot;mopac.aux&quot;</span><span class="p">]</span>
+        <span class="n">return_files</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"mopac.arc"</span><span class="p">,</span> <span class="s2">"mopac.out"</span><span class="p">,</span> <span class="s2">"mopac.aux"</span><span class="p">]</span>
         <span class="n">result</span> <span class="o">=</span> <span class="n">executor</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
-            <span class="n">cmd</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;</span><span class="si">{code}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;mopac.dat&quot;</span><span class="p">,</span> <span class="s2">&quot;&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;stdout.txt&quot;</span><span class="p">,</span> <span class="s2">&quot;2&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;stderr.txt&quot;</span><span class="p">],</span>
+            <span class="n">cmd</span><span class="o">=</span><span class="p">[</span><span class="s2">"</span><span class="si">{code}</span><span class="s2">"</span><span class="p">,</span> <span class="s2">"mopac.dat"</span><span class="p">,</span> <span class="s2">"&gt;"</span><span class="p">,</span> <span class="s2">"stdout.txt"</span><span class="p">,</span> <span class="s2">"2&gt;"</span><span class="p">,</span> <span class="s2">"stderr.txt"</span><span class="p">],</span>
             <span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">,</span>
             <span class="n">directory</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">directory</span><span class="p">,</span>
             <span class="n">files</span><span class="o">=</span><span class="n">files</span><span class="p">,</span>
@@ -679,13 +678,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <span class="p">)</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="n">result</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;There was an error running MOPAC&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">"There was an error running MOPAC"</span><span class="p">)</span>
             <span class="k">return</span> <span class="kc">None</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">pprint</span><span class="o">.</span><span class="n">pformat</span><span class="p">(</span><span class="n">result</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span> <span class="o">+</span> <span class="n">pprint</span><span class="o">.</span><span class="n">pformat</span><span class="p">(</span><span class="n">result</span><span class="p">))</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
-            <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">Output from MOPAC</span><span class="se">\n\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">result</span><span class="p">[</span><span class="s2">&quot;mopac.out&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span>
+            <span class="s2">"</span><span class="se">\n\n</span><span class="s2">Output from MOPAC</span><span class="se">\n\n</span><span class="s2">"</span> <span class="o">+</span> <span class="n">result</span><span class="p">[</span><span class="s2">"mopac.out"</span><span class="p">][</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">+</span> <span class="s2">"</span><span class="se">\n\n</span><span class="s2">"</span>
         <span class="p">)</span>
 
         <span class="c1"># Analyze the results</span>
@@ -700,64 +699,64 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 <div class="viewcode-block" id="LewisStructure.analyze">
 <a class="viewcode-back" href="../../api/mopac_step.html#mopac_step.lewis_structure.LewisStructure.analyze">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">analyze</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">lines</span><span class="o">=</span><span class="p">[],</span> <span class="n">n_calculations</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Read the results from the Lewis calculation and process.&quot;&quot;&quot;</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">analyze</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="s2">""</span><span class="p">,</span> <span class="n">lines</span><span class="o">=</span><span class="p">[],</span> <span class="n">n_calculations</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Read the results from the Lewis calculation and process."""</span>
         <span class="n">_</span><span class="p">,</span> <span class="n">configuration</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_system_configuration</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
 
         <span class="c1"># Split the aux files into sections for each step</span>
-        <span class="n">filename</span> <span class="o">=</span> <span class="s2">&quot;mopac.aux&quot;</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">directory</span><span class="p">,</span> <span class="n">filename</span><span class="p">),</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fd</span><span class="p">:</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="s2">"mopac.aux"</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">directory</span><span class="p">,</span> <span class="n">filename</span><span class="p">),</span> <span class="n">mode</span><span class="o">=</span><span class="s2">"r"</span><span class="p">)</span> <span class="k">as</span> <span class="n">fd</span><span class="p">:</span>
             <span class="n">lines_aux</span> <span class="o">=</span> <span class="n">fd</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span>
         <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_aux</span><span class="p">(</span><span class="n">lines_aux</span><span class="p">[</span><span class="mi">2</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
 
         <span class="c1"># Add main citation for MOPAC</span>
-        <span class="k">if</span> <span class="s2">&quot;MOPAC_VERSION&quot;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s2">"MOPAC_VERSION"</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
             <span class="c1"># like MOPAC2016.20.191M</span>
-            <span class="k">if</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;MOPAC_VERSION&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">:</span><span class="mi">5</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;MOPAC&quot;</span><span class="p">:</span>
-                <span class="n">release</span><span class="p">,</span> <span class="n">version</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;MOPAC_VERSION&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="n">maxsplit</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-                <span class="n">t</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">version</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="s2">&quot;%y.%j&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">data</span><span class="p">[</span><span class="s2">"MOPAC_VERSION"</span><span class="p">][</span><span class="mi">0</span><span class="p">:</span><span class="mi">5</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"MOPAC"</span><span class="p">:</span>
+                <span class="n">release</span><span class="p">,</span> <span class="n">version</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">"MOPAC_VERSION"</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"."</span><span class="p">,</span> <span class="n">maxsplit</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">t</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">version</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="s2">"%y.%j"</span><span class="p">)</span>
                 <span class="n">year</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">year</span>
                 <span class="n">month</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">month</span>
-                <span class="n">template</span> <span class="o">=</span> <span class="n">string</span><span class="o">.</span><span class="n">Template</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_bibliography</span><span class="p">[</span><span class="s2">&quot;Stewart_2016&quot;</span><span class="p">])</span>
+                <span class="n">template</span> <span class="o">=</span> <span class="n">string</span><span class="o">.</span><span class="n">Template</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_bibliography</span><span class="p">[</span><span class="s2">"Stewart_2016"</span><span class="p">])</span>
                 <span class="n">month</span> <span class="o">=</span> <span class="n">calendar</span><span class="o">.</span><span class="n">month_abbr</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">month</span><span class="p">)]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
                 <span class="n">citation</span> <span class="o">=</span> <span class="n">template</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span>
                     <span class="n">month</span><span class="o">=</span><span class="n">month</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="n">version</span><span class="p">,</span> <span class="n">year</span><span class="o">=</span><span class="n">year</span><span class="p">,</span> <span class="n">release</span><span class="o">=</span><span class="n">release</span>
                 <span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">references</span><span class="o">.</span><span class="n">cite</span><span class="p">(</span>
                     <span class="n">raw</span><span class="o">=</span><span class="n">citation</span><span class="p">,</span>
-                    <span class="n">alias</span><span class="o">=</span><span class="s2">&quot;mopac&quot;</span><span class="p">,</span>
-                    <span class="n">module</span><span class="o">=</span><span class="s2">&quot;mopac_step&quot;</span><span class="p">,</span>
+                    <span class="n">alias</span><span class="o">=</span><span class="s2">"mopac"</span><span class="p">,</span>
+                    <span class="n">module</span><span class="o">=</span><span class="s2">"mopac_step"</span><span class="p">,</span>
                     <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-                    <span class="n">note</span><span class="o">=</span><span class="s2">&quot;The principle MOPAC citation.&quot;</span><span class="p">,</span>
+                    <span class="n">note</span><span class="o">=</span><span class="s2">"The principle MOPAC citation."</span><span class="p">,</span>
                 <span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">references</span><span class="o">.</span><span class="n">cite</span><span class="p">(</span>
-                    <span class="n">raw</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_bibliography</span><span class="p">[</span><span class="s2">&quot;stewart_james_j_p_2022_6811510&quot;</span><span class="p">],</span>
-                    <span class="n">alias</span><span class="o">=</span><span class="s2">&quot;mopac&quot;</span><span class="p">,</span>
-                    <span class="n">module</span><span class="o">=</span><span class="s2">&quot;mopac_step&quot;</span><span class="p">,</span>
+                    <span class="n">raw</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_bibliography</span><span class="p">[</span><span class="s2">"stewart_james_j_p_2022_6811510"</span><span class="p">],</span>
+                    <span class="n">alias</span><span class="o">=</span><span class="s2">"mopac"</span><span class="p">,</span>
+                    <span class="n">module</span><span class="o">=</span><span class="s2">"mopac_step"</span><span class="p">,</span>
                     <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-                    <span class="n">note</span><span class="o">=</span><span class="s2">&quot;The principle MOPAC citation.&quot;</span><span class="p">,</span>
+                    <span class="n">note</span><span class="o">=</span><span class="s2">"The principle MOPAC citation."</span><span class="p">,</span>
                 <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">references</span><span class="o">.</span><span class="n">cite</span><span class="p">(</span>
-                <span class="n">raw</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_bibliography</span><span class="p">[</span><span class="s2">&quot;stewart_james_j_p_2022_6811510&quot;</span><span class="p">],</span>
-                <span class="n">alias</span><span class="o">=</span><span class="s2">&quot;mopac&quot;</span><span class="p">,</span>
-                <span class="n">module</span><span class="o">=</span><span class="s2">&quot;mopac_step&quot;</span><span class="p">,</span>
+                <span class="n">raw</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_bibliography</span><span class="p">[</span><span class="s2">"stewart_james_j_p_2022_6811510"</span><span class="p">],</span>
+                <span class="n">alias</span><span class="o">=</span><span class="s2">"mopac"</span><span class="p">,</span>
+                <span class="n">module</span><span class="o">=</span><span class="s2">"mopac_step"</span><span class="p">,</span>
                 <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-                <span class="n">note</span><span class="o">=</span><span class="s2">&quot;The principle MOPAC citation.&quot;</span><span class="p">,</span>
+                <span class="n">note</span><span class="o">=</span><span class="s2">"The principle MOPAC citation."</span><span class="p">,</span>
             <span class="p">)</span>
 
         <span class="c1"># Get the output file</span>
-        <span class="n">filename</span> <span class="o">=</span> <span class="s2">&quot;mopac.out&quot;</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">directory</span><span class="p">,</span> <span class="n">filename</span><span class="p">),</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fd</span><span class="p">:</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="s2">"mopac.out"</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">directory</span><span class="p">,</span> <span class="n">filename</span><span class="p">),</span> <span class="n">mode</span><span class="o">=</span><span class="s2">"r"</span><span class="p">)</span> <span class="k">as</span> <span class="n">fd</span><span class="p">:</span>
             <span class="n">lines</span> <span class="o">=</span> <span class="nb">iter</span><span class="p">(</span><span class="n">fd</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">splitlines</span><span class="p">())</span>
 
         <span class="c1"># Get the parameters used</span>
         <span class="n">P</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">current_values_to_dict</span><span class="p">(</span>
             <span class="n">context</span><span class="o">=</span><span class="n">seamm</span><span class="o">.</span><span class="n">flowchart_variables</span><span class="o">.</span><span class="n">_data</span>
         <span class="p">)</span>
-        <span class="n">no_error</span> <span class="o">=</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;ignore errors&quot;</span><span class="p">]</span>
-        <span class="n">fallback</span> <span class="o">=</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;on errors use connectivity&quot;</span><span class="p">]</span>
+        <span class="n">no_error</span> <span class="o">=</span> <span class="n">P</span><span class="p">[</span><span class="s2">"ignore errors"</span><span class="p">]</span>
+        <span class="n">fallback</span> <span class="o">=</span> <span class="n">P</span><span class="p">[</span><span class="s2">"on errors use connectivity"</span><span class="p">]</span>
 
         <span class="n">charge</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="n">n_atoms</span> <span class="o">=</span> <span class="n">configuration</span><span class="o">.</span><span class="n">n_atoms</span>
@@ -768,63 +767,63 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <span class="n">sum_positive_charges</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="n">sum_negative_charges</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="n">ions</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="n">neighbors</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;neighbors&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[[]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_atoms</span><span class="p">)]</span>
-        <span class="n">bonds</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;bonds&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;i&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;j&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;bondorder&quot;</span><span class="p">:</span> <span class="p">[]}</span>
-        <span class="n">lone_pairs</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;lone pairs&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">n_atoms</span>
+        <span class="n">neighbors</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">"neighbors"</span><span class="p">]</span> <span class="o">=</span> <span class="p">[[]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_atoms</span><span class="p">)]</span>
+        <span class="n">bonds</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">"bonds"</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"i"</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">"j"</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">"bondorder"</span><span class="p">:</span> <span class="p">[]}</span>
+        <span class="n">lone_pairs</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">"lone pairs"</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">n_atoms</span>
         <span class="n">have_lewis_structure</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="n">charge_error</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">:</span>
             <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
-            <span class="k">if</span> <span class="s2">&quot;MOLECULAR POINT GROUP&quot;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s2">"MOLECULAR POINT GROUP"</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
                 <span class="n">point_group</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
-            <span class="k">if</span> <span class="s2">&quot;Ion Atom No.  Type    Charge&quot;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s2">"Ion Atom No.  Type    Charge"</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
                 <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">:</span>
                     <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
                     <span class="k">if</span> <span class="ow">not</span> <span class="n">line</span><span class="p">:</span>
                         <span class="k">continue</span>
-                    <span class="k">if</span> <span class="s2">&quot;COMPUTED CHARGE ON SYSTEM&quot;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="s2">"COMPUTED CHARGE ON SYSTEM"</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
                         <span class="k">break</span>
                     <span class="n">ion</span><span class="p">,</span> <span class="n">atom</span><span class="p">,</span> <span class="n">type_</span><span class="p">,</span> <span class="n">charge</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
-                    <span class="n">ions</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">atom</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;charge&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">charge</span><span class="p">),</span> <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="n">type_</span><span class="p">}</span>
-            <span class="k">if</span> <span class="s2">&quot;COMPUTED CHARGE ON SYSTEM&quot;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
-                <span class="n">charge</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">4</span><span class="p">]</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">))</span>
-                <span class="k">if</span> <span class="s2">&quot;THIS IS THE SAME AS THE CHARGE DEFINED&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+                    <span class="n">ions</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">atom</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"charge"</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">charge</span><span class="p">),</span> <span class="s2">"type"</span><span class="p">:</span> <span class="n">type_</span><span class="p">}</span>
+            <span class="k">if</span> <span class="s2">"COMPUTED CHARGE ON SYSTEM"</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+                <span class="n">charge</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">4</span><span class="p">]</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">","</span><span class="p">))</span>
+                <span class="k">if</span> <span class="s2">"THIS IS THE SAME AS THE CHARGE DEFINED"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
                     <span class="n">charge_error</span> <span class="o">=</span> <span class="kc">True</span>
-            <span class="k">if</span> <span class="s2">&quot;SIGMA BONDS&quot;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s2">"SIGMA BONDS"</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
                 <span class="n">n_sigma_bonds</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">2</span><span class="p">])</span>
-            <span class="k">if</span> <span class="s2">&quot;LONE PAIRS&quot;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s2">"LONE PAIRS"</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
                 <span class="n">n_lone_pairs</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">2</span><span class="p">])</span>
-            <span class="k">if</span> <span class="s2">&quot;PI BONDS&quot;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s2">"PI BONDS"</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
                 <span class="n">n_pi_bonds</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">2</span><span class="p">])</span>
-            <span class="k">if</span> <span class="s2">&quot;SUM OF POSITIVE CHARGES&quot;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s2">"SUM OF POSITIVE CHARGES"</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
                 <span class="n">sum_positive_charges</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">4</span><span class="p">])</span>
-            <span class="k">if</span> <span class="s2">&quot;SUM OF NEGATIVE CHARGES&quot;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s2">"SUM OF NEGATIVE CHARGES"</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
                 <span class="n">sum_negative_charges</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">4</span><span class="p">])</span>
-            <span class="k">if</span> <span class="s2">&quot;TOPOGRAPHY OF SYSTEM&quot;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s2">"TOPOGRAPHY OF SYSTEM"</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
                 <span class="nb">next</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span>
                 <span class="nb">next</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span>
                 <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">:</span>
                     <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
-                    <span class="k">if</span> <span class="n">line</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">line</span> <span class="o">==</span> <span class="s2">""</span><span class="p">:</span>
                         <span class="k">break</span>
                     <span class="n">tmp</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
                     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
                         <span class="n">i</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">tmp</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">-</span> <span class="mi">1</span>
                         <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="n">n_atoms</span><span class="p">:</span>
                             <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
-                                <span class="sa">f</span><span class="s2">&quot;Problem with atom index in topography </span><span class="si">{</span><span class="n">n_atoms</span><span class="si">=}</span><span class="s2">: &quot;</span>
-                                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">line</span><span class="si">}</span><span class="s2">&quot;</span>
+                                <span class="sa">f</span><span class="s2">"Problem with atom index in topography </span><span class="si">{</span><span class="n">n_atoms</span><span class="si">=}</span><span class="s2">: "</span>
+                                <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">line</span><span class="si">}</span><span class="s2">"</span>
                             <span class="p">)</span>
                         <span class="n">neighbors</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">j</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">tmp</span><span class="p">[</span><span class="mi">2</span><span class="p">:]]</span>
 
-            <span class="k">if</span> <span class="n">line</span> <span class="o">==</span> <span class="s2">&quot;Lewis Structure&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">line</span> <span class="o">==</span> <span class="s2">"Lewis Structure"</span><span class="p">:</span>
                 <span class="n">have_lewis_structure</span> <span class="o">=</span> <span class="kc">True</span>
                 <span class="nb">next</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span>
                 <span class="nb">next</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span>
                 <span class="n">tmp_bonds</span> <span class="o">=</span> <span class="p">{}</span>
                 <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">:</span>
-                    <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">==</span> <span class="s2">""</span><span class="p">:</span>
                         <span class="k">break</span>
                     <span class="k">for</span> <span class="n">start</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span> <span class="o">*</span> <span class="mi">24</span><span class="p">,</span> <span class="mi">24</span><span class="p">):</span>
                         <span class="n">tmp</span> <span class="o">=</span> <span class="n">line</span><span class="p">[</span><span class="n">start</span> <span class="p">:</span> <span class="n">start</span> <span class="o">+</span> <span class="mi">24</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
@@ -833,7 +832,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                             <span class="n">j</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">tmp</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="o">-</span> <span class="mi">1</span>
                             <span class="k">if</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">i</span><span class="p">:</span>
                                 <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="n">j</span><span class="p">,</span> <span class="n">i</span>
-                            <span class="n">key</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">j</span><span class="si">}</span><span class="s2">&quot;</span>
+                            <span class="n">key</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">j</span><span class="si">}</span><span class="s2">"</span>
                             <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">tmp_bonds</span><span class="p">:</span>
                                 <span class="n">tmp_bonds</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
                             <span class="k">else</span><span class="p">:</span>
@@ -842,39 +841,39 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                             <span class="n">i</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">tmp</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">-</span> <span class="mi">1</span>
                             <span class="n">lone_pairs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
                 <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">order</span> <span class="ow">in</span> <span class="n">tmp_bonds</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-                    <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="n">key</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">)</span>
-                    <span class="n">bonds</span><span class="p">[</span><span class="s2">&quot;i&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
-                    <span class="n">bonds</span><span class="p">[</span><span class="s2">&quot;j&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">j</span><span class="p">))</span>
-                    <span class="n">bonds</span><span class="p">[</span><span class="s2">&quot;bondorder&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">order</span><span class="p">)</span>
+                    <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="n">key</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"-"</span><span class="p">)</span>
+                    <span class="n">bonds</span><span class="p">[</span><span class="s2">"i"</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+                    <span class="n">bonds</span><span class="p">[</span><span class="s2">"j"</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">j</span><span class="p">))</span>
+                    <span class="n">bonds</span><span class="p">[</span><span class="s2">"bondorder"</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">order</span><span class="p">)</span>
 
                 <span class="c1"># The neighbors according to Lewis structure</span>
                 <span class="n">lneighbors</span> <span class="o">=</span> <span class="p">[[]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_atoms</span><span class="p">)]</span>
-                <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">bonds</span><span class="p">[</span><span class="s2">&quot;i&quot;</span><span class="p">],</span> <span class="n">bonds</span><span class="p">[</span><span class="s2">&quot;j&quot;</span><span class="p">]):</span>
+                <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">bonds</span><span class="p">[</span><span class="s2">"i"</span><span class="p">],</span> <span class="n">bonds</span><span class="p">[</span><span class="s2">"j"</span><span class="p">]):</span>
                     <span class="n">lneighbors</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">j</span><span class="p">)</span>
                     <span class="n">lneighbors</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">charge</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">data</span><span class="p">[</span><span class="s2">&quot;charge&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">charge</span>
+            <span class="n">data</span><span class="p">[</span><span class="s2">"charge"</span><span class="p">]</span> <span class="o">=</span> <span class="n">charge</span>
         <span class="k">if</span> <span class="n">point_group</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">data</span><span class="p">[</span><span class="s2">&quot;point group&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">point_group</span>
+            <span class="n">data</span><span class="p">[</span><span class="s2">"point group"</span><span class="p">]</span> <span class="o">=</span> <span class="n">point_group</span>
         <span class="k">if</span> <span class="n">n_sigma_bonds</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">data</span><span class="p">[</span><span class="s2">&quot;n sigma bonds&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">n_sigma_bonds</span>
+            <span class="n">data</span><span class="p">[</span><span class="s2">"n sigma bonds"</span><span class="p">]</span> <span class="o">=</span> <span class="n">n_sigma_bonds</span>
         <span class="k">if</span> <span class="n">n_lone_pairs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">data</span><span class="p">[</span><span class="s2">&quot;n lone pairs&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">n_lone_pairs</span>
+            <span class="n">data</span><span class="p">[</span><span class="s2">"n lone pairs"</span><span class="p">]</span> <span class="o">=</span> <span class="n">n_lone_pairs</span>
         <span class="k">if</span> <span class="n">n_pi_bonds</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">data</span><span class="p">[</span><span class="s2">&quot;n pi bonds&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">n_pi_bonds</span>
+            <span class="n">data</span><span class="p">[</span><span class="s2">"n pi bonds"</span><span class="p">]</span> <span class="o">=</span> <span class="n">n_pi_bonds</span>
         <span class="k">if</span> <span class="n">sum_positive_charges</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">data</span><span class="p">[</span><span class="s2">&quot;sum positive charges&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sum_positive_charges</span>
+            <span class="n">data</span><span class="p">[</span><span class="s2">"sum positive charges"</span><span class="p">]</span> <span class="o">=</span> <span class="n">sum_positive_charges</span>
         <span class="k">if</span> <span class="n">sum_negative_charges</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">data</span><span class="p">[</span><span class="s2">&quot;sum negative charges&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sum_negative_charges</span>
+            <span class="n">data</span><span class="p">[</span><span class="s2">"sum negative charges"</span><span class="p">]</span> <span class="o">=</span> <span class="n">sum_negative_charges</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Point group = </span><span class="si">{</span><span class="n">point_group</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;     Charge = </span><span class="si">{</span><span class="n">charge</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Neighbors&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Point group = </span><span class="si">{</span><span class="n">point_group</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"     Charge = </span><span class="si">{</span><span class="n">charge</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">"Neighbors"</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">neighbors</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Bonds&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">"Bonds"</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">bonds</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Lone pairs&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">"Lone pairs"</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">lone_pairs</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">))</span>
 
         <span class="c1"># Check the Lewis structure for consistency with neighbors.</span>
@@ -889,111 +888,111 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <span class="k">if</span> <span class="ow">not</span> <span class="n">same</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">no_error</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
-                        <span class="s2">&quot;The Lewis structure yields different connectivity than the &quot;</span>
-                        <span class="s2">&quot;simple connectivity.&quot;</span>
+                        <span class="s2">"The Lewis structure yields different connectivity than the "</span>
+                        <span class="s2">"simple connectivity."</span>
                     <span class="p">)</span>
                 <span class="k">elif</span> <span class="ow">not</span> <span class="n">fallback</span><span class="p">:</span>
                     <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
-                        <span class="s2">&quot;The Lewis structure yields different connectivity than the &quot;</span>
-                        <span class="s2">&quot;simple connectivity shows.&quot;</span>
+                        <span class="s2">"The Lewis structure yields different connectivity than the "</span>
+                        <span class="s2">"simple connectivity shows."</span>
                     <span class="p">)</span>
 
         <span class="c1"># Generate the printed output if requested</span>
-        <span class="n">text</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;atom cutoff&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;no printing&quot;</span><span class="p">:</span>
-            <span class="n">text</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;   Point group symmetry: </span><span class="si">{</span><span class="n">point_group</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
-            <span class="n">text</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;             Net charge: </span><span class="si">{</span><span class="n">charge</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
-            <span class="n">text</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;Sum of positive charges: </span><span class="si">{</span><span class="n">sum_positive_charges</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
-            <span class="n">text</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;Sum of negative charges: </span><span class="si">{</span><span class="n">sum_negative_charges</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
-            <span class="n">text</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;  Number of sigma bonds: </span><span class="si">{</span><span class="n">n_sigma_bonds</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
-            <span class="n">text</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;     Number of pi bonds: </span><span class="si">{</span><span class="n">n_pi_bonds</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
-            <span class="n">text</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;   Number of lone pairs: </span><span class="si">{</span><span class="n">n_lone_pairs</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
-            <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="s2">""</span>
+        <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s2">"atom cutoff"</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">"no printing"</span><span class="p">:</span>
+            <span class="n">text</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">"   Point group symmetry: </span><span class="si">{</span><span class="n">point_group</span><span class="si">}</span><span class="se">\n</span><span class="s2">"</span>
+            <span class="n">text</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">"             Net charge: </span><span class="si">{</span><span class="n">charge</span><span class="si">}</span><span class="se">\n</span><span class="s2">"</span>
+            <span class="n">text</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">"Sum of positive charges: </span><span class="si">{</span><span class="n">sum_positive_charges</span><span class="si">}</span><span class="se">\n</span><span class="s2">"</span>
+            <span class="n">text</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">"Sum of negative charges: </span><span class="si">{</span><span class="n">sum_negative_charges</span><span class="si">}</span><span class="se">\n</span><span class="s2">"</span>
+            <span class="n">text</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">"  Number of sigma bonds: </span><span class="si">{</span><span class="n">n_sigma_bonds</span><span class="si">}</span><span class="se">\n</span><span class="s2">"</span>
+            <span class="n">text</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">"     Number of pi bonds: </span><span class="si">{</span><span class="n">n_pi_bonds</span><span class="si">}</span><span class="se">\n</span><span class="s2">"</span>
+            <span class="n">text</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">"   Number of lone pairs: </span><span class="si">{</span><span class="n">n_lone_pairs</span><span class="si">}</span><span class="se">\n</span><span class="s2">"</span>
+            <span class="n">text</span> <span class="o">+=</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span>
         <span class="k">if</span> <span class="n">charge_error</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;adjust charge&quot;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s2">"adjust charge"</span><span class="p">]:</span>
                 <span class="n">configuration</span><span class="o">.</span><span class="n">charge</span> <span class="o">=</span> <span class="n">charge</span>
                 <span class="n">text</span> <span class="o">+=</span> <span class="p">(</span>
-                    <span class="s2">&quot;The total charge on the system has been adjusted to &quot;</span>
-                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">configuration</span><span class="o">.</span><span class="n">charge</span><span class="si">}</span><span class="s2">.</span><span class="se">\n</span><span class="s2">&quot;</span>
+                    <span class="s2">"The total charge on the system has been adjusted to "</span>
+                    <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">configuration</span><span class="o">.</span><span class="n">charge</span><span class="si">}</span><span class="s2">.</span><span class="se">\n</span><span class="s2">"</span>
                 <span class="p">)</span>
             <span class="k">elif</span> <span class="n">no_error</span> <span class="ow">or</span> <span class="n">fallback</span><span class="p">:</span>
                 <span class="n">text</span> <span class="o">+=</span> <span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;The charge on the system </span><span class="si">{</span><span class="n">configuration</span><span class="o">.</span><span class="n">charge</span><span class="si">}</span><span class="s2"> is not &quot;</span>
-                    <span class="sa">f</span><span class="s2">&quot;the same as Lewis structure indicates: </span><span class="si">{</span><span class="n">charge</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+                    <span class="sa">f</span><span class="s2">"The charge on the system </span><span class="si">{</span><span class="n">configuration</span><span class="o">.</span><span class="n">charge</span><span class="si">}</span><span class="s2"> is not "</span>
+                    <span class="sa">f</span><span class="s2">"the same as Lewis structure indicates: </span><span class="si">{</span><span class="n">charge</span><span class="si">}</span><span class="se">\n</span><span class="s2">"</span>
                 <span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;The charge on the system </span><span class="si">{</span><span class="n">configuration</span><span class="o">.</span><span class="n">charge</span><span class="si">}</span><span class="s2"> is not &quot;</span>
-                    <span class="sa">f</span><span class="s2">&quot;the same as Lewis structure indicates: </span><span class="si">{</span><span class="n">charge</span><span class="si">}</span><span class="s2">&quot;</span>
+                    <span class="sa">f</span><span class="s2">"The charge on the system </span><span class="si">{</span><span class="n">configuration</span><span class="o">.</span><span class="n">charge</span><span class="si">}</span><span class="s2"> is not "</span>
+                    <span class="sa">f</span><span class="s2">"the same as Lewis structure indicates: </span><span class="si">{</span><span class="n">charge</span><span class="si">}</span><span class="s2">"</span>
                 <span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;atom cutoff&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;no printing&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s2">"atom cutoff"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"no printing"</span><span class="p">:</span>
             <span class="k">pass</span>
-        <span class="k">elif</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;atom cutoff&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;unlimited&quot;</span> <span class="ow">or</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;atom cutoff&quot;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">n_atoms</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">P</span><span class="p">[</span><span class="s2">"atom cutoff"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"unlimited"</span> <span class="ow">or</span> <span class="n">P</span><span class="p">[</span><span class="s2">"atom cutoff"</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">n_atoms</span><span class="p">:</span>
             <span class="n">symbol</span> <span class="o">=</span> <span class="n">configuration</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">symbols</span>
             <span class="n">nmax</span> <span class="o">=</span> <span class="mi">0</span>
             <span class="k">for</span> <span class="n">atoms</span> <span class="ow">in</span> <span class="n">neighbors</span><span class="p">:</span>
                 <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">atoms</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">nmax</span><span class="p">:</span>
                     <span class="n">nmax</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">atoms</span><span class="p">)</span>
-            <span class="n">table</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Atom&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;El&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;Lone Pairs&quot;</span><span class="p">:</span> <span class="p">[]}</span>
+            <span class="n">table</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"Atom"</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">"El"</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">"Lone Pairs"</span><span class="p">:</span> <span class="p">[]}</span>
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">nmax</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
-                <span class="n">table</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;At</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
-                <span class="n">table</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;El</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="n">table</span><span class="p">[</span><span class="sa">f</span><span class="s2">"At</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">"</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="n">table</span><span class="p">[</span><span class="sa">f</span><span class="s2">"El</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">"</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">atoms</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">neighbors</span><span class="p">):</span>
-                <span class="n">table</span><span class="p">[</span><span class="s2">&quot;Atom&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
-                <span class="n">table</span><span class="p">[</span><span class="s2">&quot;El&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">symbol</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
-                <span class="n">table</span><span class="p">[</span><span class="s2">&quot;Lone Pairs&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">lone_pairs</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                <span class="n">table</span><span class="p">[</span><span class="s2">"Atom"</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="n">table</span><span class="p">[</span><span class="s2">"El"</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">symbol</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                <span class="n">table</span><span class="p">[</span><span class="s2">"Lone Pairs"</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">lone_pairs</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
                 <span class="k">for</span> <span class="n">c</span><span class="p">,</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">atoms</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
-                    <span class="n">table</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;At</span><span class="si">{</span><span class="n">c</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
-                    <span class="n">table</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;El</span><span class="si">{</span><span class="n">c</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">symbol</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+                    <span class="n">table</span><span class="p">[</span><span class="sa">f</span><span class="s2">"At</span><span class="si">{</span><span class="n">c</span><span class="si">}</span><span class="s2">"</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+                    <span class="n">table</span><span class="p">[</span><span class="sa">f</span><span class="s2">"El</span><span class="si">{</span><span class="n">c</span><span class="si">}</span><span class="s2">"</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">symbol</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
                 <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">atoms</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">nmax</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
-                    <span class="n">table</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;At</span><span class="si">{</span><span class="n">c</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
-                    <span class="n">table</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;El</span><span class="si">{</span><span class="n">c</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
-            <span class="n">tmp</span> <span class="o">=</span> <span class="n">tabulate</span><span class="p">(</span><span class="n">table</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="s2">&quot;keys&quot;</span><span class="p">,</span> <span class="n">tablefmt</span><span class="o">=</span><span class="s2">&quot;pretty&quot;</span><span class="p">)</span>
+                    <span class="n">table</span><span class="p">[</span><span class="sa">f</span><span class="s2">"At</span><span class="si">{</span><span class="n">c</span><span class="si">}</span><span class="s2">"</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">""</span><span class="p">)</span>
+                    <span class="n">table</span><span class="p">[</span><span class="sa">f</span><span class="s2">"El</span><span class="si">{</span><span class="n">c</span><span class="si">}</span><span class="s2">"</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">""</span><span class="p">)</span>
+            <span class="n">tmp</span> <span class="o">=</span> <span class="n">tabulate</span><span class="p">(</span><span class="n">table</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="s2">"keys"</span><span class="p">,</span> <span class="n">tablefmt</span><span class="o">=</span><span class="s2">"pretty"</span><span class="p">)</span>
             <span class="n">length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">tmp</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span>
-            <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
-            <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot;Atoms bonded to each atom&quot;</span><span class="o">.</span><span class="n">center</span><span class="p">(</span><span class="n">length</span><span class="p">)</span>
-            <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="n">text</span> <span class="o">+=</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span>
+            <span class="n">text</span> <span class="o">+=</span> <span class="s2">"Atoms bonded to each atom"</span><span class="o">.</span><span class="n">center</span><span class="p">(</span><span class="n">length</span><span class="p">)</span>
+            <span class="n">text</span> <span class="o">+=</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span>
             <span class="n">text</span> <span class="o">+=</span> <span class="n">tmp</span>
-            <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
-            <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="n">text</span> <span class="o">+=</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span>
+            <span class="n">text</span> <span class="o">+=</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span>
 
             <span class="n">table</span> <span class="o">=</span> <span class="p">{</span>
-                <span class="s2">&quot;At1&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">bonds</span><span class="p">[</span><span class="s2">&quot;i&quot;</span><span class="p">]],</span>
-                <span class="s2">&quot;At2&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">bonds</span><span class="p">[</span><span class="s2">&quot;j&quot;</span><span class="p">]],</span>
+                <span class="s2">"At1"</span><span class="p">:</span> <span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">bonds</span><span class="p">[</span><span class="s2">"i"</span><span class="p">]],</span>
+                <span class="s2">"At2"</span><span class="p">:</span> <span class="p">[</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">bonds</span><span class="p">[</span><span class="s2">"j"</span><span class="p">]],</span>
             <span class="p">}</span>
-            <span class="n">txt</span> <span class="o">=</span> <span class="n">table</span><span class="p">[</span><span class="s2">&quot;Bond&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
-            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">order</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">bonds</span><span class="p">[</span><span class="s2">&quot;i&quot;</span><span class="p">],</span> <span class="n">bonds</span><span class="p">[</span><span class="s2">&quot;j&quot;</span><span class="p">],</span> <span class="n">bonds</span><span class="p">[</span><span class="s2">&quot;bondorder&quot;</span><span class="p">]):</span>
+            <span class="n">txt</span> <span class="o">=</span> <span class="n">table</span><span class="p">[</span><span class="s2">"Bond"</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">order</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">bonds</span><span class="p">[</span><span class="s2">"i"</span><span class="p">],</span> <span class="n">bonds</span><span class="p">[</span><span class="s2">"j"</span><span class="p">],</span> <span class="n">bonds</span><span class="p">[</span><span class="s2">"bondorder"</span><span class="p">]):</span>
                 <span class="n">el1</span> <span class="o">=</span> <span class="n">symbol</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
                 <span class="n">el2</span> <span class="o">=</span> <span class="n">symbol</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
                 <span class="k">if</span> <span class="n">order</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-                    <span class="n">txt</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">el1</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">el2</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="n">txt</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">el1</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">el2</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
                 <span class="k">elif</span> <span class="n">order</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
-                    <span class="n">txt</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">el1</span><span class="si">}</span><span class="s2">=</span><span class="si">{</span><span class="n">el2</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="n">txt</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">el1</span><span class="si">}</span><span class="s2">=</span><span class="si">{</span><span class="n">el2</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
                 <span class="k">elif</span> <span class="n">order</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
-                    <span class="n">txt</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">el1</span><span class="si">}</span><span class="s2">#</span><span class="si">{</span><span class="n">el2</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="n">txt</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">el1</span><span class="si">}</span><span class="s2">#</span><span class="si">{</span><span class="n">el2</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="n">txt</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">el1</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">order</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">el2</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-            <span class="n">tmp</span> <span class="o">=</span> <span class="n">tabulate</span><span class="p">(</span><span class="n">table</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="s2">&quot;keys&quot;</span><span class="p">,</span> <span class="n">tablefmt</span><span class="o">=</span><span class="s2">&quot;pretty&quot;</span><span class="p">)</span>
+                    <span class="n">txt</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">el1</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">order</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">el2</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+            <span class="n">tmp</span> <span class="o">=</span> <span class="n">tabulate</span><span class="p">(</span><span class="n">table</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="s2">"keys"</span><span class="p">,</span> <span class="n">tablefmt</span><span class="o">=</span><span class="s2">"pretty"</span><span class="p">)</span>
             <span class="n">length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">tmp</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span>
-            <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
-            <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot;Bonds&quot;</span><span class="o">.</span><span class="n">center</span><span class="p">(</span><span class="n">length</span><span class="p">)</span>
-            <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="n">text</span> <span class="o">+=</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span>
+            <span class="n">text</span> <span class="o">+=</span> <span class="s2">"Bonds"</span><span class="o">.</span><span class="n">center</span><span class="p">(</span><span class="n">length</span><span class="p">)</span>
+            <span class="n">text</span> <span class="o">+=</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span>
             <span class="n">text</span> <span class="o">+=</span> <span class="n">tmp</span>
-            <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="n">text</span> <span class="o">+=</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span>
 
         <span class="c1"># If requested, overwrite the bonding information in the system</span>
-        <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;use bonds&quot;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s2">"use bonds"</span><span class="p">]:</span>
             <span class="n">ids</span> <span class="o">=</span> <span class="n">configuration</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">ids</span>
             <span class="k">if</span> <span class="n">same</span><span class="p">:</span>
-                <span class="n">iatoms</span> <span class="o">=</span> <span class="p">[</span><span class="n">ids</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">bonds</span><span class="p">[</span><span class="s2">&quot;i&quot;</span><span class="p">]]</span>
-                <span class="n">jatoms</span> <span class="o">=</span> <span class="p">[</span><span class="n">ids</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">bonds</span><span class="p">[</span><span class="s2">&quot;j&quot;</span><span class="p">]]</span>
+                <span class="n">iatoms</span> <span class="o">=</span> <span class="p">[</span><span class="n">ids</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">bonds</span><span class="p">[</span><span class="s2">"i"</span><span class="p">]]</span>
+                <span class="n">jatoms</span> <span class="o">=</span> <span class="p">[</span><span class="n">ids</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">bonds</span><span class="p">[</span><span class="s2">"j"</span><span class="p">]]</span>
                 <span class="n">configuration</span><span class="o">.</span><span class="n">new_bondset</span><span class="p">()</span>
                 <span class="n">configuration</span><span class="o">.</span><span class="n">bonds</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                    <span class="n">i</span><span class="o">=</span><span class="n">iatoms</span><span class="p">,</span> <span class="n">j</span><span class="o">=</span><span class="n">jatoms</span><span class="p">,</span> <span class="n">bondorder</span><span class="o">=</span><span class="n">bonds</span><span class="p">[</span><span class="s2">&quot;bondorder&quot;</span><span class="p">]</span>
+                    <span class="n">i</span><span class="o">=</span><span class="n">iatoms</span><span class="p">,</span> <span class="n">j</span><span class="o">=</span><span class="n">jatoms</span><span class="p">,</span> <span class="n">bondorder</span><span class="o">=</span><span class="n">bonds</span><span class="p">[</span><span class="s2">"bondorder"</span><span class="p">]</span>
                 <span class="p">)</span>
-                <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Replaced the bonds in the configuration with those from the &quot;</span>
-                <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot;Lewis structure.</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="n">text</span> <span class="o">+=</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">Replaced the bonds in the configuration with those from the "</span>
+                <span class="n">text</span> <span class="o">+=</span> <span class="s2">"Lewis structure.</span><span class="se">\n</span><span class="s2">"</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">iatoms</span> <span class="o">=</span> <span class="p">[]</span>
                 <span class="n">jatoms</span> <span class="o">=</span> <span class="p">[]</span>
@@ -1006,10 +1005,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                             <span class="n">bondorders</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
                 <span class="n">configuration</span><span class="o">.</span><span class="n">new_bondset</span><span class="p">()</span>
                 <span class="n">configuration</span><span class="o">.</span><span class="n">bonds</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                    <span class="n">i</span><span class="o">=</span><span class="n">iatoms</span><span class="p">,</span> <span class="n">j</span><span class="o">=</span><span class="n">jatoms</span><span class="p">,</span> <span class="n">bondorder</span><span class="o">=</span><span class="n">bonds</span><span class="p">[</span><span class="s2">&quot;bondorder&quot;</span><span class="p">]</span>
+                    <span class="n">i</span><span class="o">=</span><span class="n">iatoms</span><span class="p">,</span> <span class="n">j</span><span class="o">=</span><span class="n">jatoms</span><span class="p">,</span> <span class="n">bondorder</span><span class="o">=</span><span class="n">bonds</span><span class="p">[</span><span class="s2">"bondorder"</span><span class="p">]</span>
                 <span class="p">)</span>
-                <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Replaced the bonds in the configuration with those from the &quot;</span>
-                <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot;simple connectivity structure.</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="n">text</span> <span class="o">+=</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">Replaced the bonds in the configuration with those from the "</span>
+                <span class="n">text</span> <span class="o">+=</span> <span class="s2">"simple connectivity structure.</span><span class="se">\n</span><span class="s2">"</span>
 
         <span class="c1"># Put any requested results into variables or tables</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">store_results</span><span class="p">(</span>
@@ -1017,11 +1016,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span>
         <span class="p">)</span>
 
-        <span class="k">if</span> <span class="s2">&quot;CPU_TIME&quot;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
-            <span class="n">t_total</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;CPU_TIME&quot;</span><span class="p">]</span>
-            <span class="n">text</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">The Lewis structure took a total of </span><span class="si">{</span><span class="n">t_total</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> s.</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="k">if</span> <span class="s2">"CPU_TIME"</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+            <span class="n">t_total</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">"CPU_TIME"</span><span class="p">]</span>
+            <span class="n">text</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">The Lewis structure took a total of </span><span class="si">{</span><span class="n">t_total</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> s.</span><span class="se">\n</span><span class="s2">"</span>
 
-        <span class="n">printer</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">textwrap</span><span class="o">.</span><span class="n">indent</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="mi">4</span> <span class="o">*</span> <span class="s2">&quot; &quot;</span><span class="p">))</span></div>
+        <span class="n">printer</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">textwrap</span><span class="o">.</span><span class="n">indent</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="mi">4</span> <span class="o">*</span> <span class="s2">" "</span><span class="p">))</span></div>
 </div>
 
 </pre></div>
@@ -1053,8 +1052,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
-<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../../_static/scripts/bootstrap.js?digest=64cc4de3f052d77215f0"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=64cc4de3f052d77215f0"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -1066,7 +1065,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.20.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.22.0.
 </p></div>
       
     </div>

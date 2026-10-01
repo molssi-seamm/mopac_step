@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 
 
@@ -7,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mopac_step.forceconstants &#8212; SEAMM MOPAC Plug-in 2026.7.27 documentation</title>
+    <title>mopac_step.forceconstants &#8212; SEAMM MOPAC Plug-in 2026.10.1 documentation</title>
   
   
   
@@ -26,8 +25,8 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+  <link href="../../_static/styles/theme.css?digest=64cc4de3f052d77215f0" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=64cc4de3f052d77215f0" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -35,10 +34,10 @@
     <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css?v=c224919a" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="../../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../../_static/scripts/fontawesome.js?digest=64cc4de3f052d77215f0"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=64cc4de3f052d77215f0" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=64cc4de3f052d77215f0" />
 
 <!-- Google Tag Manager -->
 <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -48,7 +47,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="../../_static/documentation_options.js?v=f166bad5"></script>
+    <script src="../../_static/documentation_options.js?v=65cfade2"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -61,7 +60,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <link rel="search" title="Search" href="../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.7.27" />
+  <meta name="docsearch:version" content="2026.10.1" />
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -109,7 +108,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   
     <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
 <div class="bd-header__inner bd-page-width">
-  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
     <span class="fa-solid fa-bars"></span>
   </button>
   
@@ -227,7 +226,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <div class="navbar-item navbar-persistent--container">
           
 
-<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
  <i class="fa-solid fa-magnifying-glass"></i>
  <span class="search-button__default-text">Search</span>
  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
@@ -238,15 +237,15 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <div class="navbar-item">
 
 <div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
     <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
     <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
     <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
   </button>
   <ul class="dropdown-menu dropdown-menu-end">
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
   </ul>
 </div></div>
       
@@ -283,7 +282,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   
     <div class="navbar-persistent--mobile">
 
-<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
  <i class="fa-solid fa-magnifying-glass"></i>
  <span class="search-button__default-text">Search</span>
  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
@@ -388,15 +387,15 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           <div class="navbar-item">
 
 <div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
     <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
     <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
     <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
   </button>
   <ul class="dropdown-menu dropdown-menu-end">
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
   </ul>
 </div></div>
         
@@ -488,7 +487,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <h1>Source code for mopac_step.forceconstants</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
 
-<span class="sd">&quot;&quot;&quot;Caculate the forceconstant matrix using MOPAC&quot;&quot;&quot;</span>
+<span class="sd">"""Caculate the forceconstant matrix using MOPAC"""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">math</span><span class="w"> </span><span class="kn">import</span> <span class="n">sqrt</span>
@@ -503,109 +502,109 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 <span class="n">job</span> <span class="o">=</span> <span class="n">printing</span><span class="o">.</span><span class="n">getPrinter</span><span class="p">()</span>
-<span class="n">printer</span> <span class="o">=</span> <span class="n">printing</span><span class="o">.</span><span class="n">getPrinter</span><span class="p">(</span><span class="s2">&quot;mopac&quot;</span><span class="p">)</span>
+<span class="n">printer</span> <span class="o">=</span> <span class="n">printing</span><span class="o">.</span><span class="n">getPrinter</span><span class="p">(</span><span class="s2">"mopac"</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="Forceconstants">
 <a class="viewcode-back" href="../../api/mopac_step.html#mopac_step.forceconstants.Forceconstants">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">Forceconstants</span><span class="p">(</span><span class="n">mopac_step</span><span class="o">.</span><span class="n">Energy</span><span class="p">):</span>
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">flowchart</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Force Constants&quot;</span><span class="p">,</span> <span class="n">extension</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the node&quot;&quot;&quot;</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">flowchart</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">"Force Constants"</span><span class="p">,</span> <span class="n">extension</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Initialize the node"""</span>
 
-        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Creating Forceconstants </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">"Creating Forceconstants </span><span class="si">{}</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
 
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">flowchart</span><span class="o">=</span><span class="n">flowchart</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span> <span class="n">extension</span><span class="o">=</span><span class="n">extension</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">_calculation</span> <span class="o">=</span> <span class="s2">&quot;force constants&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_calculation</span> <span class="o">=</span> <span class="s2">"force constants"</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_model</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_metadata</span> <span class="o">=</span> <span class="n">mopac_step</span><span class="o">.</span><span class="n">metadata</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span> <span class="o">=</span> <span class="n">mopac_step</span><span class="o">.</span><span class="n">ForceconstantsParameters</span><span class="p">()</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;Force Constants (Hessian) calculation&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">description</span> <span class="o">=</span> <span class="s2">"Force Constants (Hessian) calculation"</span>
 
 <div class="viewcode-block" id="Forceconstants.description_text">
 <a class="viewcode-back" href="../../api/mopac_step.html#mopac_step.forceconstants.Forceconstants.description_text">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">description_text</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">P</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Prepare information about what this node will do&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Prepare information about what this node will do"""</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="n">P</span><span class="p">:</span>
             <span class="n">P</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">values_to_dict</span><span class="p">()</span>
 
         <span class="c1"># The energy part of the description</span>
         <span class="n">tmp</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">description_text</span><span class="p">(</span><span class="n">P</span><span class="p">)</span>
-        <span class="n">energy_description</span> <span class="o">=</span> <span class="n">textwrap</span><span class="o">.</span><span class="n">dedent</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmp</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()[</span><span class="mi">1</span><span class="p">:]))</span>
+        <span class="n">energy_description</span> <span class="o">=</span> <span class="n">textwrap</span><span class="o">.</span><span class="n">dedent</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmp</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()[</span><span class="mi">1</span><span class="p">:]))</span>
 
         <span class="c1"># Put in the description of the energy calculation</span>
-        <span class="n">text</span> <span class="o">=</span> <span class="s2">&quot;The energy and forces will be c&quot;</span> <span class="o">+</span> <span class="n">energy_description</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
-        <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="s2">"The energy and forces are calculated as follows. "</span> <span class="o">+</span> <span class="n">energy_description</span>
+        <span class="n">text</span> <span class="o">+=</span> <span class="s2">"</span><span class="se">\n\n</span><span class="s2">"</span>
 
-        <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;what&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;full Hessian&quot;</span><span class="p">:</span>
-            <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot;Creating the full Hessian&quot;</span>
-        <span class="k">elif</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;what&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;atom part only&quot;</span><span class="p">:</span>
-            <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot;Creating the atom part of the Hessian&quot;</span>
+        <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s2">"what"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"full Hessian"</span><span class="p">:</span>
+            <span class="n">text</span> <span class="o">+=</span> <span class="s2">"Creating the full Hessian"</span>
+        <span class="k">elif</span> <span class="n">P</span><span class="p">[</span><span class="s2">"what"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"atom part only"</span><span class="p">:</span>
+            <span class="n">text</span> <span class="o">+=</span> <span class="s2">"Creating the atom part of the Hessian"</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot;Creating the cell part of the Hessian&quot;</span>
-        <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot; (force constant matrix) for </span><span class="si">{hamiltonian}</span><span class="s2">&quot;</span>
+            <span class="n">text</span> <span class="o">+=</span> <span class="s2">"Creating the cell part of the Hessian"</span>
+        <span class="n">text</span> <span class="o">+=</span> <span class="s2">" (force constant matrix) for </span><span class="si">{hamiltonian}</span><span class="s2">"</span>
 
-        <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;what&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;cell part only&quot;</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;two-sided_cell&quot;</span><span class="p">]:</span>
-                <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot; using two-sided differences of the strain&quot;</span>
+        <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s2">"what"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"cell part only"</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s2">"two-sided_cell"</span><span class="p">]:</span>
+                <span class="n">text</span> <span class="o">+=</span> <span class="s2">" using two-sided differences of the strain"</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot; using one-sided differences of the strain&quot;</span>
+                <span class="n">text</span> <span class="o">+=</span> <span class="s2">" using one-sided differences of the strain"</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;two-sided_atoms&quot;</span><span class="p">]:</span>
-                <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;two-sided_cell&quot;</span><span class="p">]:</span>
-                    <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;what&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;full Hessian&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s2">"two-sided_atoms"</span><span class="p">]:</span>
+                <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s2">"two-sided_cell"</span><span class="p">]:</span>
+                    <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s2">"what"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"full Hessian"</span><span class="p">:</span>
                         <span class="n">text</span> <span class="o">+=</span> <span class="p">(</span>
-                            <span class="s2">&quot; using two-sided differences for both the atoms and strain&quot;</span>
+                            <span class="s2">" using two-sided differences for both the atoms and strain"</span>
                         <span class="p">)</span>
                     <span class="k">else</span><span class="p">:</span>
-                        <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot; using two-sided differences for the atoms&quot;</span>
+                        <span class="n">text</span> <span class="o">+=</span> <span class="s2">" using two-sided differences for the atoms"</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;what&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;full Hessian&quot;</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s2">"what"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"full Hessian"</span><span class="p">:</span>
                         <span class="n">text</span> <span class="o">+=</span> <span class="p">(</span>
-                            <span class="s2">&quot; using two-sided differences for the atoms and one-sided &quot;</span>
-                            <span class="s2">&quot; for the strain&quot;</span>
+                            <span class="s2">" using two-sided differences for the atoms and one-sided "</span>
+                            <span class="s2">" for the strain"</span>
                         <span class="p">)</span>
                     <span class="k">else</span><span class="p">:</span>
-                        <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot; using two-sided differences for the atoms&quot;</span>
+                        <span class="n">text</span> <span class="o">+=</span> <span class="s2">" using two-sided differences for the atoms"</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;two-sided_cell&quot;</span><span class="p">]:</span>
-                    <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;what&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;full Hessian&quot;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s2">"two-sided_cell"</span><span class="p">]:</span>
+                    <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s2">"what"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"full Hessian"</span><span class="p">:</span>
                         <span class="n">text</span> <span class="o">+=</span> <span class="p">(</span>
-                            <span class="s2">&quot; using one-sided differences for the atoms and two-sided &quot;</span>
-                            <span class="s2">&quot;for the strain&quot;</span>
+                            <span class="s2">" using one-sided differences for the atoms and two-sided "</span>
+                            <span class="s2">"for the strain"</span>
                         <span class="p">)</span>
                     <span class="k">else</span><span class="p">:</span>
-                        <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot; using one-sided differences for the atoms&quot;</span>
+                        <span class="n">text</span> <span class="o">+=</span> <span class="s2">" using one-sided differences for the atoms"</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;what&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;full Hessian&quot;</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s2">"what"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"full Hessian"</span><span class="p">:</span>
                         <span class="n">text</span> <span class="o">+=</span> <span class="p">(</span>
-                            <span class="s2">&quot; using on-sided differences for both the atoms and strain&quot;</span>
+                            <span class="s2">" using on-sided differences for both the atoms and strain"</span>
                         <span class="p">)</span>
                     <span class="k">else</span><span class="p">:</span>
-                        <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot; using one-sided differences for the atoms&quot;</span>
-        <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot; with a step size of </span><span class="si">{stepsize}</span><span class="s2">.&quot;</span>
-        <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;what&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;cell part only&quot;</span><span class="p">:</span>
+                        <span class="n">text</span> <span class="o">+=</span> <span class="s2">" using one-sided differences for the atoms"</span>
+        <span class="n">text</span> <span class="o">+=</span> <span class="s2">" with a step size of </span><span class="si">{stepsize}</span><span class="s2">."</span>
+        <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s2">"what"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"cell part only"</span><span class="p">:</span>
             <span class="n">text</span> <span class="o">+=</span> <span class="p">(</span>
-                <span class="s2">&quot; The strain-strain part of the Hessian will be output in </span><span class="si">{cell_units}</span><span class="s2">.&quot;</span>
+                <span class="s2">" The strain-strain part of the Hessian will be output in </span><span class="si">{cell_units}</span><span class="s2">."</span>
             <span class="p">)</span>
-        <span class="k">elif</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;what&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;full Hessian&quot;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">P</span><span class="p">[</span><span class="s2">"what"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"full Hessian"</span><span class="p">:</span>
             <span class="n">text</span> <span class="o">+=</span> <span class="p">(</span>
-                <span class="s2">&quot; The atom-atom and atom-strain part of the Hessian will be output in &quot;</span>
-                <span class="s2">&quot;</span><span class="si">{atom_units}</span><span class="s2">, while the the strain-strain part will be output in &quot;</span>
-                <span class="s2">&quot;</span><span class="si">{cell_units}</span><span class="s2">.&quot;</span>
+                <span class="s2">" The atom-atom and atom-strain part of the Hessian will be output in "</span>
+                <span class="s2">"</span><span class="si">{atom_units}</span><span class="s2">, while the the strain-strain part will be output in "</span>
+                <span class="s2">"</span><span class="si">{cell_units}</span><span class="s2">."</span>
             <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot; The atom-atom part of the Hessian will be output in </span><span class="si">{atom_units}</span><span class="s2">.&quot;</span>
+            <span class="n">text</span> <span class="o">+=</span> <span class="s2">" The atom-atom part of the Hessian will be output in </span><span class="si">{atom_units}</span><span class="s2">."</span>
 
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">header</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">__</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="o">**</span><span class="n">P</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span> <span class="o">*</span> <span class="s2">&quot; &quot;</span><span class="p">)</span><span class="o">.</span><span class="fm">__str__</span><span class="p">()</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">header</span> <span class="o">+</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span> <span class="o">+</span> <span class="n">__</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="o">**</span><span class="n">P</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span> <span class="o">*</span> <span class="s2">" "</span><span class="p">)</span><span class="o">.</span><span class="fm">__str__</span><span class="p">()</span></div>
 
 
 <div class="viewcode-block" id="Forceconstants.get_input">
 <a class="viewcode-back" href="../../api/mopac_step.html#mopac_step.forceconstants.Forceconstants.get_input">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_input</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the input for an optimization MOPAC&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Get the input for an optimization MOPAC"""</span>
 
         <span class="n">P</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">current_values_to_dict</span><span class="p">(</span>
             <span class="n">context</span><span class="o">=</span><span class="n">seamm</span><span class="o">.</span><span class="n">flowchart_variables</span><span class="o">.</span><span class="n">_data</span>
@@ -615,11 +614,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <span class="n">PP</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">P</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">PP</span><span class="p">:</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">PP</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="n">units_class</span><span class="p">):</span>
-                <span class="n">PP</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;{:~P}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">PP</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
+                <span class="n">PP</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"{:~P}"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">PP</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
 
         <span class="c1"># Save the description for later printing</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">description</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">description</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">__</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">description_text</span><span class="p">(</span><span class="n">PP</span><span class="p">),</span> <span class="o">**</span><span class="n">PP</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span> <span class="o">*</span> <span class="s2">&quot; &quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">description</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">__</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">description_text</span><span class="p">(</span><span class="n">PP</span><span class="p">),</span> <span class="o">**</span><span class="n">PP</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span> <span class="o">*</span> <span class="s2">" "</span><span class="p">))</span>
 
         <span class="n">_</span><span class="p">,</span> <span class="n">configuration</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_system_configuration</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
 
@@ -629,42 +628,41 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
         <span class="c1"># Get the underlying SCF setup</span>
         <span class="n">original</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">get_input</span><span class="p">()</span>
-        <span class="c1"># Have to think about MOZYME</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">original</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;MOZYME not yet handles in forceconstants&quot;</span><span class="p">)</span>
-
+        <span class="c1"># Only the main calculation: any MOZYME follow-up calculation (a second</span>
+        <span class="c1"># input) does not apply to the many single points of the finite differences,</span>
+        <span class="c1"># and MOPAC's FORCE works with MOZYME itself.</span>
         <span class="n">keywords</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">original</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="k">if</span> <span class="s2">&quot;OLDGEO&quot;</span> <span class="ow">in</span> <span class="n">keywords</span><span class="p">:</span>
-            <span class="n">keywords</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s2">&quot;OLDGEO&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="s2">&quot;1SCF&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">keywords</span><span class="p">:</span>
-            <span class="n">keywords</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;1SCF&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">"OLDGEO"</span> <span class="ow">in</span> <span class="n">keywords</span><span class="p">:</span>
+            <span class="n">keywords</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s2">"OLDGEO"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">"1SCF"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">keywords</span><span class="p">:</span>
+            <span class="n">keywords</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"1SCF"</span><span class="p">)</span>
 
         <span class="c1"># Get the cell vectors</span>
-        <span class="k">if</span> <span class="n">is_periodic</span> <span class="ow">and</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;what&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;atom part only&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">is_periodic</span> <span class="ow">and</span> <span class="n">P</span><span class="p">[</span><span class="s2">"what"</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">"atom part only"</span><span class="p">:</span>
             <span class="n">cell_vectors</span> <span class="o">=</span> <span class="n">configuration</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">vectors</span><span class="p">(</span><span class="n">as_array</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
-            <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;two-sided_cell&quot;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s2">"two-sided_cell"</span><span class="p">]:</span>
                 <span class="c1"># Loop over the strains creating inputs</span>
                 <span class="k">for</span> <span class="n">direction</span><span class="p">,</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
-                    <span class="nb">range</span><span class="p">(</span><span class="mi">6</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;xx&quot;</span><span class="p">,</span> <span class="s2">&quot;yy&quot;</span><span class="p">,</span> <span class="s2">&quot;zz&quot;</span><span class="p">,</span> <span class="s2">&quot;yz&quot;</span><span class="p">,</span> <span class="s2">&quot;xz&quot;</span><span class="p">,</span> <span class="s2">&quot;xy&quot;</span><span class="p">)</span>
+                    <span class="nb">range</span><span class="p">(</span><span class="mi">6</span><span class="p">),</span> <span class="p">(</span><span class="s2">"xx"</span><span class="p">,</span> <span class="s2">"yy"</span><span class="p">,</span> <span class="s2">"zz"</span><span class="p">,</span> <span class="s2">"yz"</span><span class="p">,</span> <span class="s2">"xz"</span><span class="p">,</span> <span class="s2">"xy"</span><span class="p">)</span>
                 <span class="p">):</span>
                     <span class="n">vector</span> <span class="o">=</span> <span class="mi">6</span> <span class="o">*</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">]</span>
-                    <span class="n">vector</span><span class="p">[</span><span class="n">direction</span><span class="p">]</span> <span class="o">=</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;stepsize&quot;</span><span class="p">]</span>
+                    <span class="n">vector</span><span class="p">[</span><span class="n">direction</span><span class="p">]</span> <span class="o">=</span> <span class="n">P</span><span class="p">[</span><span class="s2">"stepsize"</span><span class="p">]</span>
                     <span class="n">configuration</span><span class="o">.</span><span class="n">strain</span><span class="p">(</span><span class="n">vector</span><span class="p">)</span>
                     <span class="n">structure</span><span class="p">,</span> <span class="n">symlines</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">mopac_structure</span><span class="p">()</span>
                     <span class="n">inputs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                        <span class="p">[[</span><span class="o">*</span><span class="n">keywords</span><span class="p">],</span> <span class="n">structure</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Strained +</span><span class="si">{</span><span class="n">P</span><span class="p">[</span><span class="s1">&#39;stepsize&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> in </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span>
+                        <span class="p">[[</span><span class="o">*</span><span class="n">keywords</span><span class="p">],</span> <span class="n">structure</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"Strained +</span><span class="si">{</span><span class="n">P</span><span class="p">[</span><span class="s1">'stepsize'</span><span class="p">]</span><span class="si">}</span><span class="s2"> in </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">"</span><span class="p">]</span>
                     <span class="p">)</span>
                     <span class="c1"># Set the cell back to the original cell.</span>
                     <span class="n">configuration</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">from_vectors</span><span class="p">(</span><span class="n">cell_vectors</span><span class="p">)</span>
 
                     <span class="c1"># Minus displacement</span>
                     <span class="n">vector</span> <span class="o">=</span> <span class="mi">6</span> <span class="o">*</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">]</span>
-                    <span class="n">vector</span><span class="p">[</span><span class="n">direction</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">P</span><span class="p">[</span><span class="s2">&quot;stepsize&quot;</span><span class="p">]</span>
+                    <span class="n">vector</span><span class="p">[</span><span class="n">direction</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">P</span><span class="p">[</span><span class="s2">"stepsize"</span><span class="p">]</span>
                     <span class="n">configuration</span><span class="o">.</span><span class="n">strain</span><span class="p">(</span><span class="n">vector</span><span class="p">)</span>
                     <span class="n">structure</span><span class="p">,</span> <span class="n">symlines</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">mopac_structure</span><span class="p">()</span>
                     <span class="n">inputs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                        <span class="p">[[</span><span class="o">*</span><span class="n">keywords</span><span class="p">],</span> <span class="n">structure</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Strained -</span><span class="si">{</span><span class="n">P</span><span class="p">[</span><span class="s1">&#39;stepsize&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> in </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span>
+                        <span class="p">[[</span><span class="o">*</span><span class="n">keywords</span><span class="p">],</span> <span class="n">structure</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"Strained -</span><span class="si">{</span><span class="n">P</span><span class="p">[</span><span class="s1">'stepsize'</span><span class="p">]</span><span class="si">}</span><span class="s2"> in </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">"</span><span class="p">]</span>
                     <span class="p">)</span>
                     <span class="c1"># Set the cell back to the original cell.</span>
                     <span class="n">configuration</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">from_vectors</span><span class="p">(</span><span class="n">cell_vectors</span><span class="p">)</span>
@@ -674,43 +672,43 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
                 <span class="c1"># Loop over the strains creating inputs</span>
                 <span class="k">for</span> <span class="n">direction</span><span class="p">,</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
-                    <span class="nb">range</span><span class="p">(</span><span class="mi">6</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;xx&quot;</span><span class="p">,</span> <span class="s2">&quot;yy&quot;</span><span class="p">,</span> <span class="s2">&quot;zz&quot;</span><span class="p">,</span> <span class="s2">&quot;yz&quot;</span><span class="p">,</span> <span class="s2">&quot;xz&quot;</span><span class="p">,</span> <span class="s2">&quot;xy&quot;</span><span class="p">)</span>
+                    <span class="nb">range</span><span class="p">(</span><span class="mi">6</span><span class="p">),</span> <span class="p">(</span><span class="s2">"xx"</span><span class="p">,</span> <span class="s2">"yy"</span><span class="p">,</span> <span class="s2">"zz"</span><span class="p">,</span> <span class="s2">"yz"</span><span class="p">,</span> <span class="s2">"xz"</span><span class="p">,</span> <span class="s2">"xy"</span><span class="p">)</span>
                 <span class="p">):</span>
                     <span class="n">vector</span> <span class="o">=</span> <span class="mi">6</span> <span class="o">*</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">]</span>
-                    <span class="n">vector</span><span class="p">[</span><span class="n">direction</span><span class="p">]</span> <span class="o">=</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;stepsize&quot;</span><span class="p">]</span>
+                    <span class="n">vector</span><span class="p">[</span><span class="n">direction</span><span class="p">]</span> <span class="o">=</span> <span class="n">P</span><span class="p">[</span><span class="s2">"stepsize"</span><span class="p">]</span>
                     <span class="n">configuration</span><span class="o">.</span><span class="n">strain</span><span class="p">(</span><span class="n">vector</span><span class="p">)</span>
                     <span class="n">structure</span><span class="p">,</span> <span class="n">symlines</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">mopac_structure</span><span class="p">()</span>
                     <span class="n">inputs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                        <span class="p">[[</span><span class="o">*</span><span class="n">keywords</span><span class="p">],</span> <span class="n">structure</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Strained </span><span class="si">{</span><span class="n">P</span><span class="p">[</span><span class="s1">&#39;stepsize&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> in </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span>
+                        <span class="p">[[</span><span class="o">*</span><span class="n">keywords</span><span class="p">],</span> <span class="n">structure</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"Strained </span><span class="si">{</span><span class="n">P</span><span class="p">[</span><span class="s1">'stepsize'</span><span class="p">]</span><span class="si">}</span><span class="s2"> in </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">"</span><span class="p">]</span>
                     <span class="p">)</span>
                     <span class="c1"># Set the cell back to the original cell.</span>
                     <span class="n">configuration</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">from_vectors</span><span class="p">(</span><span class="n">cell_vectors</span><span class="p">)</span>
 
         <span class="c1"># Add the force calculation</span>
-        <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;what&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;cell part only&quot;</span><span class="p">:</span>
-            <span class="n">keywords</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s2">&quot;1SCF&quot;</span><span class="p">)</span>
-            <span class="n">keywords</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;FORCE&quot;</span><span class="p">)</span>
-            <span class="k">if</span> <span class="s2">&quot;LET&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">keywords</span><span class="p">:</span>
-                <span class="n">keywords</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;LET&quot;</span><span class="p">)</span>
-            <span class="k">if</span> <span class="s2">&quot;NOREOR&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">keywords</span><span class="p">:</span>
-                <span class="n">keywords</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;NOREOR&quot;</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;two-sided_atoms&quot;</span><span class="p">]:</span>
-                <span class="k">if</span> <span class="s2">&quot;PRECISE&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">keywords</span><span class="p">:</span>
-                    <span class="n">keywords</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;PRECISE&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s2">"what"</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">"cell part only"</span><span class="p">:</span>
+            <span class="n">keywords</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s2">"1SCF"</span><span class="p">)</span>
+            <span class="n">keywords</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"FORCE"</span><span class="p">)</span>
+            <span class="k">if</span> <span class="s2">"LET"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">keywords</span><span class="p">:</span>
+                <span class="n">keywords</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"LET"</span><span class="p">)</span>
+            <span class="k">if</span> <span class="s2">"NOREOR"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">keywords</span><span class="p">:</span>
+                <span class="n">keywords</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"NOREOR"</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s2">"two-sided_atoms"</span><span class="p">]:</span>
+                <span class="k">if</span> <span class="s2">"PRECISE"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">keywords</span><span class="p">:</span>
+                    <span class="n">keywords</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"PRECISE"</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="k">if</span> <span class="s2">&quot;PRECISE&quot;</span> <span class="ow">in</span> <span class="n">keywords</span><span class="p">:</span>
-                    <span class="n">keywords</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s2">&quot;PRECISE&quot;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="s2">"PRECISE"</span> <span class="ow">in</span> <span class="n">keywords</span><span class="p">:</span>
+                    <span class="n">keywords</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s2">"PRECISE"</span><span class="p">)</span>
 
             <span class="n">structure</span><span class="p">,</span> <span class="n">symlines</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">mopac_structure</span><span class="p">()</span>
-            <span class="n">inputs</span><span class="o">.</span><span class="n">append</span><span class="p">([[</span><span class="o">*</span><span class="n">keywords</span><span class="p">],</span> <span class="n">structure</span><span class="p">,</span> <span class="s2">&quot;Atomic Hessian calculation&quot;</span><span class="p">])</span>
+            <span class="n">inputs</span><span class="o">.</span><span class="n">append</span><span class="p">([[</span><span class="o">*</span><span class="n">keywords</span><span class="p">],</span> <span class="n">structure</span><span class="p">,</span> <span class="s2">"Atomic Hessian calculation"</span><span class="p">])</span>
 
         <span class="k">return</span> <span class="n">inputs</span></div>
 
 
 <div class="viewcode-block" id="Forceconstants.analyze">
 <a class="viewcode-back" href="../../api/mopac_step.html#mopac_step.forceconstants.Forceconstants.analyze">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">analyze</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">data_sections</span><span class="o">=</span><span class="p">[],</span> <span class="n">out_sections</span><span class="o">=</span><span class="p">[],</span> <span class="n">table</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Parse the output and generating the text output and store the</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">analyze</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="s2">""</span><span class="p">,</span> <span class="n">data_sections</span><span class="o">=</span><span class="p">[],</span> <span class="n">out_sections</span><span class="o">=</span><span class="p">[],</span> <span class="n">table</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Parse the output and generating the text output and store the</span>
 <span class="sd">        data in variables for other stages to access</span>
 
 <span class="sd">        There are 8 calculations:</span>
@@ -720,7 +718,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 <span class="sd">        Since the forceconstant matrix is symmetric (we hope!) we will work with the</span>
 <span class="sd">        lower triangle as a linear array.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">P</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">current_values_to_dict</span><span class="p">(</span>
             <span class="n">context</span><span class="o">=</span><span class="n">seamm</span><span class="o">.</span><span class="n">flowchart_variables</span><span class="o">.</span><span class="n">_data</span>
         <span class="p">)</span>
@@ -731,12 +729,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <span class="n">last</span> <span class="o">=</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">n_atoms</span>
         <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
 
-        <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;what&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;cell part only&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s2">"what"</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">"cell part only"</span><span class="p">:</span>
             <span class="n">data</span> <span class="o">=</span> <span class="n">data_sections</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
             <span class="c1"># It is mass weighted so we need to remove the weighting</span>
-            <span class="k">if</span> <span class="s2">&quot;ISOTOPIC_MASSES&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Found no atomic masses&quot;</span><span class="p">)</span>
-            <span class="n">tmp</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;ISOTOPIC_MASSES&quot;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="s2">"ISOTOPIC_MASSES"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">"Found no atomic masses"</span><span class="p">)</span>
+            <span class="n">tmp</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">"ISOTOPIC_MASSES"</span><span class="p">]</span>
             <span class="n">n_atoms</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span>
 
             <span class="c1"># Replicate for x, y, z</span>
@@ -746,36 +744,36 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                     <span class="n">mass</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
 
             <span class="c1"># Get the atom part of the force constant matrix.</span>
-            <span class="k">if</span> <span class="s2">&quot;HESSIAN_MATRIX&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Found no atomic Hessian matrix!&quot;</span><span class="p">)</span>
-            <span class="n">hessian</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;HESSIAN_MATRIX&quot;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="s2">"HESSIAN_MATRIX"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">"Found no atomic Hessian matrix!"</span><span class="p">)</span>
+            <span class="n">hessian</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">"HESSIAN_MATRIX"</span><span class="p">]</span>
 
             <span class="n">ij</span> <span class="o">=</span> <span class="mi">0</span>
-            <span class="n">factor</span> <span class="o">=</span> <span class="n">Q_</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="s2">&quot;mdyne/Å&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="n">P</span><span class="p">[</span><span class="s2">&quot;atom_units&quot;</span><span class="p">])</span>
+            <span class="n">factor</span> <span class="o">=</span> <span class="n">Q_</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="s2">"mdyne/Å"</span><span class="p">)</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="n">P</span><span class="p">[</span><span class="s2">"atom_units"</span><span class="p">])</span>
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">last</span><span class="p">):</span>
                 <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
                     <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">factor</span> <span class="o">*</span> <span class="n">hessian</span><span class="p">[</span><span class="n">ij</span><span class="p">]</span> <span class="o">*</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">mass</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">mass</span><span class="p">[</span><span class="n">j</span><span class="p">]))</span>
                     <span class="n">ij</span> <span class="o">+=</span> <span class="mi">1</span>
 
-        <span class="k">if</span> <span class="n">is_periodic</span> <span class="ow">and</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;what&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;atom part only&quot;</span><span class="p">:</span>
-            <span class="n">step</span> <span class="o">=</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;stepsize&quot;</span><span class="p">]</span>
-            <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;two-sided_cell&quot;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">is_periodic</span> <span class="ow">and</span> <span class="n">P</span><span class="p">[</span><span class="s2">"what"</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">"atom part only"</span><span class="p">:</span>
+            <span class="n">step</span> <span class="o">=</span> <span class="n">P</span><span class="p">[</span><span class="s2">"stepsize"</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s2">"two-sided_cell"</span><span class="p">]:</span>
                 <span class="c1"># Loop through the strained calculations, using finite-differences</span>
                 <span class="k">for</span> <span class="n">strain</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">6</span><span class="p">):</span>
                     <span class="n">data</span> <span class="o">=</span> <span class="n">data_sections</span><span class="p">[</span><span class="mi">2</span> <span class="o">*</span> <span class="n">strain</span><span class="p">]</span>
-                    <span class="k">if</span> <span class="s2">&quot;GRADIENTS&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="s2">"GRADIENTS"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
                         <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
-                            <span class="sa">f</span><span class="s2">&quot;Found no gradients for strained structure </span><span class="si">{</span><span class="n">strain</span><span class="si">}</span><span class="s2">.&quot;</span>
+                            <span class="sa">f</span><span class="s2">"Found no gradients for strained structure </span><span class="si">{</span><span class="n">strain</span><span class="si">}</span><span class="s2">."</span>
                         <span class="p">)</span>
-                    <span class="n">forces</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;GRADIENTS&quot;</span><span class="p">]</span>
-                    <span class="k">if</span> <span class="s2">&quot;TRANS_VECTS&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+                    <span class="n">forces</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">"GRADIENTS"</span><span class="p">]</span>
+                    <span class="k">if</span> <span class="s2">"TRANS_VECTS"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
                         <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
-                            <span class="s2">&quot;Found no translation vectors for strained structure &quot;</span>
-                            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">strain</span><span class="si">}</span><span class="s2">.&quot;</span>
+                            <span class="s2">"Found no translation vectors for strained structure "</span>
+                            <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">strain</span><span class="si">}</span><span class="s2">."</span>
                         <span class="p">)</span>
 
                     <span class="n">f2</span> <span class="o">=</span> <span class="n">forces</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">last</span><span class="p">]</span>
-                    <span class="n">x0</span><span class="p">,</span> <span class="n">y0</span><span class="p">,</span> <span class="n">z0</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">z1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="n">z2</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;TRANS_VECTS&quot;</span><span class="p">]</span>
+                    <span class="n">x0</span><span class="p">,</span> <span class="n">y0</span><span class="p">,</span> <span class="n">z0</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">z1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="n">z2</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">"TRANS_VECTS"</span><span class="p">]</span>
                     <span class="n">fx0</span><span class="p">,</span> <span class="n">fy0</span><span class="p">,</span> <span class="n">fz0</span><span class="p">,</span> <span class="n">fx1</span><span class="p">,</span> <span class="n">fy1</span><span class="p">,</span> <span class="n">fz1</span><span class="p">,</span> <span class="n">fx2</span><span class="p">,</span> <span class="n">fy2</span><span class="p">,</span> <span class="n">fz2</span> <span class="o">=</span> <span class="n">forces</span><span class="p">[</span><span class="n">last</span><span class="p">:]</span>
                     <span class="n">V</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span>
                         <span class="n">x2</span> <span class="o">*</span> <span class="p">(</span><span class="n">y0</span> <span class="o">*</span> <span class="n">z1</span> <span class="o">-</span> <span class="n">z0</span> <span class="o">*</span> <span class="n">y1</span><span class="p">)</span>
@@ -783,7 +781,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                         <span class="o">+</span> <span class="n">z2</span> <span class="o">*</span> <span class="p">(</span><span class="n">x0</span> <span class="o">*</span> <span class="n">y1</span> <span class="o">-</span> <span class="n">y0</span> <span class="o">*</span> <span class="n">x1</span><span class="p">)</span>
                     <span class="p">)</span>
 
-                    <span class="n">factor</span> <span class="o">=</span> <span class="n">Q_</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">V</span><span class="p">,</span> <span class="s2">&quot;kcal/mol/Å^3&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="n">P</span><span class="p">[</span><span class="s2">&quot;cell_units&quot;</span><span class="p">])</span>
+                    <span class="n">factor</span> <span class="o">=</span> <span class="n">Q_</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">V</span><span class="p">,</span> <span class="s2">"kcal/mol/Å^3"</span><span class="p">)</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="n">P</span><span class="p">[</span><span class="s2">"cell_units"</span><span class="p">])</span>
 
                     <span class="n">s2</span> <span class="o">=</span> <span class="p">[]</span>
                     <span class="n">s2</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">x0</span> <span class="o">*</span> <span class="n">fx0</span> <span class="o">+</span> <span class="n">y0</span> <span class="o">*</span> <span class="n">fy0</span> <span class="o">+</span> <span class="n">z0</span> <span class="o">*</span> <span class="n">fz0</span><span class="p">)</span> <span class="o">*</span> <span class="n">factor</span><span class="p">)</span>
@@ -800,19 +798,19 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                     <span class="n">s2</span><span class="o">.</span><span class="n">append</span><span class="p">(((</span><span class="n">sxy</span> <span class="o">+</span> <span class="n">syx</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">factor</span><span class="p">)</span>
 
                     <span class="n">data</span> <span class="o">=</span> <span class="n">data_sections</span><span class="p">[</span><span class="mi">2</span> <span class="o">*</span> <span class="n">strain</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
-                    <span class="k">if</span> <span class="s2">&quot;GRADIENTS&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="s2">"GRADIENTS"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
                         <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
-                            <span class="sa">f</span><span class="s2">&quot;Found no gradients for strained structure -</span><span class="si">{</span><span class="n">strain</span><span class="si">}</span><span class="s2">.&quot;</span>
+                            <span class="sa">f</span><span class="s2">"Found no gradients for strained structure -</span><span class="si">{</span><span class="n">strain</span><span class="si">}</span><span class="s2">."</span>
                         <span class="p">)</span>
-                    <span class="n">forces</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;GRADIENTS&quot;</span><span class="p">]</span>
-                    <span class="k">if</span> <span class="s2">&quot;TRANS_VECTS&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+                    <span class="n">forces</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">"GRADIENTS"</span><span class="p">]</span>
+                    <span class="k">if</span> <span class="s2">"TRANS_VECTS"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
                         <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
-                            <span class="s2">&quot;Found no translation vectors for strained structure &quot;</span>
-                            <span class="sa">f</span><span class="s2">&quot;-</span><span class="si">{</span><span class="n">strain</span><span class="si">}</span><span class="s2">.&quot;</span>
+                            <span class="s2">"Found no translation vectors for strained structure "</span>
+                            <span class="sa">f</span><span class="s2">"-</span><span class="si">{</span><span class="n">strain</span><span class="si">}</span><span class="s2">."</span>
                         <span class="p">)</span>
 
                     <span class="n">f1</span> <span class="o">=</span> <span class="n">forces</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">last</span><span class="p">]</span>
-                    <span class="n">x0</span><span class="p">,</span> <span class="n">y0</span><span class="p">,</span> <span class="n">z0</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">z1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="n">z2</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;TRANS_VECTS&quot;</span><span class="p">]</span>
+                    <span class="n">x0</span><span class="p">,</span> <span class="n">y0</span><span class="p">,</span> <span class="n">z0</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">z1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="n">z2</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">"TRANS_VECTS"</span><span class="p">]</span>
                     <span class="n">fx0</span><span class="p">,</span> <span class="n">fy0</span><span class="p">,</span> <span class="n">fz0</span><span class="p">,</span> <span class="n">fx1</span><span class="p">,</span> <span class="n">fy1</span><span class="p">,</span> <span class="n">fz1</span><span class="p">,</span> <span class="n">fx2</span><span class="p">,</span> <span class="n">fy2</span><span class="p">,</span> <span class="n">fz2</span> <span class="o">=</span> <span class="n">forces</span><span class="p">[</span><span class="n">last</span><span class="p">:]</span>
                     <span class="n">V</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span>
                         <span class="n">x2</span> <span class="o">*</span> <span class="p">(</span><span class="n">y0</span> <span class="o">*</span> <span class="n">z1</span> <span class="o">-</span> <span class="n">z0</span> <span class="o">*</span> <span class="n">y1</span><span class="p">)</span>
@@ -820,7 +818,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                         <span class="o">+</span> <span class="n">z2</span> <span class="o">*</span> <span class="p">(</span><span class="n">x0</span> <span class="o">*</span> <span class="n">y1</span> <span class="o">-</span> <span class="n">y0</span> <span class="o">*</span> <span class="n">x1</span><span class="p">)</span>
                     <span class="p">)</span>
 
-                    <span class="n">factor</span> <span class="o">=</span> <span class="n">Q_</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">V</span><span class="p">,</span> <span class="s2">&quot;kcal/mol/Å^3&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="n">P</span><span class="p">[</span><span class="s2">&quot;cell_units&quot;</span><span class="p">])</span>
+                    <span class="n">factor</span> <span class="o">=</span> <span class="n">Q_</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">V</span><span class="p">,</span> <span class="s2">"kcal/mol/Å^3"</span><span class="p">)</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="n">P</span><span class="p">[</span><span class="s2">"cell_units"</span><span class="p">])</span>
 
                     <span class="n">s1</span> <span class="o">=</span> <span class="p">[]</span>
                     <span class="n">s1</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">x0</span> <span class="o">*</span> <span class="n">fx0</span> <span class="o">+</span> <span class="n">y0</span> <span class="o">*</span> <span class="n">fy0</span> <span class="o">+</span> <span class="n">z0</span> <span class="o">*</span> <span class="n">fz0</span><span class="p">)</span> <span class="o">*</span> <span class="n">factor</span><span class="p">)</span>
@@ -837,8 +835,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                     <span class="n">s1</span><span class="o">.</span><span class="n">append</span><span class="p">(((</span><span class="n">sxy</span> <span class="o">+</span> <span class="n">syx</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">factor</span><span class="p">)</span>
 
                     <span class="c1"># atoms</span>
-                    <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;what&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;full Hessian&quot;</span><span class="p">:</span>
-                        <span class="n">factor</span> <span class="o">=</span> <span class="n">Q_</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="s2">&quot;kcal/mol/Å^2&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="n">P</span><span class="p">[</span><span class="s2">&quot;atom_units&quot;</span><span class="p">])</span>
+                    <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s2">"what"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"full Hessian"</span><span class="p">:</span>
+                        <span class="n">factor</span> <span class="o">=</span> <span class="n">Q_</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="s2">"kcal/mol/Å^2"</span><span class="p">)</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="n">P</span><span class="p">[</span><span class="s2">"atom_units"</span><span class="p">])</span>
                         <span class="k">for</span> <span class="n">v1</span><span class="p">,</span> <span class="n">v2</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">f1</span><span class="p">,</span> <span class="n">f2</span><span class="p">):</span>
                             <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">v2</span> <span class="o">-</span> <span class="n">v1</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">step</span><span class="p">)</span> <span class="o">*</span> <span class="n">factor</span><span class="p">)</span>
 
@@ -849,16 +847,16 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 <span class="c1"># Get the forces for the unperturbed system</span>
                 <span class="n">data</span> <span class="o">=</span> <span class="n">data_sections</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
-                <span class="k">if</span> <span class="s2">&quot;GRADIENTS&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
-                    <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Found no gradients for unstrained structure.&quot;</span><span class="p">)</span>
-                <span class="n">forces</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;GRADIENTS&quot;</span><span class="p">]</span>
-                <span class="k">if</span> <span class="s2">&quot;TRANS_VECTS&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+                <span class="k">if</span> <span class="s2">"GRADIENTS"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">"Found no gradients for unstrained structure."</span><span class="p">)</span>
+                <span class="n">forces</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">"GRADIENTS"</span><span class="p">]</span>
+                <span class="k">if</span> <span class="s2">"TRANS_VECTS"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
                     <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
-                        <span class="s2">&quot;Found no translation vectors for unstrained  structure.&quot;</span>
+                        <span class="s2">"Found no translation vectors for unstrained  structure."</span>
                     <span class="p">)</span>
 
                 <span class="n">f0</span> <span class="o">=</span> <span class="n">forces</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">last</span><span class="p">]</span>
-                <span class="n">x0</span><span class="p">,</span> <span class="n">y0</span><span class="p">,</span> <span class="n">z0</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">z1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="n">z2</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;TRANS_VECTS&quot;</span><span class="p">]</span>
+                <span class="n">x0</span><span class="p">,</span> <span class="n">y0</span><span class="p">,</span> <span class="n">z0</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">z1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="n">z2</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">"TRANS_VECTS"</span><span class="p">]</span>
                 <span class="n">fx0</span><span class="p">,</span> <span class="n">fy0</span><span class="p">,</span> <span class="n">fz0</span><span class="p">,</span> <span class="n">fx1</span><span class="p">,</span> <span class="n">fy1</span><span class="p">,</span> <span class="n">fz1</span><span class="p">,</span> <span class="n">fx2</span><span class="p">,</span> <span class="n">fy2</span><span class="p">,</span> <span class="n">fz2</span> <span class="o">=</span> <span class="n">forces</span><span class="p">[</span><span class="n">last</span><span class="p">:]</span>
                 <span class="n">V</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span>
                     <span class="n">x2</span> <span class="o">*</span> <span class="p">(</span><span class="n">y0</span> <span class="o">*</span> <span class="n">z1</span> <span class="o">-</span> <span class="n">z0</span> <span class="o">*</span> <span class="n">y1</span><span class="p">)</span>
@@ -866,7 +864,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                     <span class="o">+</span> <span class="n">z2</span> <span class="o">*</span> <span class="p">(</span><span class="n">x0</span> <span class="o">*</span> <span class="n">y1</span> <span class="o">-</span> <span class="n">y0</span> <span class="o">*</span> <span class="n">x1</span><span class="p">)</span>
                 <span class="p">)</span>
 
-                <span class="n">factor</span> <span class="o">=</span> <span class="n">Q_</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">V</span><span class="p">,</span> <span class="s2">&quot;kcal/mol/Å^3&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="n">P</span><span class="p">[</span><span class="s2">&quot;cell_units&quot;</span><span class="p">])</span>
+                <span class="n">factor</span> <span class="o">=</span> <span class="n">Q_</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">V</span><span class="p">,</span> <span class="s2">"kcal/mol/Å^3"</span><span class="p">)</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="n">P</span><span class="p">[</span><span class="s2">"cell_units"</span><span class="p">])</span>
 
                 <span class="n">s0</span> <span class="o">=</span> <span class="p">[]</span>
                 <span class="n">s0</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">x0</span> <span class="o">*</span> <span class="n">fx0</span> <span class="o">+</span> <span class="n">y0</span> <span class="o">*</span> <span class="n">fy0</span> <span class="o">+</span> <span class="n">z0</span> <span class="o">*</span> <span class="n">fz0</span><span class="p">)</span> <span class="o">*</span> <span class="n">factor</span><span class="p">)</span>
@@ -886,19 +884,19 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 <span class="k">for</span> <span class="n">strain</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">6</span><span class="p">):</span>
                     <span class="n">data</span> <span class="o">=</span> <span class="n">data_sections</span><span class="p">[</span><span class="n">strain</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
 
-                    <span class="k">if</span> <span class="s2">&quot;GRADIENTS&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="s2">"GRADIENTS"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
                         <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
-                            <span class="sa">f</span><span class="s2">&quot;Found no gradients for strained structure </span><span class="si">{</span><span class="n">strain</span><span class="si">}</span><span class="s2">.&quot;</span>
+                            <span class="sa">f</span><span class="s2">"Found no gradients for strained structure </span><span class="si">{</span><span class="n">strain</span><span class="si">}</span><span class="s2">."</span>
                         <span class="p">)</span>
-                    <span class="n">forces</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;GRADIENTS&quot;</span><span class="p">]</span>
-                    <span class="k">if</span> <span class="s2">&quot;TRANS_VECTS&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+                    <span class="n">forces</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">"GRADIENTS"</span><span class="p">]</span>
+                    <span class="k">if</span> <span class="s2">"TRANS_VECTS"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
                         <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
-                            <span class="s2">&quot;Found no translation vectors for strained structure &quot;</span>
-                            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">strain</span><span class="si">}</span><span class="s2">.&quot;</span>
+                            <span class="s2">"Found no translation vectors for strained structure "</span>
+                            <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">strain</span><span class="si">}</span><span class="s2">."</span>
                         <span class="p">)</span>
 
                     <span class="n">f</span> <span class="o">=</span> <span class="n">forces</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">last</span><span class="p">]</span>
-                    <span class="n">x0</span><span class="p">,</span> <span class="n">y0</span><span class="p">,</span> <span class="n">z0</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">z1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="n">z2</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;TRANS_VECTS&quot;</span><span class="p">]</span>
+                    <span class="n">x0</span><span class="p">,</span> <span class="n">y0</span><span class="p">,</span> <span class="n">z0</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">z1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="n">z2</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">"TRANS_VECTS"</span><span class="p">]</span>
                     <span class="n">fx0</span><span class="p">,</span> <span class="n">fy0</span><span class="p">,</span> <span class="n">fz0</span><span class="p">,</span> <span class="n">fx1</span><span class="p">,</span> <span class="n">fy1</span><span class="p">,</span> <span class="n">fz1</span><span class="p">,</span> <span class="n">fx2</span><span class="p">,</span> <span class="n">fy2</span><span class="p">,</span> <span class="n">fz2</span> <span class="o">=</span> <span class="n">forces</span><span class="p">[</span><span class="n">last</span><span class="p">:]</span>
                     <span class="n">V</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span>
                         <span class="n">x2</span> <span class="o">*</span> <span class="p">(</span><span class="n">y0</span> <span class="o">*</span> <span class="n">z1</span> <span class="o">-</span> <span class="n">z0</span> <span class="o">*</span> <span class="n">y1</span><span class="p">)</span>
@@ -906,7 +904,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                         <span class="o">+</span> <span class="n">z2</span> <span class="o">*</span> <span class="p">(</span><span class="n">x0</span> <span class="o">*</span> <span class="n">y1</span> <span class="o">-</span> <span class="n">y0</span> <span class="o">*</span> <span class="n">x1</span><span class="p">)</span>
                     <span class="p">)</span>
 
-                    <span class="n">factor</span> <span class="o">=</span> <span class="n">Q_</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">V</span><span class="p">,</span> <span class="s2">&quot;kcal/mol/Å^3&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="n">P</span><span class="p">[</span><span class="s2">&quot;cell_units&quot;</span><span class="p">])</span>
+                    <span class="n">factor</span> <span class="o">=</span> <span class="n">Q_</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">V</span><span class="p">,</span> <span class="s2">"kcal/mol/Å^3"</span><span class="p">)</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="n">P</span><span class="p">[</span><span class="s2">"cell_units"</span><span class="p">])</span>
 
                     <span class="n">s</span> <span class="o">=</span> <span class="p">[]</span>
                     <span class="n">s</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">x0</span> <span class="o">*</span> <span class="n">fx0</span> <span class="o">+</span> <span class="n">y0</span> <span class="o">*</span> <span class="n">fy0</span> <span class="o">+</span> <span class="n">z0</span> <span class="o">*</span> <span class="n">fz0</span><span class="p">)</span> <span class="o">*</span> <span class="n">factor</span><span class="p">)</span>
@@ -923,8 +921,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                     <span class="n">s</span><span class="o">.</span><span class="n">append</span><span class="p">(((</span><span class="n">sxy</span> <span class="o">+</span> <span class="n">syx</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">factor</span><span class="p">)</span>
 
                     <span class="c1"># atoms</span>
-                    <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;what&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;full Hessian&quot;</span><span class="p">:</span>
-                        <span class="n">factor</span> <span class="o">=</span> <span class="n">Q_</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="s2">&quot;kcal/mol/Å^2&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="n">P</span><span class="p">[</span><span class="s2">&quot;atom_units&quot;</span><span class="p">])</span>
+                    <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s2">"what"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"full Hessian"</span><span class="p">:</span>
+                        <span class="n">factor</span> <span class="o">=</span> <span class="n">Q_</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="s2">"kcal/mol/Å^2"</span><span class="p">)</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="n">P</span><span class="p">[</span><span class="s2">"atom_units"</span><span class="p">])</span>
                         <span class="k">for</span> <span class="n">v</span><span class="p">,</span> <span class="n">v0</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">f0</span><span class="p">):</span>
                             <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(((</span><span class="n">v</span> <span class="o">-</span> <span class="n">v0</span><span class="p">)</span> <span class="o">/</span> <span class="n">step</span><span class="p">)</span> <span class="o">*</span> <span class="n">factor</span><span class="p">)</span>
 
@@ -934,40 +932,40 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
         <span class="n">directory</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">directory</span><span class="p">)</span>
         <span class="n">directory</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">is_periodic</span> <span class="ow">and</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;what&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;cell part only&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">is_periodic</span> <span class="ow">and</span> <span class="n">P</span><span class="p">[</span><span class="s2">"what"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"cell part only"</span><span class="p">:</span>
             <span class="n">n</span> <span class="o">=</span> <span class="mi">6</span>
-        <span class="k">elif</span> <span class="ow">not</span> <span class="n">is_periodic</span> <span class="ow">or</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;what&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;atom part only&quot;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="ow">not</span> <span class="n">is_periodic</span> <span class="ow">or</span> <span class="n">P</span><span class="p">[</span><span class="s2">"what"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"atom part only"</span><span class="p">:</span>
             <span class="n">n</span> <span class="o">=</span> <span class="n">last</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">n</span> <span class="o">=</span> <span class="n">last</span> <span class="o">+</span> <span class="mi">6</span>
 
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">directory</span> <span class="o">/</span> <span class="s2">&quot;..&quot;</span> <span class="o">/</span> <span class="s2">&quot;hessian.dat&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fd</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">directory</span> <span class="o">/</span> <span class="s2">".."</span> <span class="o">/</span> <span class="s2">"hessian.dat"</span><span class="p">,</span> <span class="s2">"w"</span><span class="p">)</span> <span class="k">as</span> <span class="n">fd</span><span class="p">:</span>
             <span class="c1"># Write the header</span>
-            <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;!molssi hessian 1.0</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">is_periodic</span> <span class="ow">and</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;what&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;cell part only&quot;</span><span class="p">:</span>
-                <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;@cell_dof 6</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-                <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;@cell_units </span><span class="si">{</span><span class="n">P</span><span class="p">[</span><span class="s1">&#39;cell_units&#39;</span><span class="p">]</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-            <span class="k">elif</span> <span class="ow">not</span> <span class="n">is_periodic</span> <span class="ow">or</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;what&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;atom part only&quot;</span><span class="p">:</span>
-                <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;@atom_dof </span><span class="si">{</span><span class="n">last</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-                <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;@atom_units </span><span class="si">{</span><span class="n">P</span><span class="p">[</span><span class="s1">&#39;atom_units&#39;</span><span class="p">]</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">"!molssi hessian 1.0</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">is_periodic</span> <span class="ow">and</span> <span class="n">P</span><span class="p">[</span><span class="s2">"what"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"cell part only"</span><span class="p">:</span>
+                <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">"@cell_dof 6</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
+                <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">"@cell_units </span><span class="si">{</span><span class="n">P</span><span class="p">[</span><span class="s1">'cell_units'</span><span class="p">]</span><span class="si">}</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="ow">not</span> <span class="n">is_periodic</span> <span class="ow">or</span> <span class="n">P</span><span class="p">[</span><span class="s2">"what"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"atom part only"</span><span class="p">:</span>
+                <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">"@atom_dof </span><span class="si">{</span><span class="n">last</span><span class="si">}</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
+                <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">"@atom_units </span><span class="si">{</span><span class="n">P</span><span class="p">[</span><span class="s1">'atom_units'</span><span class="p">]</span><span class="si">}</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;@atom_dof </span><span class="si">{</span><span class="n">last</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-                <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;@atom_units </span><span class="si">{</span><span class="n">P</span><span class="p">[</span><span class="s1">&#39;atom_units&#39;</span><span class="p">]</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-                <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;@cell_dof 6</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-                <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;@cell_units </span><span class="si">{</span><span class="n">P</span><span class="p">[</span><span class="s1">&#39;cell_units&#39;</span><span class="p">]</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-            <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;@total_dof </span><span class="si">{</span><span class="n">n</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">"@atom_dof </span><span class="si">{</span><span class="n">last</span><span class="si">}</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
+                <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">"@atom_units </span><span class="si">{</span><span class="n">P</span><span class="p">[</span><span class="s1">'atom_units'</span><span class="p">]</span><span class="si">}</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
+                <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">"@cell_dof 6</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
+                <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">"@cell_units </span><span class="si">{</span><span class="n">P</span><span class="p">[</span><span class="s1">'cell_units'</span><span class="p">]</span><span class="si">}</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
+            <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">"@total_dof </span><span class="si">{</span><span class="n">n</span><span class="si">}</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
 
             <span class="n">ij</span> <span class="o">=</span> <span class="mi">0</span>
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
                 <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
-                    <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">result</span><span class="p">[</span><span class="n">ij</span><span class="p">]</span><span class="si">:</span><span class="s2">12.6f</span><span class="si">}</span><span class="s2"> &quot;</span><span class="p">)</span>
+                    <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">result</span><span class="p">[</span><span class="n">ij</span><span class="p">]</span><span class="si">:</span><span class="s2">12.6f</span><span class="si">}</span><span class="s2"> "</span><span class="p">)</span>
                     <span class="n">ij</span> <span class="o">+=</span> <span class="mi">1</span>
-                <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
 
         <span class="c1"># Save the force constant matrix (Hessian) in the data sections</span>
         <span class="n">data</span> <span class="o">=</span> <span class="n">data_sections</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">fac</span> <span class="o">=</span> <span class="n">Q_</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;atom_units&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="s2">&quot;kJ/mol/Å^2&quot;</span><span class="p">)</span>
-        <span class="n">data</span><span class="p">[</span><span class="s2">&quot;force constants&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">v</span> <span class="o">*</span> <span class="n">fac</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">result</span><span class="p">]</span>
+        <span class="n">fac</span> <span class="o">=</span> <span class="n">Q_</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">P</span><span class="p">[</span><span class="s2">"atom_units"</span><span class="p">])</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="s2">"kJ/mol/Å^2"</span><span class="p">)</span>
+        <span class="n">data</span><span class="p">[</span><span class="s2">"force constants"</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">v</span> <span class="o">*</span> <span class="n">fac</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">result</span><span class="p">]</span>
 
         <span class="c1"># Let the energy module do its thing</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">analyze</span><span class="p">(</span>
@@ -1007,8 +1005,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
-<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../../_static/scripts/bootstrap.js?digest=64cc4de3f052d77215f0"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=64cc4de3f052d77215f0"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -1020,7 +1018,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.20.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.22.0.
 </p></div>
       
     </div>
