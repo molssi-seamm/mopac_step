@@ -51,6 +51,10 @@ extensions = [
     'sphinx.ext.intersphinx',
 ]
 
+# The plug-in's installer imports seamm_installer, which SEAMM's manager provides in an
+# installation; the documentation does not need it.
+autodoc_mock_imports = ["seamm_installer"]
+
 # The local inventory path lets a local `make html` resolve campaign-doc
 # labels immediately, without needing the main site already pushed live --
 # useful right after writing a brand-new campaign entry, like today's.
