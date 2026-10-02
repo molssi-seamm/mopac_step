@@ -37,6 +37,29 @@ csv_file = resources / "properties.csv"
 molsystem.add_properties_from_file(csv_file)
 
 
+def estimated_seconds(keyword_lines, n_atoms):
+    """A rough estimate of a MOPAC run's time, for the inline rule.
+
+    Tens of milliseconds for a small molecule; the SCF scales roughly as the
+    cube of the size, and a geometry optimization or frequencies take many SCFs.
+    """
+    n = max(1, int(n_atoms))
+    total = 0.0
+    for line in keyword_lines:
+        words = line.upper().split()
+        scf = 0.02 + 2.0e-6 * n**3
+        if (
+            "FORCE" in words
+            or "THERMO" in words
+            or any(w.startswith("THERMO") for w in words)
+        ):
+            scf *= 6 * n
+        elif "1SCF" not in words:
+            scf *= 30  # an optimization
+        total += scf
+    return total
+
+
 class MOPAC(mopac_step.MOPACBase):
     def __init__(
         self,
@@ -405,7 +428,11 @@ class MOPAC(mopac_step.MOPACBase):
 
                 t0 = time.time_ns()
 
-                result = executor.run(
+                # In place (in_situ=True), so MOPAC's output can be watched
+                # as it runs (mopac_step#155).
+                task = seamm_exec.Task(
+                    key="mopac",
+                    program="mopac",
                     cmd=["{code}", "mopac.dat", ">", "stdout.txt", "2>", "stderr.txt"],
                     config=config,
                     directory=self.directory,
@@ -414,10 +441,13 @@ class MOPAC(mopac_step.MOPACBase):
                     in_situ=True,
                     shell=True,
                     env=env,
+                    resources=seamm_exec.Resources(ntasks=1, cpus_per_task=n_cores),
+                    estimated_seconds=estimated_seconds(all_keywords, n_atoms),
                 )
+                result = seamm_exec.run_task(task, node=self)
 
                 t = (time.time_ns() - t0) / 1.0e9
-                if self._timing_data is not None:
+                if self._timing_data is not None and not result.restored:
                     self._timing_data[13] = f"{t:.3f}"
                     self._timing_data[12] = str(n_cores)
                     try:
@@ -427,14 +457,25 @@ class MOPAC(mopac_step.MOPACBase):
                     except Exception:
                         pass
 
-                if not result:
-                    self.logger.error("There was an error running MOPAC")
-                    return None
+                if not result.ok:
+                    reason = result.reason or "unknown"
+                    if result.returncode is None or reason.startswith(
+                        "attempts exhausted"
+                    ):
+                        # It did not run, so there is no output to use.
+                        self.logger.error(
+                            f"There was an error running MOPAC: {reason}\n"
+                            + result.stderr
+                        )
+                        return None
+                    self.logger.warning(f"MOPAC failed: {reason}\n" + result.stderr)
 
                 self.logger.debug("\n" + pprint.pformat(result))
 
                 self.logger.debug(
-                    "\n\nOutput from MOPAC\n\n" + result["mopac.out"]["data"] + "\n\n"
+                    "\n\nOutput from MOPAC\n\n"
+                    + str(result.files.get("mopac.out", ""))
+                    + "\n\n"
                 )
 
         # Ran successfully, put out the success file

@@ -30,6 +30,32 @@ starts from the incoming structure and the others from the previous sub-step's
 MOZYME but does no follow-up calculation, so it does not offer that setting.
 
 
+Rerunning a job
+===============
+
+MOPAC runs through SEAMM's task layer, in the step's directory so that its output can
+be watched while it runs. The task layer keeps a record of each MOPAC calculation in
+``tasks/manifest.json`` in the step's directory, with a ``tasks/mopac/DONE`` file once
+it has finished.
+
+When a job is run again in the same directory -- after it was stopped, lost its node,
+or ran out of time:
+
+* a MOPAC step that had completed is skipped, as before: its ``success.dat`` file
+  says so, and its results are read from the files it left, whatever its input now;
+* a MOPAC calculation that had finished but whose step had not completed (the job
+  stopped just after MOPAC ended), and the Lewis structure calculation, are not
+  repeated if their input is unchanged; their results are read from the files they
+  left;
+* a calculation that did not finish -- it failed, or the job was stopped while it was
+  running -- is run again, up to three attempts in all; after that the step stops with
+  a message saying so. Deleting its entry in ``tasks/manifest.json``, or changing its
+  input, lets it run again. If the job was killed outright, a MOPAC process from the
+  earlier run may still be running; the rerun stops it first.
+
+To recompute a completed MOPAC step, delete its ``success.dat``.
+
+
 Index
 =====
 
