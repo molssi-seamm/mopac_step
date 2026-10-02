@@ -1,6 +1,19 @@
 =======
 History
 =======
+2026.10.2 -- MOPAC runs as a task; failures are reported with the reason
+    * MOPAC now runs through SEAMM's task layer, still in the step's directory so its
+      output can be watched as it runs. A failed run is now reported with the reason,
+      for example its return code.
+    * Rerunning a job in the same directory reuses a MOPAC calculation that had
+      finished with the same input. A MOPAC step that had completed was already skipped
+      on a rerun; now the Lewis structure calculation, and a calculation that finished
+      just before the job was stopped, are reused too.
+    * Otherwise nothing changes: the output files are where they always were and the
+      results are the same. The record of the calculations is in
+      ``tasks/manifest.json`` in the step's directory.
+    * Requires seamm-exec 2026.10.2 or later.
+
 2026.10.1 -- Settings that depend on each other; MOZYME force constants
     * The dialogs show only the settings that apply with the current choices, and SEAMM's
       flowchart tools use the same rules: UHF and MOZYME only for Hartree-Fock; the CI
