@@ -188,9 +188,15 @@ class LewisStructure(mopac_step.MOPACBase):
         )
         result = seamm_exec.run_task(task, node=self)
 
-        if result.state == "failed" and result.returncode is None:
-            self.logger.error("There was an error running MOPAC")
-            return None
+        if not result.ok:
+            reason = result.reason or "unknown"
+            if result.returncode is None or reason.startswith("attempts exhausted"):
+                # It did not run, so there is no output to use.
+                self.logger.error(
+                    f"There was an error running MOPAC: {reason}\n" + result.stderr
+                )
+                return None
+            self.logger.warning(f"MOPAC failed: {reason}\n" + result.stderr)
 
         self.logger.debug("\n" + pprint.pformat(result))
 
