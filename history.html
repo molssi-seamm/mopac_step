@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>History &#8212; SEAMM MOPAC Plug-in 2026.10.1 documentation</title>
+    <title>History &#8212; SEAMM MOPAC Plug-in 2026.10.2 documentation</title>
   
   
   
@@ -48,7 +48,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="_static/documentation_options.js?v=65cfade2"></script>
+    <script src="_static/documentation_options.js?v=52372788"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -62,7 +62,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <link rel="prev" title="Development Team" href="authors.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.10.1" />
+  <meta name="docsearch:version" content="2026.10.2" />
   
     
     <script src="_static/searchtools.js"></script>
@@ -505,6 +505,20 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <section id="history">
 <h1>History<a class="headerlink" href="#history" title="Link to this heading">#</a></h1>
 <dl class="simple">
+<dt>2026.10.2 – MOPAC runs as a task; failures are reported with the reason</dt><dd><ul class="simple">
+<li><p>MOPAC now runs through SEAMM’s task layer, still in the step’s directory so its
+output can be watched as it runs. A failed run is now reported with the reason,
+for example its return code.</p></li>
+<li><p>Rerunning a job in the same directory reuses a MOPAC calculation that had
+finished with the same input. A MOPAC step that had completed was already skipped
+on a rerun; now the Lewis structure calculation, and a calculation that finished
+just before the job was stopped, are reused too.</p></li>
+<li><p>Otherwise nothing changes: the output files are where they always were and the
+results are the same. The record of the calculations is in
+<code class="docutils literal notranslate"><span class="pre">tasks/manifest.json</span></code> in the step’s directory.</p></li>
+<li><p>Requires seamm-exec 2026.10.2 or later.</p></li>
+</ul>
+</dd>
 <dt>2026.10.1 – Settings that depend on each other; MOZYME force constants</dt><dd><ul class="simple">
 <li><p>The dialogs show only the settings that apply with the current choices, and SEAMM’s
 flowchart tools use the same rules: UHF and MOZYME only for Hartree-Fock; the CI

@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mopac_step.mopac &#8212; SEAMM MOPAC Plug-in 2026.10.1 documentation</title>
+    <title>mopac_step.mopac &#8212; SEAMM MOPAC Plug-in 2026.10.2 documentation</title>
   
   
   
@@ -47,7 +47,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="../../_static/documentation_options.js?v=65cfade2"></script>
+    <script src="../../_static/documentation_options.js?v=52372788"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -60,7 +60,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <link rel="search" title="Search" href="../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.10.1" />
+  <meta name="docsearch:version" content="2026.10.2" />
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -524,6 +524,32 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="n">molsystem</span><span class="o">.</span><span class="n">add_properties_from_file</span><span class="p">(</span><span class="n">csv_file</span><span class="p">)</span>
 
 
+<div class="viewcode-block" id="estimated_seconds">
+<a class="viewcode-back" href="../../api/mopac_step.html#mopac_step.mopac.estimated_seconds">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">estimated_seconds</span><span class="p">(</span><span class="n">keyword_lines</span><span class="p">,</span> <span class="n">n_atoms</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""A rough estimate of a MOPAC run's time, for the inline rule.</span>
+
+<span class="sd">    Tens of milliseconds for a small molecule; the SCF scales roughly as the</span>
+<span class="sd">    cube of the size, and a geometry optimization or frequencies take many SCFs.</span>
+<span class="sd">    """</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">n_atoms</span><span class="p">))</span>
+    <span class="n">total</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">keyword_lines</span><span class="p">:</span>
+        <span class="n">words</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+        <span class="n">scf</span> <span class="o">=</span> <span class="mf">0.02</span> <span class="o">+</span> <span class="mf">2.0e-6</span> <span class="o">*</span> <span class="n">n</span><span class="o">**</span><span class="mi">3</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="s2">"FORCE"</span> <span class="ow">in</span> <span class="n">words</span>
+            <span class="ow">or</span> <span class="s2">"THERMO"</span> <span class="ow">in</span> <span class="n">words</span>
+            <span class="ow">or</span> <span class="nb">any</span><span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"THERMO"</span><span class="p">)</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">words</span><span class="p">)</span>
+        <span class="p">):</span>
+            <span class="n">scf</span> <span class="o">*=</span> <span class="mi">6</span> <span class="o">*</span> <span class="n">n</span>
+        <span class="k">elif</span> <span class="s2">"1SCF"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">words</span><span class="p">:</span>
+            <span class="n">scf</span> <span class="o">*=</span> <span class="mi">30</span>  <span class="c1"># an optimization</span>
+        <span class="n">total</span> <span class="o">+=</span> <span class="n">scf</span>
+    <span class="k">return</span> <span class="n">total</span></div>
+
+
+
 <div class="viewcode-block" id="MOPAC">
 <a class="viewcode-back" href="../../api/mopac_step.html#mopac_step.mopac.MOPAC">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">MOPAC</span><span class="p">(</span><span class="n">mopac_step</span><span class="o">.</span><span class="n">MOPACBase</span><span class="p">):</span>
@@ -899,7 +925,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
                 <span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time_ns</span><span class="p">()</span>
 
-                <span class="n">result</span> <span class="o">=</span> <span class="n">executor</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+                <span class="c1"># In place (in_situ=True), so MOPAC's output can be watched</span>
+                <span class="c1"># as it runs (mopac_step#155).</span>
+                <span class="n">task</span> <span class="o">=</span> <span class="n">seamm_exec</span><span class="o">.</span><span class="n">Task</span><span class="p">(</span>
+                    <span class="n">key</span><span class="o">=</span><span class="s2">"mopac"</span><span class="p">,</span>
+                    <span class="n">program</span><span class="o">=</span><span class="s2">"mopac"</span><span class="p">,</span>
                     <span class="n">cmd</span><span class="o">=</span><span class="p">[</span><span class="s2">"</span><span class="si">{code}</span><span class="s2">"</span><span class="p">,</span> <span class="s2">"mopac.dat"</span><span class="p">,</span> <span class="s2">"&gt;"</span><span class="p">,</span> <span class="s2">"stdout.txt"</span><span class="p">,</span> <span class="s2">"2&gt;"</span><span class="p">,</span> <span class="s2">"stderr.txt"</span><span class="p">],</span>
                     <span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">,</span>
                     <span class="n">directory</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">directory</span><span class="p">,</span>
@@ -908,10 +938,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                     <span class="n">in_situ</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                     <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                     <span class="n">env</span><span class="o">=</span><span class="n">env</span><span class="p">,</span>
+                    <span class="n">resources</span><span class="o">=</span><span class="n">seamm_exec</span><span class="o">.</span><span class="n">Resources</span><span class="p">(</span><span class="n">ntasks</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">cpus_per_task</span><span class="o">=</span><span class="n">n_cores</span><span class="p">),</span>
+                    <span class="n">estimated_seconds</span><span class="o">=</span><span class="n">estimated_seconds</span><span class="p">(</span><span class="n">all_keywords</span><span class="p">,</span> <span class="n">n_atoms</span><span class="p">),</span>
                 <span class="p">)</span>
+                <span class="n">result</span> <span class="o">=</span> <span class="n">seamm_exec</span><span class="o">.</span><span class="n">run_task</span><span class="p">(</span><span class="n">task</span><span class="p">,</span> <span class="n">node</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
 
                 <span class="n">t</span> <span class="o">=</span> <span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time_ns</span><span class="p">()</span> <span class="o">-</span> <span class="n">t0</span><span class="p">)</span> <span class="o">/</span> <span class="mf">1.0e9</span>
-                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_timing_data</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_timing_data</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">result</span><span class="o">.</span><span class="n">restored</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">_timing_data</span><span class="p">[</span><span class="mi">13</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">t</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">"</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">_timing_data</span><span class="p">[</span><span class="mi">12</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">n_cores</span><span class="p">)</span>
                     <span class="k">try</span><span class="p">:</span>
@@ -921,14 +954,25 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                     <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
                         <span class="k">pass</span>
 
-                <span class="k">if</span> <span class="ow">not</span> <span class="n">result</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">"There was an error running MOPAC"</span><span class="p">)</span>
-                    <span class="k">return</span> <span class="kc">None</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">result</span><span class="o">.</span><span class="n">ok</span><span class="p">:</span>
+                    <span class="n">reason</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">reason</span> <span class="ow">or</span> <span class="s2">"unknown"</span>
+                    <span class="k">if</span> <span class="n">result</span><span class="o">.</span><span class="n">returncode</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">reason</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span>
+                        <span class="s2">"attempts exhausted"</span>
+                    <span class="p">):</span>
+                        <span class="c1"># It did not run, so there is no output to use.</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
+                            <span class="sa">f</span><span class="s2">"There was an error running MOPAC: </span><span class="si">{</span><span class="n">reason</span><span class="si">}</span><span class="se">\n</span><span class="s2">"</span>
+                            <span class="o">+</span> <span class="n">result</span><span class="o">.</span><span class="n">stderr</span>
+                        <span class="p">)</span>
+                        <span class="k">return</span> <span class="kc">None</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">"MOPAC failed: </span><span class="si">{</span><span class="n">reason</span><span class="si">}</span><span class="se">\n</span><span class="s2">"</span> <span class="o">+</span> <span class="n">result</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
 
                 <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span> <span class="o">+</span> <span class="n">pprint</span><span class="o">.</span><span class="n">pformat</span><span class="p">(</span><span class="n">result</span><span class="p">))</span>
 
                 <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
-                    <span class="s2">"</span><span class="se">\n\n</span><span class="s2">Output from MOPAC</span><span class="se">\n\n</span><span class="s2">"</span> <span class="o">+</span> <span class="n">result</span><span class="p">[</span><span class="s2">"mopac.out"</span><span class="p">][</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">+</span> <span class="s2">"</span><span class="se">\n\n</span><span class="s2">"</span>
+                    <span class="s2">"</span><span class="se">\n\n</span><span class="s2">Output from MOPAC</span><span class="se">\n\n</span><span class="s2">"</span>
+                    <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">files</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"mopac.out"</span><span class="p">,</span> <span class="s2">""</span><span class="p">))</span>
+                    <span class="o">+</span> <span class="s2">"</span><span class="se">\n\n</span><span class="s2">"</span>
                 <span class="p">)</span>
 
         <span class="c1"># Ran successfully, put out the success file</span>
