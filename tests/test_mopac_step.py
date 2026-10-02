@@ -21,3 +21,14 @@ def test_content(response):
     """Sample pytest test function with the pytest fixture as an argument."""
     # from bs4 import BeautifulSoup
     # assert 'GitHub' in BeautifulSoup(response.content).title.string
+
+
+def test_estimated_seconds():
+    from mopac_step.mopac import estimated_seconds
+
+    single = estimated_seconds(["PM7 1SCF"], 3)
+    assert single < 1
+    assert estimated_seconds(["PM7"], 3) > single  # an optimization
+    assert estimated_seconds(["PM7 FORCE"], 3) > single
+    assert estimated_seconds(["PM7 1SCF"], 500) > 60
+    assert estimated_seconds(["PM7 1SCF", "PM7 1SCF"], 3) == 2 * single

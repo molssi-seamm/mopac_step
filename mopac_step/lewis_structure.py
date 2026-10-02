@@ -17,6 +17,7 @@ from tabulate import tabulate
 
 import mopac_step
 import seamm
+import seamm_exec
 import seamm_util.printing as printing
 from seamm_util.printing import FormattedText as __
 
@@ -173,7 +174,9 @@ class LewisStructure(mopac_step.MOPACBase):
         config = dict(full_config.items(executor_type))
 
         return_files = ["mopac.arc", "mopac.out", "mopac.aux"]
-        result = executor.run(
+        task = seamm_exec.Task(
+            key="mopac",
+            program="mopac",
             cmd=["{code}", "mopac.dat", ">", "stdout.txt", "2>", "stderr.txt"],
             config=config,
             directory=self.directory,
@@ -181,16 +184,20 @@ class LewisStructure(mopac_step.MOPACBase):
             return_files=return_files,
             in_situ=True,
             shell=True,
+            resources=seamm_exec.Resources(ntasks=1),
         )
+        result = seamm_exec.run_task(task, node=self)
 
-        if not result:
+        if result.state == "failed" and result.returncode is None:
             self.logger.error("There was an error running MOPAC")
             return None
 
         self.logger.debug("\n" + pprint.pformat(result))
 
         self.logger.debug(
-            "\n\nOutput from MOPAC\n\n" + result["mopac.out"]["data"] + "\n\n"
+            "\n\nOutput from MOPAC\n\n"
+            + str(result.files.get("mopac.out", ""))
+            + "\n\n"
         )
 
         # Analyze the results
