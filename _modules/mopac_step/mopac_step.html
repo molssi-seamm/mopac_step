@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mopac_step.mopac_step &#8212; SEAMM MOPAC Plug-in 2026.10.3 documentation</title>
+    <title>mopac_step.mopac_step &#8212; SEAMM MOPAC Plug-in 2026.10.3.1 documentation</title>
   
   
   
@@ -47,7 +47,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="../../_static/documentation_options.js?v=f64fa391"></script>
+    <script src="../../_static/documentation_options.js?v=0667127d"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -60,7 +60,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <link rel="search" title="Search" href="../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.10.3" />
+  <meta name="docsearch:version" content="2026.10.3.1" />
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -721,6 +721,40 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <span class="n">config</span><span class="p">[</span><span class="s2">"version"</span><span class="p">]</span> <span class="o">=</span> <span class="n">mopac_step</span><span class="o">.</span><span class="n">__version__</span>
         <span class="n">config</span><span class="p">[</span><span class="s2">"mdi_script"</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">resources</span> <span class="o">/</span> <span class="s2">"mopac_mdi.py"</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">config</span></div>
+
+
+<div class="viewcode-block" id="MOPACStep.get_task">
+<a class="viewcode-back" href="../../api/mopac_step.html#mopac_step.mopac_step.MOPACStep.get_task">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_task</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">configuration</span><span class="p">,</span> <span class="n">model_chemistry</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""A task computing MOPAC's heat of formation (and gradients) for one</span>
+<span class="sd">        structure: the batch half of the Model Chemistry contract. See</span>
+<span class="sd">        :mod:`mopac_step.batch`."""</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">.batch</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_task</span>
+
+        <span class="k">return</span> <span class="n">get_task</span><span class="p">(</span><span class="n">configuration</span><span class="p">,</span> <span class="n">model_chemistry</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="MOPACStep.can_run_task">
+<a class="viewcode-back" href="../../api/mopac_step.html#mopac_step.mopac_step.MOPACStep.can_run_task">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">can_run_task</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">configuration</span><span class="p">,</span> <span class="n">model_chemistry</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Whether :meth:`get_task` can run this structure (a molecule in its</span>
+<span class="sd">        lowest spin state)."""</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">.batch</span><span class="w"> </span><span class="kn">import</span> <span class="n">can_run_task</span>
+
+        <span class="k">return</span> <span class="n">can_run_task</span><span class="p">(</span><span class="n">configuration</span><span class="p">,</span> <span class="n">model_chemistry</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="MOPACStep.analyze_task">
+<a class="viewcode-back" href="../../api/mopac_step.html#mopac_step.mopac_step.MOPACStep.analyze_task">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">analyze_task</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">result</span><span class="p">,</span> <span class="n">model_chemistry</span><span class="p">,</span> <span class="n">configuration</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""The heat of formation (kJ/mol) and gradients (kJ/mol/Å) of a finished</span>
+<span class="sd">        task from :meth:`get_task`. See :mod:`mopac_step.batch`."""</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">.batch</span><span class="w"> </span><span class="kn">import</span> <span class="n">analyze_task</span>
+
+        <span class="k">return</span> <span class="n">analyze_task</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">model_chemistry</span><span class="p">,</span> <span class="n">configuration</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="MOPACStep.get_mdi_engine_command">

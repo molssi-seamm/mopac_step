@@ -4,6 +4,14 @@ mopac\_step package
 Submodules
 ----------
 
+mopac\_step.batch module
+------------------------
+
+.. automodule:: mopac_step.batch
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
 mopac\_step.energy module
 -------------------------
 
@@ -160,6 +168,14 @@ mopac\_step.optimization\_step module
 -------------------------------------
 
 .. automodule:: mopac_step.optimization_step
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+mopac\_step.resolver module
+---------------------------
+
+.. automodule:: mopac_step.resolver
    :members:
    :show-inheritance:
    :undoc-members:

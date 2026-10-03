@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>History &#8212; SEAMM MOPAC Plug-in 2026.10.3 documentation</title>
+    <title>History &#8212; SEAMM MOPAC Plug-in 2026.10.3.1 documentation</title>
   
   
   
@@ -48,7 +48,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="_static/documentation_options.js?v=f64fa391"></script>
+    <script src="_static/documentation_options.js?v=0667127d"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -62,7 +62,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <link rel="prev" title="Development Team" href="authors.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.10.3" />
+  <meta name="docsearch:version" content="2026.10.3.1" />
   
     
     <script src="_static/searchtools.js"></script>
@@ -505,6 +505,19 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <section id="history">
 <h1>History<a class="headerlink" href="#history" title="Link to this heading">#</a></h1>
 <dl class="simple">
+<dt>2026.10.3.1 – MOPAC calculations for many structures on a cluster queue</dt><dd><ul class="simple">
+<li><p>With a MOPAC model chemistry, the Energy step, the Dimer Builder and Normal Mode
+Sampling send each molecule to the cluster as a separate MOPAC calculation when
+the job’s target sends its calculations to a queue; a rerun reuses the ones
+that had finished. On this machine they keep using MOPAC’s MDI engine.</p></li>
+<li><p>The energy is the heat of formation, as from the MDI engine, and the gradients
+agree with the engine’s. Periodic and open-shell structures always use the MDI
+engine.</p></li>
+<li><p>How MOPAC is run is worked out on the machine that runs it, from that machine’s
+<code class="docutils literal notranslate"><span class="pre">mopac.ini</span></code>, including conda and environment-module installations.</p></li>
+<li><p>Requires seamm-exec 2026.10.3 or later.</p></li>
+</ul>
+</dd>
 <dt>2026.10.3 – Bugfix: forces from the MOPAC MDI engine were 3.57 times too large</dt><dd><ul class="simple">
 <li><p>Driven over MDI (the Energy step’s gradients, LAMMPS QM/MD with a MOPAC
 model chemistry, and Normal Mode Sampling’s finite-difference Hessian),

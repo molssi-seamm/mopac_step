@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>mopac_step &#8212; SEAMM MOPAC Plug-in 2026.10.3 documentation</title>
+    <title>mopac_step &#8212; SEAMM MOPAC Plug-in 2026.10.3.1 documentation</title>
   
   
   
@@ -48,7 +48,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="../_static/documentation_options.js?v=f64fa391"></script>
+    <script src="../_static/documentation_options.js?v=0667127d"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -63,7 +63,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <link rel="prev" title="API Documentation" href="index.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.10.3" />
+  <meta name="docsearch:version" content="2026.10.3.1" />
   
     
     <script src="../_static/searchtools.js"></script>
@@ -518,6 +518,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="mopac_step.html">mopac_step package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="mopac_step.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mopac_step.html#module-mopac_step.batch">mopac_step.batch module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="mopac_step.html#mopac_step.batch.analyze_task"><code class="docutils literal notranslate"><span class="pre">analyze_task()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mopac_step.html#mopac_step.batch.can_run_task"><code class="docutils literal notranslate"><span class="pre">can_run_task()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mopac_step.html#mopac_step.batch.get_task"><code class="docutils literal notranslate"><span class="pre">get_task()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mopac_step.html#mopac_step.batch.parse_aux"><code class="docutils literal notranslate"><span class="pre">parse_aux()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="mopac_step.html#module-mopac_step.energy">mopac_step.energy module</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="mopac_step.html#mopac_step.energy.Energy"><code class="docutils literal notranslate"><span class="pre">Energy</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="mopac_step.html#mopac_step.energy.Energy.analyze"><code class="docutils literal notranslate"><span class="pre">Energy.analyze()</span></code></a></li>
@@ -668,12 +675,15 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </li>
 <li class="toctree-l2"><a class="reference internal" href="mopac_step.html#module-mopac_step.mopac_step">mopac_step.mopac_step module</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="mopac_step.html#mopac_step.mopac_step.MOPACStep"><code class="docutils literal notranslate"><span class="pre">MOPACStep</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mopac_step.html#mopac_step.mopac_step.MOPACStep.analyze_task"><code class="docutils literal notranslate"><span class="pre">MOPACStep.analyze_task()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mopac_step.html#mopac_step.mopac_step.MOPACStep.can_run_task"><code class="docutils literal notranslate"><span class="pre">MOPACStep.can_run_task()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="mopac_step.html#mopac_step.mopac_step.MOPACStep.create_node"><code class="docutils literal notranslate"><span class="pre">MOPACStep.create_node()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="mopac_step.html#mopac_step.mopac_step.MOPACStep.create_tk_node"><code class="docutils literal notranslate"><span class="pre">MOPACStep.create_tk_node()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="mopac_step.html#mopac_step.mopac_step.MOPACStep.description"><code class="docutils literal notranslate"><span class="pre">MOPACStep.description()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="mopac_step.html#mopac_step.mopac_step.MOPACStep.get_executor_config"><code class="docutils literal notranslate"><span class="pre">MOPACStep.get_executor_config()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="mopac_step.html#mopac_step.mopac_step.MOPACStep.get_mdi_engine_command"><code class="docutils literal notranslate"><span class="pre">MOPACStep.get_mdi_engine_command()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="mopac_step.html#mopac_step.mopac_step.MOPACStep.get_model_chemistry_options"><code class="docutils literal notranslate"><span class="pre">MOPACStep.get_model_chemistry_options()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mopac_step.html#mopac_step.mopac_step.MOPACStep.get_task"><code class="docutils literal notranslate"><span class="pre">MOPACStep.get_task()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="mopac_step.html#mopac_step.mopac_step.MOPACStep.my_description"><code class="docutils literal notranslate"><span class="pre">MOPACStep.my_description</span></code></a></li>
 </ul>
 </li>
@@ -703,6 +713,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l4"><a class="reference internal" href="mopac_step.html#mopac_step.optimization_step.OptimizationStep.my_description"><code class="docutils literal notranslate"><span class="pre">OptimizationStep.my_description</span></code></a></li>
 </ul>
 </li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="mopac_step.html#module-mopac_step.resolver">mopac_step.resolver module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="mopac_step.html#mopac_step.resolver.resolve"><code class="docutils literal notranslate"><span class="pre">resolve()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="mopac_step.html#module-mopac_step.thermodynamics">mopac_step.thermodynamics module</a><ul>

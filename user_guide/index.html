@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>User Guide &#8212; SEAMM MOPAC Plug-in 2026.10.3 documentation</title>
+    <title>User Guide &#8212; SEAMM MOPAC Plug-in 2026.10.3.1 documentation</title>
   
   
   
@@ -48,7 +48,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="../_static/documentation_options.js?v=f64fa391"></script>
+    <script src="../_static/documentation_options.js?v=0667127d"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -63,7 +63,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <link rel="prev" title="Getting Started" href="../getting_started/index.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.10.3" />
+  <meta name="docsearch:version" content="2026.10.3.1" />
   
     
     <script src="../_static/searchtools.js"></script>
@@ -544,6 +544,21 @@ earlier run may still be running; the rerun stops it first.</p></li>
 </ul>
 <p>To recompute a completed MOPAC step, delete its <code class="docutils literal notranslate"><span class="pre">success.dat</span></code>.</p>
 </section>
+<section id="mopac-as-a-model-chemistry">
+<h2>MOPAC as a model chemistry<a class="headerlink" href="#mopac-as-a-model-chemistry" title="Link to this heading">#</a></h2>
+<p>Steps that set up a <em>model chemistry</em> and evaluate it at many structures – the
+<strong>Energy</strong> step, the <strong>Dimer Builder</strong>’s contact search, <strong>Normal Mode Sampling</strong>,
+LAMMPS QM-MD – use MOPAC through a <strong>Model Chemistry</strong> step (e.g. <code class="docutils literal notranslate"><span class="pre">MOPAC:PM7</span></code>), with
+no settings in the MOPAC step itself. On this machine they keep one MOPAC running as an
+<a class="reference external" href="https://molssi-mdi.github.io/MDI_Library/">MDI</a> engine and pass it the structures
+one after another, which suits MOPAC’s very short calculations. When the job’s target
+sends its calculations to a cluster queue, each molecule instead runs there as a
+separate MOPAC calculation, and a rerun reuses the ones that had finished.</p>
+<p>The energy is the heat of formation either way, and the gradients agree. Periodic and
+open-shell structures always use the MDI engine; on a queue target where MOPAC is not
+installed on the job’s own machine, such a structure is reported as failed, with the
+reason, and the others finish.</p>
+</section>
 <section id="index">
 <h2>Index<a class="headerlink" href="#index" title="Link to this heading">#</a></h2>
 <ul class="simple">
@@ -601,6 +616,7 @@ earlier run may still be running; the rerun stops it first.</p></li>
     <ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#settings-that-depend-on-each-other">Settings that depend on each other</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#rerunning-a-job">Rerunning a job</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mopac-as-a-model-chemistry">MOPAC as a model chemistry</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#index">Index</a></li>
 </ul>
   </nav></div>
