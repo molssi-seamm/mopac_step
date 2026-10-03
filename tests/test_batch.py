@@ -98,7 +98,7 @@ def test_open_shell_and_periodic_are_refused():
         get_task(
             Geometry([8, 8], [[0, 0, 0], [1.2, 0, 0]], multiplicity=3), MC, key="o2"
         )
-    with pytest.raises(ValueError, match="Periodic"):
+    with pytest.raises(ValueError, match="Periodic MOPAC"):
         get_task(Geometry([8], [[0, 0, 0]], cell=np.eye(3) * 5), MC, key="box")
 
 
@@ -149,3 +149,30 @@ def test_resolver_keeps_a_conda_installation(tmp_path):
     )
     assert config["code"] == "mopac" and config["conda-environment"] == "seamm-mopac"
     assert env["OMP_NUM_THREADS"] == "2"
+
+
+def test_doublet_batch_equals_mdi(tmp_path):
+    """An odd-electron molecule (OH) in its lowest spin state: the binary's
+    default (RHF, half-electron) and mopactools' spin=0 give the same heat."""
+    if not (ROOT / "mopac.ini").exists():
+        pytest.skip("MOPAC is not configured")
+    oh = Geometry([8, 1], [[0.0, 0.0, 0.0], [0.0, 0.0, 0.97]], multiplicity=2)
+    results = {}
+    for path in ("mdi", "batch"):
+        try:
+            with Evaluator(_node(tmp_path / path), MC, path=path) as evaluator:
+                evaluator.submit(oh, key="oh")
+                results[path] = list(evaluator.results())[0]
+        except Exception as e:
+            pytest.skip(f"The MOPAC MDI engine is not available: {e}")
+    assert results["batch"].ok, results["batch"].reason
+    # Both are the half-electron RHF treatment (a UHF/RHF mismatch would differ
+    # by kJ/mol); the open-shell SCF converges less tightly than a closed shell,
+    # so 1e-3 kJ/mol (observed 1.8e-4).
+    assert results["batch"].energy == pytest.approx(results["mdi"].energy, abs=1e-3)
+    # Half-electron gradients are approximate in MOPAC, and the two
+    # implementations differ: mopactools gives spurious components of about
+    # 0.03 kJ/mol/Å perpendicular to the O-H axis, where the binary gives 0.
+    assert np.allclose(
+        results["batch"].gradients, results["mdi"].gradients, rtol=G_RTOL, atol=0.06
+    )

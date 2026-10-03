@@ -54,7 +54,8 @@ def get_task(
     data = structure_data(configuration)
     if data["periodicity"] != 0:
         raise ValueError(
-            "Periodic MOPAC calculations run on the MOPAC MDI engine, not as tasks."
+            "Periodic MOPAC calculations cannot run as tasks; this structure runs "
+            "on MOPAC's MDI engine where one is available."
         )
     for name in ("atom_indices", "ghost_atoms"):
         if options.get(name) is not None:
@@ -66,12 +67,13 @@ def get_task(
     if multiplicity != minimum:
         raise ValueError(
             f"MOPAC tasks support only the lowest spin state (multiplicity "
-            f"{minimum} here), not {multiplicity}; use the MOPAC MDI engine."
+            f"{minimum} here), not {multiplicity}; this structure runs on MOPAC's "
+            "MDI engine where one is available."
         )
 
-    method = (model_chemistry.get("options") or {}).get(
-        "mdi_method_arg"
-    ) or model_chemistry["method"]
+    from seamm_exec.evaluator import mdi_method_and_basis
+
+    method, _ = mdi_method_and_basis(model_chemistry)  # the rule lives once
     keywords = [method, "1SCF", "AUX(PRECISION=9)", f"CHARGE={charge}"]
     if "gradients" in properties:
         keywords.insert(2, "GRADIENTS")
