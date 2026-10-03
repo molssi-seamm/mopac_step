@@ -73,6 +73,11 @@ open-shell structures always use the MDI engine; on a queue target where MOPAC i
 installed on the job's own machine, such a structure is reported as failed, with the
 reason, and the others finish.
 
+For a periodic structure the engine also returns the stress, as a pressure: positive
+when the system pushes outward (the opposite of MOPAC's own tensile-positive stress).
+MOPAC's model chemistries declare this, so steps that use the stress, such as the MBE
+step's periodic levels, convert it correctly.
+
 
 Index
 =====

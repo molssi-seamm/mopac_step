@@ -107,8 +107,11 @@ class MOPACStep(object):
                 stress_convention: "pressure" -- the sign of the stress the
                                    MDI engine returns (<STRESS sends the
                                    pressure, positive outward: it negates
-                                   MOPAC's tensile-positive stress). A
-                                   consumer needs it to use the stress.
+                                   MOPAC's tensile-positive stress). It
+                                   covers both paths: the batch path never
+                                   returns a stress (periodic structures
+                                   always use the MDI engine). A consumer
+                                   needs it to use the stress.
         """
         options = {}
         for theory_class, class_data in mopac_step.metadata[
