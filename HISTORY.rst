@@ -1,6 +1,17 @@
 =======
 History
 =======
+2026.10.3 -- Bugfix: forces from the MOPAC MDI engine were 3.57 times too large
+    * Driven over MDI (the Energy step's gradients, LAMMPS QM/MD with a MOPAC
+      model chemistry, and Normal Mode Sampling's finite-difference Hessian),
+      MOPAC returned forces 3.57 times too large: the conversion from kcal/mol/Å
+      to hartree/bohr multiplied by bohr/Å instead of Å/bohr. Energies were
+      right. Results computed with MOPAC over MDI since 2026-06-23 that used the
+      forces -- gradients, QM/MD trajectories, MOPAC normal-mode frequencies
+      (about 1.89 times too high) -- should be recomputed.
+    * A test now compares the engine's forces with a finite difference of its
+      energies.
+
 2026.10.2 -- MOPAC runs as a task; failures are reported with the reason
     * MOPAC now runs through SEAMM's task layer, still in the step's directory so its
       output can be watched as it runs. A failed run is now reported with the reason,

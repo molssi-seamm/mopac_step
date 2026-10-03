@@ -499,9 +499,11 @@ def main():
                 )
 
             elif command == "<FORCES":
-                # coord_deriv = dE/dx [kcal/(mol*Ang)]; force = -dE/dx
+                # coord_deriv = dE/dx [kcal/(mol*Ang)]; force = -dE/dx.
+                # Per Angstrom -> per bohr multiplies by Angstrom/bohr (0.529);
+                # this used BOHR_PER_ANG, making the forces 3.57x too large.
                 grad_kcal_ang = properties.coord_deriv.reshape(-1, 3)
-                grad_ha_bohr = (grad_kcal_ang * HARTREE_PER_KCALMOL) * BOHR_PER_ANG
+                grad_ha_bohr = (grad_kcal_ang * HARTREE_PER_KCALMOL) * ANG_PER_BOHR
                 forces = -grad_ha_bohr.ravel()
                 mdi.MDI_Send(forces, 3 * natoms, mdi.MDI_DOUBLE, comm)
 
