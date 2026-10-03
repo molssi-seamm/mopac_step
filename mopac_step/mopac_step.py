@@ -104,6 +104,11 @@ class MOPACStep(object):
                 mdi_capable      : bool
                 mdi_script       : str or None
                 mdi_method_arg   : str or None
+                stress_convention: "pressure" -- the sign of the stress the
+                                   MDI engine returns (<STRESS sends the
+                                   pressure, positive outward: it negates
+                                   MOPAC's tensile-positive stress). A
+                                   consumer needs it to use the stress.
         """
         options = {}
         for theory_class, class_data in mopac_step.metadata[
@@ -129,6 +134,7 @@ class MOPACStep(object):
                         "sparkle_elements": param.get("sparkle_elements"),
                         "mdi_capable": mdi_capable,
                         "mdi_method_arg": name if mdi_capable else None,
+                        "stress_convention": "pressure",
                     }
         return options
 

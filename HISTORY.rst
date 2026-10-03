@@ -1,6 +1,10 @@
 =======
 History
 =======
+2026.10.3.2 -- Declare the sign of the stress from MOPAC
+    * MOPAC's model chemistries now state that the stress they return for a periodic
+      system is a pressure (positive when the system pushes outward), so steps such as
+      the MBE step can use MOPAC's stress for a periodic cell.
 2026.10.3.1 -- MOPAC calculations for many structures on a cluster queue
     * With a MOPAC model chemistry, the Energy step, the Dimer Builder and Normal Mode
       Sampling send each molecule to the cluster as a separate MOPAC calculation when
