@@ -56,6 +56,24 @@ or ran out of time:
 To recompute a completed MOPAC step, delete its ``success.dat``.
 
 
+MOPAC as a model chemistry
+==========================
+
+Steps that set up a *model chemistry* and evaluate it at many structures -- the
+**Energy** step, the **Dimer Builder**'s contact search, **Normal Mode Sampling**,
+LAMMPS QM-MD -- use MOPAC through a **Model Chemistry** step (e.g. ``MOPAC:PM7``), with
+no settings in the MOPAC step itself. On this machine they keep one MOPAC running as an
+`MDI <https://molssi-mdi.github.io/MDI_Library/>`_ engine and pass it the structures
+one after another, which suits MOPAC's very short calculations. When the job's target
+sends its calculations to a cluster queue, each molecule instead runs there as a
+separate MOPAC calculation, and a rerun reuses the ones that had finished.
+
+The energy is the heat of formation either way, and the gradients agree. Periodic and
+open-shell structures always use the MDI engine; on a queue target where MOPAC is not
+installed on the job's own machine, such a structure is reported as failed, with the
+reason, and the others finish.
+
+
 Index
 =====
 
