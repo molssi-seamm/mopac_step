@@ -11,6 +11,8 @@ the open question about whether SPARKLES is reachable via the MDI path
 at all).
 """
 
+import importlib.resources
+
 import pytest  # noqa: F401
 
 import mopac_step
@@ -194,3 +196,16 @@ def test_elements_field_present_for_every_option():
             f"{name} has an empty elements string -- likely a missing "
             "metadata entry rather than a genuine empty range"
         )
+
+
+def test_stress_convention_is_declared():
+    """The MDI engine's <STRESS is the pressure (positive outward): it negates
+    MOPAC's tensile-positive Voigt stress (data/mopac_mdi.py). Consumers of the
+    batch contract need the declaration to use the stress of a periodic
+    structure (e.g. the MBE step refuses a periodic level without it)."""
+    options = mopac_step.MOPACStep.get_model_chemistry_options()
+    assert {info["stress_convention"] for info in options.values()} == {"pressure"}
+    engine = (
+        importlib.resources.files("mopac_step") / "data" / "mopac_mdi.py"
+    ).read_text()
+    assert "stress_ha_bohr3 = -full" in engine
