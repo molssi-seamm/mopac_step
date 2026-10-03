@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>History &#8212; SEAMM MOPAC Plug-in 2026.10.2 documentation</title>
+    <title>History &#8212; SEAMM MOPAC Plug-in 2026.10.3 documentation</title>
   
   
   
@@ -48,7 +48,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="_static/documentation_options.js?v=52372788"></script>
+    <script src="_static/documentation_options.js?v=f64fa391"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -62,7 +62,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <link rel="prev" title="Development Team" href="authors.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.10.2" />
+  <meta name="docsearch:version" content="2026.10.3" />
   
     
     <script src="_static/searchtools.js"></script>
@@ -505,6 +505,18 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <section id="history">
 <h1>History<a class="headerlink" href="#history" title="Link to this heading">#</a></h1>
 <dl class="simple">
+<dt>2026.10.3 – Bugfix: forces from the MOPAC MDI engine were 3.57 times too large</dt><dd><ul class="simple">
+<li><p>Driven over MDI (the Energy step’s gradients, LAMMPS QM/MD with a MOPAC
+model chemistry, and Normal Mode Sampling’s finite-difference Hessian),
+MOPAC returned forces 3.57 times too large: the conversion from kcal/mol/Å
+to hartree/bohr multiplied by bohr/Å instead of Å/bohr. Energies were
+right. Results computed with MOPAC over MDI since 2026-06-23 that used the
+forces – gradients, QM/MD trajectories, MOPAC normal-mode frequencies
+(about 1.89 times too high) – should be recomputed.</p></li>
+<li><p>A test now compares the engine’s forces with a finite difference of its
+energies.</p></li>
+</ul>
+</dd>
 <dt>2026.10.2 – MOPAC runs as a task; failures are reported with the reason</dt><dd><ul class="simple">
 <li><p>MOPAC now runs through SEAMM’s task layer, still in the step’s directory so its
 output can be watched as it runs. A failed run is now reported with the reason,
