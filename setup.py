@@ -88,6 +88,9 @@ setup(
             'Thermodynamics = mopac_step:ThermodynamicsStep',
             'Forceconstants = mopac_step:ForceconstantsStep',
         ],
+        'org.molssi.seamm.exec.resolvers': [
+            'mopac = mopac_step.resolver:resolve',
+        ],
         'org.molssi.seamm.mopac.tk': [
             'Energy = mopac_step:EnergyStep',
             'Optimization = mopac_step:OptimizationStep',

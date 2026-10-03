@@ -220,6 +220,23 @@ class MOPACStep(object):
         return config
 
     @classmethod
+    def get_task(cls, configuration, model_chemistry, **kwargs):
+        """A task computing MOPAC's heat of formation (and gradients) for one
+        structure: the batch half of the Model Chemistry contract. See
+        :mod:`mopac_step.batch`."""
+        from .batch import get_task
+
+        return get_task(configuration, model_chemistry, **kwargs)
+
+    @classmethod
+    def analyze_task(cls, result, model_chemistry, configuration, **kwargs):
+        """The heat of formation (kJ/mol) and gradients (kJ/mol/Å) of a finished
+        task from :meth:`get_task`. See :mod:`mopac_step.batch`."""
+        from .batch import analyze_task
+
+        return analyze_task(result, model_chemistry, configuration, **kwargs)
+
+    @classmethod
     def get_mdi_engine_command(
         cls,
         executor,
