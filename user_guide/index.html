@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>User Guide &#8212; SEAMM MOPAC Plug-in 2026.10.3.1 documentation</title>
+    <title>User Guide &#8212; SEAMM MOPAC Plug-in 2026.10.3.2 documentation</title>
   
   
   
@@ -48,7 +48,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="../_static/documentation_options.js?v=0667127d"></script>
+    <script src="../_static/documentation_options.js?v=319f9817"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -63,7 +63,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <link rel="prev" title="Getting Started" href="../getting_started/index.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.10.3.1" />
+  <meta name="docsearch:version" content="2026.10.3.2" />
   
     
     <script src="../_static/searchtools.js"></script>
@@ -558,6 +558,10 @@ separate MOPAC calculation, and a rerun reuses the ones that had finished.</p>
 open-shell structures always use the MDI engine; on a queue target where MOPAC is not
 installed on the job’s own machine, such a structure is reported as failed, with the
 reason, and the others finish.</p>
+<p>For a periodic structure the engine also returns the stress, as a pressure: positive
+when the system pushes outward (the opposite of MOPAC’s own tensile-positive stress).
+MOPAC’s model chemistries declare this, so steps that use the stress, such as the MBE
+step’s periodic levels, convert it correctly.</p>
 </section>
 <section id="index">
 <h2>Index<a class="headerlink" href="#index" title="Link to this heading">#</a></h2>
