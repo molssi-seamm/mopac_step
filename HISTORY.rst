@@ -1,6 +1,18 @@
 =======
 History
 =======
+2026.10.3.1 -- MOPAC calculations for many structures on a cluster queue
+    * With a MOPAC model chemistry, the Energy step, the Dimer Builder and Normal Mode
+      Sampling send each molecule to the cluster as a separate MOPAC calculation when
+      the job's target sends its calculations to a queue; a rerun reuses the ones
+      that had finished. On this machine they keep using MOPAC's MDI engine.
+    * The energy is the heat of formation, as from the MDI engine, and the gradients
+      agree with the engine's. Periodic and open-shell structures always use the MDI
+      engine.
+    * How MOPAC is run is worked out on the machine that runs it, from that machine's
+      ``mopac.ini``, including conda and environment-module installations.
+    * Requires seamm-exec 2026.10.3 or later.
+
 2026.10.3 -- Bugfix: forces from the MOPAC MDI engine were 3.57 times too large
     * Driven over MDI (the Energy step's gradients, LAMMPS QM/MD with a MOPAC
       model chemistry, and Normal Mode Sampling's finite-difference Hessian),
