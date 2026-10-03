@@ -3,4 +3,4 @@ py-cpuinfo
 requests
 seamm>=2026.10.1
 tabulate
-seamm-exec>=2026.10.2
+seamm-exec>=2026.10.3

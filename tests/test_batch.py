@@ -116,3 +116,36 @@ def test_parse_aux_heat_and_gradients():
     assert heat == pytest.approx(-55.4621453)
     assert gradients.shape == (3, 3)
     assert gradients[0].tolist() == [1.0, -2.0, 3.0]
+
+
+def test_can_run_task_and_strict_gradients():
+    from mopac_step.batch import can_run_task, parse_aux
+    from seamm_exec import AnalysisError
+
+    assert can_run_task(Geometry([8, 1, 1], WATERS[0]), MC)
+    assert not can_run_task(
+        Geometry([8, 8], [[0, 0, 0], [1.2, 0, 0]], multiplicity=3), MC
+    )
+    assert not can_run_task(Geometry([8], [[0, 0, 0]], cell=np.eye(3) * 5), MC)
+    truncated = (
+        " GRADIENTS:KCAL/MOL/ANGSTROM[0009]=\n"
+        "  0.1D+01-0.2D+01 0.3D+01\n"
+        " OVERLAP_MATRIX[0003]=\n"
+        "  0.1D+01 0.2D+01 0.3D+01\n"
+    )
+    with pytest.raises(AnalysisError, match="3 gradient values, not 9"):
+        parse_aux(truncated)
+
+
+def test_resolver_keeps_a_conda_installation(tmp_path):
+    from mopac_step.resolver import resolve
+
+    config, cmd, env = resolve(
+        {"installation": "conda", "conda-environment": "seamm-mopac", "code": ""},
+        ["{code}", "mopac.dat"],
+        {},
+        {"NTASKS": 1, "CPUS_PER_TASK": 2},
+        tmp_path,
+    )
+    assert config["code"] == "mopac" and config["conda-environment"] == "seamm-mopac"
+    assert env["OMP_NUM_THREADS"] == "2"

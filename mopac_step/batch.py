@@ -18,10 +18,25 @@ import re
 import numpy as np
 
 import seamm_exec
-from seamm_exec.evaluator import check_properties, structure_data
+from seamm_exec.evaluator import AnalysisError, check_properties, structure_data
 from seamm_util import Q_
 
 _FLOAT = re.compile(r"[+-]?\d*\.\d+(?:[DdEe][+-]?\d+)?")
+
+
+def can_run_task(configuration, model_chemistry, *, options=None):
+    """Whether :func:`get_task` can run this structure: a molecule in its lowest
+    spin state. Anything else stays on the MDI engine."""
+    options = dict(options or {})
+    data = structure_data(configuration)
+    if data["periodicity"] != 0:
+        return False
+    if options.get("atom_indices") is not None or options.get("ghost_atoms"):
+        return False
+    charge = int(options.get("charge", data["charge"]))
+    multiplicity = int(options.get("multiplicity", data["multiplicity"]))
+    n_electrons = sum(data["atomic_numbers"]) - charge
+    return multiplicity == (1 if n_electrons % 2 == 0 else 2)
 
 
 def get_task(
@@ -96,13 +111,18 @@ def parse_aux(text):
             n = int(line.split("[", 1)[1].split("]", 1)[0])
             values = []
             j = i + 1
-            while len(values) < n and j < len(lines):
+            # The values follow on lines of numbers; the next KEY= ends them.
+            while len(values) < n and j < len(lines) and "=" not in lines[j]:
                 values.extend(
                     float(v.replace("D", "E").replace("d", "e"))
                     for v in _FLOAT.findall(lines[j])
                 )
                 j += 1
-            gradients = np.asarray(values[:n], dtype=float).reshape(-1, 3)
+            if len(values) != n or n % 3 != 0:
+                raise AnalysisError(
+                    f"mopac.aux has {len(values)} gradient values, not {n}"
+                )
+            gradients = np.asarray(values, dtype=float).reshape(-1, 3)
             i = j - 1
         i += 1
     return heat, gradients
@@ -133,6 +153,12 @@ def analyze_task(
         if heat is not None:
             data["energy"] = float(Q_(heat, "kcal/mol").m_as("kJ/mol"))
         if gradients is not None and "gradients" in properties:
+            n_atoms = len(configuration.atoms.atomic_numbers)
+            if gradients.shape != (n_atoms, 3):
+                raise AnalysisError(
+                    f"The MOPAC calculation '{result.key}' has gradients for "
+                    f"{gradients.shape[0]} atoms, not {n_atoms}"
+                )
             data["gradients"] = Q_(gradients, "kcal/mol/Å").m_as("kJ/mol/Å")
     check_properties(data, properties, f"The MOPAC calculation '{result.key}'")
     return data

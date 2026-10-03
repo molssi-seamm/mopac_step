@@ -229,6 +229,14 @@ class MOPACStep(object):
         return get_task(configuration, model_chemistry, **kwargs)
 
     @classmethod
+    def can_run_task(cls, configuration, model_chemistry, **kwargs):
+        """Whether :meth:`get_task` can run this structure (a molecule in its
+        lowest spin state)."""
+        from .batch import can_run_task
+
+        return can_run_task(configuration, model_chemistry, **kwargs)
+
+    @classmethod
     def analyze_task(cls, result, model_chemistry, configuration, **kwargs):
         """The heat of formation (kJ/mol) and gradients (kJ/mol/Å) of a finished
         task from :meth:`get_task`. See :mod:`mopac_step.batch`."""

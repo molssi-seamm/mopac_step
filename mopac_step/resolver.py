@@ -16,6 +16,12 @@ import shutil
 def resolve(config, cmd, env, ce, root):
     """``(config, cmd, env)`` for running MOPAC here."""
     config = dict(config)
+    if not (config.get("code") or "").strip() and config.get("installation") in (
+        "conda",
+        "modules",
+    ):
+        # The environment or modules provide it: run it by name
+        config["code"] = "mopac"
     if not (config.get("code") or "").strip():
         path = shutil.which("mopac")
         if path is None:
