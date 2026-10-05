@@ -291,9 +291,15 @@ class MOPAC(mopac_step.MOPACBase):
                     text += "\n"
             node = node.next()
 
-        # Check for successful run, don't rerun
+        # Check for successful run, don't rerun -- but only of the same input:
+        # a marker left by a run with other input would give the old results.
         output = ""  # Text output to print
         success = directory / "success.dat"
+        previous = directory / "mopac.dat"
+        if success.exists() and not (
+            previous.exists() and previous.read_text() == text
+        ):
+            success.unlink()
         if success.exists():
             self._timing_data = None
         else:

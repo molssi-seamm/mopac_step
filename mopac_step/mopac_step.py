@@ -11,6 +11,38 @@ from pathlib import Path
 
 import mopac_step
 
+_CONDA_PYTHONS = {}
+
+
+def _conda_python(conda, environment):
+    """The Python of a conda environment, by absolute path.
+
+    Found once from ``conda env list --json``; "python" if it cannot be found,
+    as before.
+    """
+    key = (conda, environment)
+    if key not in _CONDA_PYTHONS:
+        python = "python"
+        try:
+            import json
+            import subprocess
+
+            result = subprocess.run(
+                [conda, "env", "list", "--json"],
+                capture_output=True,
+                text=True,
+                timeout=60,
+            )
+            for prefix in json.loads(result.stdout).get("envs", []):
+                candidate = Path(prefix) / "bin" / "python"
+                if Path(prefix).name == environment and candidate.exists():
+                    python = str(candidate)
+                    break
+        except Exception:
+            pass
+        _CONDA_PYTHONS[key] = python
+    return _CONDA_PYTHONS[key]
+
 
 class MOPACStep(object):
     my_description = {
@@ -341,7 +373,10 @@ class MOPACStep(object):
             "--live-stream",
             "-n",
             config["conda-environment"],
-            "python",
+            # The environment's own interpreter, by path: a bare "python" is
+            # found on the caller's PATH, which an activated virtual
+            # environment puts first (mopac_step#161).
+            _conda_python(config["conda"], config["conda-environment"]),
             config["mdi_script"],
             "-mdi",
             mdi_init,
