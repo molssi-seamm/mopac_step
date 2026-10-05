@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>mopac_step package &#8212; SEAMM MOPAC Plug-in 2026.10.3.2 documentation</title>
+    <title>mopac_step package &#8212; SEAMM MOPAC Plug-in 2026.10.5 documentation</title>
   
   
   
@@ -48,7 +48,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="../_static/documentation_options.js?v=319f9817"></script>
+    <script src="../_static/documentation_options.js?v=99beb745"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -63,7 +63,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <link rel="prev" title="mopac_step" href="modules.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.10.3.2" />
+  <meta name="docsearch:version" content="2026.10.5" />
   
     
     <script src="../_static/searchtools.js"></script>
@@ -1083,6 +1083,14 @@ be used as is.</p>
 cube of the size, and a geometry optimization or frequencies take many SCFs.</p>
 </dd></dl>
 
+<dl class="py function">
+<dt class="sig sig-object py" id="mopac_step.mopac.reuse_previous_run">
+<span class="sig-prename descclassname"><span class="pre">mopac_step.mopac.</span></span><span class="sig-name descname"><span class="pre">reuse_previous_run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">directory</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mopac_step/mopac.html#reuse_previous_run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mopac_step.mopac.reuse_previous_run" title="Link to this definition">#</a></dt>
+<dd><p>Whether a finished MOPAC run in <code class="docutils literal notranslate"><span class="pre">directory</span></code> can be reused for <code class="docutils literal notranslate"><span class="pre">text</span></code>.</p>
+<p>Only when it succeeded (<code class="docutils literal notranslate"><span class="pre">success.dat</span></code>) with the same input (<code class="docutils literal notranslate"><span class="pre">mopac.dat</span></code>);
+a marker left by a run of other input is removed, so the calculation runs.</p>
+</dd></dl>
+
 </section>
 <section id="module-mopac_step.mopac_base">
 <span id="mopac-step-mopac-base-module"></span><h2>mopac_step.mopac_base module<a class="headerlink" href="#module-mopac_step.mopac_base" title="Link to this heading">#</a></h2>
@@ -1897,6 +1905,7 @@ then add the extra widgets for controlling optimization</p>
 </ul>
 </li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mopac_step.mopac.estimated_seconds"><code class="docutils literal notranslate"><span class="pre">estimated_seconds()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mopac_step.mopac.reuse_previous_run"><code class="docutils literal notranslate"><span class="pre">reuse_previous_run()</span></code></a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-mopac_step.mopac_base">mopac_step.mopac_base module</a><ul class="pst-show_toc_level nav section-nav flex-column">

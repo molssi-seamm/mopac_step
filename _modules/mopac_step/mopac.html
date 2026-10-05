@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mopac_step.mopac &#8212; SEAMM MOPAC Plug-in 2026.10.3.2 documentation</title>
+    <title>mopac_step.mopac &#8212; SEAMM MOPAC Plug-in 2026.10.5 documentation</title>
   
   
   
@@ -47,7 +47,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="../../_static/documentation_options.js?v=319f9817"></script>
+    <script src="../../_static/documentation_options.js?v=99beb745"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -60,7 +60,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <link rel="search" title="Search" href="../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.10.3.2" />
+  <meta name="docsearch:version" content="2026.10.5" />
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -550,6 +550,26 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 
 
+<div class="viewcode-block" id="reuse_previous_run">
+<a class="viewcode-back" href="../../api/mopac_step.html#mopac_step.mopac.reuse_previous_run">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">reuse_previous_run</span><span class="p">(</span><span class="n">directory</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Whether a finished MOPAC run in ``directory`` can be reused for ``text``.</span>
+
+<span class="sd">    Only when it succeeded (``success.dat``) with the same input (``mopac.dat``);</span>
+<span class="sd">    a marker left by a run of other input is removed, so the calculation runs.</span>
+<span class="sd">    """</span>
+    <span class="n">directory</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">directory</span><span class="p">)</span>
+    <span class="n">success</span> <span class="o">=</span> <span class="n">directory</span> <span class="o">/</span> <span class="s2">"success.dat"</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">success</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="n">previous</span> <span class="o">=</span> <span class="n">directory</span> <span class="o">/</span> <span class="s2">"mopac.dat"</span>
+    <span class="k">if</span> <span class="n">previous</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span> <span class="ow">and</span> <span class="n">previous</span><span class="o">.</span><span class="n">read_text</span><span class="p">()</span> <span class="o">==</span> <span class="n">text</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="n">success</span><span class="o">.</span><span class="n">unlink</span><span class="p">()</span>
+    <span class="k">return</span> <span class="kc">False</span></div>
+
+
+
 <div class="viewcode-block" id="MOPAC">
 <a class="viewcode-back" href="../../api/mopac_step.html#mopac_step.mopac.MOPAC">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">MOPAC</span><span class="p">(</span><span class="n">mopac_step</span><span class="o">.</span><span class="n">MOPACBase</span><span class="p">):</span>
@@ -788,10 +808,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                     <span class="n">text</span> <span class="o">+=</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span>
             <span class="n">node</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">next</span><span class="p">()</span>
 
-        <span class="c1"># Check for successful run, don't rerun</span>
+        <span class="c1"># Check for successful run, don't rerun -- but only of the same input:</span>
+        <span class="c1"># a marker left by a run with other input would give the old results.</span>
         <span class="n">output</span> <span class="o">=</span> <span class="s2">""</span>  <span class="c1"># Text output to print</span>
-        <span class="n">success</span> <span class="o">=</span> <span class="n">directory</span> <span class="o">/</span> <span class="s2">"success.dat"</span>
-        <span class="k">if</span> <span class="n">success</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">reuse_previous_run</span><span class="p">(</span><span class="n">directory</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_timing_data</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="c1"># Input files</span>
@@ -976,7 +996,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 <span class="p">)</span>
 
         <span class="c1"># Ran successfully, put out the success file</span>
-        <span class="n">success</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="s2">"success"</span><span class="p">)</span>
+        <span class="p">(</span><span class="n">directory</span> <span class="o">/</span> <span class="s2">"success.dat"</span><span class="p">)</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="s2">"success"</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_only</span><span class="p">:</span>
             <span class="c1"># Analyze the results</span>
