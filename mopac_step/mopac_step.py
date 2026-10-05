@@ -17,16 +17,23 @@ _CONDA_PYTHONS = {}
 def _conda_python(conda, environment):
     """The Python of a conda environment, by absolute path.
 
-    Found once from ``conda env list --json``; "python" if it cannot be found,
-    as before.
+    ``environment`` may be a path (``conda-environment`` given as a prefix) or a
+    name. A name is looked up in ``conda env list --json``; if no environment of
+    that name is found there (another conda root, say), conda itself is asked
+    which Python the environment runs. "python" only if all that fails.
     """
     key = (conda, environment)
-    if key not in _CONDA_PYTHONS:
-        python = "python"
-        try:
-            import json
-            import subprocess
+    if key in _CONDA_PYTHONS:
+        return _CONDA_PYTHONS[key]
+    import json
+    import subprocess
 
+    python = None
+    candidate = Path(environment).expanduser() / "bin" / "python"
+    if "/" in str(environment) and candidate.exists():
+        python = str(candidate)
+    if python is None:
+        try:
             result = subprocess.run(
                 [conda, "env", "list", "--json"],
                 capture_output=True,
@@ -40,7 +47,28 @@ def _conda_python(conda, environment):
                     break
         except Exception:
             pass
-        _CONDA_PYTHONS[key] = python
+    if python is None:
+        try:
+            result = subprocess.run(
+                [
+                    conda,
+                    "run",
+                    "-n",
+                    environment,
+                    "python",
+                    "-c",
+                    "import sys; print(sys.executable)",
+                ],
+                capture_output=True,
+                text=True,
+                timeout=120,
+            )
+            found = result.stdout.strip().splitlines()
+            if result.returncode == 0 and found and Path(found[-1]).exists():
+                python = found[-1]
+        except Exception:
+            pass
+    _CONDA_PYTHONS[key] = python or "python"
     return _CONDA_PYTHONS[key]
 
 
