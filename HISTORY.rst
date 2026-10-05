@@ -1,6 +1,13 @@
 =======
 History
 =======
+2026.10.5 -- Bugfix: rerun MOPAC when its input changed; the MDI engine's Python
+    * A MOPAC calculation is reused from an earlier run in the same directory only if
+      its input is unchanged; a leftover success marker no longer skips a changed
+      calculation.
+    * The MDI engine is started with its conda environment's own Python, found by
+      path (or asked of conda), so a virtual environment earlier on the PATH cannot
+      be picked up instead (#161).
 2026.10.3.2 -- Declare the sign of the stress from MOPAC
     * MOPAC's model chemistries now state that the stress they return for a periodic
       system is a pressure (positive when the system pushes outward), so steps such as

@@ -60,6 +60,23 @@ def estimated_seconds(keyword_lines, n_atoms):
     return total
 
 
+def reuse_previous_run(directory, text):
+    """Whether a finished MOPAC run in ``directory`` can be reused for ``text``.
+
+    Only when it succeeded (``success.dat``) with the same input (``mopac.dat``);
+    a marker left by a run of other input is removed, so the calculation runs.
+    """
+    directory = Path(directory)
+    success = directory / "success.dat"
+    if not success.exists():
+        return False
+    previous = directory / "mopac.dat"
+    if previous.exists() and previous.read_text() == text:
+        return True
+    success.unlink()
+    return False
+
+
 class MOPAC(mopac_step.MOPACBase):
     def __init__(
         self,
@@ -291,10 +308,10 @@ class MOPAC(mopac_step.MOPACBase):
                     text += "\n"
             node = node.next()
 
-        # Check for successful run, don't rerun
+        # Check for successful run, don't rerun -- but only of the same input:
+        # a marker left by a run with other input would give the old results.
         output = ""  # Text output to print
-        success = directory / "success.dat"
-        if success.exists():
+        if reuse_previous_run(directory, text):
             self._timing_data = None
         else:
             # Input files
@@ -479,7 +496,7 @@ class MOPAC(mopac_step.MOPACBase):
                 )
 
         # Ran successfully, put out the success file
-        success.write_text("success")
+        (directory / "success.dat").write_text("success")
 
         if not self.input_only:
             # Analyze the results
