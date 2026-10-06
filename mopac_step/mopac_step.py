@@ -216,7 +216,7 @@ class MOPACStep(object):
 
         Reads the per-plug-in ``mopac.ini`` for the *current* executor type
         exactly as ``MOPAC.run()`` does, so the MDI engine runs in the same
-        conda/local/modules/docker environment as ordinary MOPAC jobs. Adds
+        conda/local/modules environment as ordinary MOPAC jobs. Adds
         one key, ``mdi_script`` -- the absolute path to the bundled
         ``data/mopac_mdi.py`` engine.
 
@@ -242,7 +242,6 @@ class MOPACStep(object):
             The ini section for the current executor (``installation``,
             ``code``, ``conda``, ``conda-environment``, ...), plus::
 
-                version    : str  -- this plug-in's version (container tag)
                 mdi_script : str  -- absolute path to data/mopac_mdi.py
         """
         executor_type = executor.name
@@ -284,7 +283,6 @@ class MOPACStep(object):
                 full_config.write(fd)
 
         config = dict(full_config.items(executor_type))
-        config["version"] = mopac_step.__version__
         config["mdi_script"] = str(resources / "mopac_mdi.py")
         return config
 
@@ -387,7 +385,7 @@ class MOPACStep(object):
             raise NotImplementedError(
                 "The MOPAC MDI engine is currently wired up only for a conda "
                 f"installation; mopac.ini selects '{installation}'. "
-                "TODO (Phase B+): local / modules / docker launches."
+                "TODO (Phase B+): local / modules launches."
             )
 
         mdi_init = (

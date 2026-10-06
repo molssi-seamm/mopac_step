@@ -7,6 +7,8 @@ History
       parallel exponent -- is passed when a run is recorded (seamm-exec 2026.10.6.1
       writes it beside the records), so the cost model is fitted from the step's own
       description rather than a table in seamm-exec.
+    * Removed the support for running MOPAC in a Docker container, and the Docker
+      image recipe, which were no longer used or maintained.
 
 2026.10.6 -- Timing records that a cost model can be fitted to
     * Each MOPAC run appends a record to ``~/.seamm.d/timing/mopac.csv`` through

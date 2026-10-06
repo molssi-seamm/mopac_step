@@ -19,12 +19,6 @@ This directory contains OS agnostic helper scripts which don't fall in any of th
 * `scripts`
   * `create_conda_env.py`: Helper program for spinning up new conda environments based on a starter file with Python Version and Env. Name command-line options
 
-### Docker Scripts and Files `docker`:
-
-This directory contains the files to setup the Docker environment for testing purposes
-* `Dockerfile`: Dockerfile for building the Docker image
-* `environment.yml`: Conda environment file for the Docker image
-
 
 ## How to contribute changes
 - Clone the repository if you have write access to the main repo, fork the repository if you are a collaborator.
