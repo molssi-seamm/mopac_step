@@ -1,6 +1,13 @@
 =======
 History
 =======
+2026.10.7 -- The step declares what its cost model is made of
+    * ``mopac.TIMING_SPEC`` -- basis functions and atoms as size variables, the
+      Hamiltonian and regime as the method class, the task, SCFs as the unit, no
+      parallel exponent -- is passed when a run is recorded (seamm-exec 2026.10.7
+      writes it beside the records), so the cost model is fitted from the step's own
+      description rather than a table in seamm-exec.
+
 2026.10.6 -- Timing records that a cost model can be fitted to
     * Each MOPAC run appends a record to ``~/.seamm.d/timing/mopac.csv`` through
       ``seamm_exec.record_task_timing`` -- the machine class, cores, wall time and

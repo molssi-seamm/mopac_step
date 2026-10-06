@@ -57,6 +57,25 @@ def estimated_seconds(keyword_lines, n_atoms):
     return total
 
 
+#: What MOPAC's cost model is made of (seamm_exec.timing_model.Spec as plain
+#: data): basis functions and atoms as size variables, the Hamiltonian and the
+#: regime (scf or mozyme) as the method class, the task, SCFs as the unit; one
+#: core, so no parallel exponent.
+TIMING_SPEC = {
+    "size": ["n_basis", "n_atoms"],
+    "klass": ["hamiltonian", "regime"],
+    "task": "task",
+    "units": "scf_runs",
+    "multiplier": None,
+    "default_alpha": 0.0,
+}
+
+
+def _record_kwargs():
+    """``spec=`` for seamm-exec releases that take it (2026.10.7 on)."""
+    return {"spec": TIMING_SPEC} if hasattr(seamm_exec, "TimingSpec") else {}
+
+
 #: MOPAC Hamiltonians, for the timing records
 _HAMILTONIANS = (
     "PM7",
@@ -514,7 +533,10 @@ class MOPAC(mopac_step.MOPACBase):
             if isinstance(text, bytes):
                 text = text.decode(errors="replace")
             seamm_exec.record_task_timing(
-                task, result, timing_descriptors(keyword_lines, text, configuration)
+                task,
+                result,
+                timing_descriptors(keyword_lines, text, configuration),
+                **_record_kwargs(),
             )
         except Exception as e:  # pragma: no cover - must never stop the step
             self.logger.warning(f"Could not record the timing of the MOPAC run: {e}")

@@ -54,3 +54,13 @@ def test_mozyme_regime_is_read_from_the_output():
     # Asked for but not used (MOPAC fell back): the output decides
     d = timing_descriptors(["PM7 MOZYME 1SCF"], "     SCF FIELD WAS ACHIEVED\n")
     assert d["mozyme_requested"] is True and d["regime"] == "scf"
+
+
+def test_timing_spec():
+    from mopac_step import mopac
+
+    assert mopac.TIMING_SPEC["klass"] == ["hamiltonian", "regime"]
+    assert mopac.TIMING_SPEC["default_alpha"] == 0.0
+    assert "spec" in mopac._record_kwargs() or not hasattr(
+        __import__("seamm_exec"), "TimingSpec"
+    )
