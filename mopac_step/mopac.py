@@ -4,20 +4,17 @@
 
 import calendar
 import configparser
-import csv
-from datetime import datetime, timezone
+from datetime import datetime
 import importlib
 import logging
 import os
 import os.path
 from pathlib import Path
-import platform
 import pprint
+import re
 import shutil
 import string
-import time
 
-from cpuinfo import get_cpu_info
 
 import molsystem
 import seamm
@@ -58,6 +55,81 @@ def estimated_seconds(keyword_lines, n_atoms):
             scf *= 30  # an optimization
         total += scf
     return total
+
+
+#: MOPAC Hamiltonians, for the timing records
+_HAMILTONIANS = (
+    "PM7",
+    "PM6-ORG",
+    "PM6-D3H4X",
+    "PM6-D3H4",
+    "PM6-D3",
+    "PM6",
+    "RM1",
+    "AM1",
+    "MNDOD",
+    "MNDO",
+    "PM3",
+)
+
+
+def task_kind(keyword_lines):
+    """What kind of calculation a MOPAC input asks for, for the timing records:
+    the most expensive over its calculations -- ``force`` (FORCE/THERMO, a
+    Hessian), ``opt`` (anything without 1SCF), ``gradient`` (1SCF GRADIENTS) or
+    ``energy``."""
+    kinds = []
+    for line in keyword_lines:
+        words = set(line.upper().split())
+        if (
+            "FORCE" in words
+            or "FORCETS" in words
+            or any(w.startswith("THERMO") for w in words)
+        ):
+            kinds.append("force")
+        elif "1SCF" not in words:
+            kinds.append("opt")
+        elif "GRADIENTS" in words or "GRADIENT" in words:
+            kinds.append("gradient")
+        else:
+            kinds.append("energy")
+    for kind in ("force", "opt", "gradient", "energy"):
+        if kind in kinds:
+            return kind
+    return "energy"
+
+
+def timing_descriptors(keyword_lines, output_text, configuration=None):
+    """The descriptors of a MOPAC run for its timing record (seamm_exec's
+    campaign of 2026-10-05): the Hamiltonian, the kind of task, the regime --
+    ``mozyme`` (localized orbitals, roughly linear in the size) or ``scf``
+    (the traditional SCF, N^2-N^3 in the basis functions) -- read from the
+    output, since MOZYME may not be used even when asked for; the number of
+    basis functions (4 per heavy atom, 1 per hydrogen); and from the output
+    the SCFs converged, the geometry cycles and MOPAC's own job time.
+    """
+    d = {}
+    text = " ".join(keyword_lines).upper()
+    words = text.split()
+    d["hamiltonian"] = next((h for h in _HAMILTONIANS if h in words), "")
+    d["task"] = task_kind(keyword_lines)
+    d["n_calculations"] = len(keyword_lines)
+    d["keywords"] = " && ".join(keyword_lines)
+    d["mozyme_requested"] = "MOZYME" in words
+    if configuration is not None:
+        d.update(seamm_exec.structure_descriptors(configuration))
+        if "n_atoms" in d:
+            d["n_basis"] = 4 * d["n_heavy"] + (d["n_atoms"] - d["n_heavy"])
+    if output_text:
+        d["regime"] = (
+            "mozyme" if re.search(r"^ \*\s+MOZYME\b", output_text, re.M) else "scf"
+        )
+        d["scf_runs"] = len(re.findall(r"SCF FIELD WAS ACHIEVED", output_text))
+        d["geometry_cycles"] = len(re.findall(r"^ CYCLE:\s+\d+", output_text, re.M))
+        m = re.search(r"TOTAL JOB TIME:\s+([\d.]+)\s+SECONDS", output_text)
+        d["code_seconds"] = float(m.group(1)) if m else None
+        d["terminated_normally"] = "== MOPAC DONE ==" in output_text
+    return d
 
 
 def reuse_previous_run(directory, text):
@@ -107,47 +179,6 @@ class MOPAC(mopac_step.MOPACBase):
         super().__init__(
             flowchart=flowchart, title=title, extension=extension, logger=logger
         )
-
-        # Set up the timing information
-        self._timing_data = []
-        self._timing_path = Path("~/.seamm.d/timing/mopac.csv").expanduser()
-        self._timing_header = [
-            "node",  # 0
-            "cpu",  # 1
-            "cpu_version",  # 2
-            "cpu_count",  # 3
-            "cpu_speed",  # 4
-            "date",  # 5
-            "H_SMILES",  # 6
-            "ISOMERIC_SMILES",  # 7
-            "formula",  # 8
-            "net_charge",  # 9
-            "spin_multiplicity",  # 10
-            "keywords",  # 11
-            "nproc",  # 12
-            "time",  # 13
-        ]
-        try:
-            self._timing_path.parent.mkdir(parents=True, exist_ok=True)
-
-            self._timing_data = 14 * [""]
-            self._timing_data[0] = platform.node()
-            tmp = get_cpu_info()
-            if "arch" in tmp:
-                self._timing_data[1] = tmp["arch"]
-            if "cpuinfo_version_string" in tmp:
-                self._timing_data[2] = tmp["cpuinfo_version_string"]
-            if "count" in tmp:
-                self._timing_data[3] = str(tmp["count"])
-            if "hz_advertized_friendly" in tmp:
-                self._timing_data[4] = tmp["hz_advertized_friendly"]
-
-            if not self._timing_path.exists():
-                with self._timing_path.open("w", newline="") as fd:
-                    writer = csv.writer(fd)
-                    writer.writerow(self._timing_header)
-        except Exception:
-            self._timing_data = None
 
     @property
     def input_only(self):
@@ -312,7 +343,7 @@ class MOPAC(mopac_step.MOPACBase):
         # a marker left by a run with other input would give the old results.
         output = ""  # Text output to print
         if reuse_previous_run(directory, text):
-            self._timing_data = None
+            pass
         else:
             # Input files
             files = {"mopac.dat": text}
@@ -321,9 +352,7 @@ class MOPAC(mopac_step.MOPACBase):
                 path = directory / filename
                 path.write_text(files[filename])
 
-            if self.input_only:
-                self._timing_data = None
-            else:
+            if not self.input_only:
                 # Get the computational environment and set limits
                 ce = seamm_exec.computational_environment()
 
@@ -416,35 +445,6 @@ class MOPAC(mopac_step.MOPACBase):
                     "stderr.txt",
                 ]
 
-                if self._timing_data is not None:
-                    try:
-                        self._timing_data[6] = configuration.to_smiles(
-                            canonical=True, hydrogens=True
-                        )
-                    except Exception:
-                        self._timing_data[6] = ""
-                    try:
-                        self._timing_data[7] = configuration.isomeric_smiles
-                    except Exception:
-                        self._timing_data[7] = ""
-                    try:
-                        self._timing_data[8] = configuration.formula[0]
-                    except Exception:
-                        self._timing_data[7] = ""
-                    try:
-                        self._timing_data[9] = str(configuration.charge)
-                    except Exception:
-                        self._timing_data[9] = ""
-                    try:
-                        self._timing_data[10] = str(configuration.spin_multiplicity)
-                    except Exception:
-                        self._timing_data[10] = ""
-
-                    self._timing_data[11] = " && ".join(all_keywords)
-                    self._timing_data[5] = datetime.now(timezone.utc).isoformat()
-
-                t0 = time.time_ns()
-
                 # In place (in_situ=True), so MOPAC's output can be watched
                 # as it runs (mopac_step#155).
                 task = seamm_exec.Task(
@@ -463,16 +463,7 @@ class MOPAC(mopac_step.MOPACBase):
                 )
                 result = seamm_exec.run_task(task, node=self)
 
-                t = (time.time_ns() - t0) / 1.0e9
-                if self._timing_data is not None and not result.restored:
-                    self._timing_data[13] = f"{t:.3f}"
-                    self._timing_data[12] = str(n_cores)
-                    try:
-                        with self._timing_path.open("a", newline="") as fd:
-                            writer = csv.writer(fd)
-                            writer.writerow(self._timing_data)
-                    except Exception:
-                        pass
+                self.record_timing(task, result, configuration, all_keywords)
 
                 if not result.ok:
                     reason = result.reason or "unknown"
@@ -507,6 +498,26 @@ class MOPAC(mopac_step.MOPACBase):
         self.references = None
 
         return next_node
+
+    def record_timing(self, task, result, configuration, keyword_lines):
+        """Append this run's timing record (``~/.seamm.d/timing/mopac.csv``):
+        the common columns from the task layer, the descriptors from
+        :func:`timing_descriptors`. Never raises; a restored result is not
+        recorded."""
+        try:
+            if result.restored:
+                return
+            text = result.files.get("mopac.out")
+            if text is None:
+                path = Path(self.directory) / "mopac.out"
+                text = path.read_text(errors="replace") if path.exists() else None
+            if isinstance(text, bytes):
+                text = text.decode(errors="replace")
+            seamm_exec.record_task_timing(
+                task, result, timing_descriptors(keyword_lines, text, configuration)
+            )
+        except Exception as e:  # pragma: no cover - must never stop the step
+            self.logger.warning(f"Could not record the timing of the MOPAC run: {e}")
 
     def set_id(self, node_id):
         """Set the id for node to a given tuple"""

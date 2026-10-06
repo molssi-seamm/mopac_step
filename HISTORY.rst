@@ -1,6 +1,18 @@
 =======
 History
 =======
+2026.10.6 -- Timing records that a cost model can be fitted to
+    * Each MOPAC run appends a record to ``~/.seamm.d/timing/mopac.csv`` through
+      ``seamm_exec.record_task_timing`` -- the machine class, cores, wall time and
+      outcome from the task layer, and the descriptors of the calculation: the
+      Hamiltonian, the kind of task (energy, gradient, optimization, force
+      constants), the regime actually used (``mozyme`` or ``scf``, read from the
+      output, since MOPAC may not use MOZYME even when asked), the atoms, heavy
+      atoms, basis functions, electrons, charge and multiplicity, the SCFs and
+      geometry cycles, and MOPAC's own job time. This replaces the step's own CSV
+      (SMILES, formula and keyword text, hostname), which grew without bound. See
+      seamm_exec's campaign of 2026-10-05.
+    * Requires seamm-exec 2026.10.6.
 2026.10.5 -- Bugfix: rerun MOPAC when its input changed; the MDI engine's Python
     * A MOPAC calculation is reused from an earlier run in the same directory only if
       its input is unchanged; a leftover success marker no longer skips a changed
