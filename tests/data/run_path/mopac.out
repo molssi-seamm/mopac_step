@@ -1,0 +1,211 @@
+ *******************************************************************************
+ **                                                                           **
+ **                              MOPAC v23.2.5                                **
+ **                                                                           **
+ *******************************************************************************
+ ** MOPAC's Digital Object Identifier: https://doi.org/10.5281/zenodo.6511958 **
+ **                                                                           **
+ ** Please cite the open-source release paper for use of this MOPAC version:  **
+ ** J. E. Moussa and J. J. P. Stewart (2026)                                  **
+ ** MOPAC: An open-source semiempirical molecular orbital program             **
+ ** J. Open Source Softw., 11(119), 8025, https://doi.org/10.21105/joss.08025 **
+ *******************************************************************************
+
+                              PM6-ORG CALCULATION RESULTS
+
+ *******************************************************************************
+ *  CALCULATION DONE: (MAX THREADS = 1)              Mon Oct  5 14:56:12 2026  *
+ *  PM6-ORG    - The PM6-ORG Hamiltonian to be used
+ *  SINGLET    - SPIN STATE DEFINED AS A SINGLET
+ *
+ *
+ *
+ *                 CHARGE ON SYSTEM = 0
+ *
+ *
+ *
+ *  1SCF       - DO 1 SCF AND THEN STOP 
+ *  T=         - A TIME OF 172800.0 SECONDS REQUESTED
+ *  DUMP=N     - RESTART FILE WRITTEN EVERY 7200.0 SECONDS REQUESTED
+ *  AUX        - OUTPUT AUXILIARY INFORMATION
+ *  GRADIENTS  - ALL GRADIENTS TO BE PRINTED
+ *  BONDS      - FINAL BOND-ORDER MATRIX TO BE PRINTED
+ *******************************************************************************
+1SCF PM6-ORG GRADIENTS BONDS AUX(MOS=10,XP,XS,PRECISION=3) CHARGE=0 SINGLET
+ water
+ water
+   ATOM   CHEMICAL          X               Y               Z
+  NUMBER   SYMBOL      (ANGSTROMS)     (ANGSTROMS)     (ANGSTROMS)
+
+     1       O          0.00000000  *   0.00000000  *   0.00000000  *
+     2       H          0.75700000  *   0.58600000  *   0.00000000  *
+     3       H         -0.75700000  *   0.58600000  *   0.00000000  *
+
+
+
+          CARTESIAN COORDINATES 
+
+    NO.       ATOM           X           Y           Z
+
+     1         O          0.0000      0.0000      0.0000
+     2         H          0.7570      0.5860      0.0000
+     3         H         -0.7570      0.5860      0.0000
+
+ General Reference for PM6-ORG:
+ "A semiempirical method optimized for modeling proteins", J. J. P. Stewart and A. C. Stewart
+ Journal of Molecular Modeling (2023) 29:284 [https://doi.org/10.1007/s00894-023-05695-1]
+
+           Empirical Formula: H2 O  =     3 atoms
+
+
+
+      MOLECULAR POINT GROUP   :   C2v 
+
+
+ SINGLET STATE CALCULATION
+
+
+      RHF CALCULATION, NO. OF DOUBLY OCCUPIED LEVELS = 4
+
+
+ -------------------------------------------------------------------------------
+ 1SCF PM6-ORG GRADIENTS BONDS AUX(MOS=10,XP,XS,PRECISION=3) CHARGE=0 SINGLET
+ water
+ water
+
+
+     1SCF WAS SPECIFIED, SO BFGS WAS NOT USED                 
+     SCF FIELD WAS ACHIEVED                                   
+
+
+                              PM6-ORG CALCULATION
+                                                       MOPAC v23.2.5 MacOS
+                                                       Mon Oct  5 14:56:12 2026
+
+
+
+
+          FINAL HEAT OF FORMATION =        -55.03186 KCAL/MOL =    -230.25331 KJ/MOL
+
+
+          COSMO AREA              =         42.49 SQUARE ANGSTROMS
+          COSMO VOLUME            =         25.19 CUBIC ANGSTROMS
+
+          GRADIENT NORM           =         17.73084          =       10.23691 PER ATOM
+          IONIZATION POTENTIAL    =         12.202059 EV
+          HOMO LUMO ENERGIES (EV) =        -12.202  3.586
+          NO. OF FILLED LEVELS    =          4
+          MOLECULAR WEIGHT        =         18.0152         POINT GROUP:  C2v 
+
+          MOLECULAR DIMENSIONS (Angstroms)
+
+            Atom       Atom       Distance
+            H     3    H     2     1.51400
+            H     2    O     1     0.58600
+            O     1    H     2     0.00000
+
+
+          SCF CALCULATIONS        =          1
+
+          WALL-CLOCK TIME         =      0.004 SECONDS
+          COMPUTATION TIME        =      0.006 SECONDS
+
+          LARGEST ATOMIC GRADIENTS
+
+          Atom     Label                     Cartesian Gradients           Cartesian Coordinates       |Gradient|
+                                           X          Y          Z        X          Y          Z
+
+             1       O                   0.000    -13.771      0.000    0.00000    0.00000    0.00000     13.771
+             3       H                  -3.867      6.905      0.000   -0.75700    0.58600    0.00000      7.914
+             2       H                   3.867      6.866      0.000    0.75700    0.58600    0.00000      7.880
+
+
+
+       FINAL  POINT  AND  DERIVATIVES
+
+   PARAMETER     ATOM    TYPE            VALUE        GRADIENT
+      1          1  O    CARTESIAN X     0.000000      0.000000  KCAL/ANGSTROM
+      2          1  O    CARTESIAN Y     0.000000    -13.771425  KCAL/ANGSTROM
+      3          1  O    CARTESIAN Z     0.000000      0.000000  KCAL/ANGSTROM
+      4          2  H    CARTESIAN X     0.757000      3.866774  KCAL/ANGSTROM
+      5          2  H    CARTESIAN Y     0.586000      6.866405  KCAL/ANGSTROM
+      6          2  H    CARTESIAN Z     0.000000      0.000000  KCAL/ANGSTROM
+      7          3  H    CARTESIAN X    -0.757000     -3.866774  KCAL/ANGSTROM
+      8          3  H    CARTESIAN Y     0.586000      6.905020  KCAL/ANGSTROM
+      9          3  H    CARTESIAN Z     0.000000      0.000000  KCAL/ANGSTROM
+
+
+
+
+   ATOM   CHEMICAL          X               Y               Z
+  NUMBER   SYMBOL      (ANGSTROMS)     (ANGSTROMS)     (ANGSTROMS)
+
+     1       O          0.00000000  *   0.00000000  *   0.00000000  *
+     2       H          0.75700000  *   0.58600000  *   0.00000000  *
+     3       H         -0.75700000  *   0.58600000  *   0.00000000  *
+
+                             CARTESIAN COORDINATES
+
+   1    O        0.000000000     0.000000000     0.000000000
+   2    H        0.757000000     0.586000000     0.000000000
+   3    H       -0.757000000     0.586000000     0.000000000
+
+
+           Empirical Formula: H2 O  =     3 atoms
+
+
+
+      MOLECULAR POINT GROUP   :   C2v 
+
+
+                  EIGENVALUES  
+ -40.60100 -18.05268 -14.23809 -12.20206   3.58622   6.30650
+
+
+              NET ATOMIC CHARGES AND DIPOLE CONTRIBUTIONS
+
+  ATOM NO.   TYPE          CHARGE      No. of ELECS.   s-Pop       p-Pop       
+    1          O          -0.604333        6.6043     1.88567     4.71866
+    2          H           0.302166        0.6978     0.69783
+    3          H           0.302166        0.6978     0.69783
+ DIPOLE           X         Y         Z       TOTAL
+ POINT-CHG.    -0.000     1.701     0.000     1.701
+ HYBRID         0.000     0.371    -0.000     0.371
+ SUM           -0.000     2.072    -0.000     2.072
+
+
+          ATOMIC ORBITAL ELECTRON POPULATIONS
+
+     Atom    s        px        py        pz   
+    1  O   1.88567   1.30613   1.41253   2.00000
+    2  H   0.69783
+    3  H   0.69783
+
+          BONDING CONTRIBUTION OF EACH M.O.
+
+  0.7973  1.8098  1.0277  0.0000 -1.8170 -1.8177
+
+
+
+
+
+            (VALENCIES)   BOND ORDERS
+
+     1  O     (1.817)     2  H 0.909     3  H 0.909
+
+     2  H     (0.909)     1  O 0.909
+
+     3  H     (0.909)     1  O 0.909
+
+
+ **********************
+ *                    *
+ * JOB ENDED NORMALLY *
+ *                    *
+ **********************
+
+
+
+ TOTAL JOB TIME:             0.01 SECONDS
+
+ == MOPAC DONE ==
