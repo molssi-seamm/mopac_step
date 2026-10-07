@@ -1,6 +1,24 @@
 =======
 History
 =======
+2026.10.7 -- The step declares what its cost model is made of, and its benchmark
+    * Bugfix: a MOPAC model-chemistry task's analysis failed under seamm-exec
+      2026.10.7 (``analyze_task() got an unexpected keyword argument 'task'``):
+      it now takes the task and, like the step's own runs, records the run's
+      timing from it.
+    * ``mopac_step.TIMING_BENCHMARK`` tells seamm_exec's seed benchmark what to run
+      for MOPAC: eight molecules from water to a 3000-atom alkane with PM7 and
+      PM6-ORG, as energies and optimizations, both regimes (MOZYME and the
+      traditional SCF) from 300 atoms, with size limits per tier; on one core.
+    * ``mopac.TIMING_SPEC`` -- basis functions and atoms as size variables, the
+      Hamiltonian and regime as the method class, the task, SCFs as the unit, no
+      parallel exponent -- is passed when a run is recorded (seamm-exec 2026.10.6.1
+      writes it beside the records), so the cost model is fitted from the step's own
+      description rather than a table in seamm-exec.
+    * Removed the support for running MOPAC in a Docker container, and the Docker
+      image recipe, which were no longer used or maintained.
+    * Requires Python 3.12 and seamm-exec 2026.10.6.1.
+
 2026.10.6 -- Timing records that a cost model can be fitted to
     * Each MOPAC run appends a record to ``~/.seamm.d/timing/mopac.csv`` through
       ``seamm_exec.record_task_timing`` -- the machine class, cores, wall time and
