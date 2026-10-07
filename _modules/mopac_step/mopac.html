@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mopac_step.mopac &#8212; SEAMM MOPAC Plug-in 2026.10.6 documentation</title>
+    <title>mopac_step.mopac &#8212; SEAMM MOPAC Plug-in 2026.10.7 documentation</title>
   
   
   
@@ -47,7 +47,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="../../_static/documentation_options.js?v=ae463d2f"></script>
+    <script src="../../_static/documentation_options.js?v=0a3eb936"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -60,7 +60,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <link rel="search" title="Search" href="../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.10.6" />
+  <meta name="docsearch:version" content="2026.10.7" />
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -547,6 +547,71 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 
 
+<span class="c1">#: What MOPAC's cost model is made of (seamm_exec.timing_model.Spec as plain</span>
+<span class="c1">#: data): basis functions and atoms as size variables, the Hamiltonian and the</span>
+<span class="c1">#: regime (scf or mozyme) as the method class, the task, SCFs as the unit; one</span>
+<span class="c1">#: core, so no parallel exponent.</span>
+<span class="n">TIMING_SPEC</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">"size"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"n_basis"</span><span class="p">,</span> <span class="s2">"n_atoms"</span><span class="p">],</span>
+    <span class="s2">"klass"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"hamiltonian"</span><span class="p">,</span> <span class="s2">"regime"</span><span class="p">],</span>
+    <span class="s2">"task"</span><span class="p">:</span> <span class="s2">"task"</span><span class="p">,</span>
+    <span class="s2">"units"</span><span class="p">:</span> <span class="s2">"scf_runs"</span><span class="p">,</span>
+    <span class="s2">"multiplier"</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="s2">"default_alpha"</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+<span class="p">}</span>
+
+
+<span class="c1">#: The molecules the timing benchmark runs, by size (atoms): three orders of</span>
+<span class="c1">#: magnitude, each built from SMILES; the alkanes reach MOZYME's territory</span>
+<span class="n">_BENCHMARK_MOLECULES</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="p">(</span><span class="s2">"water"</span><span class="p">,</span> <span class="s2">"O"</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"ethanol"</span><span class="p">,</span> <span class="s2">"CCO"</span><span class="p">,</span> <span class="mi">9</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"toluene"</span><span class="p">,</span> <span class="s2">"Cc1ccccc1"</span><span class="p">,</span> <span class="mi">15</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"caffeine"</span><span class="p">,</span> <span class="s2">"Cn1cnc2c1c(=O)n(C)c(=O)n2C"</span><span class="p">,</span> <span class="mi">24</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"icosane"</span><span class="p">,</span> <span class="s2">"C"</span> <span class="o">*</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">62</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"hectane"</span><span class="p">,</span> <span class="s2">"C"</span> <span class="o">*</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">302</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"alkane-300"</span><span class="p">,</span> <span class="s2">"C"</span> <span class="o">*</span> <span class="mi">300</span><span class="p">,</span> <span class="mi">902</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"alkane-1000"</span><span class="p">,</span> <span class="s2">"C"</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">,</span> <span class="mi">3002</span><span class="p">),</span>
+<span class="p">)</span>
+
+<span class="c1">#: The step's timing benchmark (seamm_exec.timing_benchmark). MOPAC does not</span>
+<span class="c1">#: take the Model Chemistry: the Hamiltonian is a parameter of its sub-steps,</span>
+<span class="c1">#: set from the chemistry key. It runs on one core, so no core sweep. From 300</span>
+<span class="c1">#: atoms both regimes run: MOZYME (the default there) and the traditional SCF</span>
+<span class="c1">#: forced, to 902 atoms (its N^3 makes 3002 too long).</span>
+<span class="n">TIMING_BENCHMARK</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">"program"</span><span class="p">:</span> <span class="s2">"mopac"</span><span class="p">,</span>
+    <span class="s2">"step"</span><span class="p">:</span> <span class="s2">"MOPAC"</span><span class="p">,</span>
+    <span class="s2">"section"</span><span class="p">:</span> <span class="s2">"mopac-step"</span><span class="p">,</span>
+    <span class="s2">"parallel"</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="s2">"systems"</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="s2">"name"</span><span class="p">:</span> <span class="n">name</span><span class="p">,</span>
+            <span class="s2">"size"</span><span class="p">:</span> <span class="n">n_atoms</span><span class="p">,</span>
+            <span class="s2">"steps"</span><span class="p">:</span> <span class="p">[{</span><span class="s2">"FromSMILESStep"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"smiles string"</span><span class="p">:</span> <span class="n">smiles</span><span class="p">}}],</span>
+        <span class="p">}</span>
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">smiles</span><span class="p">,</span> <span class="n">n_atoms</span> <span class="ow">in</span> <span class="n">_BENCHMARK_MOLECULES</span>
+    <span class="p">],</span>
+    <span class="s2">"chemistries"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">"PM7"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"quick"</span><span class="p">:</span> <span class="mi">902</span><span class="p">,</span> <span class="s2">"full"</span><span class="p">:</span> <span class="mi">3002</span><span class="p">},</span>
+        <span class="s2">"PM6-ORG"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"quick"</span><span class="p">:</span> <span class="mi">302</span><span class="p">,</span> <span class="s2">"full"</span><span class="p">:</span> <span class="mi">902</span><span class="p">},</span>
+    <span class="p">},</span>
+    <span class="s2">"parameter"</span><span class="p">:</span> <span class="s2">"hamiltonian"</span><span class="p">,</span>
+    <span class="s2">"tasks"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">"Energy"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"quick"</span><span class="p">:</span> <span class="mi">902</span><span class="p">,</span> <span class="s2">"full"</span><span class="p">:</span> <span class="mi">3002</span><span class="p">},</span>
+        <span class="s2">"Optimization"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"quick"</span><span class="p">:</span> <span class="mi">62</span><span class="p">,</span> <span class="s2">"full"</span><span class="p">:</span> <span class="mi">302</span><span class="p">},</span>
+    <span class="p">},</span>
+    <span class="s2">"variants"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">"Energy"</span><span class="p">:</span> <span class="p">[{},</span> <span class="p">{</span><span class="s2">"MOZYME"</span><span class="p">:</span> <span class="s2">"never"</span><span class="p">,</span> <span class="s2">"_min_size"</span><span class="p">:</span> <span class="mi">300</span><span class="p">,</span> <span class="s2">"_max_size"</span><span class="p">:</span> <span class="mi">902</span><span class="p">}]</span>
+    <span class="p">},</span>
+<span class="p">}</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_record_kwargs</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">"""``spec=`` for seamm-exec releases that take it (2026.10.6.1 on)."""</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s2">"spec"</span><span class="p">:</span> <span class="n">TIMING_SPEC</span><span class="p">}</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">seamm_exec</span><span class="p">,</span> <span class="s2">"TimingSpec"</span><span class="p">)</span> <span class="k">else</span> <span class="p">{}</span>
+
+
 <span class="c1">#: MOPAC Hamiltonians, for the timing records</span>
 <span class="n">_HAMILTONIANS</span> <span class="o">=</span> <span class="p">(</span>
     <span class="s2">"PM7"</span><span class="p">,</span>
@@ -940,9 +1005,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
                 <span class="n">config</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">full_config</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="n">executor_type</span><span class="p">))</span>
 
-                <span class="c1"># Use the matching version of the seamm-mopac image by default.</span>
-                <span class="n">config</span><span class="p">[</span><span class="s2">"version"</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">version</span>
-
                 <span class="n">return_files</span> <span class="o">=</span> <span class="p">[</span>
                     <span class="s2">"mopac.arc"</span><span class="p">,</span>
                     <span class="s2">"mopac.out"</span><span class="p">,</span>
@@ -1023,7 +1085,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">):</span>
                 <span class="n">text</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">errors</span><span class="o">=</span><span class="s2">"replace"</span><span class="p">)</span>
             <span class="n">seamm_exec</span><span class="o">.</span><span class="n">record_task_timing</span><span class="p">(</span>
-                <span class="n">task</span><span class="p">,</span> <span class="n">result</span><span class="p">,</span> <span class="n">timing_descriptors</span><span class="p">(</span><span class="n">keyword_lines</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">configuration</span><span class="p">)</span>
+                <span class="n">task</span><span class="p">,</span>
+                <span class="n">result</span><span class="p">,</span>
+                <span class="n">timing_descriptors</span><span class="p">(</span><span class="n">keyword_lines</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">configuration</span><span class="p">),</span>
+                <span class="o">**</span><span class="n">_record_kwargs</span><span class="p">(),</span>
             <span class="p">)</span>
         <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>  <span class="c1"># pragma: no cover - must never stop the step</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Could not record the timing of the MOPAC run: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span></div>

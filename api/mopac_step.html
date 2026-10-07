@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>mopac_step package &#8212; SEAMM MOPAC Plug-in 2026.10.6 documentation</title>
+    <title>mopac_step package &#8212; SEAMM MOPAC Plug-in 2026.10.7 documentation</title>
   
   
   
@@ -48,7 +48,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="../_static/documentation_options.js?v=ae463d2f"></script>
+    <script src="../_static/documentation_options.js?v=0a3eb936"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -63,7 +63,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <link rel="prev" title="mopac_step" href="modules.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.10.6" />
+  <meta name="docsearch:version" content="2026.10.7" />
   
     
     <script src="../_static/searchtools.js"></script>
@@ -533,9 +533,12 @@ this way for now; open-shell and periodic MOPAC stay on the MDI engine, whose
 equivalence for them has not been checked.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="mopac_step.batch.analyze_task">
-<span class="sig-prename descclassname"><span class="pre">mopac_step.batch.</span></span><span class="sig-name descname"><span class="pre">analyze_task</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">result</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_chemistry</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">configuration</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">properties</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">('energy',</span> <span class="pre">'gradients')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mopac_step/batch.html#analyze_task"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mopac_step.batch.analyze_task" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">mopac_step.batch.</span></span><span class="sig-name descname"><span class="pre">analyze_task</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">result</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_chemistry</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">configuration</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">properties</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">('energy',</span> <span class="pre">'gradients')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">task</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mopac_step/batch.html#analyze_task"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mopac_step.batch.analyze_task" title="Link to this definition">#</a></dt>
 <dd><p>The heat of formation (kJ/mol, the MDI engine’s “energy”) and gradients
 ((n, 3) kJ/mol/Å) of a finished task.</p>
+<p>Given the <code class="docutils literal notranslate"><span class="pre">task</span></code> that produced the result (seamm-exec 2026.10.7 passes
+it), its timing record is appended too (<code class="docutils literal notranslate"><span class="pre">seamm_exec.record_task_timing</span></code>),
+as the MOPAC step’s own runs do.</p>
 </dd></dl>
 
 <dl class="py function">
@@ -1084,6 +1087,25 @@ recorded.</p>
 
 </dd></dl>
 
+<dl class="py data">
+<dt class="sig sig-object py" id="mopac_step.mopac.TIMING_BENCHMARK">
+<span class="sig-prename descclassname"><span class="pre">mopac_step.mopac.</span></span><span class="sig-name descname"><span class="pre">TIMING_BENCHMARK</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'chemistries':</span> <span class="pre">{'PM6-ORG':</span> <span class="pre">{'full':</span> <span class="pre">902,</span> <span class="pre">'quick':</span> <span class="pre">302},</span> <span class="pre">'PM7':</span> <span class="pre">{'full':</span> <span class="pre">3002,</span> <span class="pre">'quick':</span> <span class="pre">902}},</span> <span class="pre">'parallel':</span> <span class="pre">False,</span> <span class="pre">'parameter':</span> <span class="pre">'hamiltonian',</span> <span class="pre">'program':</span> <span class="pre">'mopac',</span> <span class="pre">'section':</span> <span class="pre">'mopac-step',</span> <span class="pre">'step':</span> <span class="pre">'MOPAC',</span> <span class="pre">'systems':</span> <span class="pre">[{'name':</span> <span class="pre">'water',</span> <span class="pre">'size':</span> <span class="pre">3,</span> <span class="pre">'steps':</span> <span class="pre">[{'FromSMILESStep':</span> <span class="pre">{'smiles</span> <span class="pre">string':</span> <span class="pre">'O'}}]},</span> <span class="pre">{'name':</span> <span class="pre">'ethanol',</span> <span class="pre">'size':</span> <span class="pre">9,</span> <span class="pre">'steps':</span> <span class="pre">[{'FromSMILESStep':</span> <span class="pre">{'smiles</span> <span class="pre">string':</span> <span class="pre">'CCO'}}]},</span> <span class="pre">{'name':</span> <span class="pre">'toluene',</span> <span class="pre">'size':</span> <span class="pre">15,</span> <span class="pre">'steps':</span> <span class="pre">[{'FromSMILESStep':</span> <span class="pre">{'smiles</span> <span class="pre">string':</span> <span class="pre">'Cc1ccccc1'}}]},</span> <span class="pre">{'name':</span> <span class="pre">'caffeine',</span> <span class="pre">'size':</span> <span class="pre">24,</span> <span class="pre">'steps':</span> <span class="pre">[{'FromSMILESStep':</span> <span class="pre">{'smiles</span> <span class="pre">string':</span> <span class="pre">'Cn1cnc2c1c(=O)n(C)c(=O)n2C'}}]},</span> <span class="pre">{'name':</span> <span class="pre">'icosane',</span> <span class="pre">'size':</span> <span class="pre">62,</span> <span class="pre">'steps':</span> <span class="pre">[{'FromSMILESStep':</span> <span class="pre">{'smiles</span> <span class="pre">string':</span> <span class="pre">'CCCCCCCCCCCCCCCCCCCC'}}]},</span> <span class="pre">{'name':</span> <span class="pre">'hectane',</span> <span class="pre">'size':</span> <span class="pre">302,</span> <span class="pre">'steps':</span> <span class="pre">[{'FromSMILESStep':</span> <span class="pre">{'smiles</span> <span class="pre">string':</span> <span class="pre">'CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC'}}]},</span> <span class="pre">{'name':</span> <span class="pre">'alkane-300',</span> <span class="pre">'size':</span> <span class="pre">902,</span> <span class="pre">'steps':</span> <span class="pre">[{'FromSMILESStep':</span> <span class="pre">{'smiles</span> <span class="pre">string':</span> <span class="pre">'CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC'}}]},</span> <span class="pre">{'name':</span> <span class="pre">'alkane-1000',</span> <span class="pre">'size':</span> <span class="pre">3002,</span> <span class="pre">'steps':</span> <span class="pre">[{'FromSMILESStep':</span> <span class="pre">{'smiles</span> <span class="pre">string':</span> <span class="pre">'CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC'}}]}],</span> <span class="pre">'tasks':</span> <span class="pre">{'Energy':</span> <span class="pre">{'full':</span> <span class="pre">3002,</span> <span class="pre">'quick':</span> <span class="pre">902},</span> <span class="pre">'Optimization':</span> <span class="pre">{'full':</span> <span class="pre">302,</span> <span class="pre">'quick':</span> <span class="pre">62}},</span> <span class="pre">'variants':</span> <span class="pre">{'Energy':</span> <span class="pre">[{},</span> <span class="pre">{'MOZYME':</span> <span class="pre">'never',</span> <span class="pre">'_max_size':</span> <span class="pre">902,</span> <span class="pre">'_min_size':</span> <span class="pre">300}]}}</span></span><a class="headerlink" href="#mopac_step.mopac.TIMING_BENCHMARK" title="Link to this definition">#</a></dt>
+<dd><p>The step’s timing benchmark (seamm_exec.timing_benchmark). MOPAC does not
+take the Model Chemistry: the Hamiltonian is a parameter of its sub-steps,
+set from the chemistry key. It runs on one core, so no core sweep. From 300
+atoms both regimes run: MOZYME (the default there) and the traditional SCF
+forced, to 902 atoms (its N^3 makes 3002 too long).</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="mopac_step.mopac.TIMING_SPEC">
+<span class="sig-prename descclassname"><span class="pre">mopac_step.mopac.</span></span><span class="sig-name descname"><span class="pre">TIMING_SPEC</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'default_alpha':</span> <span class="pre">0.0,</span> <span class="pre">'klass':</span> <span class="pre">['hamiltonian',</span> <span class="pre">'regime'],</span> <span class="pre">'multiplier':</span> <span class="pre">None,</span> <span class="pre">'size':</span> <span class="pre">['n_basis',</span> <span class="pre">'n_atoms'],</span> <span class="pre">'task':</span> <span class="pre">'task',</span> <span class="pre">'units':</span> <span class="pre">'scf_runs'}</span></span><a class="headerlink" href="#mopac_step.mopac.TIMING_SPEC" title="Link to this definition">#</a></dt>
+<dd><p>What MOPAC’s cost model is made of (seamm_exec.timing_model.Spec as plain
+data): basis functions and atoms as size variables, the Hamiltonian and the
+regime (scf or mozyme) as the method class, the task, SCFs as the unit; one
+core, so no parallel exponent.</p>
+</dd></dl>
+
 <dl class="py function">
 <dt class="sig sig-object py" id="mopac_step.mopac.estimated_seconds">
 <span class="sig-prename descclassname"><span class="pre">mopac_step.mopac.</span></span><span class="sig-name descname"><span class="pre">estimated_seconds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">keyword_lines</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_atoms</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mopac_step/mopac.html#estimated_seconds"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mopac_step.mopac.estimated_seconds" title="Link to this definition">#</a></dt>
@@ -1224,7 +1246,7 @@ lowest spin state).</p>
 <dd><p>Return how to launch MOPAC (and its MDI engine) on this machine.</p>
 <p>Reads the per-plug-in <code class="docutils literal notranslate"><span class="pre">mopac.ini</span></code> for the <em>current</em> executor type
 exactly as <code class="docutils literal notranslate"><span class="pre">MOPAC.run()</span></code> does, so the MDI engine runs in the same
-conda/local/modules/docker environment as ordinary MOPAC jobs. Adds
+conda/local/modules environment as ordinary MOPAC jobs. Adds
 one key, <code class="docutils literal notranslate"><span class="pre">mdi_script</span></code> – the absolute path to the bundled
 <code class="docutils literal notranslate"><span class="pre">data/mopac_mdi.py</span></code> engine.</p>
 <p><code class="docutils literal notranslate"><span class="pre">mopac_mdi.py</span></code> imports only packages present in <code class="docutils literal notranslate"><span class="pre">seamm-mopac</span></code>
@@ -1245,8 +1267,7 @@ the calling step. <code class="docutils literal notranslate"><span class="pre">s
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><p>The ini section for the current executor (<code class="docutils literal notranslate"><span class="pre">installation</span></code>,
 <code class="docutils literal notranslate"><span class="pre">code</span></code>, <code class="docutils literal notranslate"><span class="pre">conda</span></code>, <code class="docutils literal notranslate"><span class="pre">conda-environment</span></code>, …), plus:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">version</span>    <span class="p">:</span> <span class="nb">str</span>  <span class="o">--</span> <span class="n">this</span> <span class="n">plug</span><span class="o">-</span><span class="ow">in</span><span class="s1">'s version (container tag)</span>
-<span class="n">mdi_script</span> <span class="p">:</span> <span class="nb">str</span>  <span class="o">--</span> <span class="n">absolute</span> <span class="n">path</span> <span class="n">to</span> <span class="n">data</span><span class="o">/</span><span class="n">mopac_mdi</span><span class="o">.</span><span class="n">py</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mdi_script</span> <span class="p">:</span> <span class="nb">str</span>  <span class="o">--</span> <span class="n">absolute</span> <span class="n">path</span> <span class="n">to</span> <span class="n">data</span><span class="o">/</span><span class="n">mopac_mdi</span><span class="o">.</span><span class="n">py</span>
 </pre></div>
 </div>
 </p>
@@ -1935,6 +1956,8 @@ then add the extra widgets for controlling optimization</p>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#mopac_step.mopac.MOPAC.set_id"><code class="docutils literal notranslate"><span class="pre">MOPAC.set_id()</span></code></a></li>
 </ul>
 </li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mopac_step.mopac.TIMING_BENCHMARK"><code class="docutils literal notranslate"><span class="pre">TIMING_BENCHMARK</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mopac_step.mopac.TIMING_SPEC"><code class="docutils literal notranslate"><span class="pre">TIMING_SPEC</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mopac_step.mopac.estimated_seconds"><code class="docutils literal notranslate"><span class="pre">estimated_seconds()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mopac_step.mopac.reuse_previous_run"><code class="docutils literal notranslate"><span class="pre">reuse_previous_run()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mopac_step.mopac.task_kind"><code class="docutils literal notranslate"><span class="pre">task_kind()</span></code></a></li>

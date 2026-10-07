@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mopac_step.batch &#8212; SEAMM MOPAC Plug-in 2026.10.6 documentation</title>
+    <title>mopac_step.batch &#8212; SEAMM MOPAC Plug-in 2026.10.7 documentation</title>
   
   
   
@@ -47,7 +47,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="../../_static/documentation_options.js?v=ae463d2f"></script>
+    <script src="../../_static/documentation_options.js?v=0a3eb936"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -60,7 +60,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <link rel="search" title="Search" href="../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.10.6" />
+  <meta name="docsearch:version" content="2026.10.7" />
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -504,9 +504,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
+<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+
 <span class="kn">import</span><span class="w"> </span><span class="nn">seamm_exec</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">seamm_exec.evaluator</span><span class="w"> </span><span class="kn">import</span> <span class="n">AnalysisError</span><span class="p">,</span> <span class="n">check_properties</span><span class="p">,</span> <span class="n">structure_data</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">seamm_util</span><span class="w"> </span><span class="kn">import</span> <span class="n">Q_</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 <span class="n">_FLOAT</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">"[+-]?\d*\.\d+(?:[DdEe][+-]?\d+)?"</span><span class="p">)</span>
 
@@ -635,9 +639,16 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <span class="o">*</span><span class="p">,</span>
     <span class="n">properties</span><span class="o">=</span><span class="p">(</span><span class="s2">"energy"</span><span class="p">,</span> <span class="s2">"gradients"</span><span class="p">),</span>
     <span class="n">options</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">task</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">"""The heat of formation (kJ/mol, the MDI engine's "energy") and gradients</span>
-<span class="sd">    ((n, 3) kJ/mol/Å) of a finished task."""</span>
+<span class="sd">    ((n, 3) kJ/mol/Å) of a finished task.</span>
+
+<span class="sd">    Given the ``task`` that produced the result (seamm-exec 2026.10.7 passes</span>
+<span class="sd">    it), its timing record is appended too (``seamm_exec.record_task_timing``),</span>
+<span class="sd">    as the MOPAC step's own runs do."""</span>
+    <span class="k">if</span> <span class="n">task</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">_record_timing</span><span class="p">(</span><span class="n">task</span><span class="p">,</span> <span class="n">result</span><span class="p">,</span> <span class="n">configuration</span><span class="p">)</span>
     <span class="n">aux</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">files</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"mopac.aux"</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">aux</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">result</span><span class="o">.</span><span class="n">directory</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
@@ -663,6 +674,39 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <span class="n">check_properties</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">properties</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"The MOPAC calculation '</span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">key</span><span class="si">}</span><span class="s2">'"</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">data</span></div>
 
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_record_timing</span><span class="p">(</span><span class="n">task</span><span class="p">,</span> <span class="n">result</span><span class="p">,</span> <span class="n">configuration</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""The timing record of a model-chemistry task; never raises, and a</span>
+<span class="sd">    restored result is not recorded."""</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="s2">"restored"</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
+            <span class="k">return</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">.mopac</span><span class="w"> </span><span class="kn">import</span> <span class="n">_record_kwargs</span><span class="p">,</span> <span class="n">timing_descriptors</span>
+
+        <span class="n">keyword_lines</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">text</span> <span class="ow">in</span> <span class="p">{</span><span class="o">**</span><span class="n">result</span><span class="o">.</span><span class="n">files</span><span class="p">,</span> <span class="o">**</span><span class="p">(</span><span class="n">task</span><span class="o">.</span><span class="n">files</span> <span class="ow">or</span> <span class="p">{})}</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"mopac.dat"</span><span class="p">,</span> <span class="s2">"mopac.mop"</span><span class="p">):</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">):</span>
+                    <span class="n">text</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">errors</span><span class="o">=</span><span class="s2">"replace"</span><span class="p">)</span>
+                <span class="n">keyword_lines</span> <span class="o">=</span> <span class="p">[</span><span class="n">text</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()[</span><span class="mi">0</span><span class="p">]]</span> <span class="k">if</span> <span class="n">text</span> <span class="k">else</span> <span class="p">[]</span>
+                <span class="k">break</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">files</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"mopac.out"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">out</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">result</span><span class="o">.</span><span class="n">directory</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
+            <span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">directory</span><span class="p">)</span> <span class="o">/</span> <span class="s2">"mopac.out"</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">read_text</span><span class="p">(</span><span class="n">errors</span><span class="o">=</span><span class="s2">"replace"</span><span class="p">)</span> <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">):</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">errors</span><span class="o">=</span><span class="s2">"replace"</span><span class="p">)</span>
+        <span class="n">seamm_exec</span><span class="o">.</span><span class="n">record_task_timing</span><span class="p">(</span>
+            <span class="n">task</span><span class="p">,</span>
+            <span class="n">result</span><span class="p">,</span>
+            <span class="n">timing_descriptors</span><span class="p">(</span><span class="n">keyword_lines</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">configuration</span><span class="p">),</span>
+            <span class="o">**</span><span class="n">_record_kwargs</span><span class="p">(),</span>
+        <span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>  <span class="c1"># pragma: no cover - must never stop the analysis</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Could not record the timing of MOPAC task </span><span class="si">{</span><span class="n">task</span><span class="o">.</span><span class="n">key</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 </pre></div>
 
                 </article>

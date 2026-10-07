@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>History &#8212; SEAMM MOPAC Plug-in 2026.10.6 documentation</title>
+    <title>History &#8212; SEAMM MOPAC Plug-in 2026.10.7 documentation</title>
   
   
   
@@ -48,7 +48,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="_static/documentation_options.js?v=ae463d2f"></script>
+    <script src="_static/documentation_options.js?v=0a3eb936"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -62,7 +62,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <link rel="prev" title="Development Team" href="authors.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.10.6" />
+  <meta name="docsearch:version" content="2026.10.7" />
   
     
     <script src="_static/searchtools.js"></script>
@@ -505,6 +505,25 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <section id="history">
 <h1>History<a class="headerlink" href="#history" title="Link to this heading">#</a></h1>
 <dl class="simple">
+<dt>2026.10.7 – The step declares what its cost model is made of, and its benchmark</dt><dd><ul class="simple">
+<li><p>Bugfix: a MOPAC model-chemistry task’s analysis failed under seamm-exec
+2026.10.7 (<code class="docutils literal notranslate"><span class="pre">analyze_task()</span> <span class="pre">got</span> <span class="pre">an</span> <span class="pre">unexpected</span> <span class="pre">keyword</span> <span class="pre">argument</span> <span class="pre">'task'</span></code>):
+it now takes the task and, like the step’s own runs, records the run’s
+timing from it.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mopac_step.TIMING_BENCHMARK</span></code> tells seamm_exec’s seed benchmark what to run
+for MOPAC: eight molecules from water to a 3000-atom alkane with PM7 and
+PM6-ORG, as energies and optimizations, both regimes (MOZYME and the
+traditional SCF) from 300 atoms, with size limits per tier; on one core.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mopac.TIMING_SPEC</span></code> – basis functions and atoms as size variables, the
+Hamiltonian and regime as the method class, the task, SCFs as the unit, no
+parallel exponent – is passed when a run is recorded (seamm-exec 2026.10.6.1
+writes it beside the records), so the cost model is fitted from the step’s own
+description rather than a table in seamm-exec.</p></li>
+<li><p>Removed the support for running MOPAC in a Docker container, and the Docker
+image recipe, which were no longer used or maintained.</p></li>
+<li><p>Requires Python 3.12 and seamm-exec 2026.10.6.1.</p></li>
+</ul>
+</dd>
 <dt>2026.10.6 – Timing records that a cost model can be fitted to</dt><dd><ul class="simple">
 <li><p>Each MOPAC run appends a record to <code class="docutils literal notranslate"><span class="pre">~/.seamm.d/timing/mopac.csv</span></code> through
 <code class="docutils literal notranslate"><span class="pre">seamm_exec.record_task_timing</span></code> – the machine class, cores, wall time and

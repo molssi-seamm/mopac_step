@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mopac_step.mopac_step &#8212; SEAMM MOPAC Plug-in 2026.10.6 documentation</title>
+    <title>mopac_step.mopac_step &#8212; SEAMM MOPAC Plug-in 2026.10.7 documentation</title>
   
   
   
@@ -47,7 +47,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="../../_static/documentation_options.js?v=ae463d2f"></script>
+    <script src="../../_static/documentation_options.js?v=0a3eb936"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -60,7 +60,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <link rel="search" title="Search" href="../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.10.6" />
+  <meta name="docsearch:version" content="2026.10.7" />
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -719,7 +719,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 <span class="sd">        Reads the per-plug-in ``mopac.ini`` for the *current* executor type</span>
 <span class="sd">        exactly as ``MOPAC.run()`` does, so the MDI engine runs in the same</span>
-<span class="sd">        conda/local/modules/docker environment as ordinary MOPAC jobs. Adds</span>
+<span class="sd">        conda/local/modules environment as ordinary MOPAC jobs. Adds</span>
 <span class="sd">        one key, ``mdi_script`` -- the absolute path to the bundled</span>
 <span class="sd">        ``data/mopac_mdi.py`` engine.</span>
 
@@ -745,7 +745,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="sd">            The ini section for the current executor (``installation``,</span>
 <span class="sd">            ``code``, ``conda``, ``conda-environment``, ...), plus::</span>
 
-<span class="sd">                version    : str  -- this plug-in's version (container tag)</span>
 <span class="sd">                mdi_script : str  -- absolute path to data/mopac_mdi.py</span>
 <span class="sd">        """</span>
         <span class="n">executor_type</span> <span class="o">=</span> <span class="n">executor</span><span class="o">.</span><span class="n">name</span>
@@ -787,7 +786,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 <span class="n">full_config</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">fd</span><span class="p">)</span>
 
         <span class="n">config</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">full_config</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="n">executor_type</span><span class="p">))</span>
-        <span class="n">config</span><span class="p">[</span><span class="s2">"version"</span><span class="p">]</span> <span class="o">=</span> <span class="n">mopac_step</span><span class="o">.</span><span class="n">__version__</span>
         <span class="n">config</span><span class="p">[</span><span class="s2">"mdi_script"</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">resources</span> <span class="o">/</span> <span class="s2">"mopac_mdi.py"</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">config</span></div>
 
@@ -902,7 +900,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
                 <span class="s2">"The MOPAC MDI engine is currently wired up only for a conda "</span>
                 <span class="sa">f</span><span class="s2">"installation; mopac.ini selects '</span><span class="si">{</span><span class="n">installation</span><span class="si">}</span><span class="s2">'. "</span>
-                <span class="s2">"TODO (Phase B+): local / modules / docker launches."</span>
+                <span class="s2">"TODO (Phase B+): local / modules launches."</span>
             <span class="p">)</span>
 
         <span class="n">mdi_init</span> <span class="o">=</span> <span class="p">(</span>
