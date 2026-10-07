@@ -2,6 +2,10 @@
 History
 =======
 2026.10.7 -- The step declares what its cost model is made of, and its benchmark
+    * Bugfix: a MOPAC model-chemistry task's analysis failed under seamm-exec
+      2026.10.7 (``analyze_task() got an unexpected keyword argument 'task'``):
+      it now takes the task and, like the step's own runs, records the run's
+      timing from it.
     * ``mopac_step.TIMING_BENCHMARK`` tells seamm_exec's seed benchmark what to run
       for MOPAC: eight molecules from water to a 3000-atom alkane with PM7 and
       PM6-ORG, as energies and optimizations, both regimes (MOZYME and the

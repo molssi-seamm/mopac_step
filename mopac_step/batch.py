@@ -17,9 +17,13 @@ import re
 
 import numpy as np
 
+import logging
+
 import seamm_exec
 from seamm_exec.evaluator import AnalysisError, check_properties, structure_data
 from seamm_util import Q_
+
+logger = logging.getLogger(__name__)
 
 _FLOAT = re.compile(r"[+-]?\d*\.\d+(?:[DdEe][+-]?\d+)?")
 
@@ -137,9 +141,16 @@ def analyze_task(
     *,
     properties=("energy", "gradients"),
     options=None,
+    task=None,
 ):
     """The heat of formation (kJ/mol, the MDI engine's "energy") and gradients
-    ((n, 3) kJ/mol/Å) of a finished task."""
+    ((n, 3) kJ/mol/Å) of a finished task.
+
+    Given the ``task`` that produced the result (seamm-exec 2026.10.7 passes
+    it), its timing record is appended too (``seamm_exec.record_task_timing``),
+    as the MOPAC step's own runs do."""
+    if task is not None:
+        _record_timing(task, result, configuration)
     aux = result.files.get("mopac.aux")
     if aux is None and result.directory is not None:
         from pathlib import Path
@@ -164,3 +175,36 @@ def analyze_task(
             data["gradients"] = Q_(gradients, "kcal/mol/Å").m_as("kJ/mol/Å")
     check_properties(data, properties, f"The MOPAC calculation '{result.key}'")
     return data
+
+
+def _record_timing(task, result, configuration):
+    """The timing record of a model-chemistry task; never raises, and a
+    restored result is not recorded."""
+    try:
+        if getattr(result, "restored", False):
+            return
+        from .mopac import _record_kwargs, timing_descriptors
+
+        keyword_lines = []
+        for name, text in {**result.files, **(task.files or {})}.items():
+            if name in ("mopac.dat", "mopac.mop"):
+                if isinstance(text, bytes):
+                    text = text.decode(errors="replace")
+                keyword_lines = [text.splitlines()[0]] if text else []
+                break
+        out = result.files.get("mopac.out")
+        if out is None and result.directory is not None:
+            from pathlib import Path
+
+            path = Path(result.directory) / "mopac.out"
+            out = path.read_text(errors="replace") if path.exists() else None
+        if isinstance(out, bytes):
+            out = out.decode(errors="replace")
+        seamm_exec.record_task_timing(
+            task,
+            result,
+            timing_descriptors(keyword_lines, out, configuration),
+            **_record_kwargs(),
+        )
+    except Exception as e:  # pragma: no cover - must never stop the analysis
+        logger.warning(f"Could not record the timing of MOPAC task {task.key}: {e}")
