@@ -49,3 +49,6 @@ versions = get_versions()
 __version__ = versions["version"]
 __git_revision__ = versions["full-revisionid"]
 del get_versions, versions
+
+# The step's cost-model spec and timing benchmark, for seamm_exec
+from .mopac import TIMING_SPEC, TIMING_BENCHMARK  # noqa: E402, F401

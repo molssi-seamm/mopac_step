@@ -71,6 +71,52 @@ TIMING_SPEC = {
 }
 
 
+#: The molecules the timing benchmark runs, by size (atoms): three orders of
+#: magnitude, each built from SMILES; the alkanes reach MOZYME's territory
+_BENCHMARK_MOLECULES = (
+    ("water", "O", 3),
+    ("ethanol", "CCO", 9),
+    ("toluene", "Cc1ccccc1", 15),
+    ("caffeine", "Cn1cnc2c1c(=O)n(C)c(=O)n2C", 24),
+    ("icosane", "C" * 20, 62),
+    ("hectane", "C" * 100, 302),
+    ("alkane-300", "C" * 300, 902),
+    ("alkane-1000", "C" * 1000, 3002),
+)
+
+#: The step's timing benchmark (seamm_exec.timing_benchmark). MOPAC does not
+#: take the Model Chemistry: the Hamiltonian is a parameter of its sub-steps,
+#: set from the chemistry key. It runs on one core, so no core sweep. From 300
+#: atoms both regimes run: MOZYME (the default there) and the traditional SCF
+#: forced, to 902 atoms (its N^3 makes 3002 too long).
+TIMING_BENCHMARK = {
+    "program": "mopac",
+    "step": "MOPAC",
+    "section": "mopac-step",
+    "parallel": False,
+    "systems": [
+        {
+            "name": name,
+            "size": n_atoms,
+            "steps": [{"FromSMILESStep": {"smiles string": smiles}}],
+        }
+        for name, smiles, n_atoms in _BENCHMARK_MOLECULES
+    ],
+    "chemistries": {
+        "PM7": {"quick": 902, "full": 3002},
+        "PM6-ORG": {"quick": 302, "full": 902},
+    },
+    "parameter": "hamiltonian",
+    "tasks": {
+        "Energy": {"quick": 902, "full": 3002},
+        "Optimization": {"quick": 62, "full": 302},
+    },
+    "variants": {
+        "Energy": [{}, {"MOZYME": "never", "_min_size": 300, "_max_size": 902}]
+    },
+}
+
+
 def _record_kwargs():
     """``spec=`` for seamm-exec releases that take it (2026.10.6.1 on)."""
     return {"spec": TIMING_SPEC} if hasattr(seamm_exec, "TimingSpec") else {}

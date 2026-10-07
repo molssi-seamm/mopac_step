@@ -1,7 +1,11 @@
 =======
 History
 =======
-2026.10.7 -- The step declares what its cost model is made of
+2026.10.7 -- The step declares what its cost model is made of, and its benchmark
+    * ``mopac_step.TIMING_BENCHMARK`` tells seamm_exec's seed benchmark what to run
+      for MOPAC: eight molecules from water to a 3000-atom alkane with PM7 and
+      PM6-ORG, as energies and optimizations, both regimes (MOZYME and the
+      traditional SCF) from 300 atoms, with size limits per tier; on one core.
     * ``mopac.TIMING_SPEC`` -- basis functions and atoms as size variables, the
       Hamiltonian and regime as the method class, the task, SCFs as the unit, no
       parallel exponent -- is passed when a run is recorded (seamm-exec 2026.10.6.1
