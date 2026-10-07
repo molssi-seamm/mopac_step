@@ -36,6 +36,7 @@ setup(
     cmdclass=versioneer.get_cmdclass(),
     license='BSD-3-Clause',
     url='https://github.com/molssi-seam/mopac_step',
+    python_requires='>=3.12',
     packages=find_packages(include=['mopac_step']),
     include_package_data=True,
 
@@ -66,8 +67,7 @@ setup(
         'License :: OSI Approved :: BSD License',
         'Natural Language :: English',
         'Programming Language :: Python :: 3 :: Only',
-        'Programming Language :: Python :: 3.8',
-        'Programming Language :: Python :: 3.9',
+        'Programming Language :: Python :: 3.12',
     ],
     entry_points={
         'console_scripts': [
