@@ -4,6 +4,7 @@
 from pathlib import Path
 from types import SimpleNamespace
 
+from mopac_step import mopac
 from mopac_step.mopac import task_kind, timing_descriptors
 
 OUT = Path(__file__).parent / "data" / "run_path" / "mopac.out"
@@ -37,7 +38,8 @@ def test_descriptors():
     assert d["n_electrons"] == 10
     assert d["regime"] == "scf"
     assert d["scf_runs"] >= 1
-    assert d["code_seconds"] == 0.01
+    # the WALL-CLOCK TIME (0.004 s), more precise than TOTAL JOB TIME (0.01 s)
+    assert d["code_seconds"] == 0.004
     assert d["terminated_normally"] is True
 
 
@@ -59,8 +61,100 @@ def test_mozyme_regime_is_read_from_the_output():
 def test_timing_spec():
     from mopac_step import mopac
 
-    assert mopac.TIMING_SPEC["klass"] == ["hamiltonian", "regime"]
+    assert mopac.TIMING_SPEC["klass"] == ["hamiltonian", "regime", "bond_orders"]
     assert mopac.TIMING_SPEC["default_alpha"] == 0.0
+    assert mopac.TIMING_SPEC["setup_by"] == "regime"
     assert "spec" in mopac._record_kwargs() or not hasattr(
         __import__("seamm_exec"), "TimingSpec"
     )
+
+
+_TWO_JOBS = """
+ *  MOZYME     - Use Localized Molecular Orbitals
+ CYCLE:     1 TIME:   0.332 TIME LEFT:  2.00D  GRAD.:   371.092 HEAT: -223.3
+ CYCLE:     2 TIME:   0.152 TIME LEFT:  2.00D  GRAD.:    80.000 HEAT: -300.0
+     SCF FIELD WAS ACHIEVED
+          WALL-CLOCK TIME         =     37.496 SECONDS
+          COMPUTATION TIME        =     37.494 SECONDS
+{follow}
+     SCF FIELD WAS ACHIEVED
+          WALL-CLOCK TIME         =     38.051 SECONDS
+          COMPUTATION TIME        =     38.047 SECONDS
+ TOTAL JOB TIME:            75.82 SECONDS
+ == MOPAC DONE ==
+"""
+
+
+def test_each_job_of_a_run_is_its_own_record():
+    """A MOZYME optimization and its follow-up are two calculations: each its
+    regime, cycles and time (MOPAC's clock is cumulative, and its TOTAL JOB
+    TIME adds the cumulative values)."""
+    lines = [
+        "PM7 MOZYME GRADIENTS",
+        "1SCF PM7 GRADIENTS OLDGEO",  # the exact (traditional SCF) follow-up
+    ]
+    jobs = mopac.job_descriptors(lines, _TWO_JOBS.replace("{follow}", ""))
+    assert len(jobs) == 2
+    main, follow = jobs
+    assert main["regime"] == "mozyme" and main["task"] == "opt"
+    assert main["geometry_cycles"] == 2
+    assert abs(main["code_seconds"] - 37.496) < 1e-6
+    assert follow["regime"] == "scf" and follow["task"] == "gradient"
+    assert follow["follow_up"] == "exact"
+    assert abs(follow["code_seconds"] - 0.555) < 1e-6
+    # the run as a whole: the last cumulative clock, not TOTAL JOB TIME
+    whole = mopac.timing_descriptors(lines, _TWO_JOBS.replace("{follow}", ""))
+    assert abs(whole["code_seconds"] - 38.051) < 1e-6
+
+
+def test_a_fresh_localized_follow_up_stays_mozyme():
+    lines = ["PM7 MOZYME GRADIENTS", "1SCF PM7 MOZYME GRADIENTS OLDGEO"]
+    text = _TWO_JOBS.replace(
+        "{follow}", " *  MOZYME     - Use Localized Molecular Orbitals"
+    )
+    main, follow = mopac.job_descriptors(lines, text)
+    assert follow["regime"] == "mozyme" and follow["follow_up"] == "new"
+
+
+def test_a_single_job_is_not_split():
+    assert mopac.job_descriptors(["PM7 1SCF GRADIENTS"], "anything") is None
+    # nor an output that does not match the input's jobs
+    assert mopac.job_descriptors(["PM7", "1SCF PM7 OLDGEO"], "no clock") is None
+
+
+def test_every_record_has_the_same_columns():
+    """A change of columns sets the timing file aside, so a single-job run,
+    a main job and its follow-up must all write the same columns."""
+    lines = ["PM7 MOZYME GRADIENTS", "1SCF PM7 GRADIENTS OLDGEO"]
+    main, follow = mopac.job_descriptors(lines, _TWO_JOBS.replace("{follow}", ""))
+    single = mopac.timing_descriptors(["PM7 1SCF GRADIENTS"], _TWO_JOBS)
+    assert set(main) == set(follow) == set(single)
+
+
+def test_a_clock_past_a_minute():
+    """Past 60 seconds MOPAC prints minutes (and hours): "1 MINUTE AND 36.262
+    SECONDS"."""
+    text = (
+        _TWO_JOBS.replace("{follow}", "")
+        .replace("=     37.496 SECONDS", "=     1 MINUTE AND 36.262 SECONDS")
+        .replace("=     38.051 SECONDS", "=     1 HOUR 2 MINUTES AND 0.5 SECONDS")
+    )
+    lines = ["PM7 MOZYME GRADIENTS", "1SCF PM7 GRADIENTS OLDGEO"]
+    main, follow = mopac.job_descriptors(lines, text)
+    assert abs(main["code_seconds"] - 96.262) < 1e-6
+    assert abs(follow["code_seconds"] - (3720.5 - 96.262)) < 1e-6
+
+
+def test_the_wall_time_is_shared_in_proportion():
+    """The time outside MOPAC's clock goes with the job that caused it."""
+    walls = mopac.job_walls(29.2, [1.55, 14.15])
+    assert abs(sum(walls) - 29.2) < 1e-9
+    assert walls[0] < 3.0 < 26.0 < walls[1]
+    assert mopac.job_walls(2.0, [0.0, 0.0]) == [1.0, 1.0]
+
+
+def test_bond_orders_are_recorded():
+    d = mopac.timing_descriptors(["PM7 1SCF GRADIENTS BONDS"], "")
+    assert d["bond_orders"] == "yes"
+    d = mopac.timing_descriptors(["PM7 1SCF GRADIENTS"], "")
+    assert d["bond_orders"] == "no"

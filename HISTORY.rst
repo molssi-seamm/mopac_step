@@ -1,6 +1,34 @@
 =======
 History
 =======
+2026.10.8.1 -- Each job of a MOPAC run is its own timing record
+    * ``TIMING_SPEC`` adds ``neighbours``, the mean number of atoms within 8 Å, as a
+      size variable: MOZYME's cost per atom is about 8 times higher in a 1,000-atom
+      water cluster than along a 900-atom alkane chain. Needs seamm-exec 2026.10.8.1
+      to record it.
+    * A run with several jobs -- a MOZYME calculation and its follow-up -- writes one
+      timing record per job, each with its own regime, geometry cycles and time, so a
+      follow-up that runs the traditional SCF is counted as that, not as MOZYME. Each
+      job's time is the difference of MOPAC's cumulative clock, read in seconds,
+      minutes or hours; MOPAC's "TOTAL JOB TIME", which adds the cumulative values,
+      overstated two-job runs by about a factor of two. The time outside MOPAC's
+      clock -- a traditional SCF on 900 atoms spends 13 s writing its output -- goes
+      to the jobs in proportion to their own time.
+    * ``TIMING_SPEC`` gives each regime a fixed cost per run (``setup_by``), fitted in
+      geometry cycles: MOZYME's localization of the orbitals measured at about one
+      cycle on ChemAI up to a few thousand atoms.
+    * Bond orders are part of the cost model's method class: MOPAC calculates them
+      after the SCF, outside its own clock, and for a traditional SCF on 900 atoms
+      they take about as long as the SCF itself.
+    * The timing benchmark runs without bond orders, plus a few runs with them at
+      302 and 902 atoms to give their cost; adds the follow-up that runs a
+      traditional SCF after MOZYME, for energies (to 902 atoms) and optimizations
+      from 300 atoms; and, for the large sizes, water spheres packed by Packmol
+      (999 atoms in the quick tier; 3,000 and 9,999 in the full, the largest with
+      MOZYME and no follow-up) in place of the 3,002-atom alkane. A 3D cluster is what
+      large MOPAC calculations usually are, and building a 10,000-atom chain from
+      SMILES took over an hour.
+
 2026.10.8 -- The cost model counts geometry cycles and scales each regime separately
     * ``TIMING_SPEC`` counts an optimization's work in geometry cycles rather than
       SCF runs, which MOPAC reports as 1 or 2 for an optimization of any length, so

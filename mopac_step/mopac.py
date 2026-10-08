@@ -62,8 +62,14 @@ def estimated_seconds(keyword_lines, n_atoms):
 #: regime (scf or mozyme) as the method class, the task, SCFs as the unit; one
 #: core, so no parallel exponent.
 TIMING_SPEC = {
-    "size": ["n_basis", "n_atoms"],
-    "klass": ["hamiltonian", "regime"],
+    # neighbours: how crowded the structure is (seamm_exec.neighbour_count) --
+    # MOZYME's cost per atom is about 8 times higher in a water cluster than
+    # along an alkane chain of the same size
+    "size": ["n_basis", "neighbours", "n_atoms"],
+    # The method class: the Hamiltonian, the regime, and whether bond orders are
+    # calculated -- after the SCF, outside MOPAC's own clock, and as dear as the
+    # SCF itself for a traditional SCF on 900 atoms
+    "klass": ["hamiltonian", "regime", "bond_orders"],
     "task": "task",
     # An optimization's time is its geometry cycles (an SCF and a gradient
     # each), not its SCF count, which MOPAC reports as 1 or 2 however long it
@@ -74,7 +80,15 @@ TIMING_SPEC = {
     # MOZYME (localized orbitals) scales roughly linearly and the traditional
     # SCF roughly as N^3: each regime has its own size exponent.
     "slope_by": "regime",
+    # MOZYME pays a large setup (localizing the orbitals) once per job, then
+    # runs fast cycles: each regime has its own fixed cost, in cycles.
+    "setup_by": "regime",
 }
+
+#: The Energy sub-step's MOZYME follow-up that runs a traditional SCF
+_EXACT_FOLLOW_UP = (
+    "recalculate the energy at the end using exact, non-localized orbitals"
+)
 
 
 #: The molecules the timing benchmark runs, by size (atoms): three orders of
@@ -87,8 +101,13 @@ _BENCHMARK_MOLECULES = (
     ("icosane", "C" * 20, 62),
     ("hectane", "C" * 100, 302),
     ("alkane-300", "C" * 300, 902),
-    ("alkane-1000", "C" * 1000, 3002),
 )
+
+#: Water spheres for the large sizes, packed by Packmol: a 3D cluster is what
+#: large MOPAC calculations usually are (a solvated system), MOZYME's cost per
+#: atom depends on how many neighbours each orbital has (far more in 3D than
+#: along a chain), and building a 10,000-atom chain from SMILES takes over an hour
+_BENCHMARK_WATER_SPHERES = (999, 3000, 9999)
 
 #: The step's timing benchmark (seamm_exec.timing_benchmark). MOPAC does not
 #: take the Model Chemistry: the Hamiltonian is a parameter of its sub-steps,
@@ -107,18 +126,78 @@ TIMING_BENCHMARK = {
             "steps": [{"FromSMILESStep": {"smiles string": smiles}}],
         }
         for name, smiles, n_atoms in _BENCHMARK_MOLECULES
+    ]
+    + [
+        {
+            "name": f"water-sphere-{n_atoms}",
+            "size": n_atoms,
+            "steps": [
+                {
+                    "Packmol": {
+                        "molecules": [
+                            {
+                                "component": "fluid",
+                                "source": "SMILES",
+                                "definition": "O",
+                                "count": 1,
+                            }
+                        ],
+                        "periodic": "No",
+                        "shape": "spherical",
+                        "dimensions": "calculated from the density",
+                        "fluid amount": "rounding this number of atoms",
+                        "approximate number of atoms": n_atoms,
+                        "density": 1.0,
+                        "assign forcefield": "No",
+                    }
+                }
+            ],
+        }
+        for n_atoms in _BENCHMARK_WATER_SPHERES
     ],
     "chemistries": {
-        "PM7": {"quick": 902, "full": 3002},
+        "PM7": {"quick": 999, "full": 9999},
         "PM6-ORG": {"quick": 302, "full": 902},
     },
     "parameter": "hamiltonian",
     "tasks": {
-        "Energy": {"quick": 902, "full": 3002},
+        "Energy": {"quick": 999, "full": 9999},
         "Optimization": {"quick": 62, "full": 302},
     },
     "variants": {
-        "Energy": [{}, {"MOZYME": "never", "_min_size": 300, "_max_size": 902}]
+        # Without bond orders, which run after the SCF outside MOPAC's clock and
+        # would blur its timing; a few runs with them, at 302 and 902 atoms in
+        # both regimes, give their cost. From 300 atoms, where MOZYME is used:
+        # the default follow-up (fresh localized orbitals), the traditional SCF
+        # forced, and the follow-up that runs a traditional SCF after MOZYME (to
+        # 902 atoms: its N^3). The 10,000-atom water sphere runs MOZYME alone,
+        # with no follow-up.
+        "Energy": [
+            {"bond orders": "no", "_max_size": 3002},
+            {
+                "bond orders": "no",
+                "MOZYME": "never",
+                "_min_size": 300,
+                "_max_size": 902,
+            },
+            {
+                "bond orders": "no",
+                "MOZYME follow-up": _EXACT_FOLLOW_UP,
+                "_min_size": 300,
+                "_max_size": 902,
+            },
+            {"bond orders": "no", "MOZYME follow-up": "none", "_min_size": 3003},
+            {"_min_size": 300, "_max_size": 902},
+            {"MOZYME": "never", "_min_size": 300, "_max_size": 902},
+        ],
+        "Optimization": [
+            {"bond orders": "no"},
+            {
+                "bond orders": "no",
+                "MOZYME follow-up": _EXACT_FOLLOW_UP,
+                "_min_size": 300,
+            },
+        ],
     },
 }
 
@@ -179,9 +258,12 @@ def timing_descriptors(keyword_lines, output_text, configuration=None):
     basis functions (4 per heavy atom, 1 per hydrogen); and from the output
     the SCFs converged, the geometry cycles and MOPAC's own job time.
     """
-    d = {}
+    # The same columns in every record (a change of columns sets the timing
+    # file aside): which job of the run, and what follow-up it is, if any
+    d = {"job": 1, "follow_up": ""}
     text = " ".join(keyword_lines).upper()
     words = text.split()
+    d["bond_orders"] = "yes" if "BONDS" in words else "no"
     d["hamiltonian"] = next((h for h in _HAMILTONIANS if h in words), "")
     d["task"] = task_kind(keyword_lines)
     d["n_calculations"] = len(keyword_lines)
@@ -197,10 +279,84 @@ def timing_descriptors(keyword_lines, output_text, configuration=None):
         )
         d["scf_runs"] = len(re.findall(r"SCF FIELD WAS ACHIEVED", output_text))
         d["geometry_cycles"] = len(re.findall(r"^ CYCLE:\s+\d+", output_text, re.M))
-        m = re.search(r"TOTAL JOB TIME:\s+([\d.]+)\s+SECONDS", output_text)
-        d["code_seconds"] = float(m.group(1)) if m else None
+        # MOPAC's clock is cumulative over the jobs of an input, and its
+        # "TOTAL JOB TIME" adds those cumulative values, so it overstates a
+        # run of several jobs: the last WALL-CLOCK TIME is the run's time.
+        clocks = _wall_clocks(output_text)
+        if clocks:
+            d["code_seconds"] = clocks[-1][1]
+        else:
+            m = re.search(r"TOTAL JOB TIME:\s+([\d.]+)\s+SECONDS", output_text)
+            d["code_seconds"] = float(m.group(1)) if m else None
         d["terminated_normally"] = "== MOPAC DONE ==" in output_text
     return d
+
+
+# MOPAC prints e.g. "= 36.965 SECONDS", "= 1 MINUTE AND 36.262 SECONDS" or
+# "= 2 HOURS 3 MINUTES AND 4.5 SECONDS"
+_WALL_CLOCK = re.compile(r"WALL-CLOCK TIME\s+=\s+([^\n]*?SECONDS?)")
+_CLOCK_PART = re.compile(r"([\d.]+)\s+(DAY|HOUR|MINUTE|SECOND)S?")
+_CLOCK_UNIT = {"DAY": 86400.0, "HOUR": 3600.0, "MINUTE": 60.0, "SECOND": 1.0}
+
+
+def _wall_clocks(output_text):
+    """[(end of the line, seconds)] for each WALL-CLOCK TIME MOPAC printed."""
+    clocks = []
+    for m in _WALL_CLOCK.finditer(output_text):
+        parts = _CLOCK_PART.findall(m.group(1).upper())
+        if parts:
+            seconds = sum(float(v) * _CLOCK_UNIT[u] for v, u in parts)
+            clocks.append((m.end(), seconds))
+    return clocks
+
+
+def job_walls(wall, codes):
+    """Each job's share of a run's wall time: its own time, plus a share of the
+    time outside MOPAC's clock in proportion to its own. That time is not only
+    the process's start-up: a traditional SCF on 900 atoms spends 13 s writing
+    its output and bond orders after its clock stops, which belongs to that job,
+    not to the short MOZYME job before it. The shares add up to the wall time."""
+    total = sum(codes)
+    extra = max(0.0, wall - total)
+    if total <= 0:
+        return [wall / len(codes)] * len(codes)
+    return [c + extra * c / total for c in codes]
+
+
+def job_descriptors(keyword_lines, output_text, configuration=None):
+    """The descriptors of each job of a MOPAC run, one dict per job, or None
+    when the output cannot be split into the input's jobs.
+
+    An input may hold several jobs: a MOZYME calculation and its follow-up (a
+    single point with fresh localized orbitals, or with a traditional SCF). Each
+    is its own calculation for the cost model -- its regime, cycles and time --
+    so a traditional-SCF follow-up is not counted as MOZYME. The output is split
+    at the cumulative WALL-CLOCK TIME MOPAC prints after each job; each job's
+    time is the difference. A follow-up is marked with ``follow_up``: ``exact``
+    (traditional SCF) or ``new`` (fresh localized orbitals).
+    """
+    if not output_text or len(keyword_lines) < 2:
+        return None
+    found = _wall_clocks(output_text)
+    ends = [end for end, _ in found]
+    clocks = [seconds for _, seconds in found]
+    if len(ends) != len(keyword_lines):
+        return None
+    jobs = []
+    start, previous = 0, 0.0
+    for i, (line, end, clock) in enumerate(zip(keyword_lines, ends, clocks)):
+        segment = output_text[start:end]
+        d = timing_descriptors([line], segment, configuration)
+        d["code_seconds"] = max(0.0, clock - previous)
+        d["job"] = i + 1
+        d["n_calculations"] = len(keyword_lines)
+        d["terminated_normally"] = "== MOPAC DONE ==" in output_text
+        words = set(line.upper().split())
+        if i > 0 and "OLDGEO" in words and "1SCF" in words:
+            d["follow_up"] = "new" if "MOZYME" in words else "exact"
+        jobs.append(d)
+        start, previous = end, clock
+    return jobs
 
 
 def reuse_previous_run(directory, text):
@@ -581,12 +737,38 @@ class MOPAC(mopac_step.MOPACBase):
                 text = path.read_text(errors="replace") if path.exists() else None
             if isinstance(text, bytes):
                 text = text.decode(errors="replace")
-            seamm_exec.record_task_timing(
-                task,
-                result,
-                timing_descriptors(keyword_lines, text, configuration),
-                **_record_kwargs(),
-            )
+            jobs = job_descriptors(keyword_lines, text, configuration)
+            wall = seamm_exec.timing.task_wall_seconds(result)
+            if (
+                jobs is None
+                or wall is None
+                or any(j.get("code_seconds") is None for j in jobs)
+            ):
+                seamm_exec.record_task_timing(
+                    task,
+                    result,
+                    timing_descriptors(keyword_lines, text, configuration),
+                    **_record_kwargs(),
+                )
+                return
+            # One record per job, the run's wall time shared out (job_walls)
+            walls = job_walls(wall, [j["code_seconds"] for j in jobs])
+            resources = getattr(task, "resources", None)
+            for d, job_wall in zip(jobs, walls):
+                seamm_exec.record_timing(
+                    "mopac",
+                    job_wall,
+                    d,
+                    ntasks=getattr(resources, "ntasks", None),
+                    cpus_per_task=getattr(resources, "cpus_per_task", None),
+                    mem_per_cpu=getattr(resources, "mem_per_cpu", None),
+                    estimated=task.estimated_seconds if d["job"] == 1 else None,
+                    state=getattr(result, "state", ""),
+                    timed_out=getattr(result, "timed_out", False),
+                    attempts=getattr(result, "attempts", None),
+                    in_situ=getattr(result, "in_situ", None),
+                    **_record_kwargs(),
+                )
         except Exception as e:  # pragma: no cover - must never stop the step
             self.logger.warning(f"Could not record the timing of the MOPAC run: {e}")
 
