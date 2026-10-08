@@ -18,8 +18,11 @@ History
     * The timing benchmark runs without bond orders, plus a few runs with them at
       302 and 902 atoms to give their cost; adds the follow-up that runs a
       traditional SCF after MOZYME, for energies (to 902 atoms) and optimizations
-      from 300 atoms; and, in the full tier, a 10,001-atom alkane with MOZYME and
-      no follow-up.
+      from 300 atoms; and, for the large sizes, water spheres packed by Packmol
+      (999 atoms in the quick tier; 3,000 and 9,999 in the full, the largest with
+      MOZYME and no follow-up) in place of the 3,002-atom alkane. A 3D cluster is what
+      large MOPAC calculations usually are, and building a 10,000-atom chain from
+      SMILES took over an hour.
 
 2026.10.8 -- The cost model counts geometry cycles and scales each regime separately
     * ``TIMING_SPEC`` counts an optimization's work in geometry cycles rather than

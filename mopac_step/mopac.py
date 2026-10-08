@@ -98,9 +98,13 @@ _BENCHMARK_MOLECULES = (
     ("icosane", "C" * 20, 62),
     ("hectane", "C" * 100, 302),
     ("alkane-300", "C" * 300, 902),
-    ("alkane-1000", "C" * 1000, 3002),
-    ("alkane-3333", "C" * 3333, 10001),
 )
+
+#: Water spheres for the large sizes, packed by Packmol: a 3D cluster is what
+#: large MOPAC calculations usually are (a solvated system), MOZYME's cost per
+#: atom depends on how many neighbours each orbital has (far more in 3D than
+#: along a chain), and building a 10,000-atom chain from SMILES takes over an hour
+_BENCHMARK_WATER_SPHERES = (999, 3000, 9999)
 
 #: The step's timing benchmark (seamm_exec.timing_benchmark). MOPAC does not
 #: take the Model Chemistry: the Hamiltonian is a parameter of its sub-steps,
@@ -119,14 +123,42 @@ TIMING_BENCHMARK = {
             "steps": [{"FromSMILESStep": {"smiles string": smiles}}],
         }
         for name, smiles, n_atoms in _BENCHMARK_MOLECULES
+    ]
+    + [
+        {
+            "name": f"water-sphere-{n_atoms}",
+            "size": n_atoms,
+            "steps": [
+                {
+                    "Packmol": {
+                        "molecules": [
+                            {
+                                "component": "fluid",
+                                "source": "SMILES",
+                                "definition": "O",
+                                "count": 1,
+                            }
+                        ],
+                        "periodic": "No",
+                        "shape": "spherical",
+                        "dimensions": "calculated from the density",
+                        "fluid amount": "rounding this number of atoms",
+                        "approximate number of atoms": n_atoms,
+                        "density": 1.0,
+                        "assign forcefield": "No",
+                    }
+                }
+            ],
+        }
+        for n_atoms in _BENCHMARK_WATER_SPHERES
     ],
     "chemistries": {
-        "PM7": {"quick": 902, "full": 10001},
+        "PM7": {"quick": 999, "full": 9999},
         "PM6-ORG": {"quick": 302, "full": 902},
     },
     "parameter": "hamiltonian",
     "tasks": {
-        "Energy": {"quick": 902, "full": 10001},
+        "Energy": {"quick": 999, "full": 9999},
         "Optimization": {"quick": 62, "full": 302},
     },
     "variants": {
@@ -135,8 +167,8 @@ TIMING_BENCHMARK = {
         # both regimes, give their cost. From 300 atoms, where MOZYME is used:
         # the default follow-up (fresh localized orbitals), the traditional SCF
         # forced, and the follow-up that runs a traditional SCF after MOZYME (to
-        # 902 atoms: its N^3). The 10,000-atom alkane runs MOZYME alone, with no
-        # follow-up.
+        # 902 atoms: its N^3). The 10,000-atom water sphere runs MOZYME alone,
+        # with no follow-up.
         "Energy": [
             {"bond orders": "no", "_max_size": 3002},
             {
