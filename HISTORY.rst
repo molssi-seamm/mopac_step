@@ -1,6 +1,15 @@
 =======
 History
 =======
+2026.10.8 -- The cost model counts geometry cycles and scales each regime separately
+    * ``TIMING_SPEC`` counts an optimization's work in geometry cycles rather than
+      SCF runs, which MOPAC reports as 1 or 2 for an optimization of any length, so
+      optimizations were predicted about ten times too short. It also names the
+      regime (``slope_by``), so MOZYME and the traditional SCF each get their own
+      size exponent. On ChemAI's benchmark every MOPAC run is now predicted within
+      a factor of 2 (from 79%). Needs seamm-exec 2026.10.8 for the regimes; older
+      versions ignore it.
+
 2026.10.7 -- The step declares what its cost model is made of, and its benchmark
     * Bugfix: a MOPAC model-chemistry task's analysis failed under seamm-exec
       2026.10.7 (``analyze_task() got an unexpected keyword argument 'task'``):

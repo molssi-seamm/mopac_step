@@ -65,9 +65,15 @@ TIMING_SPEC = {
     "size": ["n_basis", "n_atoms"],
     "klass": ["hamiltonian", "regime"],
     "task": "task",
-    "units": "scf_runs",
+    # An optimization's time is its geometry cycles (an SCF and a gradient
+    # each), not its SCF count, which MOPAC reports as 1 or 2 however long it
+    # runs; a single point has none, which counts as one.
+    "units": "geometry_cycles",
     "multiplier": None,
     "default_alpha": 0.0,
+    # MOZYME (localized orbitals) scales roughly linearly and the traditional
+    # SCF roughly as N^3: each regime has its own size exponent.
+    "slope_by": "regime",
 }
 
 
