@@ -129,3 +129,25 @@ def test_every_record_has_the_same_columns():
     main, follow = mopac.job_descriptors(lines, _TWO_JOBS.replace("{follow}", ""))
     single = mopac.timing_descriptors(["PM7 1SCF GRADIENTS"], _TWO_JOBS)
     assert set(main) == set(follow) == set(single)
+
+
+def test_a_clock_past_a_minute():
+    """Past 60 seconds MOPAC prints minutes (and hours): "1 MINUTE AND 36.262
+    SECONDS"."""
+    text = (
+        _TWO_JOBS.replace("{follow}", "")
+        .replace("=     37.496 SECONDS", "=     1 MINUTE AND 36.262 SECONDS")
+        .replace("=     38.051 SECONDS", "=     1 HOUR 2 MINUTES AND 0.5 SECONDS")
+    )
+    lines = ["PM7 MOZYME GRADIENTS", "1SCF PM7 GRADIENTS OLDGEO"]
+    main, follow = mopac.job_descriptors(lines, text)
+    assert abs(main["code_seconds"] - 96.262) < 1e-6
+    assert abs(follow["code_seconds"] - (3720.5 - 96.262)) < 1e-6
+
+
+def test_the_wall_time_is_shared_in_proportion():
+    """The time outside MOPAC's clock goes with the job that caused it."""
+    walls = mopac.job_walls(29.2, [1.55, 14.15])
+    assert abs(sum(walls) - 29.2) < 1e-9
+    assert walls[0] < 3.0 < 26.0 < walls[1]
+    assert mopac.job_walls(2.0, [0.0, 0.0]) == [1.0, 1.0]

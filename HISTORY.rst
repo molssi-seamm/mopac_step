@@ -5,9 +5,11 @@ History
     * A run with several jobs -- a MOZYME calculation and its follow-up -- writes one
       timing record per job, each with its own regime, geometry cycles and time, so a
       follow-up that runs the traditional SCF is counted as that, not as MOZYME. Each
-      job's time is the difference of MOPAC's cumulative clock; MOPAC's "TOTAL JOB
-      TIME", which adds the cumulative values, overstated two-job runs by about a
-      factor of two.
+      job's time is the difference of MOPAC's cumulative clock, read in seconds,
+      minutes or hours; MOPAC's "TOTAL JOB TIME", which adds the cumulative values,
+      overstated two-job runs by about a factor of two. The time outside MOPAC's
+      clock -- a traditional SCF on 900 atoms spends 13 s writing its output -- goes
+      to the jobs in proportion to their own time.
     * ``TIMING_SPEC`` gives each regime a fixed cost per run (``setup_by``): MOZYME
       pays a large setup, localizing the orbitals, then runs fast cycles.
     * The timing benchmark adds the follow-up that runs a traditional SCF after

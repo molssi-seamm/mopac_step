@@ -221,9 +221,9 @@ def timing_descriptors(keyword_lines, output_text, configuration=None):
         # MOPAC's clock is cumulative over the jobs of an input, and its
         # "TOTAL JOB TIME" adds those cumulative values, so it overstates a
         # run of several jobs: the last WALL-CLOCK TIME is the run's time.
-        clocks = _WALL_CLOCK.findall(output_text)
+        clocks = _wall_clocks(output_text)
         if clocks:
-            d["code_seconds"] = float(clocks[-1])
+            d["code_seconds"] = clocks[-1][1]
         else:
             m = re.search(r"TOTAL JOB TIME:\s+([\d.]+)\s+SECONDS", output_text)
             d["code_seconds"] = float(m.group(1)) if m else None
@@ -231,7 +231,35 @@ def timing_descriptors(keyword_lines, output_text, configuration=None):
     return d
 
 
-_WALL_CLOCK = re.compile(r"WALL-CLOCK TIME\s+=\s+([\d.]+)\s+SECONDS")
+# MOPAC prints e.g. "= 36.965 SECONDS", "= 1 MINUTE AND 36.262 SECONDS" or
+# "= 2 HOURS 3 MINUTES AND 4.5 SECONDS"
+_WALL_CLOCK = re.compile(r"WALL-CLOCK TIME\s+=\s+([^\n]*?SECONDS?)")
+_CLOCK_PART = re.compile(r"([\d.]+)\s+(DAY|HOUR|MINUTE|SECOND)S?")
+_CLOCK_UNIT = {"DAY": 86400.0, "HOUR": 3600.0, "MINUTE": 60.0, "SECOND": 1.0}
+
+
+def _wall_clocks(output_text):
+    """[(end of the line, seconds)] for each WALL-CLOCK TIME MOPAC printed."""
+    clocks = []
+    for m in _WALL_CLOCK.finditer(output_text):
+        parts = _CLOCK_PART.findall(m.group(1).upper())
+        if parts:
+            seconds = sum(float(v) * _CLOCK_UNIT[u] for v, u in parts)
+            clocks.append((m.end(), seconds))
+    return clocks
+
+
+def job_walls(wall, codes):
+    """Each job's share of a run's wall time: its own time, plus a share of the
+    time outside MOPAC's clock in proportion to its own. That time is not only
+    the process's start-up: a traditional SCF on 900 atoms spends 13 s writing
+    its output and bond orders after its clock stops, which belongs to that job,
+    not to the short MOZYME job before it. The shares add up to the wall time."""
+    total = sum(codes)
+    extra = max(0.0, wall - total)
+    if total <= 0:
+        return [wall / len(codes)] * len(codes)
+    return [c + extra * c / total for c in codes]
 
 
 def job_descriptors(keyword_lines, output_text, configuration=None):
@@ -248,8 +276,9 @@ def job_descriptors(keyword_lines, output_text, configuration=None):
     """
     if not output_text or len(keyword_lines) < 2:
         return None
-    ends = [m.end() for m in _WALL_CLOCK.finditer(output_text)]
-    clocks = [float(c) for c in _WALL_CLOCK.findall(output_text)]
+    found = _wall_clocks(output_text)
+    ends = [end for end, _ in found]
+    clocks = [seconds for _, seconds in found]
     if len(ends) != len(keyword_lines):
         return None
     jobs = []
@@ -661,14 +690,13 @@ class MOPAC(mopac_step.MOPACBase):
                     **_record_kwargs(),
                 )
                 return
-            # One record per job. The run's start-up (wall time less MOPAC's
-            # own) is given to each, so each looks like the job run alone.
-            overhead = max(0.0, wall - sum(j["code_seconds"] for j in jobs))
+            # One record per job, the run's wall time shared out (job_walls)
+            walls = job_walls(wall, [j["code_seconds"] for j in jobs])
             resources = getattr(task, "resources", None)
-            for d in jobs:
+            for d, job_wall in zip(jobs, walls):
                 seamm_exec.record_timing(
                     "mopac",
-                    d["code_seconds"] + overhead,
+                    job_wall,
                     d,
                     ntasks=getattr(resources, "ntasks", None),
                     cpus_per_task=getattr(resources, "cpus_per_task", None),
