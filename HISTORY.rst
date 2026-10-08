@@ -14,8 +14,9 @@ History
       overstated two-job runs by about a factor of two. The time outside MOPAC's
       clock -- a traditional SCF on 900 atoms spends 13 s writing its output -- goes
       to the jobs in proportion to their own time.
-    * ``TIMING_SPEC`` gives each regime a fixed cost per run (``setup_by``): MOZYME
-      pays a large setup, localizing the orbitals, then runs fast cycles.
+    * ``TIMING_SPEC`` gives each regime a fixed cost per run (``setup_by``), fitted in
+      geometry cycles: MOZYME's localization of the orbitals measured at about one
+      cycle on ChemAI up to a few thousand atoms.
     * Bond orders are part of the cost model's method class: MOPAC calculates them
       after the SCF, outside its own clock, and for a traditional SCF on 900 atoms
       they take about as long as the SCF itself.
