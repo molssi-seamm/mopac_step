@@ -62,7 +62,10 @@ def estimated_seconds(keyword_lines, n_atoms):
 #: regime (scf or mozyme) as the method class, the task, SCFs as the unit; one
 #: core, so no parallel exponent.
 TIMING_SPEC = {
-    "size": ["n_basis", "n_atoms"],
+    # neighbours: how crowded the structure is (seamm_exec.neighbour_count) --
+    # MOZYME's cost per atom is about 8 times higher in a water cluster than
+    # along an alkane chain of the same size
+    "size": ["n_basis", "neighbours", "n_atoms"],
     # The method class: the Hamiltonian, the regime, and whether bond orders are
     # calculated -- after the SCF, outside MOPAC's own clock, and as dear as the
     # SCF itself for a traditional SCF on 900 atoms

@@ -2,6 +2,10 @@
 History
 =======
 2026.10.8.1 -- Each job of a MOPAC run is its own timing record
+    * ``TIMING_SPEC`` adds ``neighbours``, the mean number of atoms within 8 Å, as a
+      size variable: MOZYME's cost per atom is about 8 times higher in a 1,000-atom
+      water cluster than along a 900-atom alkane chain. Needs seamm-exec 2026.10.8.1
+      to record it.
     * A run with several jobs -- a MOZYME calculation and its follow-up -- writes one
       timing record per job, each with its own regime, geometry cycles and time, so a
       follow-up that runs the traditional SCF is counted as that, not as MOZYME. Each
