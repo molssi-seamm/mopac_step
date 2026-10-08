@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mopac_step.mopac &#8212; SEAMM MOPAC Plug-in 2026.10.8 documentation</title>
+    <title>mopac_step.mopac &#8212; SEAMM MOPAC Plug-in 2026.10.8.1 documentation</title>
   
   
   
@@ -47,7 +47,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="../../_static/documentation_options.js?v=e2241af4"></script>
+    <script src="../../_static/documentation_options.js?v=ac5092dc"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -61,7 +61,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.10.8" />
+  <meta name="docsearch:version" content="2026.10.8.1" />
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -553,8 +553,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="c1">#: regime (scf or mozyme) as the method class, the task, SCFs as the unit; one</span>
 <span class="c1">#: core, so no parallel exponent.</span>
 <span class="n">TIMING_SPEC</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">"size"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"n_basis"</span><span class="p">,</span> <span class="s2">"n_atoms"</span><span class="p">],</span>
-    <span class="s2">"klass"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"hamiltonian"</span><span class="p">,</span> <span class="s2">"regime"</span><span class="p">],</span>
+    <span class="c1"># neighbours: how crowded the structure is (seamm_exec.neighbour_count) --</span>
+    <span class="c1"># MOZYME's cost per atom is about 8 times higher in a water cluster than</span>
+    <span class="c1"># along an alkane chain of the same size</span>
+    <span class="s2">"size"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"n_basis"</span><span class="p">,</span> <span class="s2">"neighbours"</span><span class="p">,</span> <span class="s2">"n_atoms"</span><span class="p">],</span>
+    <span class="c1"># The method class: the Hamiltonian, the regime, and whether bond orders are</span>
+    <span class="c1"># calculated -- after the SCF, outside MOPAC's own clock, and as dear as the</span>
+    <span class="c1"># SCF itself for a traditional SCF on 900 atoms</span>
+    <span class="s2">"klass"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"hamiltonian"</span><span class="p">,</span> <span class="s2">"regime"</span><span class="p">,</span> <span class="s2">"bond_orders"</span><span class="p">],</span>
     <span class="s2">"task"</span><span class="p">:</span> <span class="s2">"task"</span><span class="p">,</span>
     <span class="c1"># An optimization's time is its geometry cycles (an SCF and a gradient</span>
     <span class="c1"># each), not its SCF count, which MOPAC reports as 1 or 2 however long it</span>
@@ -565,7 +571,15 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <span class="c1"># MOZYME (localized orbitals) scales roughly linearly and the traditional</span>
     <span class="c1"># SCF roughly as N^3: each regime has its own size exponent.</span>
     <span class="s2">"slope_by"</span><span class="p">:</span> <span class="s2">"regime"</span><span class="p">,</span>
+    <span class="c1"># MOZYME pays a large setup (localizing the orbitals) once per job, then</span>
+    <span class="c1"># runs fast cycles: each regime has its own fixed cost, in cycles.</span>
+    <span class="s2">"setup_by"</span><span class="p">:</span> <span class="s2">"regime"</span><span class="p">,</span>
 <span class="p">}</span>
+
+<span class="c1">#: The Energy sub-step's MOZYME follow-up that runs a traditional SCF</span>
+<span class="n">_EXACT_FOLLOW_UP</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="s2">"recalculate the energy at the end using exact, non-localized orbitals"</span>
+<span class="p">)</span>
 
 
 <span class="c1">#: The molecules the timing benchmark runs, by size (atoms): three orders of</span>
@@ -578,8 +592,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <span class="p">(</span><span class="s2">"icosane"</span><span class="p">,</span> <span class="s2">"C"</span> <span class="o">*</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">62</span><span class="p">),</span>
     <span class="p">(</span><span class="s2">"hectane"</span><span class="p">,</span> <span class="s2">"C"</span> <span class="o">*</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">302</span><span class="p">),</span>
     <span class="p">(</span><span class="s2">"alkane-300"</span><span class="p">,</span> <span class="s2">"C"</span> <span class="o">*</span> <span class="mi">300</span><span class="p">,</span> <span class="mi">902</span><span class="p">),</span>
-    <span class="p">(</span><span class="s2">"alkane-1000"</span><span class="p">,</span> <span class="s2">"C"</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">,</span> <span class="mi">3002</span><span class="p">),</span>
 <span class="p">)</span>
+
+<span class="c1">#: Water spheres for the large sizes, packed by Packmol: a 3D cluster is what</span>
+<span class="c1">#: large MOPAC calculations usually are (a solvated system), MOZYME's cost per</span>
+<span class="c1">#: atom depends on how many neighbours each orbital has (far more in 3D than</span>
+<span class="c1">#: along a chain), and building a 10,000-atom chain from SMILES takes over an hour</span>
+<span class="n">_BENCHMARK_WATER_SPHERES</span> <span class="o">=</span> <span class="p">(</span><span class="mi">999</span><span class="p">,</span> <span class="mi">3000</span><span class="p">,</span> <span class="mi">9999</span><span class="p">)</span>
 
 <span class="c1">#: The step's timing benchmark (seamm_exec.timing_benchmark). MOPAC does not</span>
 <span class="c1">#: take the Model Chemistry: the Hamiltonian is a parameter of its sub-steps,</span>
@@ -598,18 +617,78 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <span class="s2">"steps"</span><span class="p">:</span> <span class="p">[{</span><span class="s2">"FromSMILESStep"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"smiles string"</span><span class="p">:</span> <span class="n">smiles</span><span class="p">}}],</span>
         <span class="p">}</span>
         <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">smiles</span><span class="p">,</span> <span class="n">n_atoms</span> <span class="ow">in</span> <span class="n">_BENCHMARK_MOLECULES</span>
+    <span class="p">]</span>
+    <span class="o">+</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="s2">"name"</span><span class="p">:</span> <span class="sa">f</span><span class="s2">"water-sphere-</span><span class="si">{</span><span class="n">n_atoms</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
+            <span class="s2">"size"</span><span class="p">:</span> <span class="n">n_atoms</span><span class="p">,</span>
+            <span class="s2">"steps"</span><span class="p">:</span> <span class="p">[</span>
+                <span class="p">{</span>
+                    <span class="s2">"Packmol"</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s2">"molecules"</span><span class="p">:</span> <span class="p">[</span>
+                            <span class="p">{</span>
+                                <span class="s2">"component"</span><span class="p">:</span> <span class="s2">"fluid"</span><span class="p">,</span>
+                                <span class="s2">"source"</span><span class="p">:</span> <span class="s2">"SMILES"</span><span class="p">,</span>
+                                <span class="s2">"definition"</span><span class="p">:</span> <span class="s2">"O"</span><span class="p">,</span>
+                                <span class="s2">"count"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+                            <span class="p">}</span>
+                        <span class="p">],</span>
+                        <span class="s2">"periodic"</span><span class="p">:</span> <span class="s2">"No"</span><span class="p">,</span>
+                        <span class="s2">"shape"</span><span class="p">:</span> <span class="s2">"spherical"</span><span class="p">,</span>
+                        <span class="s2">"dimensions"</span><span class="p">:</span> <span class="s2">"calculated from the density"</span><span class="p">,</span>
+                        <span class="s2">"fluid amount"</span><span class="p">:</span> <span class="s2">"rounding this number of atoms"</span><span class="p">,</span>
+                        <span class="s2">"approximate number of atoms"</span><span class="p">:</span> <span class="n">n_atoms</span><span class="p">,</span>
+                        <span class="s2">"density"</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
+                        <span class="s2">"assign forcefield"</span><span class="p">:</span> <span class="s2">"No"</span><span class="p">,</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+            <span class="p">],</span>
+        <span class="p">}</span>
+        <span class="k">for</span> <span class="n">n_atoms</span> <span class="ow">in</span> <span class="n">_BENCHMARK_WATER_SPHERES</span>
     <span class="p">],</span>
     <span class="s2">"chemistries"</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s2">"PM7"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"quick"</span><span class="p">:</span> <span class="mi">902</span><span class="p">,</span> <span class="s2">"full"</span><span class="p">:</span> <span class="mi">3002</span><span class="p">},</span>
+        <span class="s2">"PM7"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"quick"</span><span class="p">:</span> <span class="mi">999</span><span class="p">,</span> <span class="s2">"full"</span><span class="p">:</span> <span class="mi">9999</span><span class="p">},</span>
         <span class="s2">"PM6-ORG"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"quick"</span><span class="p">:</span> <span class="mi">302</span><span class="p">,</span> <span class="s2">"full"</span><span class="p">:</span> <span class="mi">902</span><span class="p">},</span>
     <span class="p">},</span>
     <span class="s2">"parameter"</span><span class="p">:</span> <span class="s2">"hamiltonian"</span><span class="p">,</span>
     <span class="s2">"tasks"</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s2">"Energy"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"quick"</span><span class="p">:</span> <span class="mi">902</span><span class="p">,</span> <span class="s2">"full"</span><span class="p">:</span> <span class="mi">3002</span><span class="p">},</span>
+        <span class="s2">"Energy"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"quick"</span><span class="p">:</span> <span class="mi">999</span><span class="p">,</span> <span class="s2">"full"</span><span class="p">:</span> <span class="mi">9999</span><span class="p">},</span>
         <span class="s2">"Optimization"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"quick"</span><span class="p">:</span> <span class="mi">62</span><span class="p">,</span> <span class="s2">"full"</span><span class="p">:</span> <span class="mi">302</span><span class="p">},</span>
     <span class="p">},</span>
     <span class="s2">"variants"</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s2">"Energy"</span><span class="p">:</span> <span class="p">[{},</span> <span class="p">{</span><span class="s2">"MOZYME"</span><span class="p">:</span> <span class="s2">"never"</span><span class="p">,</span> <span class="s2">"_min_size"</span><span class="p">:</span> <span class="mi">300</span><span class="p">,</span> <span class="s2">"_max_size"</span><span class="p">:</span> <span class="mi">902</span><span class="p">}]</span>
+        <span class="c1"># Without bond orders, which run after the SCF outside MOPAC's clock and</span>
+        <span class="c1"># would blur its timing; a few runs with them, at 302 and 902 atoms in</span>
+        <span class="c1"># both regimes, give their cost. From 300 atoms, where MOZYME is used:</span>
+        <span class="c1"># the default follow-up (fresh localized orbitals), the traditional SCF</span>
+        <span class="c1"># forced, and the follow-up that runs a traditional SCF after MOZYME (to</span>
+        <span class="c1"># 902 atoms: its N^3). The 10,000-atom water sphere runs MOZYME alone,</span>
+        <span class="c1"># with no follow-up.</span>
+        <span class="s2">"Energy"</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span><span class="s2">"bond orders"</span><span class="p">:</span> <span class="s2">"no"</span><span class="p">,</span> <span class="s2">"_max_size"</span><span class="p">:</span> <span class="mi">3002</span><span class="p">},</span>
+            <span class="p">{</span>
+                <span class="s2">"bond orders"</span><span class="p">:</span> <span class="s2">"no"</span><span class="p">,</span>
+                <span class="s2">"MOZYME"</span><span class="p">:</span> <span class="s2">"never"</span><span class="p">,</span>
+                <span class="s2">"_min_size"</span><span class="p">:</span> <span class="mi">300</span><span class="p">,</span>
+                <span class="s2">"_max_size"</span><span class="p">:</span> <span class="mi">902</span><span class="p">,</span>
+            <span class="p">},</span>
+            <span class="p">{</span>
+                <span class="s2">"bond orders"</span><span class="p">:</span> <span class="s2">"no"</span><span class="p">,</span>
+                <span class="s2">"MOZYME follow-up"</span><span class="p">:</span> <span class="n">_EXACT_FOLLOW_UP</span><span class="p">,</span>
+                <span class="s2">"_min_size"</span><span class="p">:</span> <span class="mi">300</span><span class="p">,</span>
+                <span class="s2">"_max_size"</span><span class="p">:</span> <span class="mi">902</span><span class="p">,</span>
+            <span class="p">},</span>
+            <span class="p">{</span><span class="s2">"bond orders"</span><span class="p">:</span> <span class="s2">"no"</span><span class="p">,</span> <span class="s2">"MOZYME follow-up"</span><span class="p">:</span> <span class="s2">"none"</span><span class="p">,</span> <span class="s2">"_min_size"</span><span class="p">:</span> <span class="mi">3003</span><span class="p">},</span>
+            <span class="p">{</span><span class="s2">"_min_size"</span><span class="p">:</span> <span class="mi">300</span><span class="p">,</span> <span class="s2">"_max_size"</span><span class="p">:</span> <span class="mi">902</span><span class="p">},</span>
+            <span class="p">{</span><span class="s2">"MOZYME"</span><span class="p">:</span> <span class="s2">"never"</span><span class="p">,</span> <span class="s2">"_min_size"</span><span class="p">:</span> <span class="mi">300</span><span class="p">,</span> <span class="s2">"_max_size"</span><span class="p">:</span> <span class="mi">902</span><span class="p">},</span>
+        <span class="p">],</span>
+        <span class="s2">"Optimization"</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span><span class="s2">"bond orders"</span><span class="p">:</span> <span class="s2">"no"</span><span class="p">},</span>
+            <span class="p">{</span>
+                <span class="s2">"bond orders"</span><span class="p">:</span> <span class="s2">"no"</span><span class="p">,</span>
+                <span class="s2">"MOZYME follow-up"</span><span class="p">:</span> <span class="n">_EXACT_FOLLOW_UP</span><span class="p">,</span>
+                <span class="s2">"_min_size"</span><span class="p">:</span> <span class="mi">300</span><span class="p">,</span>
+            <span class="p">},</span>
+        <span class="p">],</span>
     <span class="p">},</span>
 <span class="p">}</span>
 
@@ -675,9 +754,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="sd">    basis functions (4 per heavy atom, 1 per hydrogen); and from the output</span>
 <span class="sd">    the SCFs converged, the geometry cycles and MOPAC's own job time.</span>
 <span class="sd">    """</span>
-    <span class="n">d</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="c1"># The same columns in every record (a change of columns sets the timing</span>
+    <span class="c1"># file aside): which job of the run, and what follow-up it is, if any</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"job"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">"follow_up"</span><span class="p">:</span> <span class="s2">""</span><span class="p">}</span>
     <span class="n">text</span> <span class="o">=</span> <span class="s2">" "</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">keyword_lines</span><span class="p">)</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
     <span class="n">words</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+    <span class="n">d</span><span class="p">[</span><span class="s2">"bond_orders"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"yes"</span> <span class="k">if</span> <span class="s2">"BONDS"</span> <span class="ow">in</span> <span class="n">words</span> <span class="k">else</span> <span class="s2">"no"</span>
     <span class="n">d</span><span class="p">[</span><span class="s2">"hamiltonian"</span><span class="p">]</span> <span class="o">=</span> <span class="nb">next</span><span class="p">((</span><span class="n">h</span> <span class="k">for</span> <span class="n">h</span> <span class="ow">in</span> <span class="n">_HAMILTONIANS</span> <span class="k">if</span> <span class="n">h</span> <span class="ow">in</span> <span class="n">words</span><span class="p">),</span> <span class="s2">""</span><span class="p">)</span>
     <span class="n">d</span><span class="p">[</span><span class="s2">"task"</span><span class="p">]</span> <span class="o">=</span> <span class="n">task_kind</span><span class="p">(</span><span class="n">keyword_lines</span><span class="p">)</span>
     <span class="n">d</span><span class="p">[</span><span class="s2">"n_calculations"</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">keyword_lines</span><span class="p">)</span>
@@ -693,10 +775,90 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <span class="p">)</span>
         <span class="n">d</span><span class="p">[</span><span class="s2">"scf_runs"</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="sa">r</span><span class="s2">"SCF FIELD WAS ACHIEVED"</span><span class="p">,</span> <span class="n">output_text</span><span class="p">))</span>
         <span class="n">d</span><span class="p">[</span><span class="s2">"geometry_cycles"</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="sa">r</span><span class="s2">"^ CYCLE:\s+\d+"</span><span class="p">,</span> <span class="n">output_text</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">M</span><span class="p">))</span>
-        <span class="n">m</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">"TOTAL JOB TIME:\s+([\d.]+)\s+SECONDS"</span><span class="p">,</span> <span class="n">output_text</span><span class="p">)</span>
-        <span class="n">d</span><span class="p">[</span><span class="s2">"code_seconds"</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span> <span class="k">if</span> <span class="n">m</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="c1"># MOPAC's clock is cumulative over the jobs of an input, and its</span>
+        <span class="c1"># "TOTAL JOB TIME" adds those cumulative values, so it overstates a</span>
+        <span class="c1"># run of several jobs: the last WALL-CLOCK TIME is the run's time.</span>
+        <span class="n">clocks</span> <span class="o">=</span> <span class="n">_wall_clocks</span><span class="p">(</span><span class="n">output_text</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">clocks</span><span class="p">:</span>
+            <span class="n">d</span><span class="p">[</span><span class="s2">"code_seconds"</span><span class="p">]</span> <span class="o">=</span> <span class="n">clocks</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">m</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">"TOTAL JOB TIME:\s+([\d.]+)\s+SECONDS"</span><span class="p">,</span> <span class="n">output_text</span><span class="p">)</span>
+            <span class="n">d</span><span class="p">[</span><span class="s2">"code_seconds"</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span> <span class="k">if</span> <span class="n">m</span> <span class="k">else</span> <span class="kc">None</span>
         <span class="n">d</span><span class="p">[</span><span class="s2">"terminated_normally"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"== MOPAC DONE =="</span> <span class="ow">in</span> <span class="n">output_text</span>
     <span class="k">return</span> <span class="n">d</span></div>
+
+
+
+<span class="c1"># MOPAC prints e.g. "= 36.965 SECONDS", "= 1 MINUTE AND 36.262 SECONDS" or</span>
+<span class="c1"># "= 2 HOURS 3 MINUTES AND 4.5 SECONDS"</span>
+<span class="n">_WALL_CLOCK</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">"WALL-CLOCK TIME\s+=\s+([^\n]*?SECONDS?)"</span><span class="p">)</span>
+<span class="n">_CLOCK_PART</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">"([\d.]+)\s+(DAY|HOUR|MINUTE|SECOND)S?"</span><span class="p">)</span>
+<span class="n">_CLOCK_UNIT</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"DAY"</span><span class="p">:</span> <span class="mf">86400.0</span><span class="p">,</span> <span class="s2">"HOUR"</span><span class="p">:</span> <span class="mf">3600.0</span><span class="p">,</span> <span class="s2">"MINUTE"</span><span class="p">:</span> <span class="mf">60.0</span><span class="p">,</span> <span class="s2">"SECOND"</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">}</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_wall_clocks</span><span class="p">(</span><span class="n">output_text</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""[(end of the line, seconds)] for each WALL-CLOCK TIME MOPAC printed."""</span>
+    <span class="n">clocks</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">_WALL_CLOCK</span><span class="o">.</span><span class="n">finditer</span><span class="p">(</span><span class="n">output_text</span><span class="p">):</span>
+        <span class="n">parts</span> <span class="o">=</span> <span class="n">_CLOCK_PART</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">upper</span><span class="p">())</span>
+        <span class="k">if</span> <span class="n">parts</span><span class="p">:</span>
+            <span class="n">seconds</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="o">*</span> <span class="n">_CLOCK_UNIT</span><span class="p">[</span><span class="n">u</span><span class="p">]</span> <span class="k">for</span> <span class="n">v</span><span class="p">,</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">parts</span><span class="p">)</span>
+            <span class="n">clocks</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">m</span><span class="o">.</span><span class="n">end</span><span class="p">(),</span> <span class="n">seconds</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">clocks</span>
+
+
+<div class="viewcode-block" id="job_walls">
+<a class="viewcode-back" href="../../api/mopac_step.html#mopac_step.mopac.job_walls">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">job_walls</span><span class="p">(</span><span class="n">wall</span><span class="p">,</span> <span class="n">codes</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Each job's share of a run's wall time: its own time, plus a share of the</span>
+<span class="sd">    time outside MOPAC's clock in proportion to its own. That time is not only</span>
+<span class="sd">    the process's start-up: a traditional SCF on 900 atoms spends 13 s writing</span>
+<span class="sd">    its output and bond orders after its clock stops, which belongs to that job,</span>
+<span class="sd">    not to the short MOZYME job before it. The shares add up to the wall time."""</span>
+    <span class="n">total</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">codes</span><span class="p">)</span>
+    <span class="n">extra</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">wall</span> <span class="o">-</span> <span class="n">total</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">total</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">wall</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">codes</span><span class="p">)]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">codes</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">c</span> <span class="o">+</span> <span class="n">extra</span> <span class="o">*</span> <span class="n">c</span> <span class="o">/</span> <span class="n">total</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">codes</span><span class="p">]</span></div>
+
+
+
+<div class="viewcode-block" id="job_descriptors">
+<a class="viewcode-back" href="../../api/mopac_step.html#mopac_step.mopac.job_descriptors">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">job_descriptors</span><span class="p">(</span><span class="n">keyword_lines</span><span class="p">,</span> <span class="n">output_text</span><span class="p">,</span> <span class="n">configuration</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""The descriptors of each job of a MOPAC run, one dict per job, or None</span>
+<span class="sd">    when the output cannot be split into the input's jobs.</span>
+
+<span class="sd">    An input may hold several jobs: a MOZYME calculation and its follow-up (a</span>
+<span class="sd">    single point with fresh localized orbitals, or with a traditional SCF). Each</span>
+<span class="sd">    is its own calculation for the cost model -- its regime, cycles and time --</span>
+<span class="sd">    so a traditional-SCF follow-up is not counted as MOZYME. The output is split</span>
+<span class="sd">    at the cumulative WALL-CLOCK TIME MOPAC prints after each job; each job's</span>
+<span class="sd">    time is the difference. A follow-up is marked with ``follow_up``: ``exact``</span>
+<span class="sd">    (traditional SCF) or ``new`` (fresh localized orbitals).</span>
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">output_text</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">keyword_lines</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="n">found</span> <span class="o">=</span> <span class="n">_wall_clocks</span><span class="p">(</span><span class="n">output_text</span><span class="p">)</span>
+    <span class="n">ends</span> <span class="o">=</span> <span class="p">[</span><span class="n">end</span> <span class="k">for</span> <span class="n">end</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">found</span><span class="p">]</span>
+    <span class="n">clocks</span> <span class="o">=</span> <span class="p">[</span><span class="n">seconds</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">seconds</span> <span class="ow">in</span> <span class="n">found</span><span class="p">]</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ends</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">keyword_lines</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="n">jobs</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">start</span><span class="p">,</span> <span class="n">previous</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">0.0</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">clock</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">keyword_lines</span><span class="p">,</span> <span class="n">ends</span><span class="p">,</span> <span class="n">clocks</span><span class="p">)):</span>
+        <span class="n">segment</span> <span class="o">=</span> <span class="n">output_text</span><span class="p">[</span><span class="n">start</span><span class="p">:</span><span class="n">end</span><span class="p">]</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="n">timing_descriptors</span><span class="p">([</span><span class="n">line</span><span class="p">],</span> <span class="n">segment</span><span class="p">,</span> <span class="n">configuration</span><span class="p">)</span>
+        <span class="n">d</span><span class="p">[</span><span class="s2">"code_seconds"</span><span class="p">]</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">clock</span> <span class="o">-</span> <span class="n">previous</span><span class="p">)</span>
+        <span class="n">d</span><span class="p">[</span><span class="s2">"job"</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="n">d</span><span class="p">[</span><span class="s2">"n_calculations"</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">keyword_lines</span><span class="p">)</span>
+        <span class="n">d</span><span class="p">[</span><span class="s2">"terminated_normally"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"== MOPAC DONE =="</span> <span class="ow">in</span> <span class="n">output_text</span>
+        <span class="n">words</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="s2">"OLDGEO"</span> <span class="ow">in</span> <span class="n">words</span> <span class="ow">and</span> <span class="s2">"1SCF"</span> <span class="ow">in</span> <span class="n">words</span><span class="p">:</span>
+            <span class="n">d</span><span class="p">[</span><span class="s2">"follow_up"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"new"</span> <span class="k">if</span> <span class="s2">"MOZYME"</span> <span class="ow">in</span> <span class="n">words</span> <span class="k">else</span> <span class="s2">"exact"</span>
+        <span class="n">jobs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+        <span class="n">start</span><span class="p">,</span> <span class="n">previous</span> <span class="o">=</span> <span class="n">end</span><span class="p">,</span> <span class="n">clock</span>
+    <span class="k">return</span> <span class="n">jobs</span></div>
 
 
 
@@ -1091,12 +1253,38 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 <span class="n">text</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">read_text</span><span class="p">(</span><span class="n">errors</span><span class="o">=</span><span class="s2">"replace"</span><span class="p">)</span> <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span> <span class="k">else</span> <span class="kc">None</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">):</span>
                 <span class="n">text</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">errors</span><span class="o">=</span><span class="s2">"replace"</span><span class="p">)</span>
-            <span class="n">seamm_exec</span><span class="o">.</span><span class="n">record_task_timing</span><span class="p">(</span>
-                <span class="n">task</span><span class="p">,</span>
-                <span class="n">result</span><span class="p">,</span>
-                <span class="n">timing_descriptors</span><span class="p">(</span><span class="n">keyword_lines</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">configuration</span><span class="p">),</span>
-                <span class="o">**</span><span class="n">_record_kwargs</span><span class="p">(),</span>
-            <span class="p">)</span>
+            <span class="n">jobs</span> <span class="o">=</span> <span class="n">job_descriptors</span><span class="p">(</span><span class="n">keyword_lines</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">configuration</span><span class="p">)</span>
+            <span class="n">wall</span> <span class="o">=</span> <span class="n">seamm_exec</span><span class="o">.</span><span class="n">timing</span><span class="o">.</span><span class="n">task_wall_seconds</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+            <span class="k">if</span> <span class="p">(</span>
+                <span class="n">jobs</span> <span class="ow">is</span> <span class="kc">None</span>
+                <span class="ow">or</span> <span class="n">wall</span> <span class="ow">is</span> <span class="kc">None</span>
+                <span class="ow">or</span> <span class="nb">any</span><span class="p">(</span><span class="n">j</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"code_seconds"</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">jobs</span><span class="p">)</span>
+            <span class="p">):</span>
+                <span class="n">seamm_exec</span><span class="o">.</span><span class="n">record_task_timing</span><span class="p">(</span>
+                    <span class="n">task</span><span class="p">,</span>
+                    <span class="n">result</span><span class="p">,</span>
+                    <span class="n">timing_descriptors</span><span class="p">(</span><span class="n">keyword_lines</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">configuration</span><span class="p">),</span>
+                    <span class="o">**</span><span class="n">_record_kwargs</span><span class="p">(),</span>
+                <span class="p">)</span>
+                <span class="k">return</span>
+            <span class="c1"># One record per job, the run's wall time shared out (job_walls)</span>
+            <span class="n">walls</span> <span class="o">=</span> <span class="n">job_walls</span><span class="p">(</span><span class="n">wall</span><span class="p">,</span> <span class="p">[</span><span class="n">j</span><span class="p">[</span><span class="s2">"code_seconds"</span><span class="p">]</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">jobs</span><span class="p">])</span>
+            <span class="n">resources</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">task</span><span class="p">,</span> <span class="s2">"resources"</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">d</span><span class="p">,</span> <span class="n">job_wall</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">jobs</span><span class="p">,</span> <span class="n">walls</span><span class="p">):</span>
+                <span class="n">seamm_exec</span><span class="o">.</span><span class="n">record_timing</span><span class="p">(</span>
+                    <span class="s2">"mopac"</span><span class="p">,</span>
+                    <span class="n">job_wall</span><span class="p">,</span>
+                    <span class="n">d</span><span class="p">,</span>
+                    <span class="n">ntasks</span><span class="o">=</span><span class="nb">getattr</span><span class="p">(</span><span class="n">resources</span><span class="p">,</span> <span class="s2">"ntasks"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+                    <span class="n">cpus_per_task</span><span class="o">=</span><span class="nb">getattr</span><span class="p">(</span><span class="n">resources</span><span class="p">,</span> <span class="s2">"cpus_per_task"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+                    <span class="n">mem_per_cpu</span><span class="o">=</span><span class="nb">getattr</span><span class="p">(</span><span class="n">resources</span><span class="p">,</span> <span class="s2">"mem_per_cpu"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+                    <span class="n">estimated</span><span class="o">=</span><span class="n">task</span><span class="o">.</span><span class="n">estimated_seconds</span> <span class="k">if</span> <span class="n">d</span><span class="p">[</span><span class="s2">"job"</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+                    <span class="n">state</span><span class="o">=</span><span class="nb">getattr</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="s2">"state"</span><span class="p">,</span> <span class="s2">""</span><span class="p">),</span>
+                    <span class="n">timed_out</span><span class="o">=</span><span class="nb">getattr</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="s2">"timed_out"</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+                    <span class="n">attempts</span><span class="o">=</span><span class="nb">getattr</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="s2">"attempts"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+                    <span class="n">in_situ</span><span class="o">=</span><span class="nb">getattr</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="s2">"in_situ"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+                    <span class="o">**</span><span class="n">_record_kwargs</span><span class="p">(),</span>
+                <span class="p">)</span>
         <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>  <span class="c1"># pragma: no cover - must never stop the step</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Could not record the timing of the MOPAC run: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span></div>
 

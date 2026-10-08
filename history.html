@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>History &#8212; SEAMM MOPAC Plug-in 2026.10.8 documentation</title>
+    <title>History &#8212; SEAMM MOPAC Plug-in 2026.10.8.1 documentation</title>
   
   
   
@@ -48,7 +48,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="_static/documentation_options.js?v=e2241af4"></script>
+    <script src="_static/documentation_options.js?v=ac5092dc"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -63,7 +63,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.10.8" />
+  <meta name="docsearch:version" content="2026.10.8.1" />
   
     
     <script src="_static/searchtools.js"></script>
@@ -506,6 +506,35 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <section id="history">
 <h1>History<a class="headerlink" href="#history" title="Link to this heading">#</a></h1>
 <dl class="simple">
+<dt>2026.10.8.1 – Each job of a MOPAC run is its own timing record</dt><dd><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">TIMING_SPEC</span></code> adds <code class="docutils literal notranslate"><span class="pre">neighbours</span></code>, the mean number of atoms within 8 Å, as a
+size variable: MOZYME’s cost per atom is about 8 times higher in a 1,000-atom
+water cluster than along a 900-atom alkane chain. Needs seamm-exec 2026.10.8.1
+to record it.</p></li>
+<li><p>A run with several jobs – a MOZYME calculation and its follow-up – writes one
+timing record per job, each with its own regime, geometry cycles and time, so a
+follow-up that runs the traditional SCF is counted as that, not as MOZYME. Each
+job’s time is the difference of MOPAC’s cumulative clock, read in seconds,
+minutes or hours; MOPAC’s “TOTAL JOB TIME”, which adds the cumulative values,
+overstated two-job runs by about a factor of two. The time outside MOPAC’s
+clock – a traditional SCF on 900 atoms spends 13 s writing its output – goes
+to the jobs in proportion to their own time.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">TIMING_SPEC</span></code> gives each regime a fixed cost per run (<code class="docutils literal notranslate"><span class="pre">setup_by</span></code>), fitted in
+geometry cycles: MOZYME’s localization of the orbitals measured at about one
+cycle on ChemAI up to a few thousand atoms.</p></li>
+<li><p>Bond orders are part of the cost model’s method class: MOPAC calculates them
+after the SCF, outside its own clock, and for a traditional SCF on 900 atoms
+they take about as long as the SCF itself.</p></li>
+<li><p>The timing benchmark runs without bond orders, plus a few runs with them at
+302 and 902 atoms to give their cost; adds the follow-up that runs a
+traditional SCF after MOZYME, for energies (to 902 atoms) and optimizations
+from 300 atoms; and, for the large sizes, water spheres packed by Packmol
+(999 atoms in the quick tier; 3,000 and 9,999 in the full, the largest with
+MOZYME and no follow-up) in place of the 3,002-atom alkane. A 3D cluster is what
+large MOPAC calculations usually are, and building a 10,000-atom chain from
+SMILES took over an hour.</p></li>
+</ul>
+</dd>
 <dt>2026.10.8 – The cost model counts geometry cycles and scales each regime separately</dt><dd><ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">TIMING_SPEC</span></code> counts an optimization’s work in geometry cycles rather than
 SCF runs, which MOPAC reports as 1 or 2 for an optimization of any length, so
