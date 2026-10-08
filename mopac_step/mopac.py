@@ -63,7 +63,10 @@ def estimated_seconds(keyword_lines, n_atoms):
 #: core, so no parallel exponent.
 TIMING_SPEC = {
     "size": ["n_basis", "n_atoms"],
-    "klass": ["hamiltonian", "regime"],
+    # The method class: the Hamiltonian, the regime, and whether bond orders are
+    # calculated -- after the SCF, outside MOPAC's own clock, and as dear as the
+    # SCF itself for a traditional SCF on 900 atoms
+    "klass": ["hamiltonian", "regime", "bond_orders"],
     "task": "task",
     # An optimization's time is its geometry cycles (an SCF and a gradient
     # each), not its SCF count, which MOPAC reports as 1 or 2 however long it
@@ -96,6 +99,7 @@ _BENCHMARK_MOLECULES = (
     ("hectane", "C" * 100, 302),
     ("alkane-300", "C" * 300, 902),
     ("alkane-1000", "C" * 1000, 3002),
+    ("alkane-3333", "C" * 3333, 10001),
 )
 
 #: The step's timing benchmark (seamm_exec.timing_benchmark). MOPAC does not
@@ -117,26 +121,47 @@ TIMING_BENCHMARK = {
         for name, smiles, n_atoms in _BENCHMARK_MOLECULES
     ],
     "chemistries": {
-        "PM7": {"quick": 902, "full": 3002},
+        "PM7": {"quick": 902, "full": 10001},
         "PM6-ORG": {"quick": 302, "full": 902},
     },
     "parameter": "hamiltonian",
     "tasks": {
-        "Energy": {"quick": 902, "full": 3002},
+        "Energy": {"quick": 902, "full": 10001},
         "Optimization": {"quick": 62, "full": 302},
     },
     "variants": {
-        # From 300 atoms, where MOZYME is used: the default follow-up (fresh
-        # localized orbitals), the traditional SCF forced, and the follow-up
-        # that runs a traditional SCF after MOZYME (to 902 atoms: its N^3)
+        # Without bond orders, which run after the SCF outside MOPAC's clock and
+        # would blur its timing; a few runs with them, at 302 and 902 atoms in
+        # both regimes, give their cost. From 300 atoms, where MOZYME is used:
+        # the default follow-up (fresh localized orbitals), the traditional SCF
+        # forced, and the follow-up that runs a traditional SCF after MOZYME (to
+        # 902 atoms: its N^3). The 10,000-atom alkane runs MOZYME alone, with no
+        # follow-up.
         "Energy": [
-            {},
+            {"bond orders": "no", "_max_size": 3002},
+            {
+                "bond orders": "no",
+                "MOZYME": "never",
+                "_min_size": 300,
+                "_max_size": 902,
+            },
+            {
+                "bond orders": "no",
+                "MOZYME follow-up": _EXACT_FOLLOW_UP,
+                "_min_size": 300,
+                "_max_size": 902,
+            },
+            {"bond orders": "no", "MOZYME follow-up": "none", "_min_size": 3003},
+            {"_min_size": 300, "_max_size": 902},
             {"MOZYME": "never", "_min_size": 300, "_max_size": 902},
-            {"MOZYME follow-up": _EXACT_FOLLOW_UP, "_min_size": 300, "_max_size": 902},
         ],
         "Optimization": [
-            {},
-            {"MOZYME follow-up": _EXACT_FOLLOW_UP, "_min_size": 300},
+            {"bond orders": "no"},
+            {
+                "bond orders": "no",
+                "MOZYME follow-up": _EXACT_FOLLOW_UP,
+                "_min_size": 300,
+            },
         ],
     },
 }
@@ -203,6 +228,7 @@ def timing_descriptors(keyword_lines, output_text, configuration=None):
     d = {"job": 1, "follow_up": ""}
     text = " ".join(keyword_lines).upper()
     words = text.split()
+    d["bond_orders"] = "yes" if "BONDS" in words else "no"
     d["hamiltonian"] = next((h for h in _HAMILTONIANS if h in words), "")
     d["task"] = task_kind(keyword_lines)
     d["n_calculations"] = len(keyword_lines)

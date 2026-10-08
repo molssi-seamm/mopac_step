@@ -11,11 +11,11 @@ def test_declaration_shape():
     assert d["program"] == "mopac" and d["step"] == "MOPAC" and not d["parallel"]
     assert d["parameter"] == "hamiltonian"
     sizes = [s["size"] for s in d["systems"]]
-    assert sizes == sorted(sizes) and sizes[0] == 3 and sizes[-1] == 3002
+    assert sizes == sorted(sizes) and sizes[0] == 3 and sizes[-1] == 10001
     assert set(d["chemistries"]) == {"PM7", "PM6-ORG"}
     for limits in (*d["chemistries"].values(), *d["tasks"].values()):
         assert limits["quick"] <= limits["full"]
-    variant = d["variants"]["Energy"][1]
+    variant = d["variants"]["Energy"][1]  # the traditional SCF forced
     assert variant["MOZYME"] == "never" and variant["_min_size"] == 300
 
 

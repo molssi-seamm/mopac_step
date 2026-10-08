@@ -12,8 +12,14 @@ History
       to the jobs in proportion to their own time.
     * ``TIMING_SPEC`` gives each regime a fixed cost per run (``setup_by``): MOZYME
       pays a large setup, localizing the orbitals, then runs fast cycles.
-    * The timing benchmark adds the follow-up that runs a traditional SCF after
-      MOZYME, for energies (to 902 atoms) and optimizations, from 300 atoms.
+    * Bond orders are part of the cost model's method class: MOPAC calculates them
+      after the SCF, outside its own clock, and for a traditional SCF on 900 atoms
+      they take about as long as the SCF itself.
+    * The timing benchmark runs without bond orders, plus a few runs with them at
+      302 and 902 atoms to give their cost; adds the follow-up that runs a
+      traditional SCF after MOZYME, for energies (to 902 atoms) and optimizations
+      from 300 atoms; and, in the full tier, a 10,001-atom alkane with MOZYME and
+      no follow-up.
 
 2026.10.8 -- The cost model counts geometry cycles and scales each regime separately
     * ``TIMING_SPEC`` counts an optimization's work in geometry cycles rather than

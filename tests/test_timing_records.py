@@ -61,7 +61,7 @@ def test_mozyme_regime_is_read_from_the_output():
 def test_timing_spec():
     from mopac_step import mopac
 
-    assert mopac.TIMING_SPEC["klass"] == ["hamiltonian", "regime"]
+    assert mopac.TIMING_SPEC["klass"] == ["hamiltonian", "regime", "bond_orders"]
     assert mopac.TIMING_SPEC["default_alpha"] == 0.0
     assert mopac.TIMING_SPEC["setup_by"] == "regime"
     assert "spec" in mopac._record_kwargs() or not hasattr(
@@ -151,3 +151,10 @@ def test_the_wall_time_is_shared_in_proportion():
     assert abs(sum(walls) - 29.2) < 1e-9
     assert walls[0] < 3.0 < 26.0 < walls[1]
     assert mopac.job_walls(2.0, [0.0, 0.0]) == [1.0, 1.0]
+
+
+def test_bond_orders_are_recorded():
+    d = mopac.timing_descriptors(["PM7 1SCF GRADIENTS BONDS"], "")
+    assert d["bond_orders"] == "yes"
+    d = mopac.timing_descriptors(["PM7 1SCF GRADIENTS"], "")
+    assert d["bond_orders"] == "no"
