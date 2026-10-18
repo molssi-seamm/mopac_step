@@ -704,11 +704,12 @@ class MOPAC(mopac_step.MOPACBase):
 
                 self.logger.debug("\n" + pprint.pformat(result))
 
-                self.logger.debug(
-                    "\n\nOutput from MOPAC\n\n"
-                    + str(result.files.get("mopac.out", ""))
-                    + "\n\n"
-                )
+                if self.logger.isEnabledFor(logging.DEBUG):
+                    self.logger.debug(
+                        "\n\nOutput from MOPAC\n\n"
+                        + str(result.read("mopac.out") or "")
+                        + "\n\n"
+                    )
 
         # Ran successfully, put out the success file
         (directory / "success.dat").write_text("success")
@@ -731,12 +732,10 @@ class MOPAC(mopac_step.MOPACBase):
         try:
             if result.restored:
                 return
-            text = result.files.get("mopac.out")
+            text = result.read("mopac.out")
             if text is None:
                 path = Path(self.directory) / "mopac.out"
                 text = path.read_text(errors="replace") if path.exists() else None
-            if isinstance(text, bytes):
-                text = text.decode(errors="replace")
             jobs = job_descriptors(keyword_lines, text, configuration)
             wall = seamm_exec.timing.task_wall_seconds(result)
             if (

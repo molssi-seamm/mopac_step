@@ -151,15 +151,13 @@ def analyze_task(
     as the MOPAC step's own runs do."""
     if task is not None:
         _record_timing(task, result, configuration)
-    aux = result.files.get("mopac.aux")
+    aux = result.read("mopac.aux")
     if aux is None and result.directory is not None:
         from pathlib import Path
 
         path = Path(result.directory) / "mopac.aux"
         if path.exists():
             aux = path.read_text(errors="replace")
-    if isinstance(aux, bytes):
-        aux = aux.decode(errors="replace")
     data = {}
     if aux:
         heat, gradients = parse_aux(aux)
@@ -186,13 +184,16 @@ def _record_timing(task, result, configuration):
         from .mopac import _record_kwargs, timing_descriptors
 
         keyword_lines = []
-        for name, text in {**result.files, **(task.files or {})}.items():
-            if name in ("mopac.dat", "mopac.mop"):
+        for name in ("mopac.dat", "mopac.mop"):
+            text = (task.files or {}).get(name)
+            if text is None:
+                text = result.read(name)
+            if text is not None:
                 if isinstance(text, bytes):
                     text = text.decode(errors="replace")
                 keyword_lines = [text.splitlines()[0]] if text else []
                 break
-        out = result.files.get("mopac.out")
+        out = result.read("mopac.out")
         if out is None and result.directory is not None:
             from pathlib import Path
 
