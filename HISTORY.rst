@@ -1,6 +1,12 @@
 =======
 History
 =======
+2026.10.18 -- Internal: read the output files of tasks from disk
+    * seamm-exec 2026.10.18 records where each file a task returns is, not its contents,
+      since they can be gigabytes. The MOPAC step reads the files it needs with
+      ``result.read()``, from disk or the task archive, and requires that version of
+      seamm-exec.
+
 2026.10.8.1 -- Each job of a MOPAC run is its own timing record
     * ``TIMING_SPEC`` adds ``neighbours``, the mean number of atoms within 8 Å, as a
       size variable: MOZYME's cost per atom is about 8 times higher in a 1,000-atom

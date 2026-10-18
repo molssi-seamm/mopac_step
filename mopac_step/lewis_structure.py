@@ -200,11 +200,12 @@ class LewisStructure(mopac_step.MOPACBase):
 
         self.logger.debug("\n" + pprint.pformat(result))
 
-        self.logger.debug(
-            "\n\nOutput from MOPAC\n\n"
-            + str(result.files.get("mopac.out", ""))
-            + "\n\n"
-        )
+        if self.logger.isEnabledFor(logging.DEBUG):
+            self.logger.debug(
+                "\n\nOutput from MOPAC\n\n"
+                + str(result.read("mopac.out") or "")
+                + "\n\n"
+            )
 
         # Analyze the results
         self.analyze()
