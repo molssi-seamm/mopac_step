@@ -167,5 +167,9 @@ class OptimizationParameters(mopac_step.EnergyParameters):
         tmp.default = "keep current name"
 
         tmp = self["configuration name"]
-        tmp._data["enumeration"] = ["optimized with {Hamiltonian}", *tmp.enumeration]
-        tmp.default = "optimized with {Hamiltonian}"
+        tmp._data["enumeration"] = [
+            "{current name} optimized with {Hamiltonian}",
+            "optimized with {Hamiltonian}",
+            *tmp.enumeration,
+        ]
+        tmp.default = "{current name} optimized with {Hamiltonian}"
