@@ -1,6 +1,14 @@
 =======
 History
 =======
+2026.10.24 -- The optimized structure keeps its name
+    * The structures that optimizations write are now named '{current name} optimized
+      with {Hamiltonian}' by default, keeping the name the structure had, such as a
+      title read from an SDF file: 'DMC_cc optimized with PM7'. Before, every
+      structure was named 'optimized with <Hamiltonian>', so the titles of several
+      molecules were lost. Flowcharts already saved keep their setting, and the
+      previous choice remains in the list. Needs seamm 2026.10.24.
+
 2026.10.18 -- Internal: read the output files of tasks from disk
     * seamm-exec 2026.10.18 records where each file a task returns is, not its contents,
       since they can be gigabytes. The MOPAC step reads the files it needs with
