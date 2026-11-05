@@ -73,6 +73,14 @@ open-shell structures always use the MDI engine; on a queue target where MOPAC i
 installed on the job's own machine, such a structure is reported as failed, with the
 reason, and the others finish.
 
+Steps that take finite differences of the gradients, such as **Vibrational
+Analysis**, ask the engine for tight convergence: each calculation then converges to
+a relative tolerance of 0.001 instead of MOPAC's default 1.0. The engine starts each
+SCF from the previous structure's density, and at the default tolerance that leaves
+small errors that depend on which structure came before, which finite differences
+magnify. For water's anharmonic force constants the noise was 447 cm\ :sup:`-1` at
+1.0, 22 at 0.01 (the tolerance ``PRECISE`` gives), and 3.5 at 0.001.
+
 For a periodic structure the engine also returns the stress, as a pressure: positive
 when the system pushes outward (the opposite of MOPAC's own tensile-positive stress).
 MOPAC's model chemistries declare this, so steps that use the stress, such as the MBE
