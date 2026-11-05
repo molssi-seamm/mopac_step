@@ -112,6 +112,13 @@ class MOPACStep(object):
 
     _MDI_CAPABLE_METHODS = {"PM7", "PM6-D3H4", "PM6-ORG", "PM6", "AM1", "RM1"}
 
+    #: The engine's relative tolerance for precision="tight" (mopactools'
+    #: default is 1.0; 0.01 is what PRECISE does). Measured on PM7 water VPT2,
+    #: 2026-11-05: 1.0 leaves finite-difference noise of 88/447 cm^-1 in the
+    #: cubic/quartic constants, 0.01 still 17/22, 0.001 only 0.9/3.5; with
+    #: 0.0001 a tight geometry optimization no longer converged.
+    TIGHT_TOLERANCE = "0.001"
+
     # Methods actually run periodic via MDI and confirmed working, per
     # NOTES_qm_mdi_engines_validation.rst. Cross-checked against the real
     # metadata["computational models"] entries -- PM7, PM6, and PM6-ORG are
@@ -325,6 +332,7 @@ class MOPACStep(object):
         n_atoms=None,
         engine_name="MOPAC",
         extra_args=None,
+        precision=None,
     ):
         """Build the argv that launches the MOPAC MDI *engine* over TCP.
 
@@ -365,6 +373,10 @@ class MOPACStep(object):
         extra_args : list of str, optional
             Extra engine flags appended verbatim, e.g.
             ``["--mozyme", "--tolerance", "0.5"]``.
+        precision : str, optional
+            "tight" converges each SCF tightly, for finite differences of
+            gradients: the warm-started SCF otherwise leaves noise that
+            depends on the previous geometry (2026-11-05).
 
         Returns
         -------
@@ -413,6 +425,8 @@ class MOPACStep(object):
             "--multiplicity",
             str(multiplicity),
         ]
+        if precision == "tight":
+            argv.extend(["--tolerance", cls.TIGHT_TOLERANCE])
         if extra_args:
             argv.extend(extra_args)
         return argv
