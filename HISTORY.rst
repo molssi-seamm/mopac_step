@@ -1,6 +1,15 @@
 =======
 History
 =======
+2026.11.5 -- Tight convergence on request for finite differences
+    * Steps that take finite differences of MOPAC's gradients over its MDI engine, such
+      as the new Vibrational Analysis step, can now ask for tight convergence: every
+      calculation then converges to a relative tolerance of 0.001 instead of 1.0. The
+      engine starts each SCF from the previous structure's density, and at the default
+      tolerance that left noise depending on the previous structure (water's
+      anharmonic force constants: 447 cm^-1 of noise at 1.0, 22 at the 0.01 that
+      PRECISE gives, 3.5 at 0.001).
+
 2026.10.24 -- The optimized structure keeps its name
     * The structures that optimizations write are now named '{current name} optimized
       with {Hamiltonian}' by default, keeping the name the structure had, such as a
