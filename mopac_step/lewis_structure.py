@@ -119,12 +119,11 @@ class LewisStructure(mopac_step.MOPACBase):
         # Always add the charge since that will cause MOZYME, if used, to check.
         extra_keywords.append(f"CHARGE={configuration.charge}")
         # Sparkles affect the number of electrons .. each has 3? .. so ignore
-        # multiplicity
-        if False:
-            # if "SPARKLES" not in extra_keywords:
+        # multiplicity. Closed-shell systems keep MOPAC's default, as before.
+        multiplicity = configuration.spin_multiplicity
+        if "SPARKLES" not in extra_keywords and multiplicity > 1:
             # And the spin multiplicity
-            multiplicity = configuration.spin_multiplicity
-            if multiplicity <= 10:
+            if multiplicity <= 9:
                 extra_keywords.append(
                     (
                         "SINGLET",
@@ -301,8 +300,13 @@ class LewisStructure(mopac_step.MOPACBase):
                         continue
                     if "COMPUTED CHARGE ON SYSTEM" in line:
                         break
-                    ion, atom, type_, charge = line.split()
-                    ions[int(atom) - 1] = {"charge": int(charge), "type": type_}
+                    # The table may not be followed by the computed charge, e.g.
+                    # for Li2, so stop at the first line that is not an ion.
+                    tmp = line.split()
+                    if len(tmp) != 4 or not (tmp[0].isdigit() and tmp[1].isdigit()):
+                        break
+                    ion, atom, type_, q = tmp
+                    ions[int(atom) - 1] = {"charge": int(q), "type": type_}
             if "COMPUTED CHARGE ON SYSTEM" in line:
                 charge = int(line.split()[4].rstrip(","))
                 if "THIS IS THE SAME AS THE CHARGE DEFINED" not in line:
@@ -510,22 +514,24 @@ class LewisStructure(mopac_step.MOPACBase):
                 )
                 text += "\nReplaced the bonds in the configuration with those from the "
                 text += "Lewis structure.\n"
-            else:
+            elif any(len(atoms) > 0 for atoms in neighbors):
                 iatoms = []
                 jatoms = []
                 bondorders = []
                 for i in range(n_atoms):
-                    for j in lneighbors[i]:
+                    for j in neighbors[i]:
                         if j > i:
                             iatoms.append(ids[i])
                             jatoms.append(ids[j])
                             bondorders.append(1)
                 configuration.new_bondset()
-                configuration.bonds.append(
-                    i=iatoms, j=jatoms, bondorder=bonds["bondorder"]
-                )
+                configuration.bonds.append(i=iatoms, j=jatoms, bondorder=bondorders)
                 text += "\nReplaced the bonds in the configuration with those from the "
                 text += "simple connectivity structure.\n"
+            else:
+                # e.g. Li2, which MOPAC treats as two ions
+                text += "\nMOPAC gave neither a Lewis structure nor the connectivity, "
+                text += "so the bonds in the configuration were not changed.\n"
 
         # Put any requested results into variables or tables
         self.store_results(

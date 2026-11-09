@@ -1,6 +1,12 @@
 =======
 History
 =======
+2026.11.9 -- Bug fixes for the Lewis structure
+    * Fixed a bug in the ion-table parse, which no longer crashes on Li₂ and Na₂, and no
+      longer overwrites the system charge with an ion’s charge; 
+    * A connectivity fallback, which uses neighbors with matching bond orders and
+      leaves the bonds alone when MOPAC gives no structure.
+
 2026.11.5 -- Tight convergence on request for finite differences
     * Steps that take finite differences of MOPAC's gradients over its MDI engine, such
       as the new Vibrational Analysis step, can now ask for tight convergence: every
