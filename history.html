@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>History &#8212; SEAMM MOPAC Plug-in 2026.11.5 documentation</title>
+    <title>History &#8212; SEAMM MOPAC Plug-in 2026.11.9 documentation</title>
   
   
   
@@ -48,7 +48,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="_static/documentation_options.js?v=e86bfd1c"></script>
+    <script src="_static/documentation_options.js?v=3789d4b4"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -63,7 +63,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.11.5" />
+  <meta name="docsearch:version" content="2026.11.9" />
   
     
     <script src="_static/searchtools.js"></script>
@@ -506,6 +506,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <section id="history">
 <h1>History<a class="headerlink" href="#history" title="Link to this heading">#</a></h1>
 <dl class="simple">
+<dt>2026.11.9 – Bug fixes for the Lewis structure</dt><dd><ul class="simple">
+<li><p>Fixed a bug in the ion-table parse, which no longer crashes on Li₂ and Na₂, and no
+longer overwrites the system charge with an ion’s charge;</p></li>
+<li><p>A connectivity fallback, which uses neighbors with matching bond orders and
+leaves the bonds alone when MOPAC gives no structure.</p></li>
+</ul>
+</dd>
 <dt>2026.11.5 – Tight convergence on request for finite differences</dt><dd><ul class="simple">
 <li><p>Steps that take finite differences of MOPAC’s gradients over its MDI engine, such
 as the new Vibrational Analysis step, can now ask for tight convergence: every

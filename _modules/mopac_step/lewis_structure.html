@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mopac_step.lewis_structure &#8212; SEAMM MOPAC Plug-in 2026.11.5 documentation</title>
+    <title>mopac_step.lewis_structure &#8212; SEAMM MOPAC Plug-in 2026.11.9 documentation</title>
   
   
   
@@ -47,7 +47,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="../../_static/documentation_options.js?v=e86bfd1c"></script>
+    <script src="../../_static/documentation_options.js?v=3789d4b4"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -61,7 +61,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.11.5" />
+  <meta name="docsearch:version" content="2026.11.9" />
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -614,12 +614,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <span class="c1"># Always add the charge since that will cause MOZYME, if used, to check.</span>
         <span class="n">extra_keywords</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"CHARGE=</span><span class="si">{</span><span class="n">configuration</span><span class="o">.</span><span class="n">charge</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
         <span class="c1"># Sparkles affect the number of electrons .. each has 3? .. so ignore</span>
-        <span class="c1"># multiplicity</span>
-        <span class="k">if</span> <span class="kc">False</span><span class="p">:</span>
-            <span class="c1"># if "SPARKLES" not in extra_keywords:</span>
+        <span class="c1"># multiplicity. Closed-shell systems keep MOPAC's default, as before.</span>
+        <span class="n">multiplicity</span> <span class="o">=</span> <span class="n">configuration</span><span class="o">.</span><span class="n">spin_multiplicity</span>
+        <span class="k">if</span> <span class="s2">"SPARKLES"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">extra_keywords</span> <span class="ow">and</span> <span class="n">multiplicity</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
             <span class="c1"># And the spin multiplicity</span>
-            <span class="n">multiplicity</span> <span class="o">=</span> <span class="n">configuration</span><span class="o">.</span><span class="n">spin_multiplicity</span>
-            <span class="k">if</span> <span class="n">multiplicity</span> <span class="o">&lt;=</span> <span class="mi">10</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">multiplicity</span> <span class="o">&lt;=</span> <span class="mi">9</span><span class="p">:</span>
                 <span class="n">extra_keywords</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
                     <span class="p">(</span>
                         <span class="s2">"SINGLET"</span><span class="p">,</span>
@@ -799,8 +798,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                         <span class="k">continue</span>
                     <span class="k">if</span> <span class="s2">"COMPUTED CHARGE ON SYSTEM"</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
                         <span class="k">break</span>
-                    <span class="n">ion</span><span class="p">,</span> <span class="n">atom</span><span class="p">,</span> <span class="n">type_</span><span class="p">,</span> <span class="n">charge</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
-                    <span class="n">ions</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">atom</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"charge"</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">charge</span><span class="p">),</span> <span class="s2">"type"</span><span class="p">:</span> <span class="n">type_</span><span class="p">}</span>
+                    <span class="c1"># The table may not be followed by the computed charge, e.g.</span>
+                    <span class="c1"># for Li2, so stop at the first line that is not an ion.</span>
+                    <span class="n">tmp</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">4</span> <span class="ow">or</span> <span class="ow">not</span> <span class="p">(</span><span class="n">tmp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">isdigit</span><span class="p">()</span> <span class="ow">and</span> <span class="n">tmp</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">isdigit</span><span class="p">()):</span>
+                        <span class="k">break</span>
+                    <span class="n">ion</span><span class="p">,</span> <span class="n">atom</span><span class="p">,</span> <span class="n">type_</span><span class="p">,</span> <span class="n">q</span> <span class="o">=</span> <span class="n">tmp</span>
+                    <span class="n">ions</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">atom</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"charge"</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">q</span><span class="p">),</span> <span class="s2">"type"</span><span class="p">:</span> <span class="n">type_</span><span class="p">}</span>
             <span class="k">if</span> <span class="s2">"COMPUTED CHARGE ON SYSTEM"</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
                 <span class="n">charge</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">4</span><span class="p">]</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">","</span><span class="p">))</span>
                 <span class="k">if</span> <span class="s2">"THIS IS THE SAME AS THE CHARGE DEFINED"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
@@ -1008,22 +1012,24 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 <span class="p">)</span>
                 <span class="n">text</span> <span class="o">+=</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">Replaced the bonds in the configuration with those from the "</span>
                 <span class="n">text</span> <span class="o">+=</span> <span class="s2">"Lewis structure.</span><span class="se">\n</span><span class="s2">"</span>
-            <span class="k">else</span><span class="p">:</span>
+            <span class="k">elif</span> <span class="nb">any</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">atoms</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">atoms</span> <span class="ow">in</span> <span class="n">neighbors</span><span class="p">):</span>
                 <span class="n">iatoms</span> <span class="o">=</span> <span class="p">[]</span>
                 <span class="n">jatoms</span> <span class="o">=</span> <span class="p">[]</span>
                 <span class="n">bondorders</span> <span class="o">=</span> <span class="p">[]</span>
                 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_atoms</span><span class="p">):</span>
-                    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">lneighbors</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
+                    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">neighbors</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
                         <span class="k">if</span> <span class="n">j</span> <span class="o">&gt;</span> <span class="n">i</span><span class="p">:</span>
                             <span class="n">iatoms</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ids</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
                             <span class="n">jatoms</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ids</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
                             <span class="n">bondorders</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
                 <span class="n">configuration</span><span class="o">.</span><span class="n">new_bondset</span><span class="p">()</span>
-                <span class="n">configuration</span><span class="o">.</span><span class="n">bonds</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                    <span class="n">i</span><span class="o">=</span><span class="n">iatoms</span><span class="p">,</span> <span class="n">j</span><span class="o">=</span><span class="n">jatoms</span><span class="p">,</span> <span class="n">bondorder</span><span class="o">=</span><span class="n">bonds</span><span class="p">[</span><span class="s2">"bondorder"</span><span class="p">]</span>
-                <span class="p">)</span>
+                <span class="n">configuration</span><span class="o">.</span><span class="n">bonds</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="n">iatoms</span><span class="p">,</span> <span class="n">j</span><span class="o">=</span><span class="n">jatoms</span><span class="p">,</span> <span class="n">bondorder</span><span class="o">=</span><span class="n">bondorders</span><span class="p">)</span>
                 <span class="n">text</span> <span class="o">+=</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">Replaced the bonds in the configuration with those from the "</span>
                 <span class="n">text</span> <span class="o">+=</span> <span class="s2">"simple connectivity structure.</span><span class="se">\n</span><span class="s2">"</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># e.g. Li2, which MOPAC treats as two ions</span>
+                <span class="n">text</span> <span class="o">+=</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">MOPAC gave neither a Lewis structure nor the connectivity, "</span>
+                <span class="n">text</span> <span class="o">+=</span> <span class="s2">"so the bonds in the configuration were not changed.</span><span class="se">\n</span><span class="s2">"</span>
 
         <span class="c1"># Put any requested results into variables or tables</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">store_results</span><span class="p">(</span>
