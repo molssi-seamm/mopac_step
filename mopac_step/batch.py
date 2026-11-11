@@ -134,6 +134,48 @@ def parse_aux(text):
     return heat, gradients
 
 
+_settings = None
+
+
+def mopac_settings():
+    """The settings module shared with the MDI engine (``data/mopac_settings.py``),
+    loaded by its path: the engine imports it in the seamm-mopac environment."""
+    global _settings
+    if _settings is None:
+        import importlib.resources
+        import importlib.util
+
+        path = importlib.resources.files("mopac_step") / "data" / "mopac_settings.py"
+        spec = importlib.util.spec_from_file_location("_mopac_settings", str(path))
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        _settings = module
+    return _settings
+
+
+def aux_version(text):
+    """MOPAC's version from a ``.aux`` file (``MOPAC_VERSION=23.2.5``), or None."""
+    match = re.search(r"MOPAC_VERSION=\s*(\S+)", text or "")
+    return match.group(1) if match else None
+
+
+def calculation_record_of(model_chemistry, version, mozyme=False, tolerance=1.0):
+    """The settings record of a MOPAC calculation at a model chemistry, as the MDI
+    engine reports it (completed with its fingerprint); None without a version."""
+    if not version:
+        return None
+    from seamm_exec.evaluator import mdi_method_and_basis
+    from seamm_util.fingerprint import calculation_record
+
+    settings = mopac_settings()
+    method, _ = mdi_method_and_basis(model_chemistry)
+    return calculation_record(
+        settings.PROGRAM,
+        version,
+        {settings.SETTINGS_FILE: settings.settings_text(method, mozyme, tolerance)},
+    )
+
+
 def analyze_task(
     result,
     model_chemistry,
@@ -160,6 +202,11 @@ def analyze_task(
             aux = path.read_text(errors="replace")
     data = {}
     if aux:
+        # The record of the settings, as the MDI engine reports it
+        # (data/mopac_settings.py), so both routes give one fingerprint
+        record = calculation_record_of(model_chemistry, aux_version(aux))
+        if record is not None:
+            data["calculation"] = record
         heat, gradients = parse_aux(aux)
         if heat is not None:
             data["energy"] = float(Q_(heat, "kcal/mol").m_as("kJ/mol"))
