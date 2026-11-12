@@ -1,6 +1,16 @@
 =======
 History
 =======
+
+2026.11.11 -- Settings fingerprints for MOPAC's model-chemistry calculations
+    * Calculations through a MOPAC **Model Chemistry** (e.g. ``MOPAC:PM7``), whether in
+      the MDI engine or as separate MOPAC calculations on a queue, now carry a
+      fingerprint of their settings -- MOPAC's version, the method, MOZYME and the SCF
+      tolerance -- like the other codes' calculations. Both routes give the same
+      fingerprint for the same calculation, so steps that reuse results, such as
+      **Thermochemistry** with its fragment store, can tell which stored MOPAC results
+      match the calculation they need.
+
 2026.11.9 -- Bug fixes for the Lewis structure
     * Fixed a bug in the ion-table parse, which no longer crashes on Li₂ and Na₂, and no
       longer overwrites the system charge with an ion’s charge; 

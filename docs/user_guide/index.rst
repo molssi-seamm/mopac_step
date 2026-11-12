@@ -81,6 +81,14 @@ small errors that depend on which structure came before, which finite difference
 magnify. For water's anharmonic force constants the noise was 447 cm\ :sup:`-1` at
 1.0, 22 at 0.01 (the tolerance ``PRECISE`` gives), and 3.5 at 0.001.
 
+Each calculation through the Model Chemistry carries a fingerprint of its settings:
+MOPAC's version, the method, whether MOZYME is used, and the SCF tolerance. The charge
+and spin multiplicity belong to the structure and are not part of it. The MDI engine
+and the separate calculations on a queue give the same fingerprint for the same
+calculation, and steps that reuse results, such as **Thermochemistry** with its
+fragment store, use it to tell whether a stored MOPAC result came from the same
+calculation they need.
+
 For a periodic structure the engine also returns the stress, as a pressure: positive
 when the system pushes outward (the opposite of MOPAC's own tensile-positive stress).
 MOPAC's model chemistries declare this, so steps that use the stress, such as the MBE
