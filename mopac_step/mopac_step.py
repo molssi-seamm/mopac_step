@@ -294,6 +294,30 @@ class MOPACStep(object):
         return config
 
     @classmethod
+    def expected_fingerprints(
+        cls,
+        configuration,
+        model_chemistry,
+        *,
+        kind="energy",
+        properties=("energy",),
+        options=None,
+        version=None,
+    ):
+        """The settings fingerprints a MOPAC calculation of a structure would
+        record, without running it: the same for the task route and the MDI
+        engine (``data/mopac_settings.py``), from the method and MOPAC's version,
+        which is hashed (take it from a record of the same run). The settings do
+        not depend on the structure; MOPAC has no analytic Hessian, so a Hessian
+        has the energy's fingerprint."""
+        from .batch import calculation_record_of
+
+        if kind not in ("energy", "hessian"):
+            raise ValueError(f"kind must be 'energy' or 'hessian', not '{kind}'")
+        record = calculation_record_of(model_chemistry, version)
+        return None if record is None else [record["fingerprint"]]
+
+    @classmethod
     def get_task(cls, configuration, model_chemistry, **kwargs):
         """A task computing MOPAC's heat of formation (and gradients) for one
         structure: the batch half of the Model Chemistry contract. See

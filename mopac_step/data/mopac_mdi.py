@@ -80,7 +80,14 @@ import logging  # noqa: E402
 import sys  # noqa: E402
 import time  # noqa: E402
 
+import json  # noqa: E402
+from pathlib import Path  # noqa: E402
+
 import numpy as np  # noqa: E402
+
+# The settings record (data/mopac_settings.py, beside this script)
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from mopac_settings import settings_record  # noqa: E402
 
 from seamm_util import Q_  # noqa: E402
 
@@ -131,6 +138,16 @@ def multiplicity_to_spin(multiplicity, n_electrons):
 # ---------------------------------------------------------------------------
 # CLI
 # ---------------------------------------------------------------------------
+def mopac_version():
+    """MOPAC's version, as mopactools reports it, e.g. "23.2.5"."""
+    try:
+        import mopactools.api
+
+        return str(mopactools.api.VERSION)
+    except Exception:
+        return "unknown"
+
+
 def parse_args():
     p = argparse.ArgumentParser(
         description="MOPAC MDI engine (mopactools API) for LAMMPS fix mdi/qm"
@@ -274,9 +291,13 @@ def main():
         "<ENERGY",
         "<FORCES",
         "<STRESS",
+        "<FINGERPRINT_LENGTH",
+        "<FINGERPRINT",
         "EXIT",
     ]:
         mdi.MDI_Register_command("@DEFAULT", _cmd)
+    # The settings of the last calculation (no analytic Hessian over MDI)
+    records = {"energy": None, "hessian": None}
 
     logger.debug(f"MDI connection established. method={args.method}")
 
@@ -395,6 +416,12 @@ def main():
             raise RuntimeError(
                 "MOPAC reported error(s): " + "; ".join(properties.error_msg)
             )
+        records["energy"] = settings_record(
+            args.method,
+            mozyme=args.mozyme,
+            tolerance=args.tolerance,
+            version=mopac_version(),
+        )
         logger.debug(
             f"heat = {properties.heat:.8f} kcal/mol "
             f"({properties.heat * HARTREE_PER_KCALMOL:.8f} Ha)"
@@ -524,6 +551,15 @@ def main():
                 mdi.MDI_Send(stress_ha_bohr3.ravel(), 9, mdi.MDI_DOUBLE, comm)
 
         # ---- Shutdown ---------------------------------------------------
+        elif command in ("<FINGERPRINT_LENGTH", "<FINGERPRINT"):
+            # The settings of the last calculation, as JSON {"energy": record,
+            # "hessian": None}: the length first, then that many characters.
+            text = json.dumps(records, sort_keys=True)
+            if command == "<FINGERPRINT_LENGTH":
+                mdi.MDI_Send(len(text), 1, mdi.MDI_INT, comm)
+            else:
+                mdi.MDI_Send(text, len(text), mdi.MDI_CHAR, comm)
+
         elif command == "EXIT":
             logger.debug("EXIT -- shutting down.")
             break

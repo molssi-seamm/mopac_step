@@ -86,6 +86,11 @@ def test_batch_equals_mdi_heat_of_formation(tmp_path):
         # total energy of thousands of kJ/mol
         assert -300 < batch[key].energy < -150
         assert batch[key].energy == pytest.approx(mdi[key].energy, abs=E_TOL)
+        # The task route records the settings fingerprint the prediction gives
+        record = batch[key].data["calculation"]
+        assert [record["fingerprint"]] == MOPACStep.expected_fingerprints(
+            None, MC, kind="energy", version=record["version"]
+        )
         assert np.allclose(
             batch[key].gradients, mdi[key].gradients, rtol=G_RTOL, atol=G_ATOL
         )
