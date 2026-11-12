@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>mopac_step package &#8212; SEAMM MOPAC Plug-in 2026.11.9 documentation</title>
+    <title>mopac_step package &#8212; SEAMM MOPAC Plug-in 2026.11.11 documentation</title>
   
   
   
@@ -31,7 +31,7 @@
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=6a604523" />
     <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=c224919a" />
   
   <!-- So that users can add custom icons -->
@@ -48,12 +48,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="../_static/documentation_options.js?v=3789d4b4"></script>
+    <script src="../_static/documentation_options.js?v=83e1bca7"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../_static/copybutton.js?v=f281be69"></script>
-    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script data-sd-tabs-storage-prefix="sphinx-design-tab-id-" src="../_static/design-tabs.js?v=fcb327ea"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'api/mopac_step';</script>
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
 
@@ -64,7 +64,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.11.9" />
+  <meta name="docsearch:version" content="2026.11.11" />
   
     
     <script src="../_static/searchtools.js"></script>
@@ -543,6 +543,19 @@ as the MOPAC step’s own runs do.</p>
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="mopac_step.batch.aux_version">
+<span class="sig-prename descclassname"><span class="pre">mopac_step.batch.</span></span><span class="sig-name descname"><span class="pre">aux_version</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mopac_step/batch.html#aux_version"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mopac_step.batch.aux_version" title="Link to this definition">#</a></dt>
+<dd><p>MOPAC’s version from a <code class="docutils literal notranslate"><span class="pre">.aux</span></code> file (<code class="docutils literal notranslate"><span class="pre">MOPAC_VERSION=23.2.5</span></code>), or None.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mopac_step.batch.calculation_record_of">
+<span class="sig-prename descclassname"><span class="pre">mopac_step.batch.</span></span><span class="sig-name descname"><span class="pre">calculation_record_of</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_chemistry</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">version</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mozyme</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tolerance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mopac_step/batch.html#calculation_record_of"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mopac_step.batch.calculation_record_of" title="Link to this definition">#</a></dt>
+<dd><p>The settings record of a MOPAC calculation at a model chemistry, as the MDI
+engine reports it (completed with its fingerprint); None without a version.</p>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="mopac_step.batch.can_run_task">
 <span class="sig-prename descclassname"><span class="pre">mopac_step.batch.</span></span><span class="sig-name descname"><span class="pre">can_run_task</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">configuration</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_chemistry</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mopac_step/batch.html#can_run_task"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mopac_step.batch.can_run_task" title="Link to this definition">#</a></dt>
 <dd><p>Whether <a class="reference internal" href="#mopac_step.batch.get_task" title="mopac_step.batch.get_task"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_task()</span></code></a> can run this structure: a molecule in its lowest
@@ -554,6 +567,13 @@ spin state. Anything else stays on the MDI engine.</p>
 <span class="sig-prename descclassname"><span class="pre">mopac_step.batch.</span></span><span class="sig-name descname"><span class="pre">get_task</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">configuration</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_chemistry</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">properties</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">('energy',</span> <span class="pre">'gradients')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resources</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mopac_step/batch.html#get_task"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mopac_step.batch.get_task" title="Link to this definition">#</a></dt>
 <dd><p>A <code class="xref py py-class docutils literal notranslate"><span class="pre">seamm_exec.Task</span></code> computing MOPAC’s heat of formation (and
 gradients) for one structure.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mopac_step.batch.mopac_settings">
+<span class="sig-prename descclassname"><span class="pre">mopac_step.batch.</span></span><span class="sig-name descname"><span class="pre">mopac_settings</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mopac_step/batch.html#mopac_settings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mopac_step.batch.mopac_settings" title="Link to this definition">#</a></dt>
+<dd><p>The settings module shared with the MDI engine (<code class="docutils literal notranslate"><span class="pre">data/mopac_settings.py</span></code>),
+loaded by its path: the engine imports it in the seamm-mopac environment.</p>
 </dd></dl>
 
 <dl class="py function">
@@ -1276,6 +1296,17 @@ lowest spin state).</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="mopac_step.mopac_step.MOPACStep.expected_fingerprints">
+<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">expected_fingerprints</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">configuration</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_chemistry</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">kind</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'energy'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">properties</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">('energy',)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">version</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mopac_step/mopac_step.html#MOPACStep.expected_fingerprints"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mopac_step.mopac_step.MOPACStep.expected_fingerprints" title="Link to this definition">#</a></dt>
+<dd><p>The settings fingerprints a MOPAC calculation of a structure would
+record, without running it: the same for the task route and the MDI
+engine (<code class="docutils literal notranslate"><span class="pre">data/mopac_settings.py</span></code>), from the method and MOPAC’s version,
+which is hashed (take it from a record of the same run). The settings do
+not depend on the structure; MOPAC has no analytic Hessian, so a Hessian
+has the energy’s fingerprint.</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="mopac_step.mopac_step.MOPACStep.get_executor_config">
 <span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">get_executor_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">executor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seamm_options</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mopac_step/mopac_step.html#MOPACStep.get_executor_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mopac_step.mopac_step.MOPACStep.get_executor_config" title="Link to this definition">#</a></dt>
 <dd><p>Return how to launch MOPAC (and its MDI engine) on this machine.</p>
@@ -1855,8 +1886,11 @@ then add the extra widgets for controlling optimization</p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#submodules">Submodules</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-mopac_step.batch">mopac_step.batch module</a><ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mopac_step.batch.analyze_task"><code class="docutils literal notranslate"><span class="pre">analyze_task()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mopac_step.batch.aux_version"><code class="docutils literal notranslate"><span class="pre">aux_version()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mopac_step.batch.calculation_record_of"><code class="docutils literal notranslate"><span class="pre">calculation_record_of()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mopac_step.batch.can_run_task"><code class="docutils literal notranslate"><span class="pre">can_run_task()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mopac_step.batch.get_task"><code class="docutils literal notranslate"><span class="pre">get_task()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mopac_step.batch.mopac_settings"><code class="docutils literal notranslate"><span class="pre">mopac_settings()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mopac_step.batch.parse_aux"><code class="docutils literal notranslate"><span class="pre">parse_aux()</span></code></a></li>
 </ul>
 </li>
@@ -2024,6 +2058,7 @@ then add the extra widgets for controlling optimization</p>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#mopac_step.mopac_step.MOPACStep.create_node"><code class="docutils literal notranslate"><span class="pre">MOPACStep.create_node()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#mopac_step.mopac_step.MOPACStep.create_tk_node"><code class="docutils literal notranslate"><span class="pre">MOPACStep.create_tk_node()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#mopac_step.mopac_step.MOPACStep.description"><code class="docutils literal notranslate"><span class="pre">MOPACStep.description()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#mopac_step.mopac_step.MOPACStep.expected_fingerprints"><code class="docutils literal notranslate"><span class="pre">MOPACStep.expected_fingerprints()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#mopac_step.mopac_step.MOPACStep.get_executor_config"><code class="docutils literal notranslate"><span class="pre">MOPACStep.get_executor_config()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#mopac_step.mopac_step.MOPACStep.get_mdi_engine_command"><code class="docutils literal notranslate"><span class="pre">MOPACStep.get_mdi_engine_command()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#mopac_step.mopac_step.MOPACStep.get_model_chemistry_options"><code class="docutils literal notranslate"><span class="pre">MOPACStep.get_model_chemistry_options()</span></code></a></li>

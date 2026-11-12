@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mopac_step.batch &#8212; SEAMM MOPAC Plug-in 2026.11.9 documentation</title>
+    <title>mopac_step.batch &#8212; SEAMM MOPAC Plug-in 2026.11.11 documentation</title>
   
   
   
@@ -30,7 +30,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=6a604523" />
     <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css?v=c224919a" />
   
   <!-- So that users can add custom icons -->
@@ -47,12 +47,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="../../_static/documentation_options.js?v=3789d4b4"></script>
+    <script src="../../_static/documentation_options.js?v=83e1bca7"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../_static/copybutton.js?v=f281be69"></script>
-    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script data-sd-tabs-storage-prefix="sphinx-design-tab-id-" src="../../_static/design-tabs.js?v=fcb327ea"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/mopac_step/batch';</script>
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
 
@@ -61,7 +61,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.11.9" />
+  <meta name="docsearch:version" content="2026.11.11" />
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -631,6 +631,57 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 
 
+<span class="n">_settings</span> <span class="o">=</span> <span class="kc">None</span>
+
+
+<div class="viewcode-block" id="mopac_settings">
+<a class="viewcode-back" href="../../api/mopac_step.html#mopac_step.batch.mopac_settings">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">mopac_settings</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">"""The settings module shared with the MDI engine (``data/mopac_settings.py``),</span>
+<span class="sd">    loaded by its path: the engine imports it in the seamm-mopac environment."""</span>
+    <span class="k">global</span> <span class="n">_settings</span>
+    <span class="k">if</span> <span class="n">_settings</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">importlib.resources</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">importlib.util</span>
+
+        <span class="n">path</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">files</span><span class="p">(</span><span class="s2">"mopac_step"</span><span class="p">)</span> <span class="o">/</span> <span class="s2">"data"</span> <span class="o">/</span> <span class="s2">"mopac_settings.py"</span>
+        <span class="n">spec</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">spec_from_file_location</span><span class="p">(</span><span class="s2">"_mopac_settings"</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">path</span><span class="p">))</span>
+        <span class="n">module</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">module_from_spec</span><span class="p">(</span><span class="n">spec</span><span class="p">)</span>
+        <span class="n">spec</span><span class="o">.</span><span class="n">loader</span><span class="o">.</span><span class="n">exec_module</span><span class="p">(</span><span class="n">module</span><span class="p">)</span>
+        <span class="n">_settings</span> <span class="o">=</span> <span class="n">module</span>
+    <span class="k">return</span> <span class="n">_settings</span></div>
+
+
+
+<div class="viewcode-block" id="aux_version">
+<a class="viewcode-back" href="../../api/mopac_step.html#mopac_step.batch.aux_version">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">aux_version</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""MOPAC's version from a ``.aux`` file (``MOPAC_VERSION=23.2.5``), or None."""</span>
+    <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">"MOPAC_VERSION=\s*(\S+)"</span><span class="p">,</span> <span class="n">text</span> <span class="ow">or</span> <span class="s2">""</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="k">if</span> <span class="n">match</span> <span class="k">else</span> <span class="kc">None</span></div>
+
+
+
+<div class="viewcode-block" id="calculation_record_of">
+<a class="viewcode-back" href="../../api/mopac_step.html#mopac_step.batch.calculation_record_of">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">calculation_record_of</span><span class="p">(</span><span class="n">model_chemistry</span><span class="p">,</span> <span class="n">version</span><span class="p">,</span> <span class="n">mozyme</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">tolerance</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""The settings record of a MOPAC calculation at a model chemistry, as the MDI</span>
+<span class="sd">    engine reports it (completed with its fingerprint); None without a version."""</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">version</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">seamm_exec.evaluator</span><span class="w"> </span><span class="kn">import</span> <span class="n">mdi_method_and_basis</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">seamm_util.fingerprint</span><span class="w"> </span><span class="kn">import</span> <span class="n">calculation_record</span>
+
+    <span class="n">settings</span> <span class="o">=</span> <span class="n">mopac_settings</span><span class="p">()</span>
+    <span class="n">method</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">mdi_method_and_basis</span><span class="p">(</span><span class="n">model_chemistry</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">calculation_record</span><span class="p">(</span>
+        <span class="n">settings</span><span class="o">.</span><span class="n">PROGRAM</span><span class="p">,</span>
+        <span class="n">version</span><span class="p">,</span>
+        <span class="p">{</span><span class="n">settings</span><span class="o">.</span><span class="n">SETTINGS_FILE</span><span class="p">:</span> <span class="n">settings</span><span class="o">.</span><span class="n">settings_text</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="n">mozyme</span><span class="p">,</span> <span class="n">tolerance</span><span class="p">)},</span>
+    <span class="p">)</span></div>
+
+
+
 <div class="viewcode-block" id="analyze_task">
 <a class="viewcode-back" href="../../api/mopac_step.html#mopac_step.batch.analyze_task">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">analyze_task</span><span class="p">(</span>
@@ -659,6 +710,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <span class="n">aux</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">read_text</span><span class="p">(</span><span class="n">errors</span><span class="o">=</span><span class="s2">"replace"</span><span class="p">)</span>
     <span class="n">data</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="k">if</span> <span class="n">aux</span><span class="p">:</span>
+        <span class="c1"># The record of the settings, as the MDI engine reports it</span>
+        <span class="c1"># (data/mopac_settings.py), so both routes give one fingerprint</span>
+        <span class="n">record</span> <span class="o">=</span> <span class="n">calculation_record_of</span><span class="p">(</span><span class="n">model_chemistry</span><span class="p">,</span> <span class="n">aux_version</span><span class="p">(</span><span class="n">aux</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">record</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">data</span><span class="p">[</span><span class="s2">"calculation"</span><span class="p">]</span> <span class="o">=</span> <span class="n">record</span>
         <span class="n">heat</span><span class="p">,</span> <span class="n">gradients</span> <span class="o">=</span> <span class="n">parse_aux</span><span class="p">(</span><span class="n">aux</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">heat</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">data</span><span class="p">[</span><span class="s2">"energy"</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">Q_</span><span class="p">(</span><span class="n">heat</span><span class="p">,</span> <span class="s2">"kcal/mol"</span><span class="p">)</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="s2">"kJ/mol"</span><span class="p">))</span>
