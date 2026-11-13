@@ -73,7 +73,7 @@ def test_an_exception_is_an_error(engine):
 
 def test_standalone_keywords(engine):
     assert engine.standalone_keywords("PM7", 0, 1) == (
-        "PM7 1SCF GRAD AUX(PRECISION=9) GEO-OK THREADS=1 CHARGE=0"
+        "PM7 1SCF GRAD AUX(PRECISION=9) GEO-OK NOSYM THREADS=1 CHARGE=0"
     )
     doublet = engine.standalone_keywords("PM6-ORG", -1, 2, tolerance=0.1)
     assert doublet.endswith("CHARGE=-1 UHF DOUBLET RELSCF=0.1")
@@ -100,3 +100,21 @@ def test_parse_aux(engine):
         engine.parse_aux(AUX, 3)
     with pytest.raises(RuntimeError, match="no heat"):
         engine.parse_aux("nothing", 2)
+
+
+def test_who_does_the_calculation(engine):
+    """'auto': the MOPAC program for molecules, the library for periodic systems
+    and MOZYME, or without the program."""
+    route = engine.scf_route
+    assert route("auto", periodic=False, mozyme=False, have_program=True) == "program"
+    assert route("auto", periodic=True, mozyme=False, have_program=True) == "library"
+    assert route("auto", periodic=False, mozyme=True, have_program=True) == "library"
+    assert route("auto", periodic=False, mozyme=False, have_program=False) == (
+        "library"
+    )
+    assert route("library", False, False, True) == "library"
+    assert route("program", False, False, True) == "program"
+    with pytest.raises(RuntimeError, match="it is periodic"):
+        route("program", True, False, True)
+    with pytest.raises(RuntimeError, match="not found"):
+        route("program", False, False, False)

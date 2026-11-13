@@ -2,6 +2,16 @@
 History
 =======
 
+2026.11.13.1 -- Bugfix: wrong energies from the MDI engine for some molecules
+    * MOPAC's library, which the MDI engine used, runs every SCF with PULAY, and for
+      some molecules that converges to a solution far above the right one: PM6-ORG
+      penta-1,2,3-triene 449.9 instead of 421.5 kJ/mol, and the PM7 S2 triplet up to
+      600 kJ/mol too high at some bond lengths, which also sent optimizations along
+      the wrong energy surface. For molecules the engine now has the MOPAC program do
+      each calculation, with MOPAC's default SCF, so its energies are those of a MOPAC
+      calculation of the same structure; for small molecules it is as fast.
+      Periodic structures and MOZYME still use the library.
+
 2026.11.13 -- Bugfix: the MDI engine no longer dies on open-shell structures
     * MOPAC 23.2.5's library aborts at random in some calculations of open-shell
       structures (an odd number of electrons, or a multiplicity above 1), which
