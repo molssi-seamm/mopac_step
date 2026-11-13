@@ -226,7 +226,15 @@ MULTIPLICITY_KEYWORDS = {
 def standalone_keywords(method, charge, multiplicity, tolerance=1.0):
     """The keywords of a single point with gradients by the MOPAC program that
     matches the engine's calculation: UHF for open shells, as mopactools does."""
-    keywords = [method, "1SCF", "GRAD", "AUX(PRECISION=9)", "GEO-OK", "THREADS=1"]
+    keywords = [
+        method,
+        "1SCF",
+        "GRAD",
+        "AUX(PRECISION=9)",
+        "GEO-OK",
+        "NOSYM",
+        "THREADS=1",
+    ]
     keywords.append(f"CHARGE={charge}")
     if multiplicity != 1:
         keywords += [
@@ -260,17 +268,56 @@ def parse_aux(text, natoms):
     return heat, gradients
 
 
+def mopac_program():
+    """The standalone MOPAC program beside this environment's python (or on the
+    PATH), or None."""
+    import shutil
+
+    executable = Path(sys.executable).parent / "mopac"
+    if executable.exists():
+        return str(executable)
+    return shutil.which("mopac")
+
+
+def scf_route(choice, periodic, mozyme, have_program):
+    """Who does a calculation: "program", the standalone MOPAC program, or
+    "library", mopactools.
+
+    MOPAC's library runs every SCF with PULAY (its API's keywords are
+    " 1SCF PULAY BONDS", src/interface/mopac_api_operations.F90 in 23.2.5),
+    which for some molecules converges to a solution far above the one the
+    program finds with its default SCF: PM6-ORG penta-1,2,3-triene 449.9 vs
+    421.5 kJ/mol, and the PM7 S2 triplet up to 600 kJ/mol too high at some bond
+    lengths (seamm, 2026-11-13). So "auto" uses the program for molecules; the
+    library only for periodic systems and MOZYME, which the program cannot do
+    this way, or when there is no program."""
+    if choice == "library":
+        return "library"
+    usable = have_program and not periodic and not mozyme
+    if choice == "program":
+        if not usable:
+            raise RuntimeError(
+                "The MOPAC program cannot do this calculation: "
+                + (
+                    "it was not found"
+                    if not have_program
+                    else "it is periodic" if periodic else "it uses MOZYME"
+                )
+                + "."
+            )
+        return "program"
+    return "program" if usable else "library"
+
+
 def run_standalone(method, charge, multiplicity, atomic_numbers, coords_ang, tolerance):
     """One calculation (heat and gradients) with the standalone MOPAC program
-    beside this environment's python, as a dict like the engine's."""
-    import shutil
+    beside this environment's python, as a dict like the engine's. Each SCF
+    starts afresh, with MOPAC's default guess and convergence."""
     import subprocess
     import tempfile
 
     symbol = {z: s for s, z in PERIODIC_TABLE.items()}
-    executable = Path(sys.executable).parent / "mopac"
-    if not executable.exists():
-        executable = shutil.which("mopac")
+    executable = mopac_program()
     if executable is None:
         raise RuntimeError("The MOPAC program was not found.")
     lines = [standalone_keywords(method, charge, multiplicity, tolerance), "SEAMM", ""]
@@ -283,9 +330,16 @@ def run_standalone(method, charge, multiplicity, atomic_numbers, coords_ang, tol
             [str(executable), path.name], cwd=directory, capture_output=True
         )
         aux = path.with_suffix(".aux")
-        if not aux.exists():
+        if not aux.exists() or "HEAT_OF_FORMATION" not in aux.read_text():
+            out = path.with_suffix(".out")
+            errors = [
+                line.strip()
+                for line in (out.read_text().splitlines() if out.exists() else [])
+                if "ERROR" in line.upper() or "UNABLE" in line.upper()
+            ]
             raise RuntimeError(
-                f"The MOPAC program failed (return code {result.returncode})."
+                f"The MOPAC program failed (return code {result.returncode})"
+                + (": " + "; ".join(errors[:3]) if errors else ".")
             )
         heat, gradients = parse_aux(aux.read_text(), len(atomic_numbers))
     return {"heat": heat, "coord_deriv": gradients, "stress": None, "error_msg": []}
@@ -374,6 +428,16 @@ def parse_args():
         "large systems if legitimate calculations are being cut off.",
     )
     p.add_argument(
+        "--scf",
+        default="auto",
+        choices=["auto", "program", "library"],
+        help="Who does the calculations: 'program', the standalone MOPAC program "
+        "(MOPAC's default SCF, a fresh one at every geometry); 'library', "
+        "mopactools (warm start, but MOPAC's API forces PULAY, which converges to "
+        "wrong solutions for some molecules); or 'auto' (default): the program "
+        "for molecules, the library for periodic systems and MOZYME.",
+    )
+    p.add_argument(
         "--isolate",
         default="auto",
         choices=["auto", "always", "never"],
@@ -413,6 +477,13 @@ def main():
         sys.exit(1)
 
     PERIODIC_TABLE.update(MopacSystem.periodic_table)
+    have_program = mopac_program() is not None
+    if not have_program and args.scf == "auto":
+        logger.warning(
+            "The MOPAC program was not found, so MOPAC's library does every "
+            "calculation; its PULAY SCF can converge to wrong solutions for some "
+            "molecules."
+        )
 
     # Optional --elements fallback map (LAMMPS type index -> atomic number),
     # only used if the driver sends >TYPES instead of >ELEMENTS.
@@ -584,7 +655,19 @@ def main():
         nonlocal properties
         mpack_before = getattr(state, "mpack", None)
         t0 = time.perf_counter()
-        if isolate():
+        route = scf_route(args.scf, is_periodic, args.mozyme, have_program)
+        if route == "program":
+            properties = SimpleNamespace(
+                **run_standalone(
+                    args.method,
+                    charge,
+                    raw_multiplicity,
+                    atomic_numbers,
+                    system.coord,
+                    args.tolerance,
+                )
+            )
+        elif isolate():
             try:
                 result = run_isolated(calculate)
             except CalculationCrashed as e:

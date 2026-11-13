@@ -73,21 +73,30 @@ open-shell structures always use the MDI engine; on a queue target where MOPAC i
 installed on the job's own machine, such a structure is reported as failed, with the
 reason, and the others finish.
 
+For molecules the engine has the MOPAC program do each calculation (a single
+point with gradients, MOPAC's default SCF, started afresh at every structure), so
+its energies are exactly those of a MOPAC calculation of the same structure. MOPAC's
+library, which the engine used before, runs every SCF with ``PULAY``, and for some
+molecules that converges to a solution far above the right one: PM6-ORG
+penta-1,2,3-triene 449.9 instead of 421.5 kJ/mol, and the PM7 S\ :sub:`2` triplet
+up to 600 kJ/mol too high at some bond lengths. An optimization that meets such a
+solution follows the wrong energy surface. For small molecules the program is as
+fast as the library (about 35 ms a calculation for 11 atoms).
+
+Periodic structures and MOZYME still use the library, which keeps the previous
+structure's density as the starting guess; the program cannot do them this way. In
+the library, open-shell calculations each run in a separate process, because
+MOPAC 23.2.5's library aborts at random in some of them, and one whose process dies
+is done by the program. The engine's ``--scf`` option (``auto``, ``program`` or
+``library``) overrides the choice.
+
 Steps that take finite differences of the gradients, such as **Vibrational
 Analysis**, ask the engine for tight convergence: each calculation then converges to
-a relative tolerance of 0.001 instead of MOPAC's default 1.0. The engine starts each
-SCF from the previous structure's density, and at the default tolerance that leaves
-small errors that depend on which structure came before, which finite differences
-magnify. For water's anharmonic force constants the noise was 447 cm\ :sup:`-1` at
-1.0, 22 at 0.01 (the tolerance ``PRECISE`` gives), and 3.5 at 0.001.
-
-For open-shell structures (an odd number of electrons, or a multiplicity above 1)
-the engine runs each calculation in a separate process, and each SCF starts afresh.
-MOPAC 23.2.5's library aborts at random in some open-shell calculations, which used
-to stop the engine and the step ("MDI_Recv failed"). A calculation whose process
-dies is done instead by the MOPAC program itself, with the same method, charge and
-spin, and the output notes it. The two agree to about 0.001 kcal/mol in the heat of
-formation and 0.4 kcal/mol/Å in the gradients, the differences of SCF convergence.
+a relative tolerance of 0.001 instead of MOPAC's default 1.0. With a warm start (the
+library), the default tolerance leaves small errors that depend on which structure
+came before, which finite differences magnify. For water's anharmonic force
+constants the noise was 447 cm\ :sup:`-1` at 1.0, 22 at 0.01 (the tolerance
+``PRECISE`` gives), and 3.5 at 0.001.
 
 Each calculation through the Model Chemistry carries a fingerprint of its settings:
 MOPAC's version, the method, whether MOZYME is used, and the SCF tolerance. The charge
