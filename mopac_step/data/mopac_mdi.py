@@ -77,6 +77,8 @@ os.environ.setdefault("OPENBLAS_NUM_THREADS", "1")
 
 import argparse  # noqa: E402
 import logging  # noqa: E402
+import pickle  # noqa: E402
+from types import SimpleNamespace  # noqa: E402
 import sys  # noqa: E402
 import time  # noqa: E402
 
@@ -146,6 +148,147 @@ def mopac_version():
         return str(mopactools.api.VERSION)
     except Exception:
         return "unknown"
+
+
+class CalculationCrashed(RuntimeError):
+    """The process running a calculation died (see :func:`run_isolated`)."""
+
+
+def run_isolated(function):
+    """Run ``function()`` in a forked child process and return its result,
+    which must pickle.
+
+    MOPAC 23.2.5's library (mopactools 0.1.4) aborts or crashes at random in
+    some calculations of odd-electron (open-shell) systems: about one in five
+    times at a geometry of the vinyl radical, never at others, while the
+    standalone program is fine (seamm, 2026-11-13). In a child process such a
+    crash cannot take the engine with it. A child copies this process's memory,
+    so trying it again in another child fails the same way; the caller falls
+    back to the standalone program instead (:func:`run_standalone`).
+
+    Raises
+    ------
+    CalculationCrashed
+        When the child dies, by a signal or without a result.
+    RuntimeError
+        For an exception in ``function``.
+    """
+    sys.stdout.flush()
+    sys.stderr.flush()
+    read_end, write_end = os.pipe()
+    pid = os.fork()
+    if pid == 0:  # the child: compute, send the result, and leave at once
+        os.close(read_end)
+        try:
+            try:
+                payload = ("ok", function())
+            except BaseException as e:
+                payload = ("error", f"{type(e).__name__}: {e}")
+            with os.fdopen(write_end, "wb") as fd:
+                fd.write(pickle.dumps(payload))
+        finally:
+            os._exit(0)
+    os.close(write_end)
+    with os.fdopen(read_end, "rb") as fd:
+        data = fd.read()
+    _, status = os.waitpid(pid, 0)
+    if os.WIFSIGNALED(status):
+        raise CalculationCrashed(
+            f"the calculation's process died with signal {os.WTERMSIG(status)}"
+        )
+    if not data:
+        raise CalculationCrashed(
+            "the calculation's process gave no result (exit status "
+            f"{os.WEXITSTATUS(status)})"
+        )
+    kind, value = pickle.loads(data)
+    if kind == "error":
+        raise RuntimeError(value)
+    return value
+
+
+#: Element symbol -> atomic number, mopactools' (set in main(), where mopactools
+#: is imported)
+PERIODIC_TABLE = {}
+
+#: MOPAC's keywords for the spin multiplicities
+MULTIPLICITY_KEYWORDS = {
+    1: "SINGLET",
+    2: "DOUBLET",
+    3: "TRIPLET",
+    4: "QUARTET",
+    5: "QUINTET",
+    6: "SEXTET",
+    7: "SEPTET",
+}
+
+
+def standalone_keywords(method, charge, multiplicity, tolerance=1.0):
+    """The keywords of a single point with gradients by the MOPAC program that
+    matches the engine's calculation: UHF for open shells, as mopactools does."""
+    keywords = [method, "1SCF", "GRAD", "AUX(PRECISION=9)", "GEO-OK", "THREADS=1"]
+    keywords.append(f"CHARGE={charge}")
+    if multiplicity != 1:
+        keywords += [
+            "UHF",
+            MULTIPLICITY_KEYWORDS.get(multiplicity, f"MS={(multiplicity - 1) / 2}"),
+        ]
+    if tolerance != 1.0:
+        keywords.append(f"RELSCF={tolerance}")
+    return " ".join(keywords)
+
+
+def parse_aux(text, natoms):
+    """The heat of formation (kcal/mol) and the gradients (kcal/mol/Å, (3N,))
+    from a MOPAC .aux file."""
+    import re
+
+    heat = re.search(r"HEAT_OF_FORMATION:KCAL/MOL=([-+0-9.D]+)", text)
+    if heat is None:
+        raise RuntimeError("The MOPAC program gave no heat of formation.")
+    heat = float(heat.group(1).replace("D", "E"))
+    match = re.search(
+        r"GRADIENTS:KCAL/MOL/ANGSTROM\[\d+\]=\s*(.*?)(?:\n\s*[A-Z_]|\Z)", text, re.S
+    )
+    if match is None:
+        raise RuntimeError("The MOPAC program gave no gradients.")
+    gradients = np.array([float(v.replace("D", "E")) for v in match.group(1).split()])
+    if gradients.size != 3 * natoms:
+        raise RuntimeError(
+            f"The MOPAC program gave {gradients.size} gradients for {natoms} atoms."
+        )
+    return heat, gradients
+
+
+def run_standalone(method, charge, multiplicity, atomic_numbers, coords_ang, tolerance):
+    """One calculation (heat and gradients) with the standalone MOPAC program
+    beside this environment's python, as a dict like the engine's."""
+    import shutil
+    import subprocess
+    import tempfile
+
+    symbol = {z: s for s, z in PERIODIC_TABLE.items()}
+    executable = Path(sys.executable).parent / "mopac"
+    if not executable.exists():
+        executable = shutil.which("mopac")
+    if executable is None:
+        raise RuntimeError("The MOPAC program was not found.")
+    lines = [standalone_keywords(method, charge, multiplicity, tolerance), "SEAMM", ""]
+    for z, (x, y, zz) in zip(atomic_numbers, np.reshape(coords_ang, (-1, 3))):
+        lines.append(f"{symbol[int(z)]} {x:.10f} 1 {y:.10f} 1 {zz:.10f} 1")
+    with tempfile.TemporaryDirectory(prefix="seamm-mopac-") as directory:
+        path = Path(directory) / "single.mop"
+        path.write_text("\n".join(lines) + "\n")
+        result = subprocess.run(
+            [str(executable), path.name], cwd=directory, capture_output=True
+        )
+        aux = path.with_suffix(".aux")
+        if not aux.exists():
+            raise RuntimeError(
+                f"The MOPAC program failed (return code {result.returncode})."
+            )
+        heat, gradients = parse_aux(aux.read_text(), len(atomic_numbers))
+    return {"heat": heat, "coord_deriv": gradients, "stress": None, "error_msg": []}
 
 
 def parse_args():
@@ -231,6 +374,14 @@ def parse_args():
         "large systems if legitimate calculations are being cut off.",
     )
     p.add_argument(
+        "--isolate",
+        default="auto",
+        choices=["auto", "always", "never"],
+        help="Run each calculation in its own (forked) process: 'auto' "
+        "(default) for open-shell systems, where MOPAC's library otherwise "
+        "aborts after a few calculations in one process; 'always'; or 'never'.",
+    )
+    p.add_argument(
         "--log-level",
         default="INFO",
         choices=["DEBUG", "INFO", "WARNING", "ERROR"],
@@ -260,6 +411,8 @@ def main():
     except ImportError:
         logger.error("mopactools not found. conda install -c conda-forge mopactools")
         sys.exit(1)
+
+    PERIODIC_TABLE.update(MopacSystem.periodic_table)
 
     # Optional --elements fallback map (LAMMPS type index -> atomic number),
     # only used if the driver sends >TYPES instead of >ELEMENTS.
@@ -399,13 +552,59 @@ def main():
         if is_periodic:
             system.lattice = (cell_flat.reshape(3, 3) * ANG_PER_BOHR).ravel()
 
+    def isolate():
+        """Whether to run each calculation in its own process (see
+        :func:`run_isolated`): for open-shell systems, unless told otherwise.
+        MOZYME is closed-shell only."""
+        if args.isolate != "auto":
+            return args.isolate == "always"
+        if args.mozyme:
+            return False
+        n_electrons = int(np.sum(atomic_numbers)) - charge
+        return n_electrons % 2 == 1 or system.spin != 0
+
+    def calculate():
+        """One calculation, as a plain dict that pickles (for
+        :func:`run_isolated`). The state is not returned: each calculation
+        starts its SCF afresh."""
+        result = from_data(system, state, relax=False, vibe=False)
+        # mopactools' arrays are views of MOPAC's memory, freed with `result`:
+        # copy them while it is alive
+        stress = getattr(result, "stress", None)
+        return {
+            "heat": float(result.heat),
+            "coord_deriv": np.array(result.coord_deriv, dtype=float, copy=True),
+            "stress": None if stress is None else np.array(stress, dtype=float),
+            "error_msg": list(result.error_msg or []),
+        }
+
     def run_calculation():
         """Run mopac_scf/mozyme_scf (dispatched by from_data based on the
         state type) and check for reported errors."""
         nonlocal properties
         mpack_before = getattr(state, "mpack", None)
         t0 = time.perf_counter()
-        properties = from_data(system, state, relax=False, vibe=False)
+        if isolate():
+            try:
+                result = run_isolated(calculate)
+            except CalculationCrashed as e:
+                if is_periodic:
+                    raise RuntimeError(f"MOPAC failed: {e}.") from e
+                logger.warning(
+                    f"MOPAC's library failed ({e}); this calculation is done by "
+                    "the MOPAC program instead."
+                )
+                result = run_standalone(
+                    args.method,
+                    charge,
+                    raw_multiplicity,
+                    atomic_numbers,
+                    system.coord,
+                    args.tolerance,
+                )
+            properties = SimpleNamespace(**result)
+        else:
+            properties = from_data(system, state, relax=False, vibe=False)
         elapsed = time.perf_counter() - t0
         mpack_after = getattr(state, "mpack", None)
         logger.debug(
