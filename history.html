@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>History &#8212; SEAMM MOPAC Plug-in 2026.11.13 documentation</title>
+    <title>History &#8212; SEAMM MOPAC Plug-in 2026.11.13.1 documentation</title>
   
   
   
@@ -48,7 +48,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="_static/documentation_options.js?v=1061b2d4"></script>
+    <script src="_static/documentation_options.js?v=e1d96fe1"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -63,7 +63,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.11.13" />
+  <meta name="docsearch:version" content="2026.11.13.1" />
   
     
     <script src="_static/searchtools.js"></script>
@@ -506,6 +506,17 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <section id="history">
 <h1>History<a class="headerlink" href="#history" title="Link to this heading">#</a></h1>
 <dl class="simple">
+<dt>2026.11.13.1 – Bugfix: wrong energies from the MDI engine for some molecules</dt><dd><ul class="simple">
+<li><p>MOPAC’s library, which the MDI engine used, runs every SCF with PULAY, and for
+some molecules that converges to a solution far above the right one: PM6-ORG
+penta-1,2,3-triene 449.9 instead of 421.5 kJ/mol, and the PM7 S2 triplet up to
+600 kJ/mol too high at some bond lengths, which also sent optimizations along
+the wrong energy surface. For molecules the engine now has the MOPAC program do
+each calculation, with MOPAC’s default SCF, so its energies are those of a MOPAC
+calculation of the same structure; for small molecules it is as fast.
+Periodic structures and MOZYME still use the library.</p></li>
+</ul>
+</dd>
 <dt>2026.11.13 – Bugfix: the MDI engine no longer dies on open-shell structures</dt><dd><ul class="simple">
 <li><p>MOPAC 23.2.5’s library aborts at random in some calculations of open-shell
 structures (an odd number of electrons, or a multiplicity above 1), which
