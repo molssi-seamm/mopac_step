@@ -2,6 +2,14 @@
 History
 =======
 
+2026.11.13 -- Bugfix: the MDI engine no longer dies on open-shell structures
+    * MOPAC 23.2.5's library aborts at random in some calculations of open-shell
+      structures (an odd number of electrons, or a multiplicity above 1), which
+      stopped the MDI engine and the step with "MDI_Recv failed". The engine now runs
+      each open-shell calculation in a separate process, and does any calculation
+      whose process dies with the MOPAC program instead. Closed-shell structures are
+      calculated as before.
+
 2026.11.11 -- Settings fingerprints for MOPAC's model-chemistry calculations
     * Calculations through a MOPAC **Model Chemistry** (e.g. ``MOPAC:PM7``), whether in
       the MDI engine or as separate MOPAC calculations on a queue, now carry a
