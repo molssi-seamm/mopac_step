@@ -81,6 +81,14 @@ small errors that depend on which structure came before, which finite difference
 magnify. For water's anharmonic force constants the noise was 447 cm\ :sup:`-1` at
 1.0, 22 at 0.01 (the tolerance ``PRECISE`` gives), and 3.5 at 0.001.
 
+For open-shell structures (an odd number of electrons, or a multiplicity above 1)
+the engine runs each calculation in a separate process, and each SCF starts afresh.
+MOPAC 23.2.5's library aborts at random in some open-shell calculations, which used
+to stop the engine and the step ("MDI_Recv failed"). A calculation whose process
+dies is done instead by the MOPAC program itself, with the same method, charge and
+spin, and the output notes it. The two agree to about 0.001 kcal/mol in the heat of
+formation and 0.4 kcal/mol/Å in the gradients, the differences of SCF convergence.
+
 Each calculation through the Model Chemistry carries a fingerprint of its settings:
 MOPAC's version, the method, whether MOZYME is used, and the SCF tolerance. The charge
 and spin multiplicity belong to the structure and are not part of it. The MDI engine

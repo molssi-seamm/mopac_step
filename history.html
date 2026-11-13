@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>History &#8212; SEAMM MOPAC Plug-in 2026.11.11 documentation</title>
+    <title>History &#8212; SEAMM MOPAC Plug-in 2026.11.13 documentation</title>
   
   
   
@@ -48,7 +48,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="_static/documentation_options.js?v=83e1bca7"></script>
+    <script src="_static/documentation_options.js?v=1061b2d4"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -63,7 +63,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.11.11" />
+  <meta name="docsearch:version" content="2026.11.13" />
   
     
     <script src="_static/searchtools.js"></script>
@@ -506,6 +506,15 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <section id="history">
 <h1>History<a class="headerlink" href="#history" title="Link to this heading">#</a></h1>
 <dl class="simple">
+<dt>2026.11.13 – Bugfix: the MDI engine no longer dies on open-shell structures</dt><dd><ul class="simple">
+<li><p>MOPAC 23.2.5’s library aborts at random in some calculations of open-shell
+structures (an odd number of electrons, or a multiplicity above 1), which
+stopped the MDI engine and the step with “MDI_Recv failed”. The engine now runs
+each open-shell calculation in a separate process, and does any calculation
+whose process dies with the MOPAC program instead. Closed-shell structures are
+calculated as before.</p></li>
+</ul>
+</dd>
 <dt>2026.11.11 – Settings fingerprints for MOPAC’s model-chemistry calculations</dt><dd><ul class="simple">
 <li><p>Calculations through a MOPAC <strong>Model Chemistry</strong> (e.g. <code class="docutils literal notranslate"><span class="pre">MOPAC:PM7</span></code>), whether in
 the MDI engine or as separate MOPAC calculations on a queue, now carry a
