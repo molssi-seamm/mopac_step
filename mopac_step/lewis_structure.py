@@ -13,6 +13,8 @@ import os
 import string
 import textwrap
 
+import numpy as np
+
 from tabulate import tabulate
 
 import mopac_step
@@ -27,6 +29,54 @@ from seamm_util.printing import FormattedText as __
 logger = logging.getLogger(__name__)
 job = printing.getPrinter()
 printer = printing.getPrinter("mopac")
+
+#: MOPAC bonds longer than this times the sum of the covalent radii are not used.
+#: MOPAC 23's LEWIS bonds the oxygens of nitro and nitrate groups (O...O 2.17 Å).
+LONG_BOND_FACTOR = 1.3
+
+
+def long_bonds(configuration, pairs, factor=LONG_BOND_FACTOR):
+    """The bonds that are far longer than a normal bond between the atoms.
+
+    Parameters
+    ----------
+    configuration : molsystem._Configuration
+        The configuration, with the geometry MOPAC used.
+    pairs : [(int, int)]
+        The bonds, as pairs of 0-based atom indices.
+    factor : float
+        A bond is too long when longer than this times the sum of the atoms'
+        covalent radii.
+
+    Returns
+    -------
+    [(int, int, float, float)]
+        For each bond that is too long, the atoms, its length and the sum of the
+        covalent radii, in Å. Periodic systems are not checked.
+    """
+    if configuration.periodicity != 0 or len(pairs) == 0:
+        return []
+    import mendeleev
+
+    symbols = configuration.atoms.symbols
+    radius = {}
+    for symbol in set(symbols):
+        element = mendeleev.element(symbol)
+        r = element.covalent_radius_pyykko
+        if r is None:
+            r = element.covalent_radius
+        radius[symbol] = None if r is None else r / 100.0  # pm -> Å
+    xyz = np.array(configuration.atoms.get_coordinates(fractionals=False))
+    result = []
+    for i, j in pairs:
+        ri = radius[symbols[i]]
+        rj = radius[symbols[j]]
+        if ri is None or rj is None:
+            continue
+        r = float(np.linalg.norm(xyz[i] - xyz[j]))
+        if r > factor * (ri + rj):
+            result.append((i, j, r, ri + rj))
+    return result
 
 
 class LewisStructure(mopac_step.MOPACBase):
@@ -505,33 +555,43 @@ class LewisStructure(mopac_step.MOPACBase):
         # If requested, overwrite the bonding information in the system
         if P["use bonds"]:
             ids = configuration.atoms.ids
+            pairs = None
             if same:
-                iatoms = [ids[i] for i in bonds["i"]]
-                jatoms = [ids[j] for j in bonds["j"]]
-                configuration.new_bondset()
-                configuration.bonds.append(
-                    i=iatoms, j=jatoms, bondorder=bonds["bondorder"]
-                )
-                text += "\nReplaced the bonds in the configuration with those from the "
-                text += "Lewis structure.\n"
+                pairs = list(zip(bonds["i"], bonds["j"]))
+                bondorders = bonds["bondorder"]
+                source = "Lewis structure"
             elif any(len(atoms) > 0 for atoms in neighbors):
-                iatoms = []
-                jatoms = []
-                bondorders = []
-                for i in range(n_atoms):
-                    for j in neighbors[i]:
-                        if j > i:
-                            iatoms.append(ids[i])
-                            jatoms.append(ids[j])
-                            bondorders.append(1)
-                configuration.new_bondset()
-                configuration.bonds.append(i=iatoms, j=jatoms, bondorder=bondorders)
-                text += "\nReplaced the bonds in the configuration with those from the "
-                text += "simple connectivity structure.\n"
-            else:
+                pairs = [(i, j) for i in range(n_atoms) for j in neighbors[i] if j > i]
+                bondorders = [1] * len(pairs)
+                source = "simple connectivity structure"
+
+            if pairs is None:
                 # e.g. Li2, which MOPAC treats as two ions
                 text += "\nMOPAC gave neither a Lewis structure nor the connectivity, "
                 text += "so the bonds in the configuration were not changed.\n"
+            else:
+                too_long = long_bonds(configuration, pairs)
+                if len(too_long) > 0:
+                    symbol = configuration.atoms.symbols
+                    rows = [
+                        f"    {symbol[i]}{i + 1}-{symbol[j]}{j + 1}: {r:.2f} Å "
+                        f"(sum of covalent radii {r0:.2f} Å)"
+                        for i, j, r, r0 in too_long
+                    ]
+                    message = (
+                        f"MOPAC's {source} has bonds more than {LONG_BOND_FACTOR} "
+                        "times the sum of the atoms' covalent radii, so the bonds in "
+                        "the configuration were not changed:\n" + "\n".join(rows)
+                    )
+                    self.logger.warning(message)
+                    text += "\nWarning: " + message + "\n"
+                else:
+                    iatoms = [ids[i] for i, j in pairs]
+                    jatoms = [ids[j] for i, j in pairs]
+                    configuration.new_bondset()
+                    configuration.bonds.append(i=iatoms, j=jatoms, bondorder=bondorders)
+                    text += "\nReplaced the bonds in the configuration with those "
+                    text += f"from the {source}.\n"
 
         # Put any requested results into variables or tables
         self.store_results(
