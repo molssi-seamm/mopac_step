@@ -2,6 +2,13 @@
 History
 =======
 
+2026.11.15 -- Bugfix: Lewis structures could add bonds between distant atoms
+    * MOPAC's Lewis structure bonds the two oxygens of nitro and nitrate groups (2.15
+      Å apart), and with "Use bonds" the step put that O-O bond into the
+      configuration. Now, if any bond is longer than 1.3 times the sum of the atoms'
+      covalent radii, the configuration's bonds are left unchanged and a warning
+      lists the bonds.
+
 2026.11.13.1 -- Bugfix: wrong energies from the MDI engine for some molecules
     * MOPAC's library, which the MDI engine used, runs every SCF with PULAY, and for
       some molecules that converges to a solution far above the right one: PM6-ORG

@@ -1,6 +1,7 @@
+mendeleev
 molsystem
 py-cpuinfo
 requests
+seamm-exec>=2026.10.18
 seamm>=2026.10.24
 tabulate
-seamm-exec>=2026.10.18

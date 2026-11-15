@@ -1,0 +1,111 @@
+ *******************************************************************************
+ **                                                                           **
+ **                              MOPAC v23.2.5                                **
+ **                                                                           **
+ *******************************************************************************
+ ** MOPAC's Digital Object Identifier: https://doi.org/10.5281/zenodo.6511958 **
+ **                                                                           **
+ ** Please cite the open-source release paper for use of this MOPAC version:  **
+ ** J. E. Moussa and J. J. P. Stewart (2026)                                  **
+ ** MOPAC: An open-source semiempirical molecular orbital program             **
+ ** J. Open Source Softw., 11(119), 8025, https://doi.org/10.21105/joss.08025 **
+ *******************************************************************************
+
+                              PM7 CALCULATION RESULTS
+
+ *******************************************************************************
+ *  CALCULATION DONE: (MAX THREADS = 11)             Sun Nov 15 11:24:42 2026  *
+ *  PM7        - The PM7 Hamiltonian to be used
+ *  GEO-OK     - OVERRIDE INTERATOMIC DISTANCE AND OTHER SAFETY CHECKS
+ *  LEWIS      - PRINT OUT LEWIS STRUCTURE, THEN STOP
+ *  LET        - OVERRIDE SOME SAFETY CHECKS
+ *  T=         - A TIME OF 172800.0 SECONDS REQUESTED
+ *  DUMP=N     - RESTART FILE WRITTEN EVERY 7200.0 SECONDS REQUESTED
+ *  AUX        - OUTPUT AUXILIARY INFORMATION
+ *******************************************************************************
+LEWIS LET GEO-OK PM7 AUX
+ nitromethane
+ from SMILES
+   ATOM   CHEMICAL          X               Y               Z
+  NUMBER   SYMBOL      (ANGSTROMS)     (ANGSTROMS)     (ANGSTROMS)
+
+     1       C         -1.49470000  *   0.00000000  *   0.00000000  *
+     2       N         -0.00000000  *   0.00000000  *   0.00000000  *
+     3       O          0.58690000  *   1.07410000  *   0.00000000  *
+     4       O          0.58690000  *  -1.07410000  *   0.00000000  *
+     5       H         -1.82970000  *   1.03310000  *   0.00000000  *
+     6       H         -1.82970000  *  -0.51660000  *   0.89470000  *
+     7       H         -1.82970000  *  -0.51660000  *  -0.89470000  *
+
+
+
+          CARTESIAN COORDINATES 
+
+    NO.       ATOM           X           Y           Z
+
+     1         C         -1.4947      0.0000      0.0000
+     2         N         -0.0000      0.0000      0.0000
+     3         O          0.5869      1.0741      0.0000
+     4         O          0.5869     -1.0741      0.0000
+     5         H         -1.8297      1.0331      0.0000
+     6         H         -1.8297     -0.5166      0.8947
+     7         H         -1.8297     -0.5166     -0.8947
+
+ General Reference for PM7:
+ "Optimization of Parameters for Semiempirical Methods VI: More Modifications to the 
+ NDDO Approximations and Re-optimization of Parameters", J. J. P. Stewart, J. Mol. Mod., 1:32, 19 (2013)
+ https://link.springer.com/article/10.1007/s00894-012-1667-x
+
+           Empirical Formula: C H3 N O2  =     7 atoms
+
+
+
+      MOLECULAR POINT GROUP   :   Cs  
+
+   TOPOGRAPHY OF SYSTEM
+
+   ATOM No.    LABEL   Atoms connected to this atom
+      1          C      2      5      6      7
+      2          N      3      4      1
+      3          O      4      2
+      4          O      3      2
+      5          H      1
+      6          H      1
+      7          H      1
+
+                                        Lewis Structure
+
+     LMO  Atom  Atom         LMO  Atom  Atom         LMO  Atom  Atom         LMO  Atom  Atom    
+       1     1     2           5     2     3           9     3                                   
+       2     1     5           6     2     4          10     3                                   
+       3     1     6           7     3     4          11     4                                   
+       4     1     7           8     2                12     4                                   
+
+          Type          Number of Lewis structural elements identified
+
+         SIGMA BONDS        7
+         LONE PAIRS         5
+
+ Number of filled levels from atoms and charge:    12
+ Number of filled levels from Lewis structure:     12
+
+          NO CHARGES FOUND.
+
+          COMPUTED CHARGE ON SYSTEM: +0
+
+          RUN STOPPED BECAUSE KEYWORD LEWIS WAS USED.
+
+ ******************************************************************************
+ *                                                                            *
+ *     Error and normal termination messages reported in this calculation     *
+ *                                                                            *
+ * RUN STOPPED BECAUSE KEYWORD LEWIS WAS USED.                                *
+ * JOB ENDED NORMALLY                                                         *
+ *                                                                            *
+ ******************************************************************************
+
+
+
+ TOTAL JOB TIME:             0.00 SECONDS
+
+ == MOPAC DONE ==
