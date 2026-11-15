@@ -112,6 +112,18 @@ MOPAC's model chemistries declare this, so steps that use the stress, such as th
 step's periodic levels, convert it correctly.
 
 
+Bonds from the Lewis structure
+==============================
+
+The Lewis Structure step prints MOPAC's Lewis structure and, with **Use bonds**
+set to yes, replaces the configuration's bonds with it (or, when the Lewis structure
+and MOPAC's simple connectivity disagree and **On errors use connectivity** is set,
+with the connectivity). MOPAC sometimes bonds atoms that are much too far apart; for
+example it bonds the two oxygens of nitro and nitrate groups, 2.15 Å apart. If any
+of the bonds is longer than 1.3 times the sum of the two atoms' covalent radii, the
+step leaves the configuration's bonds as they are and prints a warning listing those
+bonds. Periodic systems are not checked.
+
 Index
 =====
 

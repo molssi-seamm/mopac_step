@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>mopac_step package &#8212; SEAMM MOPAC Plug-in 2026.11.13.1 documentation</title>
+    <title>mopac_step package &#8212; SEAMM MOPAC Plug-in 2026.11.15 documentation</title>
   
   
   
@@ -48,7 +48,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="../_static/documentation_options.js?v=e1d96fe1"></script>
+    <script src="../_static/documentation_options.js?v=7f90a600"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -64,7 +64,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.11.13.1" />
+  <meta name="docsearch:version" content="2026.11.15" />
   
     
     <script src="../_static/searchtools.js"></script>
@@ -955,6 +955,13 @@ data in variables for other stages to access</p>
 <section id="module-mopac_step.lewis_structure">
 <span id="mopac-step-lewis-structure-module"></span><h2>mopac_step.lewis_structure module<a class="headerlink" href="#module-mopac_step.lewis_structure" title="Link to this heading">#</a></h2>
 <p>Setup and run MOPAC for the Lewis structure</p>
+<dl class="py data">
+<dt class="sig sig-object py" id="mopac_step.lewis_structure.LONG_BOND_FACTOR">
+<span class="sig-prename descclassname"><span class="pre">mopac_step.lewis_structure.</span></span><span class="sig-name descname"><span class="pre">LONG_BOND_FACTOR</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1.3</span></span><a class="headerlink" href="#mopac_step.lewis_structure.LONG_BOND_FACTOR" title="Link to this definition">#</a></dt>
+<dd><p>MOPAC bonds longer than this times the sum of the covalent radii are not used.
+MOPAC 23’s LEWIS bonds the oxygens of nitro and nitrate groups (O…O 2.17 Å).</p>
+</dd></dl>
+
 <dl class="py class">
 <dt class="sig sig-object py" id="mopac_step.lewis_structure.LewisStructure">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">mopac_step.lewis_structure.</span></span><span class="sig-name descname"><span class="pre">LewisStructure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">flowchart</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extension</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mopac_step/lewis_structure.html#LewisStructure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mopac_step.lewis_structure.LewisStructure" title="Link to this definition">#</a></dt>
@@ -986,6 +993,29 @@ be used as is.</p>
 <dd><p>Run MOPAC</p>
 </dd></dl>
 
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mopac_step.lewis_structure.long_bonds">
+<span class="sig-prename descclassname"><span class="pre">mopac_step.lewis_structure.</span></span><span class="sig-name descname"><span class="pre">long_bonds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">configuration</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pairs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">factor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.3</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mopac_step/lewis_structure.html#long_bonds"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mopac_step.lewis_structure.long_bonds" title="Link to this definition">#</a></dt>
+<dd><p>The bonds that are far longer than a normal bond between the atoms.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>configuration</strong> (<em>molsystem._Configuration</em>) – The configuration, with the geometry MOPAC used.</p></li>
+<li><p><strong>pairs</strong> (<em>[</em><em>(</em><em>int</em><em>, </em><em>int</em><em>)</em><em>]</em>) – The bonds, as pairs of 0-based atom indices.</p></li>
+<li><p><strong>factor</strong> (<em>float</em>) – A bond is too long when longer than this times the sum of the atoms’
+covalent radii.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>For each bond that is too long, the atoms, its length and the sum of the
+covalent radii, in Å. Periodic systems are not checked.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>[(int, int, float, float)]</p>
+</dd>
+</dl>
 </dd></dl>
 
 </section>
@@ -1989,12 +2019,14 @@ then add the extra widgets for controlling optimization</p>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-mopac_step.lewis_structure">mopac_step.lewis_structure module</a><ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mopac_step.lewis_structure.LONG_BOND_FACTOR"><code class="docutils literal notranslate"><span class="pre">LONG_BOND_FACTOR</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mopac_step.lewis_structure.LewisStructure"><code class="docutils literal notranslate"><span class="pre">LewisStructure</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#mopac_step.lewis_structure.LewisStructure.analyze"><code class="docutils literal notranslate"><span class="pre">LewisStructure.analyze()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#mopac_step.lewis_structure.LewisStructure.description_text"><code class="docutils literal notranslate"><span class="pre">LewisStructure.description_text()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#mopac_step.lewis_structure.LewisStructure.run"><code class="docutils literal notranslate"><span class="pre">LewisStructure.run()</span></code></a></li>
 </ul>
 </li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mopac_step.lewis_structure.long_bonds"><code class="docutils literal notranslate"><span class="pre">long_bonds()</span></code></a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-mopac_step.lewis_structure_parameters">mopac_step.lewis_structure_parameters module</a><ul class="pst-show_toc_level nav section-nav flex-column">
