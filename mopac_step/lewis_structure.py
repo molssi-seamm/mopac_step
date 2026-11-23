@@ -240,11 +240,12 @@ class LewisStructure(mopac_step.MOPACBase):
         if not result.ok:
             reason = result.reason or "unknown"
             if result.returncode is None or reason.startswith("attempts exhausted"):
-                # It did not run, so there is no output to use.
-                self.logger.error(
-                    f"There was an error running MOPAC: {reason}\n" + result.stderr
+                # It did not run, so there is no output to use. Raise, so the
+                # failure is seen: returning None ended a Loop quietly.
+                raise RuntimeError(
+                    f"MOPAC could not be run in {self.directory}: {reason}\n"
+                    + (result.stderr or "")
                 )
-                return None
             self.logger.warning(f"MOPAC failed: {reason}\n" + result.stderr)
 
         self.logger.debug("\n" + pprint.pformat(result))

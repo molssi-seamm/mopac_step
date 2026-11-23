@@ -2,7 +2,17 @@
 History
 =======
 
-2026.11.15 -- Bugfix: Lewis structures could add bonds between distant atoms
+2026.11.23 -- Bugfix: a failed MOPAC calculation is reported as an error
+    * When MOPAC stopped on an error, the calculation's results were skipped silently
+      and the step carried on, so a job or loop could finish without the results. A
+      calculation that wrote no heat of formation, or is missing from mopac.aux, now
+      stops the step with an error that names the directory and quotes MOPAC's error
+      lines.
+    * When MOPAC could not be run at all, the step returned nothing, which ended a
+      Loop quietly; it now raises an error, and the Loop counts the iteration as
+      failed.
+
+2026.11.15 --Bugfix: Lewis structures could add bonds between distant atoms
     * MOPAC's Lewis structure bonds the two oxygens of nitro and nitrate groups (2.15
       Å apart), and with "Use bonds" the step put that O-O bond into the
       configuration. Now, if any bond is longer than 1.3 times the sum of the atoms'
