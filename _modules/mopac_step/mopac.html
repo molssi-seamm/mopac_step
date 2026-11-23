@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mopac_step.mopac &#8212; SEAMM MOPAC Plug-in 2026.11.15 documentation</title>
+    <title>mopac_step.mopac &#8212; SEAMM MOPAC Plug-in 2026.11.23 documentation</title>
   
   
   
@@ -47,7 +47,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="../../_static/documentation_options.js?v=7f90a600"></script>
+    <script src="../../_static/documentation_options.js?v=bd31c218"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -61,7 +61,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.11.15" />
+  <meta name="docsearch:version" content="2026.11.23" />
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -1207,12 +1207,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                     <span class="k">if</span> <span class="n">result</span><span class="o">.</span><span class="n">returncode</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">reason</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span>
                         <span class="s2">"attempts exhausted"</span>
                     <span class="p">):</span>
-                        <span class="c1"># It did not run, so there is no output to use.</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
-                            <span class="sa">f</span><span class="s2">"There was an error running MOPAC: </span><span class="si">{</span><span class="n">reason</span><span class="si">}</span><span class="se">\n</span><span class="s2">"</span>
-                            <span class="o">+</span> <span class="n">result</span><span class="o">.</span><span class="n">stderr</span>
+                        <span class="c1"># It did not run, so there is no output to use. Raise, so</span>
+                        <span class="c1"># the failure is seen: returning None ended a Loop quietly.</span>
+                        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+                            <span class="sa">f</span><span class="s2">"MOPAC could not be run in </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">directory</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">reason</span><span class="si">}</span><span class="se">\n</span><span class="s2">"</span>
+                            <span class="o">+</span> <span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">stderr</span> <span class="ow">or</span> <span class="s2">""</span><span class="p">)</span>
                         <span class="p">)</span>
-                        <span class="k">return</span> <span class="kc">None</span>
+                    <span class="c1"># MOPAC wrote output; whether each calculation finished is</span>
+                    <span class="c1"># checked when the results are read (analyze).</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">"MOPAC failed: </span><span class="si">{</span><span class="n">reason</span><span class="si">}</span><span class="se">\n</span><span class="s2">"</span> <span class="o">+</span> <span class="n">result</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
 
                 <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span> <span class="o">+</span> <span class="n">pprint</span><span class="o">.</span><span class="n">pformat</span><span class="p">(</span><span class="n">result</span><span class="p">))</span>
@@ -1298,6 +1300,44 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">set_id</span><span class="p">(</span><span class="n">node_id</span><span class="p">)</span></div>
 
 
+    <span class="k">def</span><span class="w"> </span><span class="nf">_check_mopac_results</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">aux_data</span><span class="p">,</span> <span class="n">n_calculations</span><span class="p">,</span> <span class="n">out_lines</span><span class="p">,</span> <span class="n">n_lines</span><span class="o">=</span><span class="mi">15</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Raise RuntimeError if a MOPAC calculation did not finish.</span>
+
+<span class="sd">        Every MOPAC calculation writes its heat of formation to the .aux file, so a</span>
+<span class="sd">        calculation is missing if the .aux file has fewer sections than were asked</span>
+<span class="sd">        for, or a section has no HEAT_OF_FORMATION (MOPAC stopped on an error).</span>
+<span class="sd">        Before, such a calculation was skipped silently and the step carried on.</span>
+<span class="sd">        The message names the directory and quotes MOPAC's error lines, or the end</span>
+<span class="sd">        of mopac.out.</span>
+<span class="sd">        """</span>
+        <span class="n">expected</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">n_calculations</span><span class="p">)</span> <span class="k">if</span> <span class="n">n_calculations</span> <span class="k">else</span> <span class="mi">1</span>
+        <span class="n">problems</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">aux_data</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">expected</span><span class="p">:</span>
+            <span class="n">problems</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"mopac.aux has results for </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">aux_data</span><span class="p">)</span><span class="si">}</span><span class="s2"> of the </span><span class="si">{</span><span class="n">expected</span><span class="si">}</span><span class="s2"> "</span>
+                <span class="s2">"calculations"</span>
+            <span class="p">)</span>
+        <span class="n">missing</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">data</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">aux_data</span><span class="p">[:</span><span class="n">expected</span><span class="p">])</span>
+            <span class="k">if</span> <span class="s2">"HEAT_OF_FORMATION"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">data</span>
+        <span class="p">]</span>
+        <span class="k">if</span> <span class="n">missing</span><span class="p">:</span>
+            <span class="n">which</span> <span class="o">=</span> <span class="s2">", "</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">missing</span><span class="p">)</span>
+            <span class="n">problems</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"calculation </span><span class="si">{</span><span class="n">which</span><span class="si">}</span><span class="s2"> has no heat of formation"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">problems</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="n">errors</span> <span class="o">=</span> <span class="p">[</span><span class="n">ln</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">ln</span> <span class="ow">in</span> <span class="n">out_lines</span> <span class="k">if</span> <span class="s2">"ERROR"</span> <span class="ow">in</span> <span class="n">ln</span><span class="o">.</span><span class="n">upper</span><span class="p">()]</span>
+        <span class="k">if</span> <span class="n">errors</span><span class="p">:</span>
+            <span class="n">quote</span> <span class="o">=</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">errors</span><span class="p">[:</span><span class="n">n_lines</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">quote</span> <span class="o">=</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">out_lines</span><span class="p">[</span><span class="o">-</span><span class="n">n_lines</span><span class="p">:])</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">"MOPAC did not finish in </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">directory</span><span class="si">}</span><span class="s2">: "</span> <span class="o">+</span> <span class="s2">"; "</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">problems</span><span class="p">)</span> <span class="o">+</span> <span class="s2">".</span><span class="se">\n</span><span class="s2">"</span>
+            <span class="sa">f</span><span class="s2">"From mopac.out:</span><span class="se">\n</span><span class="si">{</span><span class="n">quote</span><span class="si">}</span><span class="s2">"</span>
+        <span class="p">)</span>
+
 <div class="viewcode-block" id="MOPAC.analyze">
 <a class="viewcode-back" href="../../api/mopac_step.html#mopac_step.mopac.MOPAC.analyze">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">analyze</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="s2">""</span><span class="p">,</span> <span class="n">lines</span><span class="o">=</span><span class="p">[],</span> <span class="n">n_calculations</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="s2">""</span><span class="p">):</span>
@@ -1353,6 +1393,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 <span class="n">start</span> <span class="o">=</span> <span class="n">lineno</span> <span class="o">-</span> <span class="mi">6</span>
             <span class="n">lineno</span> <span class="o">+=</span> <span class="mi">1</span>
         <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">lines</span><span class="p">[</span><span class="n">start</span><span class="p">:])</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_mopac_results</span><span class="p">(</span><span class="n">aux_data</span><span class="p">,</span> <span class="n">n_calculations</span><span class="p">,</span> <span class="n">lines</span><span class="p">)</span>
 
         <span class="k">for</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">aux_data</span><span class="p">:</span>
             <span class="c1"># Add main citation for MOPAC</span>

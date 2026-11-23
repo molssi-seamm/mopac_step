@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>History &#8212; SEAMM MOPAC Plug-in 2026.11.15 documentation</title>
+    <title>History &#8212; SEAMM MOPAC Plug-in 2026.11.23 documentation</title>
   
   
   
@@ -48,7 +48,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="_static/documentation_options.js?v=7f90a600"></script>
+    <script src="_static/documentation_options.js?v=bd31c218"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -63,7 +63,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.11.15" />
+  <meta name="docsearch:version" content="2026.11.23" />
   
     
     <script src="_static/searchtools.js"></script>
@@ -506,7 +506,18 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <section id="history">
 <h1>History<a class="headerlink" href="#history" title="Link to this heading">#</a></h1>
 <dl class="simple">
-<dt>2026.11.15 – Bugfix: Lewis structures could add bonds between distant atoms</dt><dd><ul class="simple">
+<dt>2026.11.23 – Bugfix: a failed MOPAC calculation is reported as an error</dt><dd><ul class="simple">
+<li><p>When MOPAC stopped on an error, the calculation’s results were skipped silently
+and the step carried on, so a job or loop could finish without the results. A
+calculation that wrote no heat of formation, or is missing from mopac.aux, now
+stops the step with an error that names the directory and quotes MOPAC’s error
+lines.</p></li>
+<li><p>When MOPAC could not be run at all, the step returned nothing, which ended a
+Loop quietly; it now raises an error, and the Loop counts the iteration as
+failed.</p></li>
+</ul>
+</dd>
+<dt>2026.11.15 –Bugfix: Lewis structures could add bonds between distant atoms</dt><dd><ul class="simple">
 <li><p>MOPAC’s Lewis structure bonds the two oxygens of nitro and nitrate groups (2.15
 Å apart), and with “Use bonds” the step put that O-O bond into the
 configuration. Now, if any bond is longer than 1.3 times the sum of the atoms’
