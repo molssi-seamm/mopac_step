@@ -694,12 +694,14 @@ class MOPAC(mopac_step.MOPACBase):
                     if result.returncode is None or reason.startswith(
                         "attempts exhausted"
                     ):
-                        # It did not run, so there is no output to use.
-                        self.logger.error(
-                            f"There was an error running MOPAC: {reason}\n"
-                            + result.stderr
+                        # It did not run, so there is no output to use. Raise, so
+                        # the failure is seen: returning None ended a Loop quietly.
+                        raise RuntimeError(
+                            f"MOPAC could not be run in {self.directory}: {reason}\n"
+                            + (result.stderr or "")
                         )
-                        return None
+                    # MOPAC wrote output; whether each calculation finished is
+                    # checked when the results are read (analyze).
                     self.logger.warning(f"MOPAC failed: {reason}\n" + result.stderr)
 
                 self.logger.debug("\n" + pprint.pformat(result))
@@ -778,6 +780,44 @@ class MOPAC(mopac_step.MOPACBase):
 
         return super().set_id(node_id)
 
+    def _check_mopac_results(self, aux_data, n_calculations, out_lines, n_lines=15):
+        """Raise RuntimeError if a MOPAC calculation did not finish.
+
+        Every MOPAC calculation writes its heat of formation to the .aux file, so a
+        calculation is missing if the .aux file has fewer sections than were asked
+        for, or a section has no HEAT_OF_FORMATION (MOPAC stopped on an error).
+        Before, such a calculation was skipped silently and the step carried on.
+        The message names the directory and quotes MOPAC's error lines, or the end
+        of mopac.out.
+        """
+        expected = sum(n_calculations) if n_calculations else 1
+        problems = []
+        if len(aux_data) < expected:
+            problems.append(
+                f"mopac.aux has results for {len(aux_data)} of the {expected} "
+                "calculations"
+            )
+        missing = [
+            i + 1
+            for i, data in enumerate(aux_data[:expected])
+            if "HEAT_OF_FORMATION" not in data
+        ]
+        if missing:
+            which = ", ".join(str(i) for i in missing)
+            problems.append(f"calculation {which} has no heat of formation")
+        if not problems:
+            return
+
+        errors = [ln.strip() for ln in out_lines if "ERROR" in ln.upper()]
+        if errors:
+            quote = "\n".join(errors[:n_lines])
+        else:
+            quote = "\n".join(out_lines[-n_lines:])
+        raise RuntimeError(
+            f"MOPAC did not finish in {self.directory}: " + "; ".join(problems) + ".\n"
+            f"From mopac.out:\n{quote}"
+        )
+
     def analyze(self, indent="", lines=[], n_calculations=None, output=""):
         """Read the results from MOPAC calculations and analyze them,
         putting key results into variables for subsequent use by
@@ -831,6 +871,8 @@ class MOPAC(mopac_step.MOPACBase):
                 start = lineno - 6
             lineno += 1
         out.append(lines[start:])
+
+        self._check_mopac_results(aux_data, n_calculations, lines)
 
         for data in aux_data:
             # Add main citation for MOPAC

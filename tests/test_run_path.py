@@ -133,8 +133,9 @@ def real_mopac():
     return None
 
 
-def run_water(tmp_path, code):
-    """Build and run the flowchart with ``code`` as MOPAC; return the job dir."""
+def run_water(tmp_path, code, expect_ok=True):
+    """Build and run the flowchart with ``code`` as MOPAC; return the job dir
+    (and, with ``expect_ok=False``, the output of the run, which must fail)."""
     site = tmp_path / "site"
     info = site / "fakewater-0.1.dist-info"
     info.mkdir(parents=True)
@@ -177,6 +178,9 @@ def run_water(tmp_path, code):
             text=True,
             timeout=300,
         )
+        if not expect_ok and args[1] == RUN:
+            assert result.returncode != 0, "the job should have failed"
+            return job, result.stdout + result.stderr
         assert result.returncode == 0, result.stdout[-3000:] + result.stderr[-3000:]
     return job
 
@@ -207,3 +211,48 @@ def test_run_path_with_a_fake_mopac(tmp_path):
 @pytest.mark.skipif(real_mopac() is None, reason="MOPAC is not installed")
 def test_run_path_with_the_real_mopac(tmp_path):
     check_job(run_water(tmp_path, real_mopac()), enthalpy=-55.03)
+
+
+def test_run_path_mopac_error_fails_the_step(tmp_path):
+    """MOPAC stopped on an error: its .aux has no heat of formation. Before, the
+    step skipped the calculation silently and the job finished; now it fails,
+    quoting MOPAC's error line."""
+    broken = tmp_path / "broken"
+    broken.mkdir()
+    out = (DATA / "mopac.out").read_text().splitlines()
+    out.insert(len(out) // 2, " ERROR: THE SCF DID NOT CONVERGE (test)")
+    (broken / "mopac.out").write_text("\n".join(out) + "\n")
+    aux = [
+        line
+        for line in (DATA / "mopac.aux").read_text().splitlines()
+        if "HEAT_OF_FORMATION" not in line
+    ]
+    (broken / "mopac.aux").write_text("\n".join(aux) + "\n")
+    shutil.copy(DATA / "mopac.arc", broken / "mopac.arc")
+    fake = tmp_path / "fake_mopac"
+    fake.write_text(FAKE_MOPAC.format(python=sys.executable, data=broken))
+    fake.chmod(0o755)
+    job, output = run_water(tmp_path, fake, expect_ok=False)
+    text = output + (job / "job.out").read_text()
+    assert "MOPAC did not finish" in text
+    assert "has no heat of formation" in text
+    assert "THE SCF DID NOT CONVERGE (test)" in text
+
+
+def _mopac_node(tmp_path):
+    from mopac_step.mopac import MOPAC
+
+    class Node(MOPAC):
+        directory = str(tmp_path)
+
+    return object.__new__(Node)
+
+
+def test_check_mopac_results(tmp_path):
+    node = _mopac_node(tmp_path)
+    good = {"HEAT_OF_FORMATION": -55.0}
+    node._check_mopac_results([good, good], [1, 1], ["ok"])
+    with pytest.raises(RuntimeError, match="results for 1 of the 2 calculations"):
+        node._check_mopac_results([good], [1, 1], ["the end"])
+    with pytest.raises(RuntimeError, match="calculation 2 has no heat of formation"):
+        node._check_mopac_results([good, {}], [2], [" ERROR: bad", "x"])
