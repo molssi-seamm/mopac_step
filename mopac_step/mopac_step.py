@@ -119,6 +119,11 @@ class MOPACStep(object):
     #: 0.0001 a tight geometry optimization no longer converged.
     TIGHT_TOLERANCE = "0.001"
 
+    #: The MDI engine's threads, for what the driver reports: the bundled
+    #: mopac_mdi.py pins OMP/MKL/OpenBLAS to one thread, since MOPAC does not
+    #: use threads effectively (seamm_exec's HessianDriver.engine_cores_text).
+    mdi_engine_threads = 1
+
     # Methods actually run periodic via MDI and confirmed working, per
     # NOTES_qm_mdi_engines_validation.rst. Cross-checked against the real
     # metadata["computational models"] entries -- PM7, PM6, and PM6-ORG are
