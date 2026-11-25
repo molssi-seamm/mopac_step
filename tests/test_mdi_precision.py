@@ -30,3 +30,15 @@ def test_tight_precision(monkeypatch):
 
 def test_default_precision(monkeypatch):
     assert "--tolerance" not in _argv(monkeypatch)
+
+
+def test_the_engine_declares_one_thread():
+    """The driver reports the engine's cores from mdi_engine_threads; it must
+    match the engine script, which pins OpenMP and MKL to one thread."""
+    import importlib.resources
+
+    assert MOPACStep.mdi_engine_threads == 1
+    script = importlib.resources.files("mopac_step") / "data" / "mopac_mdi.py"
+    text = script.read_text()
+    assert 'os.environ.setdefault("OMP_NUM_THREADS", "1")' in text
+    assert 'os.environ.setdefault("MKL_NUM_THREADS", "1")' in text

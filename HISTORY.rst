@@ -2,6 +2,12 @@
 History
 =======
 
+2026.11.25 -- Bugfix: the MDI engine is reported as single-threaded
+    * The MOPAC step now declares that its MDI engine runs on one thread, so the
+      output says "runs on 1 core (it is single-threaded)" rather than the job's
+      cores. Needs seamm-exec 2026.11.25.2 for the message; nothing changes in how
+      MOPAC runs.
+
 2026.11.23 -- Bugfix: a failed MOPAC calculation is reported as an error
     * When MOPAC stopped on an error, the calculation's results were skipped silently
       and the step carried on, so a job or loop could finish without the results. A
