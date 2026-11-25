@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>mopac_step package &#8212; SEAMM MOPAC Plug-in 2026.11.23 documentation</title>
+    <title>mopac_step package &#8212; SEAMM MOPAC Plug-in 2026.11.25 documentation</title>
   
   
   
@@ -48,7 +48,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="../_static/documentation_options.js?v=bd31c218"></script>
+    <script src="../_static/documentation_options.js?v=d2c0d6cc"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -64,7 +64,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.11.23" />
+  <meta name="docsearch:version" content="2026.11.25" />
   
     
     <script src="../_static/searchtools.js"></script>
@@ -1491,6 +1491,19 @@ structure: the batch half of the Model Chemistry contract. See
 </dd></dl>
 
 <dl class="py attribute">
+<dt class="sig sig-object py" id="mopac_step.mopac_step.MOPACStep.mdi_engine_threads">
+<span class="sig-name descname"><span class="pre">mdi_engine_threads</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></span><a class="headerlink" href="#mopac_step.mopac_step.MOPACStep.mdi_engine_threads" title="Link to this definition">#</a></dt>
+<dd><p>the bundled
+mopac_mdi.py pins OMP/MKL/OpenBLAS to one thread, since MOPAC does not
+use threads effectively (seamm_exec’s HessianDriver.engine_cores_text).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The MDI engine’s threads, for what the driver reports</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
 <dt class="sig sig-object py" id="mopac_step.mopac_step.MOPACStep.my_description">
 <span class="sig-name descname"><span class="pre">my_description</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'description':</span> <span class="pre">'Setup</span> <span class="pre">and</span> <span class="pre">run</span> <span class="pre">MOPAC',</span> <span class="pre">'group':</span> <span class="pre">'Simulations',</span> <span class="pre">'name':</span> <span class="pre">'MolSSI</span> <span class="pre">MOPAC'}</span></span><a class="headerlink" href="#mopac_step.mopac_step.MOPACStep.my_description" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
@@ -2095,6 +2108,7 @@ then add the extra widgets for controlling optimization</p>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#mopac_step.mopac_step.MOPACStep.get_mdi_engine_command"><code class="docutils literal notranslate"><span class="pre">MOPACStep.get_mdi_engine_command()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#mopac_step.mopac_step.MOPACStep.get_model_chemistry_options"><code class="docutils literal notranslate"><span class="pre">MOPACStep.get_model_chemistry_options()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#mopac_step.mopac_step.MOPACStep.get_task"><code class="docutils literal notranslate"><span class="pre">MOPACStep.get_task()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#mopac_step.mopac_step.MOPACStep.mdi_engine_threads"><code class="docutils literal notranslate"><span class="pre">MOPACStep.mdi_engine_threads</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#mopac_step.mopac_step.MOPACStep.my_description"><code class="docutils literal notranslate"><span class="pre">MOPACStep.my_description</span></code></a></li>
 </ul>
 </li>

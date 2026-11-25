@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mopac_step.mopac_step &#8212; SEAMM MOPAC Plug-in 2026.11.23 documentation</title>
+    <title>mopac_step.mopac_step &#8212; SEAMM MOPAC Plug-in 2026.11.25 documentation</title>
   
   
   
@@ -47,7 +47,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="../../_static/documentation_options.js?v=bd31c218"></script>
+    <script src="../../_static/documentation_options.js?v=d2c0d6cc"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -61,7 +61,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.11.23" />
+  <meta name="docsearch:version" content="2026.11.25" />
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -617,6 +617,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <span class="c1">#: cubic/quartic constants, 0.01 still 17/22, 0.001 only 0.9/3.5; with</span>
     <span class="c1">#: 0.0001 a tight geometry optimization no longer converged.</span>
     <span class="n">TIGHT_TOLERANCE</span> <span class="o">=</span> <span class="s2">"0.001"</span>
+
+    <span class="c1">#: The MDI engine's threads, for what the driver reports: the bundled</span>
+    <span class="c1">#: mopac_mdi.py pins OMP/MKL/OpenBLAS to one thread, since MOPAC does not</span>
+    <span class="c1">#: use threads effectively (seamm_exec's HessianDriver.engine_cores_text).</span>
+    <span class="n">mdi_engine_threads</span> <span class="o">=</span> <span class="mi">1</span>
 
     <span class="c1"># Methods actually run periodic via MDI and confirmed working, per</span>
     <span class="c1"># NOTES_qm_mdi_engines_validation.rst. Cross-checked against the real</span>
