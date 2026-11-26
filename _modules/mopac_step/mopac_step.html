@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mopac_step.mopac_step &#8212; SEAMM MOPAC Plug-in 2026.11.25 documentation</title>
+    <title>mopac_step.mopac_step &#8212; SEAMM MOPAC Plug-in 2026.11.26 documentation</title>
   
   
   
@@ -47,7 +47,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="../../_static/documentation_options.js?v=d2c0d6cc"></script>
+    <script src="../../_static/documentation_options.js?v=e5385ca6"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -61,7 +61,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.11.25" />
+  <meta name="docsearch:version" content="2026.11.26" />
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -953,8 +953,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <span class="sa">f</span><span class="s2">"-port </span><span class="si">{</span><span class="n">port</span><span class="si">}</span><span class="s2"> -hostname </span><span class="si">{</span><span class="n">hostname</span><span class="si">}</span><span class="s2">"</span>
         <span class="p">)</span>
 
+        <span class="c1"># The conda that runs the engine, as seamm_exec's local executor chooses it:</span>
+        <span class="c1"># CONDA_EXE first, which on clusters is SEAMM's staging wrapper that unpacks</span>
+        <span class="c1"># an environment kept as an archive onto the node; the ini's conda knows</span>
+        <span class="c1"># only shared environments (xtb-step's twin failed on ARC, SEAMM job 6088).</span>
+        <span class="n">conda</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"CONDA_EXE"</span><span class="p">)</span> <span class="ow">or</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"conda"</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">"conda"</span>
         <span class="n">argv</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="n">config</span><span class="p">[</span><span class="s2">"conda"</span><span class="p">],</span>
+            <span class="n">conda</span><span class="p">,</span>
             <span class="s2">"run"</span><span class="p">,</span>
             <span class="s2">"--live-stream"</span><span class="p">,</span>
             <span class="s2">"-n"</span><span class="p">,</span>
@@ -962,7 +967,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <span class="c1"># The environment's own interpreter, by path: a bare "python" is</span>
             <span class="c1"># found on the caller's PATH, which an activated virtual</span>
             <span class="c1"># environment puts first (mopac_step#161).</span>
-            <span class="n">_conda_python</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">"conda"</span><span class="p">],</span> <span class="n">config</span><span class="p">[</span><span class="s2">"conda-environment"</span><span class="p">]),</span>
+            <span class="n">_conda_python</span><span class="p">(</span><span class="n">conda</span><span class="p">,</span> <span class="n">config</span><span class="p">[</span><span class="s2">"conda-environment"</span><span class="p">]),</span>
             <span class="n">config</span><span class="p">[</span><span class="s2">"mdi_script"</span><span class="p">],</span>
             <span class="s2">"-mdi"</span><span class="p">,</span>
             <span class="n">mdi_init</span><span class="p">,</span>
