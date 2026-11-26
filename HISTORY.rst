@@ -2,6 +2,14 @@
 History
 =======
 
+2026.11.26 -- Bugfix: the MDI engine ignored SEAMM's conda wrapper
+    * The MOPAC MDI engine was launched with the conda named in mopac.ini, while
+      SEAMM's local executor prefers CONDA_EXE. On clusters CONDA_EXE is SEAMM's
+      wrapper that unpacks an environment kept as an archive onto the node, so the
+      engine could only use an environment shared on the file system (xtb-step's twin
+      of this launch failed on ARC with an archive-only environment). The engine now
+      uses the same conda as the executor: CONDA_EXE, else the ini's.
+
 2026.11.25 -- Bugfix: the MDI engine is reported as single-threaded
     * The MOPAC step now declares that its MDI engine runs on one thread, so the
       output says "runs on 1 core (it is single-threaded)" rather than the job's
