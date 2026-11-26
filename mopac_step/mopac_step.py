@@ -434,8 +434,13 @@ class MOPACStep(object):
             f"-port {port} -hostname {hostname}"
         )
 
+        # The conda that runs the engine, as seamm_exec's local executor chooses it:
+        # CONDA_EXE first, which on clusters is SEAMM's staging wrapper that unpacks
+        # an environment kept as an archive onto the node; the ini's conda knows
+        # only shared environments (xtb-step's twin failed on ARC, SEAMM job 6088).
+        conda = os.environ.get("CONDA_EXE") or config.get("conda") or "conda"
         argv = [
-            config["conda"],
+            conda,
             "run",
             "--live-stream",
             "-n",
@@ -443,7 +448,7 @@ class MOPACStep(object):
             # The environment's own interpreter, by path: a bare "python" is
             # found on the caller's PATH, which an activated virtual
             # environment puts first (mopac_step#161).
-            _conda_python(config["conda"], config["conda-environment"]),
+            _conda_python(conda, config["conda-environment"]),
             config["mdi_script"],
             "-mdi",
             mdi_init,
